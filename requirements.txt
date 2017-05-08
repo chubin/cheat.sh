@@ -1,0 +1,9 @@
+gevent
+flask
+pygments
+requests
+pygments
+dateutils
+fuzzywuzzy
+redis
+colored
