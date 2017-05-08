@@ -20,7 +20,9 @@ Usage examples:
 
 ## Options
 
+```
     T                   omit terminal sequences (no colors; can be pasted in an editor)
+```
 
 ## Special URLs
 
@@ -70,11 +72,11 @@ You can use special search options after the closing slash:
 
 List of search options:
 
-    ```
+```
     i   case insensitive search
     b   word boundaries
     r   recursive search
-    ```
+```
 
 ## Cheat sheets sources
 
