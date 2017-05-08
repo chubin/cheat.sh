@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+    <head>
+      <link rel="stylesheet" href="bower_components/xterm.js/dist/xterm.css" />
+      <script src="bower_components/xterm.js/dist/xterm.js"></script>
+    </head>
+    <body>
+      <div id="terminal"></div>
+      <script>
+
+function httpGet(theUrl)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+};
+
+      	var term = new Terminal();
+        term.open(document.getElementById('terminal'));
+        var s = httpGet("/tar").replace(/\n/g, "\r\n");
+        term.write(s);
+      </script>
+    </body>
+</html>

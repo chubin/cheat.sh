@@ -1,0 +1,14 @@
+engines:
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+ratings:
+  paths:
+  - "**.js"
+exclude_paths:
+- "**.min.js"
+- karma*.conf.js
+- prism/**/*
+- test/**/*
+- .*

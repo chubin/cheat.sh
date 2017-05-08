@@ -1,0 +1,28 @@
+language: node_js
+
+node_js:
+  - "0.10"
+
+branches:
+  only:
+    - gh-pages
+    - /v\d+\.\d+/
+
+install:
+  - npm install -g codeclimate-test-reporter
+  - npm install
+
+before_script:
+  - export CHROME_BIN=chromium-browser
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
+after_script:
+  - codeclimate-test-reporter < ./coverage/lcov.info
+
+deploy:
+  provider: npm
+  email: $NPM_EMAIL
+  api_key: $NPM_TOKEN
+  on:
+    tags: true

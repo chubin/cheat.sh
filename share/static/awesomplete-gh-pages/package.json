@@ -1,0 +1,32 @@
+{
+  "name": "awesomplete",
+  "version": "1.1.1",
+  "description": "http://leaverou.github.io/awesomplete/",
+  "main": "awesomplete.js",
+  "scripts": {
+    "test": "karma start --single-run"
+  },
+  "repository": "LeaVerou/awesomplete",
+  "author": "Lea Verou",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LeaVerou/awesomplete/issues"
+  },
+  "homepage": "https://leaverou.github.io/awesomplete/",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-header": "^1.7.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^2.0.0",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.19",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-coverage": "^0.5.3",
+    "karma-fixture": "^0.2.5",
+    "karma-html2js-preprocessor": "^0.1.0",
+    "karma-jasmine": "^0.3.6",
+    "karma-jasmine-def": "^0.1.0"
+  }
+}
