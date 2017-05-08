@@ -1,0 +1,37 @@
+Usage:
+    
+    $ curl cheat.sh/TOPIC       show cheat sheet on the TOPIC      
+    $ curl cheat.sh/~KEYWORD    search cheat sheets for KEYWORD
+
+Options:
+
+    ?T                          text only, no ANSI sequences
+
+Special pages:
+
+    :help                       this page
+    :post                       how to post new cheat sheet
+    :bash_completion            bash function for tab completion
+    :list                       list all cheat sheets
+
+Tab completion:
+
+    $ curl cheat.sh/:bash_completion > ~/.bash.d/cheat.sh
+    $ . ~/.bash.d/cheat.sh
+
+Search:
+
+    /~snapshot          look for "snapshot" in the first level cheat sheets 
+    /scala/~closure     look for "closure" in scala cheat sheets
+    /~snapshot/r        look for "snapshot" in all cheat sheets recursively
+
+You can use special search options after the closing slash:
+
+    /~shot/bi           case insensitive (i), word boundaries (b)
+
+List of search options:
+
+    b   word boundaries
+    i   case insensitive search
+    r   recursive
+

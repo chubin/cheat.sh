@@ -1,0 +1,39 @@
+You can add a new entry to a cheat sheet or create a new cheat sheet
+in one of the following ways:
+
+1. With curl:
+
+    cat ${cheatsheet} | curl -F 'newcmd=<-' cheat.sh
+    curl --data-binary @${cheatsheet} cheat.sh/newcmd
+    
+   newcmd is the the name of the command you want to post
+   (use your @twitter or email@ in the post).
+    
+2. With git:
+
+~~~
+    # clone chubin/cheat.sh
+    git pull https://github.com/${you}/cheat.sh && cd cheat.sh
+    cp ${cheatsheet} cheat.sheets/newcmd
+    git add cheat.sheets/newcmd
+    git commit -m '...' cheat.sheets/newcmd
+    git push
+    # send pull request 
+~~~
+
+3. With a browser:
+    
+    Go to the end of the cheat sheet, click the dollar sign with the mouse
+    and post your cheat sheet. It will be saved automatically and reviewed.
+
+When writing an entry for a cheat sheet, please keep in mind:
+
+    1. We don't try to repeat manuals and documentation sites
+    2. We don't try to document each and every special usage case of a tool
+    3. We try to find and gather the most interesting usage cases
+
+If you want contribute to the project, but you have no idea what 
+cheat sheet you should post, check the list of the most wanted cheat sheets:
+
+    cheat.sh/:wanted
+
