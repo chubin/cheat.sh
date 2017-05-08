@@ -83,14 +83,14 @@ List of search options:
 cheat.sh uses several community driven repositories
 of cheat sheets:
 
-* cheat.sheets [1 contributor][0 stars][May 1, 2017]
+* [cheat.sheets](https://github.com/chubin/cheat.sheets) [1 contributor][0 stars][May 1, 2017]
 
 External repositories:
 
-* tldr-pages/tldr [331 contributors][9.222 stars][Dec 8, 2013]
-* cheat [93 contributors][3.144 stars][Jul 28, 2013]
-* a8m/go-lang-cheat-sheet [23 contributors][2.009 stars][Feb 9, 2014]
-* adambard/learnxinyminutes-docs [985 contributors][4.405 stars][Jun 23, 2013]
+* [tldr-pages/tldr](https://github.com/tldr-pages/tldr) [331 contributors][9.222 stars][Dec 8, 2013]
+* [chrisallenlane/cheat](https://github.com/chrisallenlane/cheat) [93 contributors][3.144 stars][Jul 28, 2013]
+* [a8m/go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet) [23 contributors][2.009 stars][Feb 9, 2014]
+* [adambard/learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs) [985 contributors][4.405 stars][Jun 23, 2013]
 
 ## How to add a cheat sheet
 
@@ -98,8 +98,8 @@ If you want to add a cheat sheet, you have one of the following
 ways:
 
 * Add it to one of the external cheat sheets repositories; you should decide on your own what is the best repository for your cheat sheet;
-* Add it to the local cheat.sh repository (cheat.sheets) on github (fork, commit, pull request);
-* Post it on cheat.sh using curl or a web browser (cheat.sh/:post).
+* Add it to the local cheat.sh repository ([cheat.sheets](https://github.com/chubin/cheat.sheets)) on github (fork, commit, pull request);
+* Post it on cheat.sh using curl or a web browser ([cheat.sh/:post](http://cheat.sh/:post)).
 
 If you want to change an existing cheat sheet,
 you have to find the original repository (when you open a cheat sheet in a browser,
