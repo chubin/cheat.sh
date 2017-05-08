@@ -10,13 +10,13 @@
 
 Usage examples:
 
-    ```
+```
     $ curl cheat.sh/rsync
     $ curl cheat.sh/btrfs~volume
     $ curl cheat.sh/~snapshot
     $ curl cheat.sh/scala/Functions
     $ curl cheat.sh/scala/Functions~map
-    ```
+```
 
 ## Options
 
@@ -26,53 +26,54 @@ Usage examples:
 
 Special URLs:
 
-    ```
+```
     /:help             # show help page
     /:post             # how to post new cheat sheets
     /:list             # list all known cheat sheets
-    ```
+```
 
 ## Tab completion
 
-    ```
+```
     $ curl cheat.sh/:bash_completion > ~/.bash.d/cheat.sh
     $ . ~/.bash.d/cheat.sh
     $ # add . ~/.bash.d/cheat.sh to ~/.bashrc
-    ```
+```
 
 ## Search
 
 To search for a keyword, use the query:
 
-    ```
+```
     /~keyword
-    ```
+```
 
 In this case search is not recursive — it is conducted only in a pages of the specified level.
 For example:
 
-    ```
+```
     /~snapshot          look for snapshot in the first level cheat sheets 
     /scala/~currying     look for currying in scala cheat sheets
-    ```
+```
 
 For a recursive search in all cheat sheets, use double slash:
 
-    ```
-    //~snapshot         look for snapshot in all cheat sheets
-    ```
+```
+    /~snapshot/r         look for snapshot in all cheat sheets
+```
 
 You can use special search options after the closing slash:
 
-    ```
+```
     /~shot/bi           case insensitive (i), word boundaries (b)
-    ```
+```
 
 List of search options:
 
     ```
     i   case insensitive search
     b   word boundaries
+    r   recursive search
     ```
 
 ## Cheat sheets sources
