@@ -11,6 +11,8 @@ d88' `"Y8  888P"Y88b  d88' `88b `P  )88b    888       d88(  "8  888P"Y88b
 
 ```
 
+![cheat.sh usage](http://igor.chub.in/download/cheatsh-en.gif)
+
 ## Features
 
 * simple curl/browser interface
