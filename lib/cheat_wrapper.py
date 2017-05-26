@@ -198,14 +198,26 @@ def split_paragraphs(text):
     return answer
         
 def paragraph_contains(paragraph, keyword, insensitive=False, word_boundaries=True):
-    regex = re.escape(keyword)
-    if not word_boundaries:
-        regex = r"\b%s\b" % keyword 
+    """
+    Several keywords can be joined together using ~
+    For example: ~ssh~passphrase
+    """
+    answer = True
 
-    if insensitive:
-        answer = bool(re.search(regex, paragraph, re.IGNORECASE))
+    if '~' in keyword:
+        keywords = keyword.split('~')
     else:
-        answer = bool(re.search(regex, paragraph))
+        keywords = [keyword]
+
+    for keyword in keywords:
+        regex = re.escape(keyword)
+        if not word_boundaries:
+            regex = r"\b%s\b" % keyword 
+
+        if insensitive:
+            answer = answer and bool(re.search(regex, paragraph, re.IGNORECASE))
+        else:
+            answer = answer and bool(re.search(regex, paragraph))
 
     return answer
 
@@ -322,9 +334,39 @@ def colorize_internal(topic, answer, html_needed):
 
     return answer
 
+def github_button(topic_type):
+    repository = {
+        "cheat.sheets":         'chubin/cheat.sheets',
+        "cheat.sheets dir":     'chubin/cheat.sheets',
+        "tldr":                 'tldr-pages/tldr',
+        "internal":             '',
+        "cheat":                'chrisallenlane/cheat',
+        "search":               '',
+        "internal":             '',
+        "unknown":              '',
+    }
+
+    full_name = repository.get(topic_type, '')
+    if not full_name:
+        return ''
+
+    short_name = full_name.split('/',1)[1]
+    button = (
+        "<!-- Place this tag where you want the button to render. -->"
+        '<a aria-label="Star %(full_name)s on GitHub" data-count-aria-label="# stargazers on GitHub"'
+        ' data-count-api="/repos/%(full_name)s#stargazers_count"'
+        ' data-count-href="/%(full_name)s/stargazers"'
+        ' data-icon="octicon-star"' 
+        ' href="https://github.com/%(full_name)s"'
+        '  class="github-button">%(short_name)s</a>'
+    ) % locals()
+    return button
+
 #
 
-def cheat_wrapper(query, highlight=True, html=False):
+def cheat_wrapper(query, request_options=None, html=False):
+
+    highlight = not bool(request_options and request_options.get('no-terminal'))
 
     keyword = None
     if '~' in query:
@@ -346,6 +388,8 @@ def cheat_wrapper(query, highlight=True, html=False):
         search_mode = False
 
 
+    found = True            # if the page was found in the database
+    editable = False        # can generated page be edited on github (only cheat.sheets pages can)
     result = ""
     for topic, answer in answers:
         
@@ -357,6 +401,9 @@ def cheat_wrapper(query, highlight=True, html=False):
             highlight = False
 
         topic_type = get_topic_type(topic)
+        if topic_type == 'unknown':
+            found = False
+
         if highlight:
             if topic_type.endswith(" dir"):
                 pass
@@ -376,19 +423,29 @@ def cheat_wrapper(query, highlight=True, html=False):
                 else:
                     answer = pygments_highlight(answer, BashLexer(), Terminal256Formatter(style='native'))
 
+        if topic_type == "cheat.sheets":
+            editable = True
+
         if search_mode:
-            result += "\n%s%s %s %s%s\n" % (colored.bg('dark_gray'), colored.attr("res_underlined"), topic, colored.attr("res_underlined"), colored.attr('reset'))
+            if highlight:
+                result += "\n%s%s %s %s%s\n" % (colored.bg('dark_gray'), colored.attr("res_underlined"), topic, colored.attr("res_underlined"), colored.attr('reset'))
+            else: 
+                result += "[%s]" % topic
 
         result += answer
 
     if search_mode:
         result = result[1:]
+        editable = False
+        repository_button = ''
+    else:
+        repository_button = github_button(topic_type)
 
     if html:
         result = result + "\n$"
         result = html_wrapper(result)
         title = "<title>cheat.sh/%s</title>" % topic
-        title += '\n<link rel="stylesheet" href="/files/awesomplete.css" /><script src="/files/awesomplete.min.js" async></script>'
+        # title += '\n<link rel="stylesheet" href="/files/awesomplete.css" />script src="/files/awesomplete.min.js" async></script>'
         # submit button: thanks to http://stackoverflow.com/questions/477691/
         submit_button = '<input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1" />'
         topic_list = """
@@ -397,10 +454,18 @@ def cheat_wrapper(query, highlight=True, html=False):
         """ % ("\n".join("<option value='%s'></option>" % x for x in get_topics_list()))
 
         curl_line = "<span class='pre'>$ curl cheat.sh/</span>"
-        form_html = '<form action="/" method="GET"/>%s%s<input type="text" value="%s" name="topic" list="topics" class="awesomplete_" autofocus autocomplete="off"/>%s</form>' % (submit_button, curl_line, query, topic_list)
-        result = re.sub("<pre>", form_html + "<pre>", result)
-        result = re.sub("<head>", "<head>" + title, result)
-        result = result.replace('</body>', TWITTER_BUTTON + GITHUB_BUTTON + GITHUB_BUTTON_2 + GITHUB_BUTTON_FOOTER + '</body>')
+        if query == ':firstpage':
+            query = ""
+        form_html = '<form action="/" method="GET"/>%s%s<input type="text" value="%s" name="topic" list="topics" autofocus autocomplete="off"/>%s</form>' % (submit_button, curl_line, query, topic_list)
 
-    return result
+        edit_button = ''
+        if editable:
+            edit_page_link = 'https://github.com/chubin/cheat.sheets/edit/master/sheets/' + topic
+            edit_button = '<pre style="position:absolute;padding-left:40em;overflow:visible;height:0;">[<a href="%s" style="color:cyan">edit</a>]</pre>' % edit_page_link
+        result = re.sub("<pre>", edit_button + form_html + "<pre>", result)
+        result = re.sub("<head>", "<head>" + title, result)
+        if not request_options.get('quiet'):
+            result = result.replace('</body>', TWITTER_BUTTON + GITHUB_BUTTON + repository_button + GITHUB_BUTTON_FOOTER + '</body>')
+
+    return result, found
 

@@ -27,7 +27,7 @@ app = Flask(__name__)
 MYDIR = os.path.abspath(os.path.dirname( os.path.dirname('__file__') ))
 sys.path.append("%s/lib/" % MYDIR)
 
-from globals import LOG_FILE, TEMPLATES, STATIC, log, error
+from globals import FILE_QUERIES_LOG, LOG_FILE, TEMPLATES, STATIC, log, error
 
 from cheat_wrapper import cheat_wrapper, save_cheatsheet
 
@@ -47,6 +47,31 @@ def is_html_needed(user_agent):
         return False
     return True
 
+def parse_args(args):
+    result = {}
+
+    q = ""
+    for key, val in args.items():
+        if len(val) == 0:
+            q += key
+            continue
+
+    if q is None:
+        return result
+    if 'T' in q:
+        result['no-terminal'] = True
+    if 'q' in q:
+        result['quiet'] = True
+
+    for key, val in args.items():
+        if val == 'True':
+            val = True
+        if val == 'False':
+            val = False
+        result[key] = val
+
+    return result
+
 @app.route('/files/<path:path>')
 def send_static(path):
     return send_from_directory(STATIC, path)
@@ -58,6 +83,11 @@ def send_favicon():
 @app.route('/malformed-response.html')
 def send_malformed():
     return send_from_directory(STATIC, 'malformed-response.html')
+
+def log_query(ip, found, topic, user_agent):
+    log_entry = "%s %s %s %s" % (ip, found, topic, user_agent)
+    with open(FILE_QUERIES_LOG, 'a') as my_file:
+        my_file.write(log_entry+"\n")
 
 @app.route("/", methods=['GET', 'POST'])
 @app.route("/<path:topic>", methods=["GET", "POST"])
@@ -76,6 +106,21 @@ def answer(topic = None):
 
     user_agent = request.headers.get('User-Agent', '').lower()
     html_needed = is_html_needed(user_agent)
+    options = parse_args(request.args)
+
+    if request.headers.getlist("X-Forwarded-For"):
+       ip = request.headers.getlist("X-Forwarded-For")[0]
+       if ip.startswith('::ffff:'):
+           ip = ip[7:]
+    else:
+       ip = request.remote_addr
+    if request.headers.getlist("X-Forwarded-For"):
+       ip = request.headers.getlist("X-Forwarded-For")[0]
+       if ip.startswith('::ffff:'):
+           ip = ip[7:]
+    else:
+       ip = request.remote_addr
+
 
     if request.method == 'POST':
         for k, v in request.form.items():
@@ -109,8 +154,9 @@ def answer(topic = None):
     if topic is None:
         topic = ":firstpage"
 
-    answer = cheat_wrapper(topic, html=is_html_needed(user_agent))
+    answer, found = cheat_wrapper(topic, request_options=options, html=is_html_needed(user_agent))
     
+    log_query(ip, found, topic, user_agent)
     return answer
 
 server = WSGIServer(("", 8002), app) # log=None)

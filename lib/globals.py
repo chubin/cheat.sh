@@ -6,6 +6,7 @@ MYDIR = os.path.abspath(os.path.dirname( os.path.dirname('__file__') ))
 ANSI2HTML = os.path.join( MYDIR, "share/ansi2html.sh" )
 
 LOG_FILE  = os.path.join( MYDIR, 'log/main.log' )
+FILE_QUERIES_LOG  = os.path.join( MYDIR, 'log/queries.log' )
 TEMPLATES = os.path.join( MYDIR, 'share/templates' )
 STATIC    = os.path.join( MYDIR, 'share/static' )
 
