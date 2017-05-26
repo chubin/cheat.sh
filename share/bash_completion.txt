@@ -1,4 +1,4 @@
-_cheatsh_complete_curl() 
+_cheatsh_complete_curl()
 {
     local cur prev opts
     _get_comp_words_by_ref -n : cur
@@ -12,7 +12,7 @@ _cheatsh_complete_curl()
 		COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
 		__ltrim_colon_completions "$cur"
         return 0
-    fi  
+    fi
 }
 complete -F _cheatsh_complete_curl curl
 
