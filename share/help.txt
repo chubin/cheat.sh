@@ -5,7 +5,11 @@ Usage:
 
 Options:
 
-    ?T                          text only, no ANSI sequences
+    ?OPTIONS
+
+    q                           quiet mode, don't show github/twitter buttons
+    T                           text only, no ANSI sequences
+    
 
 Special pages:
 
@@ -22,6 +26,7 @@ Tab completion:
 Search:
 
     /~snapshot          look for "snapshot" in the first level cheat sheets 
+    /~ssh~passphrase    several keywords can be combined together using ~
     /scala/~closure     look for "closure" in scala cheat sheets
     /~snapshot/r        look for "snapshot" in all cheat sheets recursively
 
