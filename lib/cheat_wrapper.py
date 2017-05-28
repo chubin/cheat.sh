@@ -12,18 +12,17 @@ import re
 import random
 import string
 
-from fuzzywuzzy import process
-from fuzzywuzzy import fuzz
+from fuzzywuzzy import process, fuzz
 
 import redis
 import colored
 
 from pygments import highlight as pygments_highlight
-from pygments.lexers import BashLexer, GoLexer, ScalaLexer, RustLexer
+from pygments.lexers import BashLexer, GoLexer, ScalaLexer, RustLexer, PythonLexer, PhpLexer
 from pygments.formatters import TerminalFormatter, Terminal256Formatter
 
 from pygments.styles import get_all_styles
-print list(get_all_styles())
+COLOR_STYLES = sorted(list(get_all_styles()))
 
 MYDIR = os.path.abspath(os.path.dirname(os.path.dirname('__file__')))
 sys.path.append("%s/lib/" % MYDIR)
@@ -32,13 +31,17 @@ from globals import error, ANSI2HTML, \
                     PATH_CHEAT_SHEETS, PATH_CHEAT_SHEETS_SPOOL
 
 from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_2, GITHUB_BUTTON_FOOTER
+
+from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnxy
  
 # globals
-INTERNAL_TOPICS = [":firstpage", ':post', ':bash_completion', ':help']
+INTERNAL_TOPICS = [":firstpage", ':post', ':bash_completion', ':help', ':styles']
 LEXER = {
-    "go":       GoLexer,
-    "scala":    ScalaLexer,
-    "rust":     RustLexer,
+    "go"    :   GoLexer,
+    "scala" :   ScalaLexer,
+    "rust"  :   RustLexer,
+    "python":   PythonLexer,
+    "php"   :   PhpLexer,
 }
 REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
 
@@ -58,7 +61,6 @@ def update_cheat_topics():
         answer.append(filename)
     return answer
 CHEAT_TOPICS = update_cheat_topics()
-print CHEAT_TOPICS
 
 def update_cheat_sheets_topics():
     answer = []
@@ -66,17 +68,21 @@ def update_cheat_sheets_topics():
 
     for topic in glob.glob(PATH_CHEAT_SHEETS + "*/*"):
         dirname, filename = os.path.split(topic)
-        answer.append("%s/%s" % (os.path.basename(dirname), filename))
+        dirname = os.path.basename(dirname)
+        if dirname.startswith('_'):
+            dirname = dirname[1:]
+        answer.append("%s/%s" % (dirname, filename))
     
     for topic in glob.glob(PATH_CHEAT_SHEETS + "*"):
         _, filename = os.path.split(topic)
         if os.path.isdir(topic):
-            answer_dirs.append(filename)
+            if filename.startswith('_'):
+                filename = filename[1:]
+            answer_dirs.append(filename+'/')
         else:
             answer.append(filename)
     return answer, answer_dirs
 CHEAT_SHEETS_TOPICS, CHEAT_SHEETS_DIRS = update_cheat_sheets_topics()
-
 
 ANSI_ESCAPE = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
 def remove_ansi(sometext):
@@ -94,11 +100,50 @@ def html_wrapper(data):
 #
 #
 
+cached_topics_list = [[]]
+def get_topics_list(skip_dirs=False, skip_internal=False):
+    """
+    List of topics returned on /:list
+    """
+    
+    if cached_topics_list[0] != []:
+        return cached_topics_list[0]
+
+    answer = CHEAT_TOPICS + TLDR_TOPICS + CHEAT_SHEETS_TOPICS
+    answer = sorted(set(answer))
+
+    # doing it in this strange way to save the order of the topics
+    for topic in get_learnxiny_list():
+        if topic not in answer:
+            answer.append(topic)
+
+    if not skip_dirs:
+        answer += CHEAT_SHEETS_DIRS
+    if not skip_internal:
+        answer += INTERNAL_TOPICS
+
+    cached_topics_list[0] = answer
+    return answer
+
+def get_topics_dirs():
+    return set([x.split('/', 1)[0] for x in get_topics_list() if '/' in x])
+
+#
+#
+#
+
 def get_topic_type(topic):
     if topic == "":
         return "search"
+
     if topic.startswith(":"):
         return "internal"
+    if '/' in topic:
+        topic_type, topic_name = topic.split('/', 1)
+        if topic_type in get_topics_dirs() and topic_name in [':list']:
+            return "internal"
+        if is_valid_learnxy(topic):
+            return 'learnxiny'
     if topic in CHEAT_SHEETS_TOPICS:
         return "cheat.sheets"
     if topic.rstrip('/') in CHEAT_SHEETS_DIRS and topic.endswith('/'):
@@ -110,21 +155,23 @@ def get_topic_type(topic):
     return "unknown"
 
 #
+#   Various cheat sheets getters
 #
-#
-
-def get_topics_list(skip_dirs=False, skip_internal=False):
-    
-    answer = sorted(set(CHEAT_TOPICS + TLDR_TOPICS + CHEAT_SHEETS_TOPICS))
-    if not skip_internal:
-        answer += INTERNAL_TOPICS
-    if not skip_dirs:
-        answer += CHEAT_SHEETS_DIRS
-    return answer
 
 def get_internal(topic):
+    if '/' in topic:
+        topic_type, topic_name = topic.split('/', 1)
+        if topic_name == ":list":
+            topic_list = [x[len(topic_type)+1:] 
+                for x in get_topics_list()
+                if x.startswith(topic_type + "/")]
+            return "\n".join(topic_list)+"\n"
+
     if topic == ":list":
         return "\n".join(x for x in get_topics_list())
+
+    if topic == ':styles':
+        return "\n".join(COLOR_STYLES)
 
     if topic in INTERNAL_TOPICS:
         return open(os.path.join(MYDIR, "share", topic[1:]+".txt"), "r").read()
@@ -158,7 +205,14 @@ def get_cheat(topic):
     return answer
 
 def get_cheat_sheets(topic):
-    return open(PATH_CHEAT_SHEETS + "%s" % topic, "r").read().decode('utf-8')
+    """
+    Get the cheat sheet topic from the own repository (cheat.sheets).
+    It's possible that topic directory starts with omited underscore
+    """
+    filename = PATH_CHEAT_SHEETS + "%s" % topic
+    if not os.path.exists(filename):
+        filename = PATH_CHEAT_SHEETS + "_%s" % topic
+    return open(filename, "r").read().decode('utf-8')
 
 def get_cheat_sheets_dir(topic):
     answer = []
@@ -174,8 +228,7 @@ def get_unknown(topic):
     else:
         topics_list = [x for x in topics_list if not x.startswith(':')]
 
-    possible_topics = process.extract(topic, topics_list, scorer=fuzz.ratio)
-    possible_topics = possible_topics[:3]
+    possible_topics = process.extract(topic, topics_list, scorer=fuzz.ratio)[:3]
     possible_topics_text = "\n".join([("    * %s %s" % x) for x in possible_topics])
     return """
 Unknown topic.
@@ -183,6 +236,20 @@ Do you mean one of these topics may be?
 
 %s
     """ % possible_topics_text
+
+TOPIC_GETTERS = (
+    ("cheat.sheets"     , get_cheat_sheets),
+    ("cheat.sheets dir" , get_cheat_sheets_dir),
+    ("tldr"             , get_tldr),
+    ("internal"         , get_internal),
+    ("cheat"            , get_cheat),
+    ("learnxiny"        , get_learnxiny),
+    ("unknown"          , get_unknown),
+)
+
+#
+#
+#
 
 def split_paragraphs(text):
     answer = []
@@ -226,28 +293,39 @@ def join_paragraphs(paragraphs):
     return answer
     
 def get_answer(topic, keyword, options=""):
+    """
+    Find cheat sheet for the topic.
+    If not keyword, return answer.
+    Otherwise cut the paragraphs cotaining keywords.
+
+    Args:
+        topic (str):    the name of the topic of the cheat sheet
+        keyword (str):  the name of the keywords to search in the cheat sheets
+    
+    Returns:
+        string:         the cheat sheet
+    """
 
     answer = None
+
+    # checking if the answer is in the cache
     if topic != "":
         answer = REDIS.get(topic)
         if answer:
             answer = answer.decode('utf-8')
 
+    # if answer was not found in the cache
+    # try to find it in one of the repositories
     if not answer:
         topic_type = get_topic_type(topic)
-        if topic_type == "cheat.sheets":
-            answer = get_cheat_sheets(topic)
-        elif topic_type == "cheat.sheets dir":
-            answer = get_cheat_sheets_dir(topic)
-        elif topic_type == "tldr":
-            answer = get_tldr(topic)
-        elif topic_type == "internal":
-            answer = get_internal(topic)
-            highlight = False
-        elif topic_type == "cheat":
-            answer = get_cheat(topic)
-        else:
+        for topic_getter_type, topic_getter in TOPIC_GETTERS:
+            if topic_type == topic_getter_type:
+                answer = topic_getter(topic)
+                break
+        if not answer:
             answer = get_unknown(topic)
+
+        # saving answers in the cache
         if topic_type not in ["search", "internal", "unknown"]:
             REDIS.set(topic, answer)
 
@@ -336,14 +414,14 @@ def colorize_internal(topic, answer, html_needed):
 
 def github_button(topic_type):
     repository = {
-        "cheat.sheets":         'chubin/cheat.sheets',
-        "cheat.sheets dir":     'chubin/cheat.sheets',
-        "tldr":                 'tldr-pages/tldr',
-        "internal":             '',
-        "cheat":                'chrisallenlane/cheat',
-        "search":               '',
-        "internal":             '',
-        "unknown":              '',
+        "cheat.sheets"      :   'chubin/cheat.sheets',
+        "cheat.sheets dir"  :   'chubin/cheat.sheets',
+        "tldr"              :   'tldr-pages/tldr',
+        "cheat"             :   'chrisallenlane/cheat',
+        "learnxiny"         :   'adambard/learnxinyminutes-docs',
+        "internal"          :   '',
+        "search"            :   '',
+        "unknown"           :   '',
     }
 
     full_name = repository.get(topic_type, '')
@@ -364,9 +442,23 @@ def github_button(topic_type):
 
 #
 
+def rewrite_aliases(word):
+    if word == ':bash.completion':
+        return ':bash_completion'
+    return word
+
 def cheat_wrapper(query, request_options=None, html=False):
 
+    # 
+    # at the moment, we just remove trailing slashes
+    # so queries python/ and python are equal
+    #
+    query = query.rstrip('/')
+
+    query = rewrite_aliases(query)
+
     highlight = not bool(request_options and request_options.get('no-terminal'))
+    color_style = request_options.get('style', '')
 
     keyword = None
     if '~' in query:
@@ -405,23 +497,24 @@ def cheat_wrapper(query, request_options=None, html=False):
             found = False
 
         if highlight:
-            if topic_type.endswith(" dir"):
-                pass
-            if topic_type == "unknown":
-                # rrt = light green comments
-                answer = pygments_highlight(answer, BashLexer(), Terminal256Formatter(style='native'))
-            elif topic_type == "internal":
+            #if topic_type.endswith(" dir"):
+            #    pass
+                
+            if topic_type == "internal":
                 answer = colorize_internal(topic, answer, html)
             else:
-                for lexer_name, lexer in LEXER.items():
+                color_style = color_style or "native"
+                lexer = BashLexer
+                for lexer_name, lexer_value in LEXER.items():
                     if topic.startswith("%s/" % lexer_name):
-                        answer = pygments_highlight(
-                            answer,
-                            lexer(),
-                            Terminal256Formatter(style='monokai'))
+                        color_style = color_style or "monokai"
+                        if lexer_name == 'php':
+                            answer = "<?\n%s?>\n" % answer
+                        lexer = lexer_value
                         break
-                else:
-                    answer = pygments_highlight(answer, BashLexer(), Terminal256Formatter(style='native'))
+
+                formatter = Terminal256Formatter(style=color_style)
+                answer = pygments_highlight(answer, lexer(), formatter)
 
         if topic_type == "cheat.sheets":
             editable = True
@@ -448,10 +541,8 @@ def cheat_wrapper(query, request_options=None, html=False):
         # title += '\n<link rel="stylesheet" href="/files/awesomplete.css" />script src="/files/awesomplete.min.js" async></script>'
         # submit button: thanks to http://stackoverflow.com/questions/477691/
         submit_button = '<input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1" />'
-        topic_list = """
-<datalist id="topics">%s
-</datalist>
-        """ % ("\n".join("<option value='%s'></option>" % x for x in get_topics_list()))
+        topic_list = ('<datalist id="topics">%s</datalist>'
+                        % ("\n".join("<option value='%s'></option>" % x for x in get_topics_list())))
 
         curl_line = "<span class='pre'>$ curl cheat.sh/</span>"
         if query == ':firstpage':
