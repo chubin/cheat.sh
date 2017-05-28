@@ -46,7 +46,7 @@ class LearnXYAdapter(object):
             else:
                 block.append(before)
 
-        answer.append((block_name, block))
+        answer.append((block_name, self._cut_block(block)))
         return answer
 
     def is_valid(self, name):
@@ -122,7 +122,12 @@ class LearnPythonAdapter(LearnXYAdapter):
 
     @staticmethod
     def _cut_block(block):
-        return block[:-2]
+        answer = block[2:-1]
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
 
 #
 # Exported functions
