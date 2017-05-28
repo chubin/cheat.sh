@@ -10,6 +10,7 @@ class LearnXYAdapter(object):
 
         self._whole_cheatsheet = self._read_cheatsheet()
         self._blocks = self._extract_blocks()
+        self._topics_list = [x for x,y in self._blocks] + [":learn"]
 
     def _read_cheatsheet(self):
         filename = os.path.join(self._learn_xy_path, self._filename)
@@ -32,7 +33,7 @@ class LearnXYAdapter(object):
         answer = []
 
         block = []
-        block_name = None
+        block_name = "Start"
         for before, now, after in zip([""]+lines, lines, lines[1:]):
             new_block_name = self._is_block_separator(before, now, after)
             if new_block_name:
@@ -49,18 +50,24 @@ class LearnXYAdapter(object):
         return answer
 
     def is_valid(self, name):
-        for x, _ in self._blocks:
+        for x in self._topics_list:
             if x == name:
                 return True
         return False
 
     def get_list(self, prefix=False):
         if prefix:
-            return ["%s/%s" % (self._prefix, x) for x,y in self._blocks]
+            return ["%s/%s" % (self._prefix, x) for x in self._topics_list]
         else:
-            return [x for x,y in self._blocks]
+            return self._topics_list
 
     def get_cheat_sheet(self, name, partial=False):
+        if name == ":list":
+            return "\n".join(self.get_list()) + "\n"
+
+        if name == ":learn":
+            return "\n".join(self._whole_cheatsheet) + "\n"
+
         if partial:
             possible_names = []
             for x, y in self._blocks:
