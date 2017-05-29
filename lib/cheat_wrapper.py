@@ -352,6 +352,10 @@ def find_answer_by_keyword(directory, keyword, options=""):
 
     answer_paragraphs = []
     for topic in get_topics_list(skip_internal=True, skip_dirs=True):
+        # skip these pages, don't show them in search
+        if topic in [':firstpage']:
+            continue
+
         if not topic.startswith(directory):
             continue
         
