@@ -35,7 +35,7 @@ from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_2, GITHUB_BUTTO
 from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnxy
  
 # globals
-INTERNAL_TOPICS = [":firstpage", ':post', ':bash_completion', ':help', ':styles']
+INTERNAL_TOPICS = [":firstpage", ':post', ':bash_completion', ':help', ':styles', ':styles-demo']
 LEXER = {
     "go"    :   GoLexer,
     "scala" :   ScalaLexer,
@@ -463,6 +463,8 @@ def cheat_wrapper(query, request_options=None, html=False):
 
     highlight = not bool(request_options and request_options.get('no-terminal'))
     color_style = request_options.get('style', '')
+    if color_style not in COLOR_STYLES:
+        color_style = ''
 
     keyword = None
     if '~' in query:
