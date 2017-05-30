@@ -35,7 +35,7 @@ from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_2, GITHUB_BUTTO
 from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnxy
  
 # globals
-INTERNAL_TOPICS = [":firstpage", ':post', ':bash_completion', ':help', ':styles', ':styles-demo']
+INTERNAL_TOPICS = [":list", ":firstpage", ':post', ':bash_completion', ':help', ':styles', ':styles-demo', ':emacs', ':fish', ':bash', ':zsh']
 LEXER = {
     "go"    :   GoLexer,
     "scala" :   ScalaLexer,
@@ -168,10 +168,10 @@ def get_internal(topic):
             return "\n".join(topic_list)+"\n"
 
     if topic == ":list":
-        return "\n".join(x for x in get_topics_list())
+        return "\n".join(x for x in get_topics_list()) + "\n"
 
     if topic == ':styles':
-        return "\n".join(COLOR_STYLES)
+        return "\n".join(COLOR_STYLES) + "\n"
 
     if topic in INTERNAL_TOPICS:
         return open(os.path.join(MYDIR, "share", topic[1:]+".txt"), "r").read()
@@ -352,8 +352,8 @@ def find_answer_by_keyword(directory, keyword, options=""):
 
     answer_paragraphs = []
     for topic in get_topics_list(skip_internal=True, skip_dirs=True):
-        # skip these pages, don't show them in search
-        if topic in [':firstpage']:
+        # skip the internal pages, don't show them in search
+        if topic in INTERNAL_TOPICS:
             continue
 
         if not topic.startswith(directory):
