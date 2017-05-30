@@ -1,7 +1,8 @@
-# if ch is too short for you, replace it with cheat.sh
-# in the function declaration and in the complete call below
+# add this to ~/.bashrc or to ~/.bash.d/cheat.sh and
+#   source ~/.bash.d/cheat.sh
+# in your ~/.bashrc
 
-ch()
+cheat.sh()
 {
     # replace native with the color scheme you want
     # curl cheat.sh/:styles-demo to show the available color schemes
@@ -24,5 +25,5 @@ _cheatsh_complete_cheatsh()
     #fi  
 }
 
-complete -F _cheatsh_complete_cheatsh ch
+complete -F _cheatsh_complete_cheatsh cheat.sh
 
