@@ -1,0 +1,11 @@
+# retrieve command cheat sheets from cheat.sh
+# fish version by @tobiasreischmann
+# (replace ch with cheat.sh if the name is too short for you)
+
+function ch
+    curl ch/$argv
+end
+
+# register completions (on-the-fly, non-cached, because the actual command won't be cached anyway
+complete -c ch -xa '(curl -s cheat.sh/:list)'
+
