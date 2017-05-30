@@ -1,0 +1,15 @@
+;
+; Written by RenJMR
+; 
+
+(defun ejmr-search-cheat-sh ()
+  "Search `http://cheat.sh/' for help on commands and code."
+  (interactive)
+  (ivy-read "Command or Topic: "
+      (process-lines "curl" "--silent" "http://cheat.sh/:list?T&q")
+      :require-match t
+      :sort t
+      :history 'ejmr-search-cheat-sh
+      :action (lambda (input)
+        (browse-url (concat "http://cheat.sh/" input "?T&q")))
+      :caller 'ejmr-search-cheat-sh))
