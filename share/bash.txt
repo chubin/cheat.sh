@@ -1,9 +1,14 @@
-cht()
+# if ch is too short for you, replace it with cheat.sh
+# in the function declaration and in the complete call below
+
+ch()
 {
+    # replace native with the color scheme you want
+    # curl cheat.sh/:styles-demo to show the available color schemes
     curl -s cheat.sh/"$1"?style=native
 }
 
-_cheatsh_complete_cht() 
+_cheatsh_complete_cheatsh() 
 {
     local cur opts #prev
     _get_comp_words_by_ref -n : cur
@@ -12,12 +17,12 @@ _cheatsh_complete_cht()
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     opts="$(curl -s cheat.sh/:list)"
 
-    #if [[ "${cur}" == cht ]] ; then
+    #if [[ "${cur}" == ch ]] ; then
 		COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
 		__ltrim_colon_completions "$cur"
         return 0
     #fi  
 }
 
-complete -F _cheatsh_complete_cht cht
+complete -F _cheatsh_complete_cheatsh ch
 
