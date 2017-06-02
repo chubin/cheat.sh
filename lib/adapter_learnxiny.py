@@ -24,9 +24,10 @@ class LearnXYAdapter(object):
                         code_mode = True
                         continue
                     else:
-                        return answer
+                        code_mode = False
                 if code_mode:
                     answer.append(line.rstrip('\n'))
+            return answer
 
     def _extract_blocks(self):
         lines = self._whole_cheatsheet
@@ -87,6 +88,39 @@ class LearnXYAdapter(object):
 # Various cheat sheets
 #
 
+class LearnLuaAdapter(LearnXYAdapter):
+    _prefix = "lua"
+    _filename = "lua.html.markdown"
+
+    def _is_block_separator(self, before, now, after):
+        if (re.match('-----+', before) 
+            and re.match('-------+', after)
+            and re.match('--\s+[0-9]+\.', now)):
+            block_name = re.sub('--+\s+[0-9]+\.\s*', '', now)
+            block_name = '_'.join(block_name.strip('.').strip().split())
+            replace_with = {
+                '1_Metatables_and_metamethods': 
+                    'Metatables',
+                '2_Class-like_tables_and_inheritance':
+                    'Class-like_tables',
+                'Variables_and_flow_control':
+                    'Flow_control',
+            }
+            if block_name in replace_with:
+                block_name = replace_with[block_name]
+            return block_name
+        else:
+            return None
+
+    @staticmethod
+    def _cut_block(block):
+        answer = block[2:-1]
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
+
 class LearnPHPAdapter(LearnXYAdapter):
     _prefix = "php"
     _filename = "php.html.markdown"
@@ -129,13 +163,50 @@ class LearnPythonAdapter(LearnXYAdapter):
             answer = answer[:1]
         return answer
 
+class LearnPerlAdapter(LearnXYAdapter):
+    _prefix = "perl"
+    _filename = "perl.html.markdown"
+
+    def _is_block_separator(self, before, now, after):
+        if re.match('####+\s+', now):
+            block_name = re.sub('#+\s', '', now)
+            block_name = '_'.join(block_name.strip().split())
+            replace_with = {
+                'Conditional_and_looping_constructs': 
+                    'Control_Flow',
+                'Perl_variable_types':
+                    'Types',
+                'Files_and_I/O':
+                    'Files',
+                'Writing_subroutines':
+                    'Subroutines',
+            }
+            if block_name in replace_with:
+                block_name = replace_with[block_name]
+            return block_name
+        else:
+            return None
+
+    @staticmethod
+    def _cut_block(block):
+        answer = block[2:]
+        if len(answer) == 0:
+            return answer
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
+
 #
 # Exported functions
 #
 
 ADAPTERS = {
+    'lua'       : LearnLuaAdapter(),
     'python'    : LearnPythonAdapter(),
     'php'       : LearnPHPAdapter(),
+    'perl'      : LearnPerlAdapter(),
 }
 
 def get_learnxiny(topic):

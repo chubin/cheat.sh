@@ -18,7 +18,7 @@ import redis
 import colored
 
 from pygments import highlight as pygments_highlight
-from pygments.lexers import BashLexer, GoLexer, ScalaLexer, RustLexer, PythonLexer, PhpLexer
+import pygments.lexers # from pygments.lexers import BashLexer, GoLexer, ScalaLexer, RustLexer, PythonLexer, PhpLexer, PerlLexer
 from pygments.formatters import TerminalFormatter, Terminal256Formatter
 
 from pygments.styles import get_all_styles
@@ -37,11 +37,15 @@ from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnx
 # globals
 INTERNAL_TOPICS = [":list", ":firstpage", ':post', ':bash_completion', ':help', ':styles', ':styles-demo', ':emacs', ':fish', ':bash', ':zsh']
 LEXER = {
-    "go"    :   GoLexer,
-    "scala" :   ScalaLexer,
-    "rust"  :   RustLexer,
-    "python":   PythonLexer,
-    "php"   :   PhpLexer,
+    "go"    :   pygments.lexers.GoLexer,
+    "elixir":   pygments.lexers.ElixirLexer,
+    "js"    :   pygments.lexers.JavascriptLexer,
+    "lua"   :   pygments.lexers.LuaLexer,
+    "scala" :   pygments.lexers.ScalaLexer,
+    "rust"  :   pygments.lexers.RustLexer,
+    "perl"  :   pygments.lexers.PerlLexer,
+    "python":   pygments.lexers.PythonLexer,
+    "php"   :   pygments.lexers.PhpLexer,
 }
 REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
 
@@ -510,7 +514,7 @@ def cheat_wrapper(query, request_options=None, html=False):
                 answer = colorize_internal(topic, answer, html)
             else:
                 color_style = color_style or "native"
-                lexer = BashLexer
+                lexer = pygments.lexers.BashLexer
                 for lexer_name, lexer_value in LEXER.items():
                     if topic.startswith("%s/" % lexer_name):
                         color_style = color_style or "monokai"
