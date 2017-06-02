@@ -533,7 +533,7 @@ def cheat_wrapper(query, request_options=None, html=False):
             if highlight:
                 result += "\n%s%s %s %s%s\n" % (colored.bg('dark_gray'), colored.attr("res_underlined"), topic, colored.attr("res_underlined"), colored.attr('reset'))
             else: 
-                result += "[%s]" % topic
+                result += "\n[%s]\n" % topic
 
         result += answer
 
