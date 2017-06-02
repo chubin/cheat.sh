@@ -1,5 +1,5 @@
 
-![cheat.sh logo](http://cheat.sh/static/big-logo.png)
+![cheat.sh logo](http://cheat.sh/files/big-logo.png)
 
 ## Features
 
