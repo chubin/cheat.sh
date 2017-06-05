@@ -42,7 +42,7 @@ named after the name of the language:
 
 Read more about the programming languages cheat sheets below.
 
-There are several special pages, those name are always starting with a colon,
+There are several special pages (their name are always starting with a colon),
 that are not cheat sheets and have special meaning. For example:
 
 ```
@@ -107,9 +107,9 @@ List of search options:
     r   recursive search
 ```
 
-## Special URLs
+## Special pages
 
-Special URLs:
+Special pages:
 
 ```
     :help               this page
@@ -129,7 +129,7 @@ Special URLs:
 Tab completion is a very important part of cheat.sh.
 Having more than a thousand cheat sheets, it's very hard to learn all their names.
 
-If you use a cheat.sh shell functions, it's enough to include it
+If you want to use the `cheat.sh` shell functions, it's enough to include `:bash` (`:zsh` or `:fish`)
 in `~/.bashrc`:
 
 ```
@@ -172,7 +172,7 @@ are organized in namespaces (subdirectories), that are named according
 to the programming languages.
 
 For each supported programming languages
-there are several special cheat sheets: it own sheet, `hello`, `:list` and `:learn`.
+there are several special cheat sheets: its own sheet, `hello`, `:list` and `:learn`.
 Say for lua it will look like:
 
 ```
@@ -181,22 +181,30 @@ Say for lua it will look like:
     lua/:list
     lua/:learn
 ```
+
+Some languages has the one-liners-cheat sheet, `1line`:
+
+```
+    perl/1line
+```
 * `hello` describes how you can start with the language — install it if needed, build and run its programs, and it shows the "Hello world" program written in the language;
 * `:list` shows all topics related to the language
 * `:learn` shows a learn-x-in-minutes language cheat sheet perfect for getting started with the language.
+* `1line` is a collection of one-liners in this language
 
 ![cheat.sh usage](http://cheat.sh/files/supported-languages.png)
 
 At the moment, cheat.sh covers the 7 following programming languages (alphabetically sorted):
 
-|Prefix |Language|Basics|
-|-------|--------|------|
-|`go/`  |Go      |✓     |
-|`lua/` |Lua     |✓     |
-|`perl/`|Perl    |✓     |
-|`php/` |PHP     |✓     |
-|`rust/`|Rust    |✓     |
-|`scala/`|Scala  |✓     |
+|Prefix     |Language|Basics|One-liners|
+|-----------|--------|------|----------|
+|`go/`      |Go      |✓     |          |
+|`lua/`     |Lua     |✓     |          |
+|`perl/`    |Perl    |✓     |✓         |
+|`php/`     |PHP     |✓     |          |
+|`python/`  |Python  |✓     |          |
+|`rust/`    |Rust    |✓     |          |
+|`scala/`   |Scala   |✓     |          |
 
 ## Cheat sheets sources
 
@@ -217,6 +225,7 @@ of cheat sheets
 |UNIX/Linux commands    |[chrisallenlane/cheat](https://github.com/chrisallenlane/cheat)|93/3231|Jul 28, 2013|
 |Programming languages  |[adambard/learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs)|999/4513|Jun 23, 2013|
 |Go                     |[a8m/go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)|23/2086|Feb 9, 2014|
+|Perl                   |[pkrumnis/perl1line.txt](https://github.com/pkrumins/perl1line.txt)|4/151|Nov 4, 2011|
 
 Pie diagram reflecting cheat sheets sources distribution (by number of cheat sheets on cheat.sh originating from a repository):
 
