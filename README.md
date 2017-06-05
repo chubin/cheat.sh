@@ -185,6 +185,8 @@ Say for lua it will look like:
 * `:list` shows all topics related to the language
 * `:learn` shows a learn-x-in-minutes language cheat sheet perfect for getting started with the language.
 
+![cheat.sh usage](http://cheat.sh/files/supported-languages.png)
+
 ## Cheat sheets sources
 
 Instead of creating yet another mediocre cheat sheet repository,
