@@ -17,7 +17,9 @@ Unified read, search and write access to the popular cheat sheets repositories.
 
 To read a cheat sheet:
 
+```
     curl cheat.sh/sudo
+```
 
 Here `sudo` is the name of the cheat sheet you are looking for.
 
@@ -25,14 +27,18 @@ If you don't know the name of the topic you need,
 you can search for it using the ~KEYWORD notation.
 For example, to see how you can make snapshots, you make the following query
 
+```
     ~snapshot
+```
 
 and get the list of snapshot creation examples commands.
 
 Programming languages cheat sheets are located in correspondent namespaces,
 named after the name of the language:
 
+```
     scala/Functions
+```
 
 Read more about the programming languages cheat sheets below.
 
@@ -188,7 +194,8 @@ cheat sheet repositories covering topics of our interest:
 programming and operating systems usage.
 
 cheat.sh uses several community driven repositories
-of cheat sheets:
+of cheat sheets
+(in the popularity column number of contributors/number of stars are shown):
 
 |Cheat sheets           |Repository                                            | Popularity | Creation Date |
 |-----------------------|------------------------------------------------------|------------|---------------|
