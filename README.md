@@ -165,13 +165,13 @@ Options can be combined together in this way:
 
 (note the `\` before `&`: it is escaping `&`, which has in shell special meaning). 
 
-## Programming languages support
+## Programming languages cheat sheets
 
-Cheat sheets related to the programming languages
+Cheat sheets related to programming languages
 are organized in namespaces (subdirectories), that are named according
 to the programming languages.
 
-For each supported programming languages
+For each supported programming language
 there are several special cheat sheets: its own sheet, `hello`, `:list` and `:learn`.
 Say for lua it will look like:
 
