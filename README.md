@@ -198,7 +198,7 @@ of cheat sheets:
 |Programming languages  |[adambard/learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs)|999/4513|Jun 23, 2013|
 |Go                     |[a8m/go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)|23/2086|Feb 9, 2014|
 
-Pie diagram reflecting cheat sheets sources distribution (by number of cheat sheets in repository):
+Pie diagram reflecting cheat sheets sources distribution (by number of cheat sheets on cheat.sh originating from a repository):
 
 ![cheat.sh cheat sheets repositories](http://cheat.sh/files/stat-2017-06-05.png)
 
