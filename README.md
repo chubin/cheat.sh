@@ -187,6 +187,17 @@ Say for lua it will look like:
 
 ![cheat.sh usage](http://cheat.sh/files/supported-languages.png)
 
+At the moment, cheat.sh covers the 7 following programming languages (alphabetically sorted):
+
+|Prefix |Language|Basics|
+|-------|--------|------|
+|`go/`  |Go      |✓     |
+|`lua/` |Lua     |✓     |
+|`perl/`|Perl    |✓     |
+|`php/` |PHP     |✓     |
+|`rust/`|Rust    |✓     |
+|`scala/`|Scala  |✓     |
+
 ## Cheat sheets sources
 
 Instead of creating yet another mediocre cheat sheet repository,
