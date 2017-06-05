@@ -209,7 +209,23 @@ Pie diagram reflecting cheat sheets sources distribution (by number of cheat she
 
 ![cheat.sh cheat sheets repositories](http://cheat.sh/files/stat-2017-06-05.png)
 
-## How to add a cheat sheet
+## How to conribute
+
+### How to edit a cheat sheet
+
+If you want to edit a cheat.sh cheat sheet, you should edit it in the upstream repository.
+You will find the name of the source repository in a browser, when you open a cheat sheet.
+There are two github buttons in the bottom of the page: the second one is the button
+of the repository, whom belongs the current cheat sheet.
+
+You can edit the cheat sheet directly in your browser (you need a github account for it).
+There is a edit button in the top right corner. If you click on it, an editor will be open.
+There you will change the cheat sheet (under the hood: the upstrem repository is forked, your changes are
+commited in the forked repository, a pull request to the upstream repository owner is sent).
+
+![cheat.sh cheat sheets repositories](http://cheat.sh/files/edit-cheat-sheet.png)
+
+### How to add a cheat sheet
 
 If you want to add a cheat sheet, you have one of the following
 ways:
@@ -223,4 +239,12 @@ you have to find the original repository (when you open a cheat sheet in a brows
 you see the repository's github button in the bottom of the cheat sheet),
 the cheat sheet is coming from, and change it there.
 After some time the changes will be synchronized on cheat.sh.
+
+### How to add a cheat sheet repository
+
+If you want to add a cheat sheet repository to cheat.sh, please open an issue:
+
+* [Add a new repository](https://github.com/chubin/cheat.sh/issues/new)
+
+Please specify the name of the repository, and give its short description.
 
