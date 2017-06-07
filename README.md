@@ -119,7 +119,8 @@ Special pages:
     :bash               bash function and tab completion setup
     :fish               fish function and tab completion setup
     :zsh                zsh function and tab completion setup
-    :emacs              cheat.sh function for emacs
+    :emacs              cheat.sh function for Emacs
+    :emacs-ivy          cheat.sh function for Emacs (uses ivy)
     :styles             list of color styles
     :styles-demo        show color styles usage examples
 ```
@@ -146,6 +147,15 @@ and don't create any special functions, include `:bash_completion`:
     $ . ~/.bash.d/cheat.sh
     $ # add . ~/.bash.d/cheat.sh to ~/.bashrc
 ```
+
+## Editors integration
+
+### Emacs
+
+* [cheat-sh.el](https://github.com/davep/cheat-sh.el) — Emacs support (available also at cheat.sh/:emacs)
+* cheat.sh/:emacs-ivy — Emacs support for ivy users
+
+[![asciicast](https://asciinema.org/a/123734.png)](https://asciinema.org/a/123734)
 
 ## Options
 
