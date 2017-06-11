@@ -11,11 +11,11 @@ d88' `"Y8  888P"Y88b  d88' `88b `P  )88b    888       d88(  "8  888P"Y88b
 
     * the fastest way to find <command options> | <code pieces> you need
     * provides access to community driven cheat sheets repositories
-    * delivers <822> cheat sheets in <9> areas and growing
+    * delivers <844> cheat sheets in <11> areas and growing
     * covers UNIX/Linux commands and programming languages
     * programming languages cheat sheets are under:
-        </go/> </js/> </lua/> </perl/> </php/> </python/>
-        </rust/> </scala/>
+        </go/> </haskell/> </js/> </lua/> </ocaml/>
+        </perl/> </php/> </python/> </rust/> </scala/>
     * supports bash completion (add {/:bash_completion} to your {~/.bashrc})
 
 
