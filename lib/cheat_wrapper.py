@@ -11,6 +11,7 @@ import glob
 import re
 import random
 import string
+import collections
 
 from fuzzywuzzy import process, fuzz
 
@@ -35,17 +36,19 @@ from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_2, GITHUB_BUTTO
 from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnxy
  
 # globals
-INTERNAL_TOPICS = [":list", ":firstpage", ':post', ':bash_completion', ':help', ':styles', ':styles-demo', ':emacs', ':fish', ':bash', ':zsh']
+INTERNAL_TOPICS = [":list", ":firstpage", ':post', ':bash_completion', ':help', ':styles', ':styles-demo', ':emacs', ':emacs-ivy', ':fish', ':bash', ':zsh']
 LEXER = {
-    "go"    :   pygments.lexers.GoLexer,
     "elixir":   pygments.lexers.ElixirLexer,
+    "go"    :   pygments.lexers.GoLexer,
     "js"    :   pygments.lexers.JavascriptLexer,
+    "kotlin":   pygments.lexers.KotlinLexer,
     "lua"   :   pygments.lexers.LuaLexer,
-    "scala" :   pygments.lexers.ScalaLexer,
-    "rust"  :   pygments.lexers.RustLexer,
     "perl"  :   pygments.lexers.PerlLexer,
     "python":   pygments.lexers.PythonLexer,
     "php"   :   pygments.lexers.PhpLexer,
+    "ruby"  :   pygments.lexers.RubyLexer,
+    "rust"  :   pygments.lexers.RustLexer,
+    "scala" :   pygments.lexers.ScalaLexer,
 }
 REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
 
@@ -132,6 +135,16 @@ def get_topics_list(skip_dirs=False, skip_internal=False):
 def get_topics_dirs():
     return set([x.split('/', 1)[0] for x in get_topics_list() if '/' in x])
 
+
+def get_stat():
+    stat = collections.Counter([
+        get_topic_type(topic) for topic in get_topics_list()
+    ])
+
+    answer = ""
+    for k,v in stat.items():
+        answer += "%s %s\n" % (k,v)
+    return answer
 #
 #
 #
@@ -176,6 +189,9 @@ def get_internal(topic):
 
     if topic == ':styles':
         return "\n".join(COLOR_STYLES) + "\n"
+
+    if topic == ":stat":
+        return get_stat()+"\n"
 
     if topic in INTERNAL_TOPICS:
         return open(os.path.join(MYDIR, "share", topic[1:]+".txt"), "r").read()

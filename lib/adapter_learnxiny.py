@@ -121,28 +121,39 @@ class LearnLuaAdapter(LearnXYAdapter):
             answer = answer[:1]
         return answer
 
-class LearnPHPAdapter(LearnXYAdapter):
-    _prefix = "php"
-    _filename = "php.html.markdown"
+class LearnJavaScriptAdapter(LearnXYAdapter):
+    _prefix = "js"
+    _filename = "javascript.html.markdown"
 
     def _is_block_separator(self, before, now, after):
-        if (re.match(r'/\*\*\*\*\*+', before) 
-            and re.match(r'\s*\*/', after)
-            and re.match(r'\s*\*\s*', now)):
-            block_name = re.sub(r'\s*\*\s*', '', now)
-            block_name = re.sub(r'&', '', block_name)
-            block_name = '_'.join(block_name.strip().split())
+        if (    re.match('//////+', before) 
+            and re.match('//+\s+[0-9]+\.', now)
+            and re.match('\s*', after)):
+            block_name = re.sub('//+\s+[0-9]+\.\s*', '', now)
+            block_name = '_'.join(block_name.strip(", ").split())
+            replace_with = {
+                'More_about_Objects': 
+                    'Prototypes',
+            }
+            for k in replace_with:
+                if k in block_name:
+                    block_name = replace_with[k]
             return block_name
         else:
             return None
 
     @staticmethod
     def _cut_block(block):
-        return block[2:]
+        answer = block[2:-1]
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
 
-class LearnPythonAdapter(LearnXYAdapter):
-    _prefix = "python"
-    _filename = "python.html.markdown"
+class LearnKotlinAdapter(LearnXYAdapter):
+    _prefix = "kotlin"
+    _filename = "kotlin.html.markdown"
 
     def _is_block_separator(self, before, now, after):
         if (re.match('#######+', before) 
@@ -198,15 +209,84 @@ class LearnPerlAdapter(LearnXYAdapter):
             answer = answer[:1]
         return answer
 
+class LearnPHPAdapter(LearnXYAdapter):
+    _prefix = "php"
+    _filename = "php.html.markdown"
+
+    def _is_block_separator(self, before, now, after):
+        if (re.match(r'/\*\*\*\*\*+', before) 
+            and re.match(r'\s*\*/', after)
+            and re.match(r'\s*\*\s*', now)):
+            block_name = re.sub(r'\s*\*\s*', '', now)
+            block_name = re.sub(r'&', '', block_name)
+            block_name = '_'.join(block_name.strip().split())
+            return block_name
+        else:
+            return None
+
+    @staticmethod
+    def _cut_block(block):
+        return block[2:]
+
+class LearnPythonAdapter(LearnXYAdapter):
+    _prefix = "python"
+    _filename = "python.html.markdown"
+
+    def _is_block_separator(self, before, now, after):
+        if (re.match('#######+', before) 
+            and re.match('#######+', after)
+            and re.match('#+\s+[0-9]+\.', now)):
+            block_name = re.sub('#+\s+[0-9]+\.\s*', '', now)
+            block_name = '_'.join(block_name.strip().split())
+            return block_name
+        else:
+            return None
+
+    @staticmethod
+    def _cut_block(block):
+        answer = block[2:-1]
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
+
+class LearnRubyAdapter(LearnXYAdapter):
+    _prefix = "ruby"
+    _filename = "ruby.html.markdown"
+
+    def _is_block_separator(self, before, now, after):
+        if (re.match('#######+', before) 
+            and re.match('#######+', after)
+            and re.match('#+\s+[0-9]+\.', now)):
+            block_name = re.sub('#+\s+[0-9]+\.\s*', '', now)
+            block_name = '_'.join(block_name.strip().split())
+            return block_name
+        else:
+            return None
+
+    @staticmethod
+    def _cut_block(block):
+        answer = block[2:-1]
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
+
+
 #
 # Exported functions
 #
 
 ADAPTERS = {
+    'js'        : LearnJavaScriptAdapter(),
+    'kotlin'    : LearnKotlinAdapter(),
     'lua'       : LearnLuaAdapter(),
     'python'    : LearnPythonAdapter(),
     'php'       : LearnPHPAdapter(),
     'perl'      : LearnPerlAdapter(),
+    'ruby'      : LearnRubyAdapter(),
 }
 
 def get_learnxiny(topic):

@@ -201,20 +201,22 @@ Some languages has the one-liners-cheat sheet, `1line`:
 * `:list` shows all topics related to the language
 * `:learn` shows a learn-x-in-minutes language cheat sheet perfect for getting started with the language.
 * `1line` is a collection of one-liners in this language
+* `weirdness` is a collection of examples of weird things in this language
 
 ![cheat.sh usage](http://cheat.sh/files/supported-languages.png)
 
-At the moment, cheat.sh covers the 7 following programming languages (alphabetically sorted):
+At the moment, cheat.sh covers the 8 following programming languages (alphabetically sorted):
 
-|Prefix     |Language|Basics|One-liners|
-|-----------|--------|------|----------|
-|`go/`      |Go      |✓     |          |
-|`lua/`     |Lua     |✓     |          |
-|`perl/`    |Perl    |✓     |✓         |
-|`php/`     |PHP     |✓     |          |
-|`python/`  |Python  |✓     |          |
-|`rust/`    |Rust    |✓     |          |
-|`scala/`   |Scala   |✓     |          |
+|Prefix     |Language  |Basics|One-liners|Weirdness|
+|-----------|----------|------|----------|---------|
+|`go/`      |Go        |✓     |          |         |
+|`js/`      |JavaScript|✓     |✓         |✓        |
+|`lua/`     |Lua       |✓     |          |         |
+|`perl/`    |Perl      |✓     |✓         |         |
+|`php/`     |PHP       |✓     |          |         |
+|`python/`  |Python    |✓     |          |         |
+|`rust/`    |Rust      |✓     |          |         |
+|`scala/`   |Scala     |✓     |          |         |
 
 ## Cheat sheets sources
 
