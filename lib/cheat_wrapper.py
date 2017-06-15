@@ -38,11 +38,17 @@ from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnx
 # globals
 INTERNAL_TOPICS = [":list", ":firstpage", ':post', ':bash_completion', ':help', ':styles', ':styles-demo', ':emacs', ':emacs-ivy', ':fish', ':bash', ':zsh']
 LEXER = {
+    "clojure":  pygments.lexers.ClojureLexer,
+    "erlang":   pygments.lexers.ErlangLexer,
     "elixir":   pygments.lexers.ElixirLexer,
+    "elm"   :   pygments.lexers.ElmLexer,
     "go"    :   pygments.lexers.GoLexer,
+    "haskell":  pygments.lexers.HaskellLexer,
+    "julia" :   pygments.lexers.JuliaLexer,
     "js"    :   pygments.lexers.JavascriptLexer,
     "kotlin":   pygments.lexers.KotlinLexer,
     "lua"   :   pygments.lexers.LuaLexer,
+    "ocaml" :   pygments.lexers.OcamlLexer,
     "perl"  :   pygments.lexers.PerlLexer,
     "python":   pygments.lexers.PythonLexer,
     "php"   :   pygments.lexers.PhpLexer,

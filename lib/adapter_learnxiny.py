@@ -88,6 +88,121 @@ class LearnXYAdapter(object):
 # Various cheat sheets
 #
 
+class LearnClojureAdapter(LearnXYAdapter):
+    _prefix = "clojure"
+    _filename = "clojure.html.markdown"
+
+    def _is_block_separator(self, before, now, after):
+        if (    re.match(r'\s*$', before) 
+            and re.match(r';\s*', now)
+            and re.match(r';;;;;;+', after)):
+            block_name = re.sub(';\s*', '', now)
+            block_name = '_'.join([x.strip(",&:") for x in  block_name.strip(", ").split()])
+            # replace_with = {
+            #     'More_about_Objects': 
+            #         'Prototypes',
+            # }
+            # for k in replace_with:
+            #     if k in block_name:
+            #         block_name = replace_with[k]
+            return block_name
+        else:
+            return None
+
+    @staticmethod
+    def _cut_block(block):
+        answer = block[2:]
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
+
+class LearnElixirAdapter(LearnXYAdapter):
+    _prefix = "elixir"
+    _filename = "elixir.html.markdown"
+
+    def _is_block_separator(self, before, now, after):
+        if (    re.match(r'## ---*', before) 
+            and re.match(r'## --', now)
+            and re.match(r'## ---*', after)):
+            block_name = re.sub('## --\s*', '', now)
+            block_name = '_'.join(block_name.strip(", ").split())
+            replace_with = {
+                'More_about_Objects': 
+                    'Prototypes',
+            }
+            for k in replace_with:
+                if k in block_name:
+                    block_name = replace_with[k]
+            return block_name
+        else:
+            return None
+
+    @staticmethod
+    def _cut_block(block):
+        answer = block[2:-1]
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
+
+
+class LearnElmAdapter(LearnXYAdapter):
+    _prefix = "elm"
+    _filename = "elm.html.markdown"
+
+    def _is_block_separator(self, before, now, after):
+        if (    re.match('\s*', before) 
+            and re.match(r'\{--.*--\}', now)
+            and re.match('\s*', after)):
+            block_name = re.sub('\{--+\s*', '', now)
+            block_name = re.sub('--\}', '', block_name)
+            block_name = '_'.join(block_name.strip(", ").split())
+            replace_with = {
+                'More_about_Objects': 
+                    'Prototypes',
+            }
+            for k in replace_with:
+                if k in block_name:
+                    block_name = replace_with[k]
+            return block_name
+        else:
+            return None
+
+    @staticmethod
+    def _cut_block(block):
+        answer = block[2:-1]
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
+
+class LearnErlangAdapter(LearnXYAdapter):
+    _prefix = "erlang"
+    _filename = "erlang.html.markdown"
+
+    def _is_block_separator(self, before, now, after):
+        if (re.match('%%%%%%+', before) 
+            and re.match('%%\s+[0-9]+\.', now)
+            and re.match('%%%%%%+', after)):
+            block_name = re.sub('%%+\s+[0-9]+\.\s*', '', now)
+            block_name = '_'.join(block_name.strip('.').strip().split())
+            return block_name
+        else:
+            return None
+
+    @staticmethod
+    def _cut_block(block):
+        answer = block[2:-1]
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
+
 class LearnLuaAdapter(LearnXYAdapter):
     _prefix = "lua"
     _filename = "lua.html.markdown"
@@ -151,6 +266,66 @@ class LearnJavaScriptAdapter(LearnXYAdapter):
             answer = answer[:1]
         return answer
 
+class LearnJuliaAdapter(LearnXYAdapter):
+    _prefix = "julia"
+    _filename = "julia.html.markdown"
+
+    def _is_block_separator(self, before, now, after):
+        if (    re.match('####+', before) 
+            and re.match(r'##\s*', now)
+            and re.match('####+', after)):
+            block_name = re.sub(r'##\s+[0-9]+\.\s*', '', now)
+            block_name = '_'.join(block_name.strip(", ").split())
+            #replace_with = {
+            #    'More_about_Objects': 
+            #        'Prototypes',
+            #}
+            #for k in replace_with:
+            #    if k in block_name:
+            #        block_name = replace_with[k]
+            return block_name
+        else:
+            return None
+
+    @staticmethod
+    def _cut_block(block):
+        answer = block[2:-1]
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
+
+class LearnHaskellAdapter(LearnXYAdapter):
+    _prefix = "haskell"
+    _filename = "haskell.html.markdown"
+
+    def _is_block_separator(self, before, now, after):
+        if (    re.match('------+', before) 
+            and re.match('--+\s+[0-9]+\.', now)
+            and re.match('------+', after)):
+            block_name = re.sub('--+\s+[0-9]+\.\s*', '', now)
+            block_name = '_'.join(block_name.strip(", ").split())
+            replace_with = {
+                'More_about_Objects': 
+                    'Prototypes',
+            }
+            for k in replace_with:
+                if k in block_name:
+                    block_name = replace_with[k]
+            return block_name
+        else:
+            return None
+
+    @staticmethod
+    def _cut_block(block):
+        answer = block[2:-1]
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
+
 class LearnKotlinAdapter(LearnXYAdapter):
     _prefix = "kotlin"
     _filename = "kotlin.html.markdown"
@@ -161,6 +336,37 @@ class LearnKotlinAdapter(LearnXYAdapter):
             and re.match('#+\s+[0-9]+\.', now)):
             block_name = re.sub('#+\s+[0-9]+\.\s*', '', now)
             block_name = '_'.join(block_name.strip().split())
+            return block_name
+        else:
+            return None
+
+    @staticmethod
+    def _cut_block(block):
+        answer = block[2:-1]
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
+
+class LearnOCamlAdapter(LearnXYAdapter):
+    _prefix = "ocaml"
+    _filename = "ocaml.html.markdown"
+
+    def _is_block_separator(self, before, now, after):
+        if (    re.match('\s*', before) 
+            and re.match(r'\(\*\*\*+', now)
+            and re.match('\s*', after)):
+            block_name = re.sub(r'\(\*\*\*+\s*', '', now)
+            block_name = re.sub(r'\s*\*\*\*\)', '', block_name)
+            block_name = '_'.join(block_name.strip(", ").split())
+            replace_with = {
+                'More_about_Objects': 
+                    'Prototypes',
+            }
+            for k in replace_with:
+                if k in block_name:
+                    block_name = replace_with[k]
             return block_name
         else:
             return None
@@ -280,9 +486,16 @@ class LearnRubyAdapter(LearnXYAdapter):
 #
 
 ADAPTERS = {
+    'clojure'   : LearnClojureAdapter(),
+    'elixir'    : LearnElixirAdapter(),
+    'elm'       : LearnElmAdapter(),
+    'erlang'    : LearnErlangAdapter(),
+    'haskell'   : LearnHaskellAdapter(),
     'js'        : LearnJavaScriptAdapter(),
+    'julia'     : LearnJuliaAdapter(),
     'kotlin'    : LearnKotlinAdapter(),
     'lua'       : LearnLuaAdapter(),
+    'ocaml'     : LearnOCamlAdapter(),
     'python'    : LearnPythonAdapter(),
     'php'       : LearnPHPAdapter(),
     'perl'      : LearnPerlAdapter(),
