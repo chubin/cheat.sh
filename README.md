@@ -203,7 +203,7 @@ Some languages has the one-liners-cheat sheet, `1line`:
 * `1line` is a collection of one-liners in this language
 * `weirdness` is a collection of examples of weird things in this language
 
-![cheat.sh usage](http://cheat.sh/files/supported-languages-elixir.png)
+![cheat.sh usage](http://cheat.sh/files/supported-languages-elm.png)
 
 At the moment, cheat.sh covers the 15 following programming languages (alphabetically sorted):
 
