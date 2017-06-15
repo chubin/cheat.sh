@@ -203,15 +203,20 @@ Some languages has the one-liners-cheat sheet, `1line`:
 * `1line` is a collection of one-liners in this language
 * `weirdness` is a collection of examples of weird things in this language
 
-![cheat.sh usage](http://cheat.sh/files/supported-languages.png)
+![cheat.sh usage](http://cheat.sh/files/supported-languages-updated.png)
 
-At the moment, cheat.sh covers the 8 following programming languages (alphabetically sorted):
+At the moment, cheat.sh covers the 15 following programming languages (alphabetically sorted):
 
 |Prefix     |Language  |Basics|One-liners|Weirdness|
 |-----------|----------|------|----------|---------|
+|`clojure/` |Clojure   |✓     |          |         |
+|`elixir/`  |Elixir    |✓     |          |         |
+|`elm/`     |Elm       |✓     |          |         |
+|`erlang/`  |Erlang    |✓     |          |         |
 |`go/`      |Go        |✓     |          |         |
 |`haskell/` |Haskell   |✓     |          |         |
 |`js/`      |JavaScript|✓     |✓         |✓        |
+|`julia/`   |Julia     |✓     |          |         |
 |`lua/`     |Lua       |✓     |          |         |
 |`ocaml/`   |OCaml     |✓     |          |         |
 |`perl/`    |Perl      |✓     |✓         |         |
