@@ -46,7 +46,7 @@ There are several special pages (their name are always starting with a colon),
 that are not cheat sheets and have special meaning. For example:
 
 ```
-    :help           
+    :help
     :list           list all cheat sheets
     /perl/:list     list all perl cheat sheets
 ```
@@ -83,7 +83,7 @@ In this case search is not recursive — it is conducted only in a pages of the 
 For example:
 
 ```
-    /~snapshot          look for snapshot in the first level cheat sheets 
+    /~snapshot          look for snapshot in the first level cheat sheets
     /scala/~currying     look for currying in scala cheat sheets
 ```
 
@@ -139,7 +139,7 @@ in `~/.bashrc`:
     $ # add . ~/.bash.d/cheat.sh to ~/.bashrc
 ```
 
-If you want to use cheat.sh with curl 
+If you want to use cheat.sh with curl
 and don't create any special functions, include `:bash_completion`:
 
 ```
@@ -155,7 +155,7 @@ and don't create any special functions, include `:bash_completion`:
 * [cheat-sh.el](https://github.com/davep/cheat-sh.el) — Emacs support (available also at cheat.sh/:emacs)
 * cheat.sh/:emacs-ivy — Emacs support for ivy users
 
-[![asciicast](https://asciinema.org/a/123734.png)](https://asciinema.org/a/123734)
+[![asciicast](https://asciinema.org/a/3xvqwrsu9g4taj5w526sb2t35.png)](https://asciinema.org/a/3xvqwrsu9g4taj5w526sb2t35)
 
 ## Options
 
@@ -173,7 +173,7 @@ Options can be combined together in this way:
     $ curl cheat.sh/for?qT\&style=bw
 ```
 
-(note the `\` before `&`: it is escaping `&`, which has in shell special meaning). 
+(note the `\` before `&`: it is escaping `&`, which has in shell special meaning).
 
 ## Programming languages cheat sheets
 
