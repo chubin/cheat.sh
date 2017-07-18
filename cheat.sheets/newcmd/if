@@ -1,0 +1,20 @@
+int main() { 
+    // Basic 
+    if(x > 0) {
+        return x; 
+    }
+    else { 
+        return -x; 
+    }
+
+    // if else 
+    if(x > 0) { 
+        return x; 
+    }
+    else if(x == 0) { 
+        return 420; 
+    }
+    else { 
+        return -x;
+    }
+}

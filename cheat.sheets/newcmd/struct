@@ -19,5 +19,3 @@ ObjectName structName {
 // Accessing PUBLIC variables 
 ObjectName v = structName(5, "Hello");              // Creates a struct via the constructor 
 std::cout << v.a << " " << v.b << std::endl;        // Prints to console "5 Hello"
-
-
