@@ -1,0 +1,8 @@
+int *int_Ptr;     		// Declare a pointer variable called iPtr pointing to an int (an int pointer)
+                		// It contains an address. That address holds an int value.
+double *double_Ptr;  	// Declare a pointer of type double.
+
+int a = 5;				// Initializes a to the integer value 5 
+int *int_Ptr = &a		// Set int_Ptr which is an int pointer to the address of a
+std::cout << int_Ptr;	// Returns the address of a 
+std::cout << *int_Ptr;	// Returns 5 because it dereference the pointer to retrieve the value of a.

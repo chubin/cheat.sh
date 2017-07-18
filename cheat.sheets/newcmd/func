@@ -1,0 +1,29 @@
+// ### Functions 
+// a simple function 
+void functionName() {}
+
+// function with parameters of integers
+void functionName(int param1, int param2) {}
+
+// return type declaration 
+int functionName() { 
+    return 420;
+}
+
+// Return multiple values at once 
+// (C++ uses pairs [ 2 values ] and tuple [ more than 2 values ])
+// Please refer pairs and tuple respectively for more information
+std::tuple<double, double> functionName() {
+	return std::make_tuple( double1, double2 );
+}
+
+pair<double,double> result = functionName();
+std::cout << result.first << std::endl;
+std::cout << result.second << std::endl;
+
+// Pass by reference (the caller and the callee use the same variable for the parameter) 
+int functionName(int &referenceName) {}
+
+// Pass by value (the caller and callee have two independent variables with the same value)
+int functionName(int valueName) {}
+
