@@ -1,0 +1,13 @@
+// To install: (Mac OSX) type g++ in terminal and click enter to download the XCode Developer Tools
+               (Debian/Ubuntu) apt-get install g++
+               (Fedora/CentOS) dnf install gcc-c++
+
+// To Compile: g++ my_script.cpp
+// To Execute: ./a.out
+
+// To Compile w/ specific executable name: g++ my_script.cpp -o my.executable
+// To Execute: ./my.executable
+int main() { 
+    std::cout << "Hello" << endl;
+    return 0;
+}
