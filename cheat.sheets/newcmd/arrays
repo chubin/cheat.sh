@@ -1,6 +1,0 @@
-// In C++11 you can do the following, but most people use vector instead of arrays 
-a.size();           // Returns the size of array a
-
-int a[10];          // Declare an int array with length 10. 
-a[0] = 420;         // Set the value 420 to index 0 of array a
-int b = a[0]        // Set variable b to 420 by accessing index 0 of array a.
