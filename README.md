@@ -224,6 +224,7 @@ At the moment, cheat.sh covers the 15 following programming languages (alphabeti
 |`python/`  |Python    |✓     |          |         |
 |`rust/`    |Rust      |✓     |          |         |
 |`scala/`   |Scala     |✓     |          |         |
+|`c++/`     |c++       |✓     |          |         |
 
 ## Cheat sheets sources
 
