@@ -519,7 +519,7 @@ class LearnRubyAdapter(LearnXYAdapter):
 
 ADAPTERS = {
     'clojure'   : LearnClojureAdapter(),
-    'cpp'       : LearnCppAdapter(),
+    'c++'       : LearnCppAdapter(),
     'elixir'    : LearnElixirAdapter(),
     'elm'       : LearnElmAdapter(),
     'erlang'    : LearnErlangAdapter(),
