@@ -203,6 +203,7 @@ Some languages has the one-liners-cheat sheet, `1line`:
 * `1line` is a collection of one-liners in this language
 * `weirdness` is a collection of examples of weird things in this language
 
+![cheat.sh usage](./NewPicture.png)
 ![cheat.sh usage](http://cheat.sh/files/supported-languages-c++.png)
 
 At the moment, cheat.sh covers the 15 following programming languages (alphabetically sorted):
@@ -225,6 +226,7 @@ At the moment, cheat.sh covers the 15 following programming languages (alphabeti
 |`python/`  |Python    |✓     |          |         |
 |`rust/`    |Rust      |✓     |          |         |
 |`scala/`   |Scala     |✓     |          |         |
+|`c++/`     |c++       |✓     |          |         |
 
 ## Cheat sheets sources
 
