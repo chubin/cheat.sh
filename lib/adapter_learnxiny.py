@@ -118,6 +118,38 @@ class LearnClojureAdapter(LearnXYAdapter):
             answer = answer[:1]
         return answer
 
+class LearnCppAdapter(LearnXYAdapter):
+    _prefix = "c++"
+    _filename = "c++.html.markdown"
+
+    def _is_block_separator(self, before, now, after):
+        if (    re.match(r'////////*', before) 
+            and re.match(r'// ', now)
+            and re.match(r'////////*', after)):
+            block_name = re.sub('//\s*', '', now).replace('(', '').replace(')', '')
+            block_name = '_'.join(block_name.strip(", ").split())
+            replace_with = {
+                'More_about_Objects': 
+                    'Prototypes',
+            }
+            for k in replace_with:
+                if k in block_name:
+                    block_name = replace_with[k]
+            return block_name
+        else:
+            return None
+
+    @staticmethod
+    def _cut_block(block):
+        answer = block[2:-1]
+        if answer == []:
+            return answer
+        if answer[0].split() == '':
+            answer = answer[1:]
+        if answer[-1].split() == '':
+            answer = answer[:1]
+        return answer
+
 class LearnElixirAdapter(LearnXYAdapter):
     _prefix = "elixir"
     _filename = "elixir.html.markdown"
@@ -487,6 +519,7 @@ class LearnRubyAdapter(LearnXYAdapter):
 
 ADAPTERS = {
     'clojure'   : LearnClojureAdapter(),
+    'c++'       : LearnCppAdapter(),
     'elixir'    : LearnElixirAdapter(),
     'elm'       : LearnElmAdapter(),
     'erlang'    : LearnErlangAdapter(),

@@ -204,11 +204,13 @@ Some languages has the one-liners-cheat sheet, `1line`:
 * `weirdness` is a collection of examples of weird things in this language
 
 ![cheat.sh usage](./NewPicture.png)
+![cheat.sh usage](http://cheat.sh/files/supported-languages-c++.png)
 
 At the moment, cheat.sh covers the 15 following programming languages (alphabetically sorted):
 
 |Prefix     |Language  |Basics|One-liners|Weirdness|
 |-----------|----------|------|----------|---------|
+|`c++/`     |C++       |✓     |          |         |
 |`clojure/` |Clojure   |✓     |          |         |
 |`elixir/`  |Elixir    |✓     |          |         |
 |`elm/`     |Elm       |✓     |          |         |
