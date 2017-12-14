@@ -1,0 +1,19 @@
+;;
+;; Written by RenJMR
+;; https://www.reddit.com/r/emacs/comments/6ddr7p/snippet_search_cheatsh_using_ivy/ 
+;; 
+;;;
+;;; Install the package `ivy' and use `(require 'ivy)' if you do not have
+;;; access to the `ivy-read' function.
+
+(defun ejmr-search-cheat-sh ()
+  "Search `http://cheat.sh/' for help on commands and code."
+  (interactive)
+  (ivy-read "Command or Topic: "
+      (process-lines "curl" "--silent" "http://cheat.sh/:list?T&q")
+      :require-match t
+      :sort t
+      :history 'ejmr-search-cheat-sh
+      :action (lambda (input)
+        (browse-url (concat "http://cheat.sh/" input "?T&q")))
+      :caller 'ejmr-search-cheat-sh))
