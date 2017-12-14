@@ -13,7 +13,7 @@ in one of the following ways:
 
 ~~~
     # clone chubin/cheat.sh
-    git pull https://github.com/${you}/cheat.sh && cd cheat.sh
+    git pull https://github.com/${you}/cheat && cd cheat
     cp ${cheatsheet} cheat.sheets/newcmd
     git add cheat.sheets/newcmd
     git commit -m '...' cheat.sheets/newcmd
