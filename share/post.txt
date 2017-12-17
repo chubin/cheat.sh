@@ -17,7 +17,7 @@ to chubin/cheat.sheets):
     git pull https://github.com/${you}/cheat.sheets && cd cheat.sheets
     cp ${cheatsheet} newcmd
     git add newcmd
-    git commit -m 'added newcmd cheat sheets' newcmd
+    git commit -m 'added newcmd cheat sheet' newcmd
     git push
     # send pull request 
 ~~~
