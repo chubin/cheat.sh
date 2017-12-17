@@ -1,5 +1,6 @@
 You can add a new entry to a cheat sheet or create a new cheat sheet
-in one of the following ways:
+in one of the following ways (your cheat sheet will be eventually added
+to chubin/cheat.sheets):
 
 1. With curl:
 
@@ -12,11 +13,11 @@ in one of the following ways:
 2. With git:
 
 ~~~
-    # clone chubin/cheat.sh
-    git pull https://github.com/${you}/cheat.sh && cd cheat.sh
-    cp ${cheatsheet} cheat.sheets/newcmd
-    git add cheat.sheets/newcmd
-    git commit -m '...' cheat.sheets/newcmd
+    # clone chubin/cheat.sheets
+    git pull https://github.com/${you}/cheat.sheets && cd cheat.sheets
+    cp ${cheatsheet} newcmd
+    git add newcmd
+    git commit -m 'added newcmd cheat sheets' newcmd
     git push
     # send pull request 
 ~~~
