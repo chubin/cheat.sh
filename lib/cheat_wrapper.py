@@ -585,6 +585,9 @@ def cheat_wrapper(query, request_options=None, html=False):
 
         edit_button = ''
         if editable:
+            # It's possible that topic directory starts with omited underscore
+            if '/' in topic:
+                topic = '_' + topic
             edit_page_link = 'https://github.com/chubin/cheat.sheets/edit/master/sheets/' + topic
             edit_button = '<pre style="position:absolute;padding-left:40em;overflow:visible;height:0;">[<a href="%s" style="color:cyan">edit</a>]</pre>' % edit_page_link
         result = re.sub("<pre>", edit_button + form_html + "<pre>", result)
