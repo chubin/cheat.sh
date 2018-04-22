@@ -157,6 +157,12 @@ and don't create any special functions, include `:bash_completion`:
 
 [![asciicast](https://asciinema.org/a/3xvqwrsu9g4taj5w526sb2t35.png)](https://asciinema.org/a/3xvqwrsu9g4taj5w526sb2t35)
 
+### Vim
+
+* [cheat.sh-vim](https://github.com/dbeniamine/cheat.sh-vim) — Vim support
+
+[![asciicast](https://asciinema.org/a/c6QRIhus7np2OOQzmQ2RNXzRZ.png)](https://asciinema.org/a/c6QRIhus7np2OOQzmQ2RNXzRZ)
+
 ## Options
 
     ?OPTIONS
