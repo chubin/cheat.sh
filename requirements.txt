@@ -1,6 +1,5 @@
 gevent
 flask
-pygments
 requests
 pygments
 dateutils
