@@ -22,7 +22,6 @@ import redis
 from fuzzywuzzy import process, fuzz
 
 from pygments import highlight as pygments_highlight
-import pygments.lexers
 from pygments.formatters import Terminal256Formatter # pylint: disable=no-name-in-module
 from pygments.styles import get_all_styles
 
@@ -33,6 +32,8 @@ from globals import error, ANSI2HTML, \
                     PATH_CHEAT_SHEETS, PATH_CHEAT_SHEETS_SPOOL
 from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_FOOTER
 from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnxy
+from languages_data import LEXER, LANGUAGE_ALIAS
+import beautifier
 # pylint: disable=wrong-import-position,wrong-import-order
 
 COLOR_STYLES = sorted(list(get_all_styles()))
@@ -53,28 +54,7 @@ INTERNAL_TOPICS = [
     ':zsh'
     ]
 
-LEXER = {
-    "clojure":  pygments.lexers.ClojureLexer,
-    "c++"   :   pygments.lexers.CppLexer,
-    "erlang":   pygments.lexers.ErlangLexer,
-    "elixir":   pygments.lexers.ElixirLexer,
-    "elm"   :   pygments.lexers.ElmLexer,
-    "go"    :   pygments.lexers.GoLexer,
-    "haskell":  pygments.lexers.HaskellLexer,
-    "julia" :   pygments.lexers.JuliaLexer,
-    "js"    :   pygments.lexers.JavascriptLexer,
-    "kotlin":   pygments.lexers.KotlinLexer,
-    "lua"   :   pygments.lexers.LuaLexer,
-    "mongo" :   pygments.lexers.JavascriptLexer,
-    "ocaml" :   pygments.lexers.OcamlLexer,
-    "perl"  :   pygments.lexers.PerlLexer,
-    "python":   pygments.lexers.PythonLexer,
-    "php"   :   pygments.lexers.PhpLexer,
-    "psql"  :   pygments.lexers.PostgresLexer,
-    "ruby"  :   pygments.lexers.RubyLexer,
-    "rust"  :   pygments.lexers.RustLexer,
-    "scala" :   pygments.lexers.ScalaLexer,
-}
+
 REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
 MAX_SEARCH_LEN = 20
 
@@ -183,7 +163,7 @@ def _get_stat():
 #
 #
 
-def get_topic_type(topic):
+def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     """
     Return topic type for `topic` or "unknown" if topic can't be determined.
     """
@@ -192,12 +172,18 @@ def get_topic_type(topic):
         result = "search"
     elif topic.startswith(":"):
         result = "internal"
-    elif '/' in topic and not ' ' in topic:
+    elif '/' in topic:
         topic_type, topic_name = topic.split('/', 1)
-        if topic_type in _get_topics_dirs() and topic_name in [':list']:
-            result = "internal"
-        if is_valid_learnxy(topic):
-            result = 'learnxiny'
+        if '+' in topic_name:
+            result = 'question'
+        else:
+            if topic_type in _get_topics_dirs() and topic_name in [':list']:
+                result = "internal"
+            elif is_valid_learnxy(topic):
+                result = 'learnxiny'
+            else:
+                result = 'question'
+
     elif topic in CHEAT_SHEETS_TOPICS:
         result = "cheat.sheets"
     elif topic.rstrip('/') in CHEAT_SHEETS_DIRS and topic.endswith('/'):
@@ -206,10 +192,11 @@ def get_topic_type(topic):
         result = "cheat"
     elif topic in TLDR_TOPICS:
         result = "tldr"
-    elif ' ' in topic:
+    elif '+' in topic:
         result = "question"
     else:
         result = 'unknown'
+    print topic, " ", result
     return result
 
 #
@@ -290,6 +277,7 @@ def _get_answer_for_question(topic):
     """
     Find answer for the `topic` question.
     """
+    topic = " ".join(topic.replace('+', ' ').strip().split())
     cmd = ["/home/igor/cheat.sh/bin/get-answer-for-question", topic]
     proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
     answer = proc.communicate()[0].decode('utf-8')
@@ -311,18 +299,23 @@ Do you mean one of these topics may be?
 %s
     """ % possible_topics_text
 
+# pylint: disable=bad-whitespace
+#
+# topic_type, function_getter
+# should be replaced with a decorator
 TOPIC_GETTERS = (
-    ("cheat.sheets", _get_cheat_sheets),
-    ("cheat.sheets dir", _get_cheat_sheets_dir),
-    ("tldr", _get_tldr),
-    ("internal", _get_internal),
-    ("cheat", _get_cheat),
-    ("learnxiny", get_learnxiny),
-    ("question", _get_answer_for_question),
-    ("unknown", _get_unknown),
+    ("cheat.sheets",        _get_cheat_sheets),
+    ("cheat.sheets dir",    _get_cheat_sheets_dir),
+    ("tldr",                _get_tldr),
+    ("internal",            _get_internal),
+    ("cheat",               _get_cheat),
+    ("learnxiny",           get_learnxiny),
+    ("question",            _get_answer_for_question),
+    ("unknown",             _get_unknown),
 )
+# pylint: enable=bad-whitespace
 
-def get_answer(topic, keyword, options=""):
+def get_answer(topic, keyword, options="", request_options=None): # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     """
     Find cheat sheet for the topic.
     If `keyword` is None or rempty, return the whole answer.
@@ -378,14 +371,17 @@ def get_answer(topic, keyword, options=""):
         return answer
 
     answer = None
+    needs_beautification = False
 
     # checking if the answer is in the cache
     if topic != "":
         # temporary hack for "questions":
         # the topic name has to be prefixed with q:
         # so we can later delete them from redis
-        if '/' in topic and ' ' in topic:
+        # and we known that they need beautification
+        if '/' in topic and '+' in topic:
             topic = "q:" + topic
+            needs_beautification = True
 
         answer = REDIS.get(topic)
         if answer:
@@ -395,6 +391,7 @@ def get_answer(topic, keyword, options=""):
     # try to find it in one of the repositories
     if not answer:
         topic_type = get_topic_type(topic)
+
         for topic_getter_type, topic_getter in TOPIC_GETTERS:
             if topic_type == topic_getter_type:
                 answer = topic_getter(topic)
@@ -405,6 +402,15 @@ def get_answer(topic, keyword, options=""):
         # saving answers in the cache
         if topic_type not in ["search", "internal", "unknown"]:
             REDIS.set(topic, answer)
+
+    if needs_beautification:
+        filetype = 'bash'
+        if '/' in topic:
+            filetype = topic.split('/', 1)[0]
+            if filetype.startswith('q:'):
+                filetype = filetype[2:]
+
+        answer = beautifier.beautify(answer.encode('utf-8'), filetype, request_options)
 
     if not keyword:
         return answer
@@ -426,7 +432,7 @@ def get_answer(topic, keyword, options=""):
     answer = _join_paragraphs(paragraphs)
     return answer
 
-def find_answer_by_keyword(directory, keyword, options=""):
+def find_answer_by_keyword(directory, keyword, options="", request_options=None):
     """
     Search in the whole tree of all cheatsheets or in its subtree `directory`
     by `keyword`
@@ -447,7 +453,7 @@ def find_answer_by_keyword(directory, keyword, options=""):
         if not recursive and '/' in subtopic:
             continue
 
-        answer = get_answer(topic, keyword, options=options)
+        answer = get_answer(topic, keyword, options=options, request_options=request_options)
         if answer:
             answer_paragraphs.append((topic, answer))
 
@@ -458,7 +464,7 @@ def find_answer_by_keyword(directory, keyword, options=""):
     return answer_paragraphs
 
 #
-#
+#========================>8   cut here  8<===================================================
 #
 
 def save_cheatsheet(topic_name, cheatsheet):
@@ -553,6 +559,16 @@ def _rewrite_aliases(word):
         return ':bash_completion'
     return word
 
+def _rewrite_section_name(query):
+    """
+    """
+    if '/' not in query:
+        return query
+
+    section_name, rest = query.split('/', 1)
+    section_name = LANGUAGE_ALIAS.get(section_name, section_name)
+    return "%s/%s" % (section_name, rest)
+
 def cheat_wrapper(query, request_options=None, html=False): # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     """
     Giant megafunction that delivers cheat sheet for `query`.
@@ -570,7 +586,7 @@ def cheat_wrapper(query, request_options=None, html=False): # pylint: disable=to
     query = query.rstrip('/')
 
     query = _rewrite_aliases(query)
-    query = query.replace('+', ' ')
+    query = _rewrite_section_name(query)
 
     highlight = not bool(request_options and request_options.get('no-terminal'))
     color_style = request_options.get('style', '')
@@ -590,10 +606,11 @@ def cheat_wrapper(query, request_options=None, html=False): # pylint: disable=to
             options = options[:options.index('/')]
             keyword = keyword[:-len(options)-1]
 
-        answers = find_answer_by_keyword(topic, keyword, options=options)
+        answers = find_answer_by_keyword(
+            topic, keyword, options=options, request_options=request_options)
         search_mode = True
     else:
-        answers = [(query, get_answer(query, keyword))]
+        answers = [(query, get_answer(query, keyword, request_options=request_options))]
         search_mode = False
 
 
@@ -624,8 +641,11 @@ def cheat_wrapper(query, request_options=None, html=False): # pylint: disable=to
                 answer = _colorize_internal(topic, answer, html)
             else:
                 color_style = color_style or "native"
-                lexer = pygments.lexers.BashLexer
+                lexer = LEXER['bash']
                 for lexer_name, lexer_value in LEXER.items():
+                    if topic.startswith('cpp'):
+                        topic = 'c++' + topic[3:]
+
                     if topic.startswith("%s/" % lexer_name):
                         color_style = color_style or "monokai"
                         if lexer_name == 'php':
@@ -634,7 +654,7 @@ def cheat_wrapper(query, request_options=None, html=False): # pylint: disable=to
                         break
 
                 formatter = Terminal256Formatter(style=color_style)
-                answer = pygments_highlight(answer, lexer(), formatter)
+                answer = pygments_highlight(answer, lexer(), formatter).lstrip('\n')
 
         if topic_type == "cheat.sheets":
             editable = True
