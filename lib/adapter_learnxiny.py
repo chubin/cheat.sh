@@ -119,7 +119,7 @@ class LearnClojureAdapter(LearnXYAdapter):
         return answer
 
 class LearnCppAdapter(LearnXYAdapter):
-    _prefix = "c++"
+    _prefix = "cpp"
     _filename = "c++.html.markdown"
 
     def _is_block_separator(self, before, now, after):
