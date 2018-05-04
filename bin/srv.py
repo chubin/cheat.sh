@@ -63,6 +63,15 @@ def parse_args(args):
     if 'q' in q:
         result['quiet'] = True
 
+    options_meaning = {
+        "c": dict(add_comments=True),
+        "C": dict(add_comments=False),
+        "Q": dict(remove_text=True),
+    }
+    for option, meaning in options_meaning.items():
+        if option in q:
+            result.update(meaning)
+
     for key, val in args.items():
         if val == 'True':
             val = True
