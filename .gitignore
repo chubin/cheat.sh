@@ -1,3 +1,4 @@
 *.pyc
 log/
 ve/
+share/vim/.vim/
