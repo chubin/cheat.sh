@@ -15,10 +15,14 @@ Exported functions:
     normalize(text, mode)
 """
 
+from gevent.monkey import patch_all
+from gevent.subprocess import Popen
+patch_all()
+
+# pylint: disable=wrong-import-position,wrong-import-order
 import sys
 import os
 import textwrap
-import subprocess
 import hashlib
 import re
 
@@ -27,7 +31,6 @@ from tempfile import NamedTemporaryFile
 
 import redis
 
-# pylint: disable=wrong-import-position,wrong-import-order
 MYDIR = os.path.abspath(os.path.dirname(os.path.dirname('__file__')))
 sys.path.append("%s/lib/" % MYDIR)
 from languages_data import VIM_NAME
@@ -196,7 +199,7 @@ def _run_vim_script(script_lines, text_lines):
 
     cmd = ["script", "-q", "-c",
            "vim -S %s %s" % (script_vim.name, textfile.name)]
-    subprocess.Popen(cmd, shell=False, stdout=FNULL, stderr=FNULL, env=my_env).communicate()
+    Popen(cmd, shell=False, stdout=FNULL, stderr=FNULL, env=my_env).communicate()
 
     return open(textfile.name, "r").read()
 
