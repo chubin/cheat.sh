@@ -5,6 +5,7 @@ All hardcoded pathes should be (theoretically) here.
 
 import logging
 import os
+from pygments.styles import get_all_styles
 
 MYDIR = os.path.abspath(os.path.dirname(os.path.dirname('__file__')))
 
@@ -20,6 +21,8 @@ PATH_TLDR_PAGES = "/home/igor/.tldr/cache/pages/*/*.md"
 PATH_CHEAT_PAGES = "/usr/local/lib/python2.7/dist-packages/cheat/cheatsheets/*"
 PATH_CHEAT_SHEETS = "/home/igor/cheat.sheets/sheets/"
 PATH_CHEAT_SHEETS_SPOOL = "/home/igor/cheat.sheets/spool/"
+
+COLOR_STYLES = sorted(list(get_all_styles()))
 
 def error(text):
     """
