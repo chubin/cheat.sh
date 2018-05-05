@@ -13,8 +13,6 @@ import sys
 import os
 import glob
 import re
-import random
-import string
 import collections
 
 import colored
@@ -29,7 +27,7 @@ MYDIR = os.path.abspath(os.path.dirname(os.path.dirname('__file__')))
 sys.path.append("%s/lib/" % MYDIR)
 from globals import error, ANSI2HTML, \
                     PATH_TLDR_PAGES, PATH_CHEAT_PAGES, \
-                    PATH_CHEAT_SHEETS, PATH_CHEAT_SHEETS_SPOOL
+                    PATH_CHEAT_SHEETS
 from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_FOOTER
 from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnxy
 from languages_data import LEXER, LANGUAGE_ALIAS
@@ -397,6 +395,7 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
                 answer = topic_getter(topic)
                 break
         if not answer:
+            topic_type = "unknown"
             answer = _get_unknown(topic)
 
         # saving answers in the cache
@@ -465,21 +464,6 @@ def find_answer_by_keyword(directory, keyword, options="", request_options=None)
 
 #
 #========================>8   cut here  8<===================================================
-#
-
-def save_cheatsheet(topic_name, cheatsheet):
-    """
-    Save posted cheat sheet `cheatsheet` with `topic_name`
-    in the spool directory
-    """
-
-    nonce = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(9))
-    filename = topic_name.replace('/', '.') + "." + nonce
-    filename = os.path.join(PATH_CHEAT_SHEETS_SPOOL, filename)
-
-    open(filename, 'w').write(cheatsheet)
-#
-#
 #
 
 def _colorize_internal(topic, answer, html_needed):
