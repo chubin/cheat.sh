@@ -90,6 +90,9 @@ LANGUAGE_ALIAS = {
     'c#':           'csharp',
     'f#':           'fsharp',
     'objc':         'objective-c',
+    'sh':           'bash',
+    'asm':          'assembly',
+    'assembler':    'assembly',
 }
 
 VIM_NAME = {
@@ -97,4 +100,5 @@ VIM_NAME = {
     "dlang":        "d",
     "vbnet":        "vb",
     "delphi":       "pascal",
+    "bash":         "sh",
 }
