@@ -23,6 +23,7 @@ from globals import error, ANSI2HTML, COLOR_STYLES
 from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_FOOTER
 from languages_data import LEXER
 from get_answer import get_topic_type, get_topics_list, get_answer, find_answer_by_keyword
+from beautifier import code_blocks
 # import beautifier
 # pylint: disable=wrong-import-position,wrong-import-order
 
@@ -85,20 +86,40 @@ def _colorize_internal(topic, answer, html_needed):
 
     return answer
 
-def _colorize_ansi_answer(topic, answer, color_style):
+def _colorize_ansi_answer(topic, answer, color_style,               # pylint: disable=too-many-arguments
+                          highlight_all=True, highlight_code=False,
+                          unindent_code=False):
 
     color_style = color_style or "native"
-    lexer = LEXER['bash']
+    lexer_class = LEXER['bash']
     for lexer_name, lexer_value in LEXER.items():
         if topic.startswith("%s/" % lexer_name):
-            color_style = color_style or "monokai"
+            # color_style = color_style or "monokai"
             if lexer_name == 'php':
                 answer = "<?\n%s?>\n" % answer
-            lexer = lexer_value
+            lexer_class = lexer_value
             break
 
-    formatter = Terminal256Formatter(style=color_style)
-    return pygments_highlight(answer, lexer(), formatter).lstrip('\n')
+    if highlight_all:
+        highlight = lambda answer: pygments_highlight(
+            answer, lexer_class(), Terminal256Formatter(style=color_style)).strip('\n')+'\n'
+    else:
+        highlight = lambda x: x
+
+    if highlight_code:
+        blocks = code_blocks(answer, wrap_lines=True, unindent_code=(4 if unindent_code else False))
+        highlighted_blocks = []
+        for block in blocks:
+            if block[0] == 1:
+                this_block = highlight(block[1])
+            else:
+                this_block = block[1].strip('\n')+'\n'
+            highlighted_blocks.append(this_block)
+
+        result = "\n".join(highlighted_blocks)
+    else:
+        result = highlight(answer).lstrip('\n')
+    return result
 
 def _github_button(topic_type):
 
@@ -177,7 +198,7 @@ def _render_html(query, result, editable, repository_button, request_options):
                                 + '</body>')
     return result
 
-def _visualize(query, keyword, answers, request_options, html=None):
+def _visualize(query, keyword, answers, request_options, html=None): # pylint: disable=too-many-locals
 
     search_mode = bool(keyword)
 
@@ -198,27 +219,30 @@ def _visualize(query, keyword, answers, request_options, html=None):
                     + colored.attr('reset') + "\n"
             break
 
-        if topic in [":list", ":bash_completion"]:
-            highlight = False
-
         topic_type = get_topic_type(topic)
-        if topic_type == 'unknown':
-            found = False
+        highlight = (highlight
+                     and topic not in [":list", ":bash_completion"]
+                     and topic_type not in ["unknown"]
+                    )
+        found = found and not topic_type == 'unknown'
+        editable = editable or topic_type == "cheat.sheets"
 
-        if topic_type == "cheat.sheets":
-            editable = True
-
-        if not highlight:
-            if search_mode:
-                result += "\n[%s]\n" % topic
+        if topic_type == "internal" and highlight:
+            answer = _colorize_internal(topic, answer, html)
         else:
+            answer = _colorize_ansi_answer(
+                topic, answer, color_style,
+                highlight_all=highlight,
+                highlight_code=(topic_type == 'question'
+                                and not request_options.get('add_comments')
+                                and not request_options.get('remove_text')),
+                unindent_code=request_options.get('unindent_code')
+                )
 
-            if topic_type == "internal":
-                answer = _colorize_internal(topic, answer, html)
+        if search_mode:
+            if not highlight:
+                result += "\n[%s]\n" % topic
             else:
-                answer = _colorize_ansi_answer(topic, answer, color_style)
-
-            if search_mode:
                 result += "\n%s%s %s %s%s\n" % (colored.bg('dark_gray'),
                                                 colored.attr("res_underlined"),
                                                 topic,
@@ -226,8 +250,9 @@ def _visualize(query, keyword, answers, request_options, html=None):
                                                 colored.attr('reset'))
         result += answer
 
+    result = result.strip('\n') + "\n"
+
     if search_mode:
-        result = result.lstrip('\n')
         editable = False
         repository_button = ''
     else:
@@ -250,6 +275,9 @@ def cheat_wrapper(query, request_options=None, html=False):
     as soon as possible.
     """
 
+    def _strip_hyperlink(query):
+        return re.sub('(,[0-9]+)+$', '', query)
+
     def _parse_query(query):
         topic = query
         keyword = None
@@ -271,7 +299,7 @@ def cheat_wrapper(query, request_options=None, html=False):
 
     # at the moment, we just remove trailing slashes
     # so queries python/ and python are equal
-    query = query.rstrip('/')
+    query = _strip_hyperlink(query.rstrip('/'))
     topic, keyword, search_options = _parse_query(query)
 
     if keyword:
