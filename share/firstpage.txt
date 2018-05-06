@@ -19,6 +19,7 @@ d88' `"Y8  888P"Y88b  d88' `88b `P  )88b    888       d88(  "8  888P"Y88b
     * database management systems:
         <mongo/> <redis/>
     * supports bash completion (add {/:bash_completion} to your {~/.bashrc})
+    * editors integration (see {/:emacs} and {/:vim})
 
 
 To show a cheat sheet:
