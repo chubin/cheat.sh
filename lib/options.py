@@ -7,7 +7,9 @@ def parse_args(args):
     Parse arguments and options.
     Replace short options with their long counterparts.
     """
-    result = {}
+    result = {
+        'add_comments':  True,
+    }
 
     query = ""
     for key, val in args.items():
@@ -15,15 +17,12 @@ def parse_args(args):
             query += key
             continue
 
-    if 'T' in query:
-        result['no-terminal'] = True
-    if 'q' in query:
-        result['quiet'] = True
-
     options_meaning = {
-        "c": dict(add_comments=True),
-        "C": dict(add_comments=False),
+        "c": dict(add_comments=False, unindent_code=False),
+        "C": dict(add_comments=False, unindent_code=True),
         "Q": dict(remove_text=True),
+        'q': dict(quiet=True),
+        'T': {'no-terminal': True},
     }
     for option, meaning in options_meaning.items():
         if option in query:
