@@ -12,7 +12,8 @@ actively uses caching.
 
 Exported functions:
 
-    normalize(text, mode)
+    beautify(text, lang, options)
+    code_blocks(text)
 """
 
 from gevent.monkey import patch_all
@@ -144,33 +145,33 @@ def _classify_lines(lines):
     line_types = [1 if x == -1 else x for x in line_types]
     return line_types
 
-def _wrap_lines(lines_classes, shift_code=False):
+def _wrap_lines(lines_classes, unindent_code=False):
     """
     Wrap classified lines. Add the splitted lines to the stream.
-    If `shift_code` is True, remove leading four spaces.
+    If `unindent_code` is True, remove leading four spaces.
     """
 
-    def _shift_code(line, shift=0):
+    def _unindent_code(line, shift=0):
         #if line.startswith('    '):
         #    return line[4:]
 
-        if shift == 1 and line != '':
+        if shift == -1 and line != '':
             return ' ' + line
 
-        if shift == 3:
-            if line.startswith('   '):
-                return line[3:]
+        if shift > 0:
+            if line.startswith(' '*shift):
+                return line[shift:]
 
         return line
 
     result = []
     for line_tuple in lines_classes:
         if line_tuple[0] == 1:
-            if shift_code:
-                shift = 3
+            if unindent_code:
+                shift = 3 if unindent_code is True else unindent_code
             else:
                 shift = -1
-            result.append((line_tuple[0], _shift_code(line_tuple[1], shift=shift)))
+            result.append((line_tuple[0], _unindent_code(line_tuple[1], shift=shift)))
         else:
             if line_tuple[1].strip() == "":
                 result.append((line_tuple[0], ""))
@@ -236,12 +237,13 @@ def _beautify(text, filetype, add_comments=False, remove_text=False):
 
     # We shift the code if and only if we either convert the text into comments
     # or remove the text completely. Otherwise the code has to remain aligned
-    shift_code = add_comments or remove_text
+    unindent_code = add_comments or remove_text
+    print unindent_code
 
     lines = [x.rstrip('\n') for x in text.splitlines()]
     lines = _cleanup_lines(lines)
     lines_classes = zip(_classify_lines(lines), lines)
-    lines_classes = _wrap_lines(lines_classes, shift_code=shift_code)
+    lines_classes = _wrap_lines(lines_classes, unindent_code=unindent_code)
     #for x,y in lines_classes:
     #   print "%s: %s" % (x, y)
 
@@ -261,6 +263,22 @@ def _beautify(text, filetype, add_comments=False, remove_text=False):
             [line for (_, line) in lines_classes])
 
     return output
+
+def code_blocks(text, wrap_lines=False, unindent_code=False):
+    """
+    Split `text` into blocks of text and code.
+    Return list of tuples TYPE, TEXT
+    """
+    lines = [x.rstrip('\n') for x in text.splitlines()]
+    lines_classes = zip(_classify_lines(lines), lines)
+
+    if wrap_lines:
+        lines_classes = _wrap_lines(lines_classes, unindent_code=unindent_code)
+
+    lines_blocks = groupby(lines_classes, key=lambda x: x[0])
+    answer = [(x[0], "\n".join([y[1] for y in x[1]])+"\n") for x in lines_blocks]
+    return answer
+
 
 def beautify(text, lang, options):
     """
