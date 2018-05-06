@@ -1,0 +1,28 @@
+" To use cheat.sh from your vim, install the cheat.sh-vim plugin from David Beniamine
+" located at https://github.com/dbeniamine/cheat.sh-vim.
+" See the page for the configuration options and the magic key combinations.
+"
+" ## Vizardry
+"
+" If you have Vizardry installed, you can run from vim:
+" 
+"     Invoke -u dbeniamine cheat.sh-vim
+" 
+" ## Vundle
+"
+" Add the following to your Vundle Plugin list and do InstallPlugins:
+" 
+"     Plugin 'dbeniamine/cheat.sh-vim'
+" 
+" ## Pathogen
+"
+" If you are using Pathogen, Run the following command in shell:
+"
+"     git clone https://github.com/dbeniamine/cheat.sh-vim.git ~/.vim/bundle/cheat.sh-vim
+" 
+" ## Quick install
+" 
+"     git clone https://github.com/dbeniamine/cheat.sh-vim.git
+"     cd cheat.sh-vim/
+"     cp -r ./* ~/.vim
+
