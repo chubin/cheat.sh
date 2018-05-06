@@ -12,10 +12,15 @@ Options:
     T                  text only, no ANSI sequences
     style=STYLE        color style
 
+    c                  do not comment text, do not shift code (QUERY+ only)
+    C                  do not comment text, shift code (QUERY+ only)
+    Q                  code only, don't show text (QUERY+ only)
+
 Options can be combined together in this way:
 
-    curl cheat.sh/for?qT&style=bw
+    curl 'cheat.sh/for?qT&style=bw'
     
+(when using & in shell, don't forget to specify the quotes or escape & with \)
 
 Special pages:
 
@@ -28,8 +33,15 @@ Special pages:
 
 Tab completion:
 
+    $ mkdir -p ~/.bash.d/
     $ curl cheat.sh/:bash_completion > ~/.bash.d/cheat.sh
     $ . ~/.bash.d/cheat.sh
+    $ echo '. ~/.bash.d/cheat.sh' >> ~/.bashrc
+
+Editor integration:
+
+    :emacs              see the page for the Emacs configuration
+    :vim                see the page for the Vim configuration
 
 Search:
 
@@ -64,5 +76,3 @@ Support programming languages:
     rust
     python
     php
-
-
