@@ -31,18 +31,19 @@ REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
 MAX_SEARCH_LEN = 20
 
 INTERNAL_TOPICS = [
-    ":list",
-    ":firstpage",
-    ':post',
+    ':bash',
     ':bash_completion',
-    ':help',
-    ':styles',
-    ':styles-demo',
     ':emacs',
     ':emacs-ivy',
+    ":firstpage",
     ':fish',
-    ':bash',
-    ':zsh'
+    ':help',
+    ":list",
+    ':post',
+    ':styles',
+    ':styles-demo',
+    ':vim',
+    ':zsh',
     ]
 
 def _update_tldr_topics():
@@ -130,7 +131,8 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
     """
     Return topic type for `topic` or "unknown" if topic can't be determined.
     """
-    result = ''
+    result = 'unknown'
+
     if topic == "":
         result = "search"
     elif topic.startswith(":"):
@@ -144,21 +146,19 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
                 result = "internal"
             elif is_valid_learnxy(topic):
                 result = 'learnxiny'
-            else:
-                result = 'question'
 
-    elif topic in CHEAT_SHEETS_TOPICS:
-        result = "cheat.sheets"
-    elif topic.rstrip('/') in CHEAT_SHEETS_DIRS and topic.endswith('/'):
-        result = "cheat.sheets dir"
-    elif topic in CHEAT_TOPICS:
-        result = "cheat"
-    elif topic in TLDR_TOPICS:
-        result = "tldr"
-    elif '+' in topic:
-        result = "question"
-    else:
-        result = 'unknown'
+    if result == 'unknown':
+        if topic in CHEAT_SHEETS_TOPICS:
+            result = "cheat.sheets"
+        elif topic.rstrip('/') in CHEAT_SHEETS_DIRS and topic.endswith('/'):
+            result = "cheat.sheets dir"
+        elif topic in CHEAT_TOPICS:
+            result = "cheat"
+        elif topic in TLDR_TOPICS:
+            result = "tldr"
+        elif '+' in topic:
+            result = "question"
+
     print topic, " ", result
     return result
 
