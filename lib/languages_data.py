@@ -10,7 +10,7 @@ import pygments.lexers
 
 LEXER = {
     "clojure":  pygments.lexers.ClojureLexer,
-    "c++"   :   pygments.lexers.CppLexer,
+    "cpp"   :   pygments.lexers.CppLexer,
     "erlang":   pygments.lexers.ErlangLexer,
     "elixir":   pygments.lexers.ElixirLexer,
     "elm"   :   pygments.lexers.ElmLexer,
