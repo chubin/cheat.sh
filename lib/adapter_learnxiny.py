@@ -2,7 +2,6 @@
 Adapters for the cheat sheets from the Learn X in Y project
 """
 
-import abc
 import os
 import re
 
@@ -16,6 +15,10 @@ class LearnXYAdapter(object):
     _replace_with = {}
     _filename = ''
     prefix = ''
+    _replace_with = {}
+    _splitted = True
+    _block_cut_start = 2
+    _block_cut_end = 0
 
     def __init__(self):
 
@@ -28,14 +31,30 @@ class LearnXYAdapter(object):
         self._topics_list += [":learn"]
         print self.prefix, self._topics_list
 
-    @abc.abstractmethod
     def _is_block_separator(self, before, now, after):
-        pass
+        if (re.match(r'////////*', before)
+                and re.match(r'// ', now)
+                and re.match(r'////////*', after)):
+            block_name = re.sub(r'//\s*', '', now).replace('(', '').replace(')', '')
+            block_name = '_'.join(block_name.strip(", ").split())
+            for character in '/,':
+                block_name = block_name.replace(character, '')
+            for k in self._replace_with:
+                if k in block_name:
+                    block_name = self._replace_with[k]
+            return block_name
+        return None
 
-    @staticmethod
-    @abc.abstractmethod
-    def _cut_block(block, start_block=False):
-        pass
+    def _cut_block(self, block, start_block=False):
+        if not start_block:
+            answer = block[self._block_cut_start:-self._block_cut_end]
+        if answer == []:
+            return answer
+        if answer[0].strip() == '':
+            answer = answer[1:]
+        if answer[-1].strip() == '':
+            answer = answer[:1]
+        return answer
 
     def _read_cheatsheet(self):
         filename = os.path.join(self._learn_xy_path, self._filename)
@@ -55,6 +74,10 @@ class LearnXYAdapter(object):
             return answer
 
     def _extract_blocks(self):
+
+        if not self._splitted:
+            return []
+
         lines = self._whole_cheatsheet
         answer = []
 
@@ -287,6 +310,12 @@ class LearnErlangAdapter(LearnXYAdapter):
         if answer[-1].split() == '':
             answer = answer[:1]
         return answer
+
+class LearnGoAdapter(LearnXYAdapter):
+    "Learn Go in Y Minutes"
+    prefix = "go"
+    _filename = "go.html.markdown"
+    _splitted = False
 
 class LearnLuaAdapter(LearnXYAdapter):
     """
