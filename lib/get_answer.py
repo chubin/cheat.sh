@@ -23,7 +23,7 @@ from fuzzywuzzy import process, fuzz
 import beautifier
 from globals import MYDIR, PATH_TLDR_PAGES, PATH_CHEAT_PAGES, PATH_CHEAT_SHEETS, COLOR_STYLES
 from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnxy
-from languages_data import LANGUAGE_ALIAS
+from languages_data import LANGUAGE_ALIAS, SO_NAME
 # pylint: enable=wrong-import-position,wrong-import-order
 
 REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
@@ -240,6 +240,7 @@ def _get_answer_for_question(topic):
     """
     Find answer for the `topic` question.
     """
+
     topic = " ".join(topic.replace('+', ' ').strip().split())
     cmd = ["/home/igor/cheat.sh/bin/get-answer-for-question", topic]
     proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
@@ -348,6 +349,18 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
         section_name = LANGUAGE_ALIAS.get(section_name, section_name)
         return "%s/%s" % (section_name, rest)
 
+    def _rewrite_section_name_for_q(query):
+        """
+        """
+        if '/' not in query:
+            return query
+
+        section_name, rest = query.split('/', 1)
+        section_name = SO_NAME.get(section_name, section_name)
+        print "%s/%s" % (section_name, rest)
+        return "%s/%s" % (section_name, rest)
+
+
     answer = None
     needs_beautification = False
 
@@ -361,6 +374,7 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
         # so we can later delete them from redis
         # and we known that they need beautification
         if '/' in topic and '+' in topic:
+            topic = _rewrite_section_name_for_q(topic)
             topic = "q:" + topic
             needs_beautification = True
 
