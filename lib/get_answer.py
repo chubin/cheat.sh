@@ -44,6 +44,7 @@ INTERNAL_TOPICS = [
     ':styles-demo',
     ':vim',
     ':zsh',
+    ':share',
     ]
 
 def _update_tldr_topics():
@@ -69,6 +70,8 @@ def _update_cheat_sheets_topics():
 
     for topic in glob.glob(PATH_CHEAT_SHEETS + "*/*"):
         dirname, filename = os.path.split(topic)
+        if filename in ['_info.yaml']:
+            continue
         dirname = os.path.basename(dirname)
         if dirname.startswith('_'):
             dirname = dirname[1:]
