@@ -27,9 +27,17 @@ Special pages:
     :help               this page
     :list               list all cheat sheets
     :post               how to post new cheat sheet
+    :bash               shell client
     :bash_completion    bash function for tab completion
     :styles             list of color styles
     :styles-demo        show color styles usage examples
+
+Shell client:
+
+    $ curl https://cht.sh/:bash > ~/bin/cht.sh
+    $ chmod +x ~/bin/cht.sh
+    $ cht.sh python :learn
+    $ cht.sh --shell
 
 Tab completion:
 
@@ -59,7 +67,6 @@ List of search options:
     b   word boundaries
     i   case insensitive search
     r   recursive
-
 
 Programming languages topics:
 
