@@ -1,29 +1,247 @@
-# add this to ~/.bashrc or to ~/.bash.d/cheat.sh and
-#   source ~/.bash.d/cheat.sh
-# in your ~/.bashrc
+#!/bin/bash
+#
+# [X] open section
+# [X] one shot mode
+# [X] usage info
+# [X] dependencies check
+# [X] help
+# [X] yank/y/copy/c
+# [X] Y/C
+# [X] eof problem
+# [X] less
+#
 
-cheat.sh()
+__CHTSH_VERSION=1
+__CHTSH_DATETIME="2018-05-19 22:26:46 +0200"
+
+get_list_of_sections()
 {
-    # replace native with the color scheme you want
-    # curl cheat.sh/:styles-demo to show the available color schemes
-    curl -s cheat.sh/"$1"?style=native
+  curl -s https://cht.sh/:list | grep -v '/.*/' | grep '/$'
 }
 
-_cheatsh_complete_cheatsh() 
-{
-    local cur opts #prev
-    _get_comp_words_by_ref -n : cur
+if [ "$1" == --read ]; then
+  read -r a || a=exit
+  echo $a
+  exit 0
+elif [ "$1" == --help ] || [ -z "$1" ]; then
+  cat <<EOF
+Usage:
 
-    COMPREPLY=()
-    prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="$(curl -s cheat.sh/:list)"
+    ${0##*/} --help           show this help
+    ${0##*/} --shell [LANG]   shell mode (open LANG if specified)
+    ${0##*/} QUERY            process QUERY and exit
+EOF
+  exit 0
+elif [ "$1" == --shell ]; then
+  shell_mode=yes
+  shift
+fi
 
-    #if [[ "${cur}" == ch ]] ; then
-		COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-		__ltrim_colon_completions "$cur"
-        return 0
-    #fi  
-}
+if [ "$shell_mode" != yes ]; then
+  opts=""
+  input=""
+  for o; do
+    if [[ "$o" == -* ]]; then
+      opts="${opts}${o#-}"
+    else
+      input="$input $o"
+    fi
+  done
+  query=$(echo "$input" | sed 's@ *$@@; s@^ *@@; s@ @/@; s@ @+@g')
+  curl -s https://cht.sh/"$query"
+  exit 0
+fi
 
-complete -F _cheatsh_complete_cheatsh cheat.sh
+which xsel >& /dev/null || { echo 'DEPENDENCY: please install "xsel" for "copy"' >&2; }
+which rlwrap >& /dev/null || { echo 'DEPENDENCY: install "rlwrap" to use cht.sh in the shell mode' >&2; exit 1; }
+which curl >& /dev/null || { echo 'DEPENDENCY: install "curl" to use cht.sh' >&2; exit 1; }
 
+mkdir -p $HOME/.cht.sh/
+lines=$(tput lines)
+
+prompt="cht.sh"
+section="$1"
+
+TMP1=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
+trap 'rm -rf $TMP1 $TMP2' EXIT
+
+[ -e "$HOME/.cht.sh/.hushlogin" ] || { echo "type 'help' for the cht.sh shell help"; }
+
+while true; do
+  if [ "$section" != "" ]; then
+    full_prompt="$prompt/$section> "
+  else
+    full_prompt="$prompt> "
+  fi
+
+  input=$(rlwrap -H $HOME/.cht.sh/history -pgreen -C cht.sh -S "$full_prompt" bash "$0" --read)
+
+  case "$input" in
+    '?'|h|help)
+      cat <<EOF
+help    - show this help
+hush    - do not show the 'help' string at start anymore
+cd LANG - change the language context
+copy    - copy the last answer in the clipboard (aliases: yank, y, c)
+ccopy   - copy the last answer w/o comments (cut comments; aliases: cc, Y, C)
+exit    - exit the cheat shell (aliases: quit, ^D)
+id [ID] - set/show an unique session id ("reset" to reset, "remove" to remove)
+update  - self update (only if the scriptfile is writeable)
+version - show current cht.sh version
+/:help  - service help
+QUERY   - space ceparated query staring (examples are below)
+              cht.sh> python zip list
+              cht.sh/python> zip list
+              cht.sh/go> /python zip list
+EOF
+      continue
+      ;;
+    hush)
+      mkdir -p $HOME/.cht.sh/ && touch $HOME/.cht.sh/.hushlogin && echo "Initial 'use help' message was disabled"
+      continue
+      ;;
+    cd)
+      section=""
+      continue
+      ;;
+    "cd "*)
+      new_section=$(echo "$input" | sed 's/cd //; s/ .*//; s@/\+$@@; s@^/\+@@')
+      if [ "$new_section" = "" ] || [ "$new_section" = ".." ] || [ "$new_section" = / ]; then
+        section=""
+      else
+        valid_sections=($(get_list_of_sections))
+        valid=no; for q in "${valid_sections[@]}"; do [[ "$q" == $new_section/ ]] && { valid=yes; break; }; done
+        if [ "$valid" = no ]; then
+          echo "Invalid section: $new_section"
+          echo "Valid sections:"
+          echo "${valid_sections[@]}" | xargs printf "%-10s\n" | tr ' ' .  | xargs -n 10 | sed 's/\./ /g; s/^/  /'
+          continue
+        else
+          section="$new_section"
+        fi
+      fi
+      continue
+      ;;
+    exit|quit)
+      break
+      ;;
+    copy|yank|c|y)
+      if [ -z "$input" ]; then
+        echo copy: Make at least one query first.
+        continue
+      else
+        curl -s https://cht.sh/"$query"?T > "$TMP1"
+        xsel -i < "$TMP1"
+        echo "copy: $(wc -l "$TMP1" | awk '{print $1}') lines copied to the selection"
+        continue
+      fi
+      ;;
+    ccopy|cc|C|Y)
+      if [ -z "$input" ]; then
+        echo copy: Make at least one query first.
+        continue
+      else
+        curl -s https://cht.sh/"$query"?TQ > "$TMP1"
+        xsel -i < "$TMP1"
+        echo "copy: $(wc -l "$TMP1" | awk '{print $1}') lines copied to the selection"
+        continue
+      fi
+      ;;
+    id|"id "*)
+      id_file="$HOME/.cht.sh/id"
+
+      if [ "$input" = id ]; then
+        new_id=""
+      else
+        new_id=$(echo "$input" | sed 's/id \+//; s/ *$//; s/ /+/g')
+      fi
+      if [ "$new_id" = remove ]; then
+        if [ -e "$id_file" ]; then
+          rm -f "$id_file" && echo "id is removed"
+        else
+          echo "id was not set, so you can't remove it"
+        fi
+        continue
+      fi
+      if [ -n "$new_id" ] && [ "$new_id" != reset ] && [ "$(echo $new_id | wc -c)" -lt 16 ]; then
+        echo "ERROR: $new_id: Too short id. Minimal id length is 16. Use 'id reset' for a random id"
+        continue
+      fi
+      if [ -z "$new_id" ]; then
+        # if new_id is not specified check if we have some id already
+        # if yes, just show it
+        # if not, generate a new id
+        if [ -e "$id_file" ]; then
+          echo $(cat "$id_file" | awk '{if ($6 == "id") print $NF}' | head -1)
+          continue
+        else
+          new_id=reset
+        fi
+      fi
+      if [ "$new_id" = reset ]; then
+        new_id="$(cat /dev/urandom 2> /dev/null | env LC_CTYPE=C tr -cd 'a-f0-9' 2> /dev/null | head -c 32)"
+      else
+        echo WARNING: if someone gueses your id, he can read your cht.sh search history
+      fi
+      if [ -e "$id_file" ] && grep -q '\tid\t[^\t]\+$' "$id_file" 2> /dev/null; then
+        sed -i 's/\tid\t[^\t]\+$/ id '"$new_id"'/' "$id_file"
+      else
+        if ! [ -e "$id_file" ]; then
+          printf '#\n\n' > "$id_file"
+        fi
+        printf ".cht.sh\tTRUE\t/\tTRUE\t0\tid\t$new_id\n" >> "$id_file"
+      fi
+      echo "$new_id"
+      continue
+      ;;
+    update)
+      [ -w "$0" ] || { echo "The script is readonly; please update manually: curl -s https://cht.sh/:bash | sudo tee $0"; continue; }
+      TMP2=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
+      curl -s https://cht.sh/:bash > "$TMP2"
+      if ! cmp "$0" "$TMP2" > /dev/null 2>&1; then
+        args=(--shell)
+        [ -n "$section" ] && args=("${args[@]}" "$section")
+        cp "$TMP2" "$0" && echo "Updated. Restarting..." && exec "$0" "${args[@]}"
+      else
+        echo "cht.sh is up to date. No update needed"
+      fi
+      rm -f "$TMP2" > /dev/null 2>&1
+      continue
+      ;;
+    version)
+      echo "cht.sh version $__CHTSH_VERSION of $__CHTSH_DATETIME; installed at: $(stat -c %y "$0" | sed 's@\..* @ @')"
+      TMP2=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
+      if curl -s https://cht.sh/:bash > "$TMP2"; then
+        if ! cmp "$0" "$TMP2" > /dev/null 2>&1; then
+          echo "Update needed (type 'update' for that)".
+        else
+          echo "Up to date. No update needed"
+        fi
+      fi
+      rm -f "$TMP2" > /dev/null 2>&1
+      continue
+      ;;
+    "")
+      continue
+      ;;
+  esac
+
+  if [ -z "$section" ] || [[ "$input" = /* ]]; then
+    query=$(echo "$input" | sed 's@ @/@; s@ @+@g')
+  else
+    query=$(echo "$section/$input" | sed 's@ @+@g')
+  fi
+
+  b_opts=()
+  if [ -e "$HOME/.cht.sh/id" ]; then
+    b_opts=(-b "$HOME/.cht.sh/id")
+  fi
+
+  curl "${b_opts[@]}" -s https://cht.sh/"$query" > "$TMP1"
+
+  if [ -z "$lines" ] || [ "$(wc -l "$TMP1" | awk '{print $1}')" -lt "$lines" ]; then
+    cat "$TMP1"
+  else
+    less -R "$TMP1"
+  fi
+done
