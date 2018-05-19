@@ -25,6 +25,8 @@ from limits import Limits
 from cheat_wrapper import cheat_wrapper
 from post import process_post_request
 from options import parse_args
+
+from stateful_queries import save_query, last_query
 # pylint: disable=wrong-import-position,wrong-import-order
 
 if not os.path.exists(os.path.dirname(LOG_FILE)):
@@ -119,10 +121,15 @@ def answer(topic=None):
     html_needed = is_html_needed(user_agent)
     options = parse_args(request.args)
 
-    ip_address = get_request_ip(request)
-    not_allowed = LIMITS.check_ip(ip_address)
-    if not_allowed:
-        return "429 %s\n" % not_allowed, 429
+    request_id = request.cookies.get('id')
+    if topic is not None and topic.lstrip('/') == ':last':
+        if request_id:
+            topic = last_query(request_id)
+        else:
+            return "ERROR: you have to set id for your requests to use /:last\n"
+    else:
+        if request_id:
+            save_query(request_id, topic)
 
     if request.method == 'POST':
         process_post_request(request, html_needed)
@@ -135,6 +142,12 @@ def answer(topic=None):
 
     if topic is None:
         topic = ":firstpage"
+
+    ip_address = get_request_ip(request)
+    if '+' in topic:
+        not_allowed = LIMITS.check_ip(ip_address)
+        if not_allowed:
+            return "429 %s\n" % not_allowed, 429
 
     result, found = cheat_wrapper(topic, request_options=options, html=is_html_needed(user_agent))
 
