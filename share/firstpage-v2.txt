@@ -1,0 +1,31 @@
+      _                _         _    __  
+  ___| |__   ___  __ _| |_   ___| |__ \ \       The only cheat sheet you need
+ / __| '_ \ / _ \/ _` | __| / __| '_ \ \ \
+| (__| | | |  __/ (_| | |_ _\__ \ | | |/ /
+ \___|_| |_|\___|\__,_|\__(_)___/_| |_/_/ 
+
++------------------------+ +------------------------+ +------------------------+
+| $ curl cht.sh/btrfs    | | $ cht.sh btrfs         | | $ cht.sh lua/:learn    |
+| $ curl cheat.sh/ls     | | $ cht.sh tar~list      | | Learn any* programming |
+| $ curl cht.sh/tar~list | |                        | | languages not leaving  |
+|                        | |                        | | your shell             |
+|                        | |                        | | *) any of 60           |
+|                        | |                        | |                        |
++-- queries with curl ---+ +- own optional client --+ +- learn, learn, learn! -+
++------------------------+ +------------------------+ +------------------------+
+| $ cht.sh go/f<tab><tab>| | $ cht.sh --shell       | | $ cht.sh go zip lists  |
+| go/for   go/func       | | cht.sh> help           | | Ask any question using |
+| $ cht.sh go/for        | | ...                    | | cht.sh or curl cht.sh: |
+| ...                    | |                        | | /go/zip+lists (note +) |
+|                        | |                        | |                        |
+|                        | |                        | |                        |
++---- TAB-completion ----+ +-- interactive shell ---+ +- programming questions-+
++------------------------+ +------------------------+ +------------------------+
+| $ curl cht.sh/:help    | | $ vim prg.py           | | $ time curl cht.sh/    |
+| see /:help             | | ...                    | | ...                    |
+| for usage information  | | zip lists _            | | real    0m0.075s       |
+| and README.md on GitHub| | <leader>KK             | |                        |
+| for the details        | |                        | |                        |
+|                        | |                        | |                        |
++--- self-documented ----+ +- queries from editor! -+ +---- instant answers ---+
+
