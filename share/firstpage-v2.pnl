@@ -1,0 +1,86 @@
+      _                _         _    __  
+  ___| |__   ___  __ _| |_   ___| |__ \ \      The only cheat sheet you need
+ / __| '_ \ / _ \/ _` | __| / __| '_ \ \ \     Ultrafast access to the best
+| (__| | | |  __/ (_| | |_ _\__ \ | | |/ /     community driven documentation
+ \___|_| |_|\___|\__,_|\__(_)___/_| |_/_/      repositories of the world
+
++------------------------+ +------------------------+ +------------------------+
+| $ curl chteat.sh/ls    | | $ cht.sh btrfs         | | $ cht.sh lua/:learn    |
+| $ curl cht.sh/btrfs    | | $ cht.sh tar~list      | | Learn any* programming |
+| $ curl cht.sh/tar~list | |                        | | language not leaving   |
+| $ curl https://cht.sh  | |                        | | your shell             |
+|                        | |                        | | *) any of 60           |
+|                        | |                        | |                        |
++-- queries with curl ---+ +- own optional client --+ +- learn, learn, learn! -+
++------------------------+ +------------------------+ +------------------------+
+| $ cht.sh go/f<tab><tab>| | $ cht.sh --shell       | | $ cht.sh go zip lists  |
+| go/for   go/func       | | cht.sh> help           | | Ask any question using |
+| $ cht.sh go/for        | | ...                    | | cht.sh or curl cht.sh: |
+| ...                    | |                        | | /go/zip+lists          |
+|                        | |                        | | (use /,+ when curling) |
+|                        | |                        | |                        |
++---- TAB-completion ----+ +-- interactive shell ---+ +- programming questions-+
++------------------------+ +------------------------+ +------------------------+
+| $ curl cht.sh/:help    | | $ vim prg.py           | | $ time curl cht.sh/    |
+| see /:help and /:intro | | ...                    | | ...                    |
+| for usage information  | | zip lists _            | | real    0m0.075s       |
+| and README.md on GitHub| | <leader>KK             | |                        |
+| for the details        | |             *awesome*  | |                        |
+|            *start here*| |                        | |                        |
++--- self-documented ----+ +- queries from editor! -+ +---- instant answers ---+
+
+[Follow @igor_chubin for updates][github.com/chubin/cheat.sh]
+==[mask]==
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKAAAAA
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKAAAAA GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKAAAA    DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+KKKKKKKKKKKKKKKKKKKKKKKKKKKLKKKKKKKKKKKAAAA    DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+KKKKKKKKKKKKKKKKKKKKKKKKKKLLLKKKKKKKKKAAAAA    DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+
+DDDDDDDDDDDDDDDDDDDDDDDDDD DDDDDDDDDDDDDDDDDDDDDDDDDD DDDDDDDDDDDDDDDDDDDDDDDDDD
+D $ BBBB CCCCCCCCCCCCCCC D D $ BBBBBB CCCCCCCCCCCCC D D $ CCCCCCCCCCCBBBBBB    D
+D $ BBBB CCCCCCCCCCCCCCC D D $ BBBBBB CCCCCCCCCCCCC D D Learn anyF programming D
+D $ BBBB CCCCCCCCCCCCCCC D D                        D D languages not leaving  D
+D $ CCCC BBBBBBCCCCCCCCC D D                        D D your shell             D
+D                        D D                        D D FF any of 60           D
+D                        D D                        D D                        D
+DDDEEEEEEEEEEEEEEEEEEEDDDD DD EEEEEEEEEEEEEEEEEEE DDD DD EEEEEEEEEEEEEEEEEEEE DD
+DDDDDDDDDDDDDDDDDDDDDDDDDD DDDDDDDDDDDDDDDDDDDDDDDDDD DDDDDDDDDDDDDDDDDDDDDDDDDD
+D $ CCCCCCCCCCCBBBBBBBBBBD D $ CCCCCC BBBBBBB       D D $ CCCCCC BBBBBBBBBBBB  D
+D go/for   go/func       D D HHHHHHH help           D D ask any question using D
+D $ cht.sh go/for        D D ...                    D D cht.sh or curl cht.sh: D
+D ...                    D D                        D D /goHzipHlists          D
+D                        D D                        D D (use H,H when curling) D
+D                        D D                        D D                        D
+DDDDDEEEEEEEEEEEEEEEEDDDDD DDDEEEEEEEEEEEEEEEEEEEDDDD DDEEEEEEEEEEEEEEEEEEEEEEDD
+DDDDDDDDDDDDDDDDDDDDDDDDDD DDDDDDDDDDDDDDDDDDDDDDDDDD DDDDDDDDDDDDDDDDDDDDDDDDDD
+| $ CCCCCCCCCCCCBBBBB    D D $ BBB CCCCCC           D D $ BBBB curl cht.sh/    D
+| see HHHHHH and HHHHHHH D D ...                    D D ...                    D
+| for usage information  D D zip lists _            D D real    HHHHHHHH       D
+| and readme.md on CCCCCCD D HHHHHHHHHH             D D                        D
+| for the details        D D            * awesome * D D                        D
+|            FFFFFFFFFFFFD D                        D D                        D
+DDDD EEEEEEEEEEEEEEE DDDDD DD EEEEEEEEEEEEEEEEEEEE DD DDDDD EEEEEEEEEEEEEEE DDDD
+
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+==[code]==
+
+set_color A green
+set_color B white
+set_color C gray
+set_color D cyan
+set_color E yellow
+
+set_color A #00cc00
+set_color B #00cc00
+set_color C #00aacc
+set_color D #888888
+set_color E #cccc00
+set_color F #ff0000
+set_color H #22aa22
+set_color I #cc0000
+set_color J #000000
+  
+set_bg_color G #555555
+set_bg_color J #555555
+
