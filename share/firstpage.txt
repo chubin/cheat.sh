@@ -34,4 +34,4 @@ To post a cheat sheet (details in {/:post}):
 
     $ curl -F 'newcmd=<-' cheat.sh
 
-[Follow @igor_chubin for updates] [github.com/chubin/cheat.sh]
+[Follow @igor_chubin for updates] [https://github.com/chubin/cheat.sh]
