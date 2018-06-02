@@ -9,10 +9,59 @@
 # [X] Y/C
 # [X] eof problem
 # [X] less
+# [X] stealth mode
 #
+# here are several examples for the stealth mode:
+#
+# zip lists
+# list permutation
+# random list element
+# reverse a list
+# read json from file
+# append string to a file
+# run process in background
+# count words in text counter
+# group elements list
 
-__CHTSH_VERSION=1
-__CHTSH_DATETIME="2018-05-19 22:26:46 +0200"
+__CHTSH_VERSION=2
+__CHTSH_DATETIME="2018-06-02 22:26:46 +0200"
+
+STEALTH_MAX_SELECTION_LENGTH=5
+
+do_query()
+{
+  local query="$*"
+  local b_opts=()
+
+  if [ -e "$HOME/.cht.sh/id" ]; then
+    b_opts=(-b "$HOME/.cht.sh/id")
+  fi
+
+  curl "${b_opts[@]}" -s https://cht.sh/"$query" > "$TMP1"
+
+  if [ -z "$lines" ] || [ "$(wc -l "$TMP1" | awk '{print $1}')" -lt "$lines" ]; then
+    cat "$TMP1"
+  else
+    less -R "$TMP1"
+  fi
+}
+
+prepare_query()
+{
+  local section="$1"; shift
+  local input="$1"; shift
+  local arguments="$1"; shift
+
+  local query
+  if [ -z "$section" ] || [[ "$input" = /* ]]; then
+    query=$(echo "$input" | sed 's@ @/@; s@ @+@g')
+  else
+    query=$(echo "$section/$input" | sed 's@ @+@g')
+  fi
+
+  [ -n "$arguments" ] && arguments="?$arguments"
+  echo "$query$arguments"
+}
 
 get_list_of_sections()
 {
@@ -86,6 +135,7 @@ copy    - copy the last answer in the clipboard (aliases: yank, y, c)
 ccopy   - copy the last answer w/o comments (cut comments; aliases: cc, Y, C)
 exit    - exit the cheat shell (aliases: quit, ^D)
 id [ID] - set/show an unique session id ("reset" to reset, "remove" to remove)
+stealth - stealth mode (automatic queries for selected text)
 update  - self update (only if the scriptfile is writeable)
 version - show current cht.sh version
 /:help  - service help
@@ -194,6 +244,37 @@ EOF
       echo "$new_id"
       continue
       ;;
+    stealth|"stealth "*)
+        if [ "$input" != stealth ]; then
+          arguments=$(echo "$input" | sed 's/stealth //; s/ /\&/')
+        fi
+        trap break SIGINT
+        past=$(xsel -o)
+        printf "\033[0;31mstealth:\033[0m you are in the stealth mode; select any text in any window for a query\n"
+        printf "\033[0;31mstealth:\033[0m selections longer than $STEALTH_MAX_SELECTION_LENGTH words are ignored\n"
+        if [ -n "$arguments" ]; then
+          printf "\033[0;31mstealth:\033[0m query arguments: ?$arguments\n"
+        fi
+        printf "\033[0;31mstealth:\033[0m use ^C to leave this mode\n"
+        while true; do
+          current=$(xsel -o)
+          if [ "$past" != "$current" ]; then
+            past=$current
+            if [ $(echo $current | wc -w) -gt "$STEALTH_MAX_SELECTION_LENGTH" ]; then
+              echo "\033[0;31mstealth:\033[0m selection length is longer than $STEALTH_MAX_SELECTION_LENGTH words; ignoring"
+              continue
+            else
+              current_text="$(echo $current | tr -c '[a-zA-Z0-9]' ' ')"
+              printf "\n\033[0;31mstealth: \033[7m $current_text\033[0m\n"
+              query=$(prepare_query "$section" "$current_text" "$arguments")
+              do_query "$query"
+            fi
+          fi
+          sleep 1;
+        done
+        trap - SIGINT
+        continue
+      ;;
     update)
       [ -w "$0" ] || { echo "The script is readonly; please update manually: curl -s https://cht.sh/:bash | sudo tee $0"; continue; }
       TMP2=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
@@ -226,22 +307,6 @@ EOF
       ;;
   esac
 
-  if [ -z "$section" ] || [[ "$input" = /* ]]; then
-    query=$(echo "$input" | sed 's@ @/@; s@ @+@g')
-  else
-    query=$(echo "$section/$input" | sed 's@ @+@g')
-  fi
-
-  b_opts=()
-  if [ -e "$HOME/.cht.sh/id" ]; then
-    b_opts=(-b "$HOME/.cht.sh/id")
-  fi
-
-  curl "${b_opts[@]}" -s https://cht.sh/"$query" > "$TMP1"
-
-  if [ -z "$lines" ] || [ "$(wc -l "$TMP1" | awk '{print $1}')" -lt "$lines" ]; then
-    cat "$TMP1"
-  else
-    less -R "$TMP1"
-  fi
+  query=$(prepare_query "$section" "$input")
+  do_query "$query"
 done
