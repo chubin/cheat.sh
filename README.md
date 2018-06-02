@@ -1,5 +1,5 @@
 
-![cheat.sh logo](http://cheat.sh/files/big-logo.png)
+![cheat.sh logo](http://cheat.sh/files/big-logo-v2.png)
 
 Unified read, search and write access to the popular cheat sheets repositories.
 
