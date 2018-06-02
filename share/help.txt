@@ -27,14 +27,14 @@ Special pages:
     :help               this page
     :list               list all cheat sheets
     :post               how to post new cheat sheet
-    :bash               shell client
+    :cht.sh             shell client (cht.sh)
     :bash_completion    bash function for tab completion
     :styles             list of color styles
     :styles-demo        show color styles usage examples
 
 Shell client:
 
-    $ curl https://cht.sh/:bash > ~/bin/cht.sh
+    $ curl https://cht.sh/:cht.sh > ~/bin/cht.sh
     $ chmod +x ~/bin/cht.sh
     $ cht.sh python :learn
     $ cht.sh --shell
@@ -42,9 +42,9 @@ Shell client:
 Tab completion:
 
     $ mkdir -p ~/.bash.d/
-    $ curl cheat.sh/:bash_completion > ~/.bash.d/cheat.sh
-    $ . ~/.bash.d/cheat.sh
-    $ echo '. ~/.bash.d/cheat.sh' >> ~/.bashrc
+    $ curl cheat.sh/:bash_completion > ~/.bash.d/cht.sh
+    $ . ~/.bash.d/cht.sh
+    $ echo '. ~/.bash.d/cht.sh' >> ~/.bashrc
 
 Editor integration:
 

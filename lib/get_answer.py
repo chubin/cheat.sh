@@ -24,6 +24,7 @@ import beautifier
 from globals import MYDIR, PATH_TLDR_PAGES, PATH_CHEAT_PAGES, PATH_CHEAT_SHEETS, COLOR_STYLES
 from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnxy
 from languages_data import LANGUAGE_ALIAS, SO_NAME
+from colorize_internal import colorize_internal
 # pylint: enable=wrong-import-position,wrong-import-order
 
 REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
@@ -31,7 +32,7 @@ REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
 MAX_SEARCH_LEN = 20
 
 INTERNAL_TOPICS = [
-    ':bash',
+    ':cht.sh',
     ':bash_completion',
     ':emacs',
     ':emacs-ivy',
@@ -174,7 +175,6 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
 #def registered_answer_getter(func):
 #    REGISTERED_ANSWER_GETTERS.append(funct)
 #    return cls
-
 def _get_internal(topic):
     if '/' in topic:
         topic_type, topic_name = topic.split('/', 1)
@@ -194,7 +194,10 @@ def _get_internal(topic):
         return _get_stat()+"\n"
 
     if topic in INTERNAL_TOPICS:
-        return open(os.path.join(MYDIR, "share", topic[1:]+".txt"), "r").read()
+        if topic[1:] == 'intro':
+            return colorize_internal(open(os.path.join(MYDIR, "share", topic[1:]+".txt"), "r").read())
+        else:
+            return open(os.path.join(MYDIR, "share", topic[1:]+".txt"), "r").read()
 
     return ""
 
