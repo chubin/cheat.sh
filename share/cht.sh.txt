@@ -260,11 +260,11 @@ EOF
           current=$(xsel -o)
           if [ "$past" != "$current" ]; then
             past=$current
-            if [ $(echo $current | wc -w) -gt "$STEALTH_MAX_SELECTION_LENGTH" ]; then
+            current_text="$(echo $current | tr -c '[a-zA-Z0-9]' ' ')"
+            if [ $(echo $current_text | wc -w) -gt "$STEALTH_MAX_SELECTION_LENGTH" ]; then
               echo "\033[0;31mstealth:\033[0m selection length is longer than $STEALTH_MAX_SELECTION_LENGTH words; ignoring"
               continue
             else
-              current_text="$(echo $current | tr -c '[a-zA-Z0-9]' ' ')"
               printf "\n\033[0;31mstealth: \033[7m $current_text\033[0m\n"
               query=$(prepare_query "$section" "$current_text" "$arguments")
               do_query "$query"
@@ -278,11 +278,15 @@ EOF
     update)
       [ -w "$0" ] || { echo "The script is readonly; please update manually: curl -s https://cht.sh/:bash | sudo tee $0"; continue; }
       TMP2=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
-      curl -s https://cht.sh/:bash > "$TMP2"
+      curl -s https://cht.sh/:cht.sh > "$TMP2"
       if ! cmp "$0" "$TMP2" > /dev/null 2>&1; then
-        args=(--shell)
-        [ -n "$section" ] && args=("${args[@]}" "$section")
-        cp "$TMP2" "$0" && echo "Updated. Restarting..." && exec "$0" "${args[@]}"
+        if grep -q ^__CHTSH_VERSION= "$TMP2"; then
+          args=(--shell)
+          [ -n "$section" ] && args=("${args[@]}" "$section")
+          cp "$TMP2" "$0" && echo "Updated. Restarting..." && rm "$TMP2" && exec "$0" "${args[@]}"
+        else
+          echo "Something went wrong. Please update manually"
+        fi
       else
         echo "cht.sh is up to date. No update needed"
       fi
@@ -292,7 +296,7 @@ EOF
     version)
       echo "cht.sh version $__CHTSH_VERSION of $__CHTSH_DATETIME; installed at: $(stat -c %y "$0" | sed 's@\..* @ @')"
       TMP2=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
-      if curl -s https://cht.sh/:bash > "$TMP2"; then
+      if curl -s https://cht.sh/:cht.sh > "$TMP2"; then
         if ! cmp "$0" "$TMP2" > /dev/null 2>&1; then
           echo "Update needed (type 'update' for that)".
         else
