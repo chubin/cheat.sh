@@ -19,6 +19,7 @@ import os
 import re
 import redis
 from fuzzywuzzy import process, fuzz
+from langdetect import detect
 
 import beautifier
 from globals import MYDIR, PATH_TLDR_PAGES, PATH_CHEAT_PAGES, PATH_CHEAT_SHEETS, COLOR_STYLES
@@ -250,7 +251,14 @@ def _get_answer_for_question(topic):
     """
 
     topic = " ".join(topic.replace('+', ' ').strip().split())
-    cmd = ["/home/igor/cheat.sh/bin/get-answer-for-question", topic]
+
+    lang = detect(topic)
+    if lang != 'en':
+        topic = ['--human-language', lang, topic]
+    else:
+        topic = [topic]
+
+    cmd = ["/home/igor/cheat.sh/bin/get-answer-for-question"] + topic
     proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
     answer = proc.communicate()[0].decode('utf-8')
     return answer
