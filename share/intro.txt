@@ -1,0 +1,203 @@
+## curl cht.sh
+
+To access a cheat sheet you can simply issue a plain HTTP or HTTPS request
+specifying the topic name in the query URL:
+
+    {1curl cheat.sh}{2/tar}
+    {1curl https://cheat.sh}{2/tar}
+
+You can use the full service name, {2cheat.sh}, or the shorter variant, {2cht.sh}.
+They are equivalent:
+
+    {1curl https://}{2cht.sh}{1/tar}
+    {1curl https://}{2cheat.sh}{1/tar}
+
+The preferred access protocol is HTTPS, and you should use it always when possible.
+
+Cheat sheets in the root namespaces cover UNIX/Linux commands.
+Cheat sheets covering programming languages are located in subsections.
+
+    {1curl cht.sh/}{2go/func}
+
+All cheat sheets in a subsection can be listed using a special query {2:list} :
+
+    {1curl cht.sh/go/}{2:list}
+
+There are several other special queries. All of them are starting with a {2colon}.
+See {2/:help} for the full list of the special queries.
+
+## Search
+
+If a cheat sheet is too large, you can cut the needed part out using an
+additional search parameter. In this case, only the paragraph that contains the
+search term will be displayed:
+
+    {1curl cht.sh/tar}{2~extract}
+
+If the name of the cheat sheet is omitted, and only the serch query is specified,
+all cheat sheets in the namespace are scanned, and the found occurrencies
+are displayed:
+
+    {1curl cht.sh/}{2~extract}
+
+## Options
+
+cheat.sh queries as well as search queries have many options.
+They can be specified as a part of the query string in the URL, after {2?}.
+Short single letter options could be written all jointly together,
+and long options are separated with {2&}. For example, to switch 
+syntax highlighting off the {2T} switch is used:
+
+    {1curl cht.sh/tar}{2?T}
+
+Full list of all available cheat.sh options as well as description of all modes
+of operation can be found in {2/:help},
+
+    {1curl cht.sh}{2/:help}
+
+## cht.sh client
+
+Though it's perfectly possible to access cheat.sh using {1curl} (or any other
+HTTP client) alone, there is a special client, that has several advantages
+comparing to plain curling: {2cht.sh}.
+
+To install the client in {2~/bin}:
+
+    {1curl} {2https://cht.sh/:cht.sh} {1> ~/bin/cht.sh}
+    {1chmod +x ~/bin/cht.sh}
+
+Queries look the same, but you can separate words in the query with {1spaces},
+instead of {1+} as when using curl, what looks more natural:
+
+    {1cht.sh} {2python zip lists}
+
+## cht.sh shell
+
+If you always issuing queries about the same programming language, it's can be
+more convenient to run the client in the shell mode and specify the queries
+context:
+
+    {1$} {2cht.sh --shell python}
+    {1cht.sh/python> zip lists}
+
+Of course, you can start the shell without the context too:
+
+    {1$} {2cht.sh --shell}
+    {1cht.sh> python zip lists}
+    {1cht.sh> go http query}
+    {1cht.sh> js iterate list}
+
+If you ue predominantly one language but sometime issuing queries about other,
+you may prepend the query with {2/}:
+
+    {1cht.sh/python>} {2zip lists}
+    {1cht.sh/python>} {2/go http query}
+    {1cht.sh/python>} {2/js iterate list}
+
+## :learn
+
+If you are just start learning a new programming language, and you have no
+distinct queries for the moment, cheat.sh can be a good starting point too. As
+you know, it exports cheat sheets from the best cheat sheet repositories, and
+one of them is {1Learn X in Y}, a repository of concise documentation devoted
+to learning programming languages from scratch (and not only them).
+
+If you want start learning a new programming language, do (use less -R because
+the output could be quite big): 
+
+    {1curl cht.sh/elixir/}{2:learn} {1| less -R}
+
+Or simply {2:learn} with cht.sh (you don't need {2less -R} here, because
+{1cht.sh} starts pager if needed automatically):
+
+    {4cht.sh/elixir>} {2:learn}
+
+## Programming languages questions
+
+One of the most important features of cheat.sh is that you can ask it any
+questions about programming languages and instantly get answers on them. You
+can use both direct HTTP queries or the cht.sh client for that:
+
+    {1curl cht.sh/}{2python/reverse+list}
+    
+    {4cht.sh/python>} {2reverse list}
+
+In the latter case you don't need + to separate the words in the query, you can
+do it in a more natural way, with spaces.
+
+If context in the cht.sh shell is not specified, you have to write the
+programming language name as the first word in the query:
+
+    {4cht.sh>} {2python reverse list}
+
+But if you are using only one programming language and all queries are about
+it, it's better to change the current context and 
+
+## Comments
+
+Text in the answers is syntactically formatted as comment in the correspondent
+programming language
+
+When using cht.sh, you can copy the result of the last query into the selection
+buffer (you may also call it "clibpoard") using {2C} (or {2c}, with text):
+
+    {1cht.sh/python> reverse list}
+    {4...}
+    {1cht.sh/python>} {2C}
+    {4=1 lines copied}
+
+## bash TAB-completion for cht.sh
+
+One of the advantages of the {1cht.sh} client comparing to plain curl is that you
+can use TAB completion when writing its queries in {1bash}
+(other supported shells: {1zsh} and {1fish}).
+
+Install the TAB completion script for that. Assuming you use bash, you have to do:
+
+    {1mkdir -p ~/.bash.d/cht.sh}
+    {1curl} {2https://cht.sh/:bash_completion} {1> ~/.bash.d/cht.sh}
+    {1echo 'source ~/.bash.d/cht.sh' >> ~/.bashrc}
+    {1source ~/.bash.d/cht.sh}
+
+## Editor
+
+You can access cheat.sh directly from editors: {1Vim} and {1Emacs}.
+It's a very important feature! You should absolutely like it.
+
+{1Imagine:}
+instead of switching to your browser, googling, browsing Stack Overflow
+and eventually copying the code snippets you need and later pasting them into
+the editor, you can achieve the same instantly and without leaving
+the editor at all!
+
+Here is how it looks like:
+
+1. In Vim, if you have a question while editing a program, you can just type
+your question {1directly in the buffer} and press {2<leader>KK}. You will get
+the answer to your question in {1pager}. (with {2<leader>KB} you'll get the answer
+in a separate {1buffer}; and with <leader>KP you'll paste it directly in your
+{1current buffer}).
+
+2. If you like the answer shown in pager, you can {1paste it} immediately
+in the buffer. Just press {2....} for that.
+
+You have to install cheat.sh {1Vim/Emacs plugins} for the editor support.
+See {2/:vim} or {2/:emacs} with the detailed installation instructions.
+
+## Feature requests, feedback and contribution
+
+If you want to submit a new community driver repository for cheat.sh please
+open a ticket on the project page on GitHub.
+
+If you want to modify an existing cheat sheet, please check the source of the
+cheat sheet (it is always displayed in the cheat sheet bottom line).
+
+If you want to add a new cheat sheet, add it here:
+{1https://github.com/chubin/cheat.sheets}
+
+If you want to suggest a new feature for cheat.sh, or if you've found a bug,
+please open a new issue on github:
+{1https://github.com/chubin/cheat.sh}
+
+If you want to get the major project updates, follow @igor_chubin in Twitter
+or this RSS feed: {1https://twitrss.me/twitter_user_to_rss/?user=igor_chubin}
