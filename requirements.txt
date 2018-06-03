@@ -6,3 +6,4 @@ dateutils
 fuzzywuzzy
 redis
 colored
+langdetect
