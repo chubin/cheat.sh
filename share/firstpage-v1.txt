@@ -1,0 +1,37 @@
+
+          oooo                                .                oooo        
+          `888                              .o8                `888        
+ .ooooo.   888 .oo.    .ooooo.   .oooo.   .o888oo      .oooo.o  888 .oo.   
+d88' `"Y8  888P"Y88b  d88' `88b `P  )88b    888       d88(  "8  888P"Y88b  
+888        888   888  888ooo888  .oP"888    888       `"Y88b.   888   888  
+888   .o8  888   888  888    .o d8(  888    888 . .o. o.  )88b  888   888  
+`Y8bod8P' o888o o888o `Y8bod8P' `Y888""8o   "888" Y8P 8""888P' o888o o888o 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    * the fastest way to find <command options> | <code pieces> you need
+    * provides access to community driven cheat sheets repositories
+    * delivers <906> cheat sheets in <16> areas and growing
+    * covers UNIX/Linux commands and programming languages
+    * programming languages cheat sheets are under:
+        <clojure/> <c++/> <elixir/> <elm/> <erlang/> <go/> <haskell/> <js/>
+        <julia/> <lua/> <ocaml/> <perl/> <php/> <python/> <rust/> <scala/>
+    * database management systems:
+        <mongo/> <redis/>
+    * supports bash completion (add {/:bash_completion} to your {~/.bashrc})
+    * editors integration (see {/:emacs} and {/:vim})
+
+
+To show a cheat sheet:
+
+    $ curl cheat.sh/{command}
+
+To find a cheat sheet (details in {/:help}):
+
+    $ curl cheat.sh/{~keyword}
+
+To post a cheat sheet (details in {/:post}):
+
+    $ curl -F 'newcmd=<-' cheat.sh
+
+[Follow @igor_chubin for updates] [github.com/chubin/cheat.sh]
