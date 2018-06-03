@@ -74,7 +74,7 @@ def _colorize_internal(topic, answer, html_needed):
     if topic in [':list', ':bash_completion']:
         return answer
 
-    if topic == ':firstpage':
+    if topic == ':firstpage-v1':
         lines = answer.splitlines()
         answer_lines = lines[:9]
         answer_lines.append(colored.fg('grey_35')+lines[9]+colored.attr('reset'))
