@@ -205,7 +205,6 @@ def _run_vim_script(script_lines, text_lines):
     return open(textfile.name, "r").read()
 
 def _commenting_script(lines_blocks, filetype):
-
     script_lines = []
     block_start = 1
     for block in lines_blocks:
@@ -215,7 +214,7 @@ def _commenting_script(lines_blocks, filetype):
 
         if block[0] == 0:
             comment_type = 'sexy'
-            if block_end - block_start < 1:
+            if block_end - block_start < 1 or filetype == 'ruby':
                 comment_type = 'comment'
 
             script_lines.insert(0, "%s,%s call NERDComment(1, '%s')"
