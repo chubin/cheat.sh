@@ -5,7 +5,7 @@
  \___|_| |_|\___|\__,_|\__(_)___/_| |_/_/      repositories of the world
 
 +------------------------+ +------------------------+ +------------------------+
-| $ curl chteat.sh/ls    | | $ cht.sh btrfs         | | $ cht.sh lua/:learn    |
+| $ curl cheat.sh/ls     | | $ cht.sh btrfs         | | $ cht.sh lua/:learn    |
 | $ curl cht.sh/btrfs    | | $ cht.sh tar~list      | | Learn any* programming |
 | $ curl cht.sh/tar~list | |                        | | language not leaving   |
 | $ curl https://cht.sh  | |                        | | your shell             |
