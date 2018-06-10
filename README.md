@@ -3,19 +3,19 @@
 
 Unified access to the best community driven cheat sheets repositories of the world.
 
-Let's imagine for a moment that we have an ideal cheat sheet.
-How such a thing shold look like?
+Let's imagine for a moment that there is such a thing as an ideal cheat sheet.
+How it should look like?
 What features should it have?
 
-* *concise* — it should be concise; it should contain only things you need and nothing else;
-* *fast* — it should be possible to use it instantly;
-* *comprehensive* — it should contain answers for every question you could have;
-* *universal* — it should be available everywhere without any preparations;
-* *unobtrusive* — it does not distract you when you are using it, it does not want anything from you;
-* *tutoring* — it helps you to learn the subject;
-* *inconspicuous* — it should be possible to use it completely unnoticed.
+* **concise** — it should be concise; it should contain only things you need and nothing else;
+* **fast** — it should be possible to use it instantly;
+* **comprehensive** — it should contain answers for every question you could have;
+* **universal** — it should be available everywhere, as soon as needed, without any preparations;
+* **unobtrusive** — it does not distract you from your main task when you are using it;
+* **tutoring** — it helps you to learn the subject;
+* **inconspicuous** — it should be possible to use it completely unnoticed.
 
-It's *cheat.sh*.
+Such a thing does exist.
 
 ## Features
 
@@ -455,19 +455,20 @@ mechanism to access selected existing well developed and good maintained
 cheat sheet repositories covering topics of our interest:
 programming and operating systems usage.
 
-cheat.sh uses several community driven repositories
-of cheat sheets
-(in the popularity column number of contributors/number of stars are shown):
+*cheat.sh* uses selected community driven cheat sheet repositories
+and information sources, maintained by thousands of users, developers and authors
+all over the world
+(in the *Users* column number of contributors/number of stars is shown):
 
-|Cheat sheets           |Repository                                            | Popularity | Creation Date |
+|Cheat sheets           |Repository                                            | Users | Creation Date |
 |-----------------------|------------------------------------------------------|------------|---------------|
-|UNIX/Linux, programming|[cheat.sheets](https://github.com/chubin/cheat.sheets)| 2/20       | May 1, 2017   |
-|UNIX/Linux commands    |[tldr-pages/tldr](https://github.com/tldr-pages/tldr) | 336/9449   | Dec 8, 2013   |
-|UNIX/Linux commands    |[chrisallenlane/cheat](https://github.com/chrisallenlane/cheat)|93/3231|Jul 28, 2013|
-|Programming languages  |[adambard/learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs)|999/4513|Jun 23, 2013|
-|Go                     |[a8m/go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)|23/2086|Feb 9, 2014|
-|Perl                   |[pkrumnis/perl1line.txt](https://github.com/pkrumins/perl1line.txt)|4/151|Nov 4, 2011|
-|Programming languages  |[StackOverflow](https://stackoverflow.com)| | |
+|UNIX/Linux, programming|[cheat.sheets](https://github.com/chubin/cheat.sheets)| 6/54       | May 1, 2017   |
+|UNIX/Linux commands    |[tldr-pages/tldr](https://github.com/tldr-pages/tldr) | 541/17360  | Dec 8, 2013   |
+|UNIX/Linux commands    |[chrisallenlane/cheat](https://github.com/chrisallenlane/cheat)|105/4193|Jul 28, 2013|
+|Programming languages  |[adambard/learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs)|1096/5285|Jun 23, 2013|
+|Go                     |[a8m/go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)|29/3034|Feb 9, 2014|
+|Perl                   |[pkrumnis/perl1line.txt](https://github.com/pkrumins/perl1line.txt)|4/165|Nov 4, 2011|
+|Programming languages  |[StackOverflow](https://stackoverflow.com)|9M |Sep 15, 2008|
 
 Pie diagram reflecting cheat sheets sources distribution (by number of cheat sheets on cheat.sh originating from a repository):
 
