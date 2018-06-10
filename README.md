@@ -280,7 +280,7 @@ If you don't want any text in the answers and the only thing you need is code,
 use the `Q` option when starting the stealth mode.
 
 <p align="center">
-![when you lie in your interview](http://cheat.sh/files/stealth-mode.gif)
+  <img src='https://cheat.sh/files/stealth-mode.gif'/>
 </p>
 
 ```
