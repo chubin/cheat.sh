@@ -22,16 +22,18 @@ Such a thing does exist.
 cheat.sh
 
 * has simple curl/browser interface;
-* covers 55 programming languages, and several DBMSes, and more than 1000 most important UNIX/Linux commands;
+* covers 55 programming languages, several DBMSes, and more than 1000 most important UNIX/Linux commands;
+* provides access to the best community driven cheat sheets repositories as well as StackOverflow;
 * available everywhere, no installation needed;
-* ultrafast, it returns the answer, as a rule, within 100 ms;
+* ultrafast, returns the answer, as a rule, within 100 ms;
+* has a convenient command line client, `cht.sh`, very advantageous and helpful, though not mandatory;
 * can be used directly from the editor, without losing the context;
-* has a convenient command line client, very advantageous and helpful, though not mandatory;
-* supports special mode (stealth mode), where it can be used fully invisibly, not even touching a key and not making a sound.
+* supports a special mode (stealth mode), where it can be used fully invisibly, not even touching a key and not making a sound.
 
 ## Usage
 
-To read a cheat sheet for a UNIX/Linux command, use the name of the command as the query:
+To get a cheat sheet for a UNIX/Linux command from a command line, query the service using `curl` or any other HTTP/HTTPS client
+specifying the name of the command in the query:
 
 ```
     curl cheat.sh/tar
@@ -41,16 +43,12 @@ To read a cheat sheet for a UNIX/Linux command, use the name of the command as t
 
 ```
 
-You can use both HTTPS and HTTP to access the service, and both the long (cheat.sh) and the short service names (cht.sh). 
+You can use both HTTPS and HTTP to access the service, and both the long (cheat.sh) and the short (cht.sh) service names.
 
-Here `tar`, `curl`, `rsync`, and `tr` are the names of the UNIX/Linux commands, you want to get cheat sheets for.
+Here `tar`, `curl`, `rsync`, and `tr` are names of the UNIX/Linux commands, you want to get cheat sheets for.
 
-If you don't know the name of the command you need,
-you can search for it using the `~KEYWORD` notation.
-
-For example, to see how you can make snapshots of a filesystem/volume/something else (and let's imagine you don't know using
-what command you could do it), you use `~snapshot` (note the `~`) as the query:
-
+If you don't know the name of the command you need, you can search for it using the `~KEYWORD` notation.
+For example, to see how you can make `snapshots` of a filesystem/volume/something else:
 ```
     curl cht.sh/~snapshot
 ```
@@ -71,23 +69,43 @@ To get the list of available programming language cheat sheets, do a special que
 ```
 
 (almost) each programming language has a special page, named `:learn`,
-that describes the langauge basics (and that's direct mappng from a beauriful project "Learn X in Y"),
-and that could be good starting point, if you are only beginning to learn the language.
+that describes the language basics (that's a direct mapping from the *"Learn X in Y"* project).
+It could be good starting point, if you are only beginning to learn the language.
 
-What is much more important, and what makes *cheat.sh* really useful,
-is that if there is no cheat sheet for some programming language query
-(and it is almost always the case, for there are by far more devirse queries than all possible cheat sheets),
-it is generated on the fly, using available information in the related connected documentation repositories and 
-answers on StackOverflow. Of course, there is no guarantee that the returned 
-cheat sheet will be a 100% hit, but it almost always exactly what you are looking for.
+If there is no cheat sheet for some programming language query (and it is almost always the case),
+it is generated on the fly, using the connected documentation repositories and answers on StackOverflow.
+Of course, there is no guarantee that the returned cheat sheet will be a 100% hit, but it almost always exactly what you are looking for.
 
-Just try these and your own various queries to get the impression of that, how the answers look like:
+Try these and your own various queries to get the impression of that, how the answers look like:
 ```
     curl cht.sh/go/reverse+a+list
     curl cht.sh/python/random+list+elements
     curl cht.sh/js/parse+json
     curl cht.sh/lua/merge+tables
     curl cht.sh/clojure/variadic+function
+```
+
+Cheat sheets are formatted as code of the queried programming language and can be pasted directly into a program
+in this language. Text comments, if there are any, are formatted according to the language syntax.
+
+```
+-- lua: retrieve list of keys in a table
+
+local keyset={}
+local n=0
+
+for k,v in pairs(tab) do
+  n=n+1
+  keyset[n]=k
+end
+
+--[[
+   [ Note that you cannot guarantee any order in keyset. If you want the
+   [ keys in sorted order, then sort keyset with table.sort(keyset).
+   [ 
+   [ [lhf] [so/q/12674345] [cc by-sa 3.0]
+   ]]
+
 ```
 
 If you don't need text comments in the answer, you can eliminate them
@@ -201,22 +219,24 @@ as a query string for cheat.sh, and the correspondent cheat sheet is automatical
 
 Let's imagine, that you are having an online interview, where your interviewer asks you
 some questions using a shared document (say Google Docs) and you are supposed
-to write your coding answers there (you make type in the questions on your own,
-just to show to the interviewer that you've heard it right).
+to write your coding answers there (it's possible too that you'll type in the questions
+on your own, just to show to the interviewer that you've heard it right).
 
-When using the stealth mode of `cht.sh`, the only thing you need to do to see the cheat sheet for a question,
-is to select the question with the mouse.
+When using the stealth mode of `cht.sh`, the only thing you need to do in order to see
+a cheat sheet for some question, is to select the question using the mouse.
 If you don't want any text in the answers and the only thing you need is code,
 use the `Q` option when starting the stealth mode.
+
+![when you lie in your interview](http://cheat.sh/files/stealth-mode.gif)
 
 ```
 You: Hi!                                          | $ cht.sh --shell python
 She: Hi!                                          | cht.sh/python> stealth Q
 She: Are you ready for a small interview?         | stealth: you are in the stealth mode; select any text
-She: Just a couple of questions about python      | stealth: selections longer than 5 words are ignored
+She: Just a couple of questions                   | stealth: selections longer than 5 words are ignored
 She: We will talk about python                    | stealth: query arguments: ?Q
 She: Let's start from something simple.           | stealth: use ^C to leave this mode
-She: Do you known how to reverse a list in python?|
+She: Do you know how to reverse a list in python? |
 You: Sure                                         |
 You: (selecting "reverse a list")                 | stealth: reverse a list
                                                   | reverse_lst = lst[::-1]
@@ -251,7 +271,7 @@ She: Could you just use filter instead may be?    |         return sort(less)+eq
                                                   |     else:
 You: quicksort with filter?                       |         return array
                                                   |
-She: Yes                                          | stealth: quicksort filter
+She: Yes                                          | stealth: quicksort with filter
 You: (selecting "quicksort with filter")          | return qsort(filter(lt, L[1:]))+[pivot] \
 You: Ok, I will try.                              |     +qsort(filter(ge, L[1:]))
 You: Something like that?                         |
@@ -263,7 +283,7 @@ She: Yes! Perfect! Exactly what I wanted to see!  |
 ```
 
 Or course, it is just fun, and you should never cheat in your coding interviews,
-because you know what happens otherwise.
+because you know what happens when you do.
 
 ![when you lie in your interview](http://cheat.sh/files/when-you-lie-katze.png)
 
