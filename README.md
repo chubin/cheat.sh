@@ -19,15 +19,15 @@ Such a thing does exist.
 
 ## Features
 
-cheat.sh
+**cheat.sh**
 
 * has simple curl/browser interface;
 * covers 55 programming languages, several DBMSes, and more than 1000 most important UNIX/Linux commands;
-* provides access to the best community driven cheat sheets repositories as well as StackOverflow;
+* provides access to the best community driven cheat sheets repositories in the world as well as to StackOverflow;
 * available everywhere, no installation needed;
-* ultrafast, returns the answer, as a rule, within 100 ms;
-* has a convenient command line client, `cht.sh`, very advantageous and helpful, though not mandatory;
-* can be used directly from the editor, without losing the context;
+* ultrafast, returns answers, as a rule, within 100 ms;
+* has a convenient command line client, `cht.sh`, that is very advantageous and helpful, though not mandatory;
+* can be used directly from code editors, without opening a browser and not switching your mental context;
 * supports a special mode (stealth mode), where it can be used fully invisibly, not even touching a key and not making a sound.
 
 ## Usage
@@ -40,10 +40,8 @@ specifying the name of the command in the query:
     curl cht.sh/curl
     curl https://cheat.sh/rsync
     curl https://cht.sh/tr
-
 ```
-
-You can use both HTTPS and HTTP to access the service, and both the long (cheat.sh) and the short (cht.sh) service names.
+As you can see, you can use both HTTPS and HTTP to access the service, and both the long (cheat.sh) and the short (cht.sh) service names.
 
 Here `tar`, `curl`, `rsync`, and `tr` are names of the UNIX/Linux commands, you want to get cheat sheets for.
 
@@ -54,7 +52,7 @@ For example, to see how you can make `snapshots` of a filesystem/volume/somethin
 ```
 
 Programming languages cheat sheets are located not directly in the root namespace,
-but in special namespaces, dedicated for them:
+but in special namespaces, dedicated to them:
 
 ```
     curl cht.sh/go/Pointers
@@ -70,13 +68,13 @@ To get the list of available programming language cheat sheets, do a special que
 
 (almost) each programming language has a special page, named `:learn`,
 that describes the language basics (that's a direct mapping from the *"Learn X in Y"* project).
-It could be good starting point, if you are only beginning to learn the language.
+It could be a good starting point, if you've just started learning a language.
 
 If there is no cheat sheet for some programming language query (and it is almost always the case),
-it is generated on the fly, using the connected documentation repositories and answers on StackOverflow.
-Of course, there is no guarantee that the returned cheat sheet will be a 100% hit, but it almost always exactly what you are looking for.
+it is generated on the fly, basing on available cheat sheets and answers on StackOverflow.
+Of course, there is no guarantee that the returned cheat sheet will be a 100% hit, but it is almost always exactly what you are looking for.
 
-Try these and your own various queries to get the impression of that, how the answers look like:
+Try these (and your own) queries to get the impression of that, how the answers look like:
 ```
     curl cht.sh/go/reverse+a+list
     curl cht.sh/python/random+list+elements
@@ -85,32 +83,53 @@ Try these and your own various queries to get the impression of that, how the an
     curl cht.sh/clojure/variadic+function
 ```
 
-Cheat sheets are formatted as code of the queried programming language and can be pasted directly into a program
-in this language. Text comments, if there are any, are formatted according to the language syntax.
+If you don't like an answer for some of your queries, you can pick another one: for that, repeat the query with an additional parameter `/1`, `/2` etc. appended:
 
 ```
--- lua: retrieve list of keys in a table
+    curl cht.sh/python/random+string
+    curl cht.sh/python/random+string/1
+    curl cht.sh/python/random+string/2
+```
 
-local keyset={}
-local n=0
+Cheat sheets are formatted as code of the queried programming language (at least we are trying our best to do so)
+so they can be pasted into a program in this language directly. Text comments, if there are any, are formatted according to the language syntax.
 
-for k,v in pairs(tab) do
-  n=n+1
-  keyset[n]=k
-end
+```
+    $ curl cht.sh/lua/table+keys
+    -- lua: retrieve list of keys in a table
 
---[[
-   [ Note that you cannot guarantee any order in keyset. If you want the
-   [ keys in sorted order, then sort keyset with table.sort(keyset).
-   [ 
-   [ [lhf] [so/q/12674345] [cc by-sa 3.0]
-   ]]
+    local keyset={}
+    local n=0
+
+    for k,v in pairs(tab) do
+      n=n+1
+      keyset[n]=k
+    end
+
+    --[[
+       [ Note that you cannot guarantee any order in keyset. If you want the
+       [ keys in sorted order, then sort keyset with table.sort(keyset).
+       [ 
+       [ [lhf] [so/q/12674345] [cc by-sa 3.0]
+       ]]
 
 ```
 
 If you don't need text comments in the answer, you can eliminate them
-with a special option `?Q`, and if you don't need syntax highlighting, switch it of using `?T`.
-You can combine the options:
+using a special option `?Q`:
+```
+    $ curl cht.sh/lua/table+keys?Q
+    local keyset={}
+    local n=0
+
+    for k,v in pairs(tab) do
+      n=n+1
+      keyset[n]=k
+    end
+```
+
+And if you don't need syntax highlighting, switch it off using `?T`.
+You can combine the options together:
 
 ```
     curl cht.sh/go/reverse+a+list?Q
@@ -120,7 +139,9 @@ You can combine the options:
     curl cht.sh/clojure/variadic+function?QT
 ```
 
-Try to ask your own queries. Try to follow these rules when making your queries:
+Full list of all options described below and in `/:help`.
+
+Try your own queries. Follow these rules:
 
 1. Try to be more specific (`/python/append+file` is better than `/python/file` and `/python/append`);
 2. Ask practical question if possible (yet theoretical question are possible too);
@@ -132,8 +153,9 @@ Read more about the programming languages queries below.
 
 ## Command line client, cht.sh
 
-The cheat.sh service has its own command line client (cht.sh), that has several useful features,
-comparing to quering the service directly with curl:
+The cheat.sh service has its own command line client (`cht.sh`), that,
+comparing to quering the service directly with `curl`,
+has several useful features:
 
 * Special shell mode with a persistent queries context and readline support;
 * Queries history;
@@ -148,13 +170,13 @@ To install the client:
     chmod +x ~/bin/cht.sh
 ```
 
-Now, you can use `cht.sh` instead of curl, and write queries in more natural way,
+Now, you can use `cht.sh` instead of `curl`, and write your queries in more natural way,
 with spaces instead of `+`:
 
 ```
-    cht.sh go reverse a list
-    cht.sh python random list elements
-    cht.sh js parse json
+    $ cht.sh go reverse a list
+    $ cht.sh python random list elements
+    $ cht.sh js parse json
 ```
 
 It is even more convenient to start the client in a special shell mode:
@@ -164,14 +186,14 @@ It is even more convenient to start the client in a special shell mode:
     cht.sh> go reverse a list
 ```
 
-If all queries are supposed to be about the same language, you can change the context of the queries
+If all your queries are supposed to be about the same language, you can change the context of the queries
 and spare repeating the programming language name:
 ```
     $ cht.sh --shell
     cht.sh> cd go
     cht.sh/go> reverse a list
 ```
-or even start in this context:
+or even start the client in this context:
 ```
     $ cht.sh --shell go
     cht.sh/go> reverse a list
@@ -181,18 +203,48 @@ or even start in this context:
 ```
 
 If you want to change the context, you can do it with the `cd` command,
-or you can temporary change the context only for one query
+or if you want do a single query for some other language, just prepend it with `/`:
 
 ```
-    cht.sh --shell go
+    $ cht.sh --shell go
+    ...
     cht.sh/go> /python dictionary comprehension
     ...
 ```
 
-If you want to copy the last answer in the clipboard, you can
+If you want to copy the last answer into the clipboard, you can
 use the `c` (`copy`) command, or `C` (`ccopy`, without comments).
 
-Type `help` to list other internal cht.sh commands.
+```
+    cht.sh/python> append file
+    #  python - How do you append to a file?
+
+    with open("test.txt", "a") as myfile:
+        myfile.write("appended text")
+    cht.sh/python> C
+    copy: 2 lines copied to the selection
+```
+
+Type `help` for other internal `cht.sh` commands.
+
+```
+	cht.sh> help
+	help    - show this help
+	hush    - do not show the 'help' string at start anymore
+	cd LANG - change the language context
+	copy    - copy the last answer in the clipboard (aliases: yank, y, c)
+	ccopy   - copy the last answer w/o comments (cut comments; aliases: cc, Y, C)
+	exit    - exit the cheat shell (aliases: quit, ^D)
+	id [ID] - set/show an unique session id ("reset" to reset, "remove" to remove)
+	stealth - stealth mode (automatic queries for selected text)
+	update  - self update (only if the scriptfile is writeable)
+	version - show current cht.sh version
+	/:help  - service help
+	QUERY   - space ceparated query staring (examples are below)
+				  cht.sh> python zip list
+				  cht.sh/python> zip list
+				  cht.sh/go> /python zip list
+```
 
 ### Tab completion
 
@@ -256,7 +308,7 @@ You: itertools.chain.from_iterable(a)             |
 She: Good. Let's try something harder.            |
 She: What about quicksort implementation?         |
 You: (selecting "quicksort implementation")       | stealth: quicksort implementation
-You: Let's me think about it.                     | (some big and clumsy lowlevel implementation is shown)
+You: Let me think about it.                       | (some big and clumsy lowlevel implementation is shown)
 You: Well...(starting typing it in)               | def sort(array=[12,4,5,6,7,3,1,15]):
                                                   |     less = []
                                                   |     equal = []
@@ -267,14 +319,14 @@ You: What do you mean?                            |         for x in array:
                                                   |             if x < pivot: less.append(x)
 She: I mean,                                      |             if x == pivot: equal.append(x)
 She: do you really need all these ifs and fors?   |             if x > pivot: greater.append(x)
-She: Could you just use filter instead may be?    |         return sort(less)+equal+sort(greater)
+She: Could you may be just use filter instead?    |         return sort(less)+equal+sort(greater)
                                                   |     else:
 You: quicksort with filter?                       |         return array
                                                   |
 She: Yes                                          | stealth: quicksort with filter
 You: (selecting "quicksort with filter")          | return qsort(filter(lt, L[1:]))+[pivot] \
 You: Ok, I will try.                              |     +qsort(filter(ge, L[1:]))
-You: Something like that?                         |
+You: Something like this?                         |
 You: qsort(filter(lt, L[1:]))+[pivot] \           |
        + qsort(filter(ge, L[1:]))                 |
                                                   |
@@ -288,6 +340,25 @@ because you know what happens when you do.
 ![when you lie in your interview](http://cheat.sh/files/when-you-lie-katze.png)
 
 ## Editors integration
+
+You can access cheat.sh directly from editors: *Vim* and *Emacs*.
+Instead of opening your browser, googling, browsing Stack Overflow
+and eventually copying the code snippets you need into the clipboard
+and later pasting them into the editor,
+you can achieve the same instantly and without leaving the editor at all!
+
+Here is how it looks like in Vim:
+
+1. If you have a question while editing a program, you can just type
+your question directly in the buffer and press `<leader>KK`. You will get
+the answer to your question in pager. (with `<leader>KB` you'll get the answer
+in a separate buffer).
+
+2. If you like the answer. You can manually paste it from the buffer or
+the pager, or if you are lazy you can use `<leader>KP` to paste it under
+your question (`<leader>KR` will replace your question). If you want the
+answer without the comments, `<leader>KC` replays the last query
+toggling them.
 
 ### Vim
 
@@ -304,7 +375,7 @@ because you know what happens when you do.
 
 ## Special pages
 
-There are several special pages (their nameis are always starting with a colon),
+There are several special pages (their names are always starting with a colon),
 that are not cheat sheets and have special meaning.
 
 
