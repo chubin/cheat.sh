@@ -191,79 +191,81 @@ To activate tab completion support for `cht.sh`, add the `:bash_completion` scri
 One of the important properties of any real cheat sheet,
 is that it could be used fully unnoticed.
 
-cheat.sh can be used completely unnoticed too. The cheat.sh client, cht.sh, has
-a special mode, called *stealth mode*, where you don't need even to touch your
+cheat.sh can be used completely unnoticed too. The cheat.sh client, `cht.sh`, has
+a special mode, called **stealth mode**, using that you don't even need to touch your
 keyboard to open some cheat sheet.
 
-In this mode, as soon as you select some text with the mouse (and it is added
+In this mode, as soon as you select some text with the mouse (and thus it is added
 into the selection buffer of X Window System or into the clipboard) it's used
-as a query string for cheat.sh, and correspondent cheat sheets are shown.
+as a query string for cheat.sh, and the correspondent cheat sheet is automatically shown.
 
-Let's imagine, that you are having an online interview with a shared documents
-(say Google Docs), where the interviewer ask you some questions (or where you
-typing them in on your own, just to show to the interviewer that you've heard
-it right).
+Let's imagine, that you are having an online interview, where your interviewer asks you
+some questions using a shared document (say Google Docs) and you are supposed
+to write your coding answers there (you make type in the questions on your own,
+just to show to the interviewer that you've heard it right).
 
-To see the cheat sheets for the questions, you just have to select them,
-and do nothing more. If you don't want to see the comments and the only thing you need is code,
-use `?Q` when going into the stealth mode.
+When using the stealth mode of `cht.sh`, the only thing you need to do to see the cheat sheet for a question,
+is to select the question with the mouse.
+If you don't want any text in the answers and the only thing you need is code,
+use the `Q` option when starting the stealth mode.
 
 ```
-She: Hi!                                                      | $ cht.sh --shell python
-You: Hi!                                                      | cht.sh/python> stealth Q
-She: Are you ready for a small interview?                     | stealth: you are in the stealth mode; select any text in any window for a query
-She: Just a couple of questions about python                  | stealth: selections longer than 5 words are ignored
-She: We will talk about python                                | stealth: query arguments: ?Q
-She: Let's start from something simple.                       | stealth: use ^C to leave this mode
-She: Do you known how to reverse a list in python?            | 
-You: Sure                                                     |
-You: (selecting "reverse a list")                             | stealth: reverse a list
-                                                              | reverse_lst = lst[::-1]
-You: lst[::-1]?                                               |
-She: Good.                                                    |
-She: Do you know how to chain a list of lists?                |
-You: (selecting "chain a list of lists")                      | stealth: chain a list of lists
-                                                              | import itertools
-                                                              | a = [["a","b"], ["c"]]
-                                                              | print list(itertools.chain.from_iterable(a))
-You: May I use external modules?                              |
-She: What module do you want to use?                          |
-You: itertools                                                |
-She: Yes, you may use it                                      |
-You: Ok, then:                                                |
-You: itertools.chain.from_iterable(a)                         |
-She: Good. Let's try something harder.                        |
-She: What about quicksort implementation?                     | 
-You: (selecting "quicksort implementation")                   | stealth: quicksort implementation
-You: Let's me think about it.                                 | (some big and clumsy lowlevel implementation is shown)
-You: Well...(starting typing it in)                           | def sort(array=[12,4,5,6,7,3,1,15]):
-                                                              |     less = []
-                                                              |     equal = []
-She: (seeing your ugly pascal style)                          |     greater = []
-She: Could you write it more concise?                         |     if len(array) > 1:
-                                                              |         pivot = array[0]
-You: What do you mean?                                        |         for x in array:
-                                                              |             if x < pivot: less.append(x)
-She: I mean,                                                  |             if x == pivot: equal.append(x)
-She: do you really need all these ifs and fors?               |             if x > pivot: greater.append(x)
-She: Could you just use filter instead may be?                |         return sort(less)+equal+sort(greater)
-                                                              |     else:
-You: quicksort with filter?                                   |         return array
-                                                              |
-She: Yes                                                      | stealth: quicksort filter
-You: (selecting "quicksort with filter")                      | return qsort(filter(lt, L[1:]))+[pivot]+qsort(filter(ge, L[1:]))
-You: Ok, I will try.                                          |
-You: Something like that?                                     |
-You: qsort(filter(lt, L[1:]))+[pivot]+qsort(filter(ge, L[1:]))|
-                                                              |
-She: Yes! Perfect! Exactly what I wanted to see!              |
+You: Hi!                                          | $ cht.sh --shell python
+She: Hi!                                          | cht.sh/python> stealth Q
+She: Are you ready for a small interview?         | stealth: you are in the stealth mode; select any text
+She: Just a couple of questions about python      | stealth: selections longer than 5 words are ignored
+She: We will talk about python                    | stealth: query arguments: ?Q
+She: Let's start from something simple.           | stealth: use ^C to leave this mode
+She: Do you known how to reverse a list in python?|
+You: Sure                                         |
+You: (selecting "reverse a list")                 | stealth: reverse a list
+                                                  | reverse_lst = lst[::-1]
+You: lst[::-1]?                                   |
+She: Good.                                        |
+She: Do you know how to chain a list of lists?    |
+You: (selecting "chain a list of lists")          | stealth: chain a list of lists
+                                                  | import itertools
+                                                  | a = [["a","b"], ["c"]]
+                                                  | print list(itertools.chain.from_iterable(a))
+You: May I use external modules?                  |
+She: What module do you want to use?              |
+You: itertools                                    |
+She: Yes, you may use it                          |
+You: Ok, then:                                    |
+You: itertools.chain.from_iterable(a)             |
+She: Good. Let's try something harder.            |
+She: What about quicksort implementation?         |
+You: (selecting "quicksort implementation")       | stealth: quicksort implementation
+You: Let's me think about it.                     | (some big and clumsy lowlevel implementation is shown)
+You: Well...(starting typing it in)               | def sort(array=[12,4,5,6,7,3,1,15]):
+                                                  |     less = []
+                                                  |     equal = []
+She: (seeing your ugly pascal style)              |     greater = []
+She: Could you write it more concise?             |     if len(array) > 1:
+                                                  |         pivot = array[0]
+You: What do you mean?                            |         for x in array:
+                                                  |             if x < pivot: less.append(x)
+She: I mean,                                      |             if x == pivot: equal.append(x)
+She: do you really need all these ifs and fors?   |             if x > pivot: greater.append(x)
+She: Could you just use filter instead may be?    |         return sort(less)+equal+sort(greater)
+                                                  |     else:
+You: quicksort with filter?                       |         return array
+                                                  |
+She: Yes                                          | stealth: quicksort filter
+You: (selecting "quicksort with filter")          | return qsort(filter(lt, L[1:]))+[pivot] \
+You: Ok, I will try.                              |     +qsort(filter(ge, L[1:]))
+You: Something like that?                         |
+You: qsort(filter(lt, L[1:]))+[pivot] \           |
+       + qsort(filter(ge, L[1:]))                 |
+                                                  |
+She: Yes! Perfect! Exactly what I wanted to see!  |
 
 ```
 
 Or course, it is just fun, and you should never cheat in your coding interviews,
 because you know what happens otherwise.
 
-![when you lie in your interview](http://cheat.sh/files/when-you-lie.png)
+![when you lie in your interview](http://cheat.sh/files/when-you-lie-katze.png)
 
 ## Editors integration
 
