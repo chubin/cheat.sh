@@ -279,7 +279,9 @@ a cheat sheet for some question, is to select the question using the mouse.
 If you don't want any text in the answers and the only thing you need is code,
 use the `Q` option when starting the stealth mode.
 
+<p align="center">
 ![when you lie in your interview](http://cheat.sh/files/stealth-mode.gif)
+</p>
 
 ```
 You: Hi!                                          | $ cht.sh --shell python
@@ -311,26 +313,26 @@ You: (selecting "quicksort implementation")       | stealth: quicksort implement
 You: Let me think about it.                       | (some big and clumsy lowlevel implementation is shown)
 You: Well...(starting typing it in)               | def sort(array=[12,4,5,6,7,3,1,15]):
                                                   |     less = []
-                                                  |     equal = []
-She: (seeing your ugly pascal style)              |     greater = []
-She: Could you write it more concise?             |     if len(array) > 1:
-                                                  |         pivot = array[0]
-You: What do you mean?                            |         for x in array:
-                                                  |             if x < pivot: less.append(x)
-She: I mean,                                      |             if x == pivot: equal.append(x)
-She: do you really need all these ifs and fors?   |             if x > pivot: greater.append(x)
-She: Could you may be just use filter instead?    |         return sort(less)+equal+sort(greater)
-                                                  |     else:
-You: quicksort with filter?                       |         return array
-                                                  |
-She: Yes                                          | stealth: quicksort with filter
-You: (selecting "quicksort with filter")          | return qsort(filter(lt, L[1:]))+[pivot] \
-You: Ok, I will try.                              |     +qsort(filter(ge, L[1:]))
-You: Something like this?                         |
+She: (seeing your ugly pascal style)              |     equal = []
+She: Could you write it more concise?             |     greater = []
+                                                  |     if len(array) > 1:
+You: What do you mean?                            |         pivot = array[0]
+                                                  |         for x in array:
+She: I mean,                                      |             if x < pivot: less.append(x)
+She: do you really need all these ifs and fors?   |             if x == pivot: equal.append(x)
+She: Could you may be just use filter instead?    |             if x > pivot: greater.append(x)
+                                                  |         return sort(less)+equal+sort(greater)
+You: quicksort with filter?                       |     else:
+                                                  |         return array
+She: Yes                                          |
+You: (selecting "quicksort with filter")          | stealth: quicksort with filter
+You: Ok, I will try.                              | return qsort(filter(lt, L[1:]))+[pivot] \
+You: Something like this?                         |     +qsort(filter(ge, L[1:]))
 You: qsort(filter(lt, L[1:]))+[pivot] \           |
        + qsort(filter(ge, L[1:]))                 |
                                                   |
 She: Yes! Perfect! Exactly what I wanted to see!  |
+                                                  |
 
 ```
 
@@ -341,7 +343,7 @@ because you know what happens when you do.
 
 ## Editors integration
 
-You can access cheat.sh directly from editors: *Vim* and *Emacs*.
+You can use *cheat.sh* directly from the editor (*Vim* and *Emacs* are currently supported).
 Instead of opening your browser, googling, browsing Stack Overflow
 and eventually copying the code snippets you need into the clipboard
 and later pasting them into the editor,
@@ -354,9 +356,9 @@ your question directly in the buffer and press `<leader>KK`. You will get
 the answer to your question in pager. (with `<leader>KB` you'll get the answer
 in a separate buffer).
 
-2. If you like the answer. You can manually paste it from the buffer or
-the pager, or if you are lazy you can use `<leader>KP` to paste it under
-your question (`<leader>KR` will replace your question). If you want the
+2. If you like the answer, you can manually paste it from the buffer or
+the pager, or if you are lazy you can use `<leader>KP` to paste it below/under
+your question (or replace you question using `<leader>KR`). If you want the
 answer without the comments, `<leader>KC` replays the last query
 toggling them.
 
