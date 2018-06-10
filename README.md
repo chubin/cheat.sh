@@ -310,7 +310,7 @@ You: itertools.chain.from_iterable(a)               |
 She: Good. Let's try something harder.              |
 She: What about quicksort implementation?           |
 You: (selecting "quicksort implementation")         | stealth: quicksort implementation
-You: Let me think about it.                         | (some big and clumsy lowlevel implementation is shown)
+You: Let me think about it.                         | (some big and clumsy lowlevel implementation shown)
 You: Well...(starting typing it in)                 | def sort(array=[12,4,5,6,7,3,1,15]):
                                                     |     less = []
 She: (seeing your ugly pascal style)                |     equal = []
