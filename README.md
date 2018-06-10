@@ -284,55 +284,55 @@ use the `Q` option when starting the stealth mode.
 </p>
 
 ```
-You: Hi!                                          | $ cht.sh --shell python
-She: Hi!                                          | cht.sh/python> stealth Q
-She: Are you ready for a small interview?         | stealth: you are in the stealth mode; select any text
-She: Just a couple of questions                   | stealth: selections longer than 5 words are ignored
-She: We will talk about python                    | stealth: query arguments: ?Q
-She: Let's start from something simple.           | stealth: use ^C to leave this mode
-She: Do you know how to reverse a list in python? |
-You: Sure                                         |
-You: (selecting "reverse a list")                 | stealth: reverse a list
-                                                  | reverse_lst = lst[::-1]
-You: lst[::-1]?                                   |
-She: Good.                                        |
-She: Do you know how to chain a list of lists?    |
-You: (selecting "chain a list of lists")          | stealth: chain a list of lists
-                                                  | import itertools
-                                                  | a = [["a","b"], ["c"]]
-                                                  | print list(itertools.chain.from_iterable(a))
-You: May I use external modules?                  |
-She: What module do you want to use?              |
-You: itertools                                    |
-She: Yes, you may use it                          |
-You: Ok, then:                                    |
-You: itertools.chain.from_iterable(a)             |
-She: Good. Let's try something harder.            |
-She: What about quicksort implementation?         |
-You: (selecting "quicksort implementation")       | stealth: quicksort implementation
-You: Let me think about it.                       | (some big and clumsy lowlevel implementation is shown)
-You: Well...(starting typing it in)               | def sort(array=[12,4,5,6,7,3,1,15]):
-                                                  |     less = []
-She: (seeing your ugly pascal style)              |     equal = []
-She: Could you write it more concise?             |     greater = []
-                                                  |     if len(array) > 1:
-You: What do you mean?                            |         pivot = array[0]
-                                                  |         for x in array:
-She: I mean,                                      |             if x < pivot: less.append(x)
-She: do you really need all these ifs and fors?   |             if x == pivot: equal.append(x)
-She: Could you may be just use filter instead?    |             if x > pivot: greater.append(x)
-                                                  |         return sort(less)+equal+sort(greater)
-You: quicksort with filter?                       |     else:
-                                                  |         return array
-She: Yes                                          |
-You: (selecting "quicksort with filter")          | stealth: quicksort with filter
-You: Ok, I will try.                              | return qsort(filter(lt, L[1:]))+[pivot] \
-You: Something like this?                         |     +qsort(filter(ge, L[1:]))
-You: qsort(filter(lt, L[1:]))+[pivot] \           |
-       + qsort(filter(ge, L[1:]))                 |
-                                                  |
-She: Yes! Perfect! Exactly what I wanted to see!  |
-                                                  |
+You: Hi!                                            | $ cht.sh --shell python
+She: Hi!                                            | cht.sh/python> stealth Q
+She: Are you ready for a small interview?           | stealth: you are in the stealth mode; select any text
+She: Just a couple of questions                     | stealth: selections longer than 5 words are ignored
+She: We will talk about python                      | stealth: query arguments: ?Q
+She: Let's start from something simple.             | stealth: use ^C to leave this mode
+She: Do you know how to reverse a list in python?   |
+You: Sure                                           |
+You: (selecting "reverse a list")                   | stealth: reverse a list
+                                                    | reverse_lst = lst[::-1]
+You: lst[::-1]?                                     |
+She: Good.                                          |
+She: Do you know how to chain a list of lists?      |
+You: (selecting "chain a list of lists")            | stealth: chain a list of lists
+                                                    | import itertools
+                                                    | a = [["a","b"], ["c"]]
+                                                    | print list(itertools.chain.from_iterable(a))
+You: May I use external modules?                    |
+She: What module do you want to use?                |
+You: itertools                                      |
+She: Yes, you may use it                            |
+You: Ok, then:                                      |
+You: itertools.chain.from_iterable(a)               |
+She: Good. Let's try something harder.              |
+She: What about quicksort implementation?           |
+You: (selecting "quicksort implementation")         | stealth: quicksort implementation
+You: Let me think about it.                         | (some big and clumsy lowlevel implementation is shown)
+You: Well...(starting typing it in)                 | def sort(array=[12,4,5,6,7,3,1,15]):
+                                                    |     less = []
+She: (seeing your ugly pascal style)                |     equal = []
+She: Could you write it more concise?               |     greater = []
+                                                    |     if len(array) > 1:
+You: What do you mean?                              |         pivot = array[0]
+                                                    |         for x in array:
+She: I mean,                                        |             if x < pivot: less.append(x)
+She: do you really need all these ifs and fors?     |             if x == pivot: equal.append(x)
+She: Could you may be just use filter instead?      |             if x > pivot: greater.append(x)
+                                                    |         return sort(less)+equal+sort(greater)
+You: quicksort with filter?                         |     else:
+                                                    |         return array
+She: Yes                                            |
+You: (selecting "quicksort with filter")            | stealth: quicksort with filter
+You: Ok, I will try.                                | return qsort(filter(lt, L[1:]))+[pivot] \
+You: Something like this?                           |     +qsort(filter(ge, L[1:]))
+You: qsort(filter(lt, L[1:]))+[pivot] \             |
+       + qsort(filter(ge, L[1:]))                   |
+                                                    |
+She: Yes! Perfect! Exactly what I wanted to see!    |
+                                                    |
 
 ```
 
