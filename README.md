@@ -362,11 +362,52 @@ your question (or replace you question using `<leader>KR`). If you want the
 answer without the comments, `<leader>KC` replays the last query
 toggling them.
 
+If you use some static analysis plugin such as *syntastic* (for Vim), you can use
+its warning and error messages as cheat.sh queries: place the cursor on the problem line
+and press `<leader>KE`: explandation for the warning will opened in a new buffer.
+
 ### Vim
 
 * [cheat.sh-vim](https://github.com/dbeniamine/cheat.sh-vim) — Vim support
 
-[![asciicast](https://asciinema.org/a/c6QRIhus7np2OOQzmQ2RNXzRZ.png)](https://asciinema.org/a/c6QRIhus7np2OOQzmQ2RNXzRZ)
+Here is Vim configuration example:
+
+```
+" some configuration above ...
+
+let mapleader=" "
+
+call vundle#begin()
+Bundle 'gmarik/vundle'
+Bundle 'scrooloose/syntastic'
+Bundle 'dbeniamine/cheat.sh-vim'
+call vundle#end()
+
+let g:syntastic_javascript_checkers = [ 'jshint' ]
+let g:syntastic_ocaml_checkers = ['merlin']
+let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_shell_checkers = ['shellcheck']
+
+" some configuration below ...
+```
+
+In this example, several Vim plugins are used:
+
+* [gmarik/vundle](https://github.com/VundleVim/Vundle.vim) — Vim plugin manager
+* [scrooloose/syntastic](https://github.com/vim-syntastic/syntastic) — Syntax checking plugin
+* [cheat.sh-vim](https://github.com/dbeniamine/cheat.sh-vim) — Vim support
+
+Syntastic shows warnings and errors (found by code analysys tools: `jshint`, `merlin`, `pylint`, `shellcheckt etc.),
+and `cheat.sh-vim` shows you explanations for the errors and warnings
+and answers on programming languages queries written in the editor.
+
+Watch a demo, where the most important features of the cheat.sh Vim plugin are shown (5 Min):
+
+<p align="center">
+  <img src='https://cheat.sh/files/vim-demo.gif'/>
+</p>
+
+<!-- [![asciicast](https://asciinema.org/a/c6QRIhus7np2OOQzmQ2RNXzRZ.png)](https://asciinema.org/a/c6QRIhus7np2OOQzmQ2RNXzRZ) -->
 
 ### Emacs
 
