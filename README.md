@@ -364,7 +364,7 @@ toggling them.
 
 If you use some static analysis plugin such as *syntastic* (for Vim), you can use
 its warning and error messages as cheat.sh queries: place the cursor on the problem line
-and press `<leader>KE`: explandation for the warning will opened in a new buffer.
+and press `<leader>KE`: explanation for the warning will be opened in a new buffer.
 
 ### Vim
 
@@ -405,6 +405,14 @@ Watch a demo, where the most important features of the cheat.sh Vim plugin are s
 
 <p align="center">
   <img src='https://cheat.sh/files/vim-demo.gif'/>
+</p>
+
+Or, if you want to scroll and/or pause, the same on YouTube:
+
+<p align="center">
+  <a href="http://www.youtube.com/watch?feature=player_embedded&v=xyf6MJ0y-z8
+  " target="_blank"><img src="http://img.youtube.com/vi/xyf6MJ0y-z8/0.jpg" 
+  alt="cheat.sh-vim: Using cheat.sh from vim" width="240" height="180" border="10" /></a>
 </p>
 
 <!-- [![asciicast](https://asciinema.org/a/c6QRIhus7np2OOQzmQ2RNXzRZ.png)](https://asciinema.org/a/c6QRIhus7np2OOQzmQ2RNXzRZ) -->
