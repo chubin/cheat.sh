@@ -412,7 +412,7 @@ Or, if you want to scroll and/or pause, the same on YouTube:
 <p align="center">
   <a href="http://www.youtube.com/watch?feature=player_embedded&v=xyf6MJ0y-z8
   " target="_blank"><img src="http://img.youtube.com/vi/xyf6MJ0y-z8/0.jpg" 
-  alt="cheat.sh-vim: Using cheat.sh from vim" width="1024" height="768" border="10" /></a>
+  alt="cheat.sh-vim: Using cheat.sh from vim" width="800" height="600" border="10" /></a>
 </p>
 
 <!-- [![asciicast](https://asciinema.org/a/c6QRIhus7np2OOQzmQ2RNXzRZ.png)](https://asciinema.org/a/c6QRIhus7np2OOQzmQ2RNXzRZ) -->
