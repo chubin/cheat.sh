@@ -30,6 +30,10 @@ Such a thing does exist.
 * can be used directly from code editors, without opening a browser and not switching your mental context;
 * supports a special mode (stealth mode), where it can be used fully invisibly, not even touching a key and not making a sound.
 
+<p align="center">
+  <img src='https://cheat.sh/files/demo-curl.gif'/>
+</p>
+
 ## Usage
 
 To get a cheat sheet for a UNIX/Linux command from a command line, query the service using `curl` or any other HTTP/HTTPS client
