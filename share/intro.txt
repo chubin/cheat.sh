@@ -15,7 +15,8 @@ They are equivalent:
 The preferred access protocol is HTTPS, and you should use it always when possible.
 
 Cheat sheets in the root namespaces cover UNIX/Linux commands.
-Cheat sheets covering programming languages are located in subsections.
+
+Cheat sheets covering programming languages are located in subsections:
 
     {1curl cht.sh/}{2go/func}
 
@@ -25,6 +26,7 @@ All cheat sheets in a subsection can be listed using a special query {2:list} :
 
 There are several other special queries. All of them are starting with a {2colon}.
 See {2/:help} for the full list of the special queries.
+
 
 ## Search
 
@@ -39,6 +41,7 @@ all cheat sheets in the namespace are scanned, and the found occurrencies
 are displayed:
 
     {1curl cht.sh/}{2~extract}
+
 
 ## Options
 
@@ -55,6 +58,7 @@ of operation can be found in {2/:help},
 
     {1curl cht.sh}{2/:help}
 
+
 ## cht.sh client
 
 Though it's perfectly possible to access cheat.sh using {1curl} (or any other
@@ -70,6 +74,7 @@ Queries look the same, but you can separate words in the query with {1spaces},
 instead of {1+} as when using curl, what looks more natural:
 
     {1cht.sh} {2python zip lists}
+
 
 ## cht.sh shell
 
@@ -94,6 +99,7 @@ you may prepend the query with {2/}:
     {1cht.sh/python>} {2/go http query}
     {1cht.sh/python>} {2/js iterate list}
 
+
 ## :learn
 
 If you are just start learning a new programming language, and you have no
@@ -111,6 +117,7 @@ Or simply {2:learn} with cht.sh (you don't need {2less -R} here, because
 {1cht.sh} starts pager if needed automatically):
 
     {4cht.sh/elixir>} {2:learn}
+
 
 ## Programming languages questions
 
@@ -133,6 +140,7 @@ programming language name as the first word in the query:
 But if you are using only one programming language and all queries are about
 it, it's better to change the current context and 
 
+
 ## Comments
 
 Text in the answers is syntactically formatted as comment in the correspondent
@@ -146,6 +154,7 @@ buffer (you may also call it "clibpoard") using {2C} (or {2c}, with text):
     {1cht.sh/python>} {2C}
     {4=1 lines copied}
 
+
 ## bash TAB-completion for cht.sh
 
 One of the advantages of the {1cht.sh} client comparing to plain curl is that you
@@ -158,6 +167,7 @@ Install the TAB completion script for that. Assuming you use bash, you have to d
     {1curl} {2https://cht.sh/:bash_completion} {1> ~/.bash.d/cht.sh}
     {1echo 'source ~/.bash.d/cht.sh' >> ~/.bashrc}
     {1source ~/.bash.d/cht.sh}
+
 
 ## Editor
 
@@ -175,14 +185,17 @@ Here is how it looks like:
 1. In Vim, if you have a question while editing a program, you can just type
 your question {1directly in the buffer} and press {2<leader>KK}. You will get
 the answer to your question in {1pager}. (with {2<leader>KB} you'll get the answer
-in a separate {1buffer}; and with <leader>KP you'll paste it directly in your
-{1current buffer}).
+in a separate {1buffer}).
 
-2. If you like the answer shown in pager, you can {1paste it} immediately
-in the buffer. Just press {2....} for that.
+2. If you like the answer. You can manually paste it from the buffer or
+the pager, or if you are lazy you can use {2<leader>KP} to paste it under
+your question ({2<leader>KR} will replace your question). If you want the
+answer without the comments, {2<leader>KC} replays the last query
+toggling them.
 
 You have to install cheat.sh {1Vim/Emacs plugins} for the editor support.
 See {2/:vim} or {2/:emacs} with the detailed installation instructions.
+
 
 ## Feature requests, feedback and contribution
 
