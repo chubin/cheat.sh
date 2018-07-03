@@ -7,6 +7,7 @@ Exports:
     get_topic_type()
     get_answer()
 """
+from __future__ import print_function
 
 from gevent.monkey import patch_all
 from gevent.subprocess import Popen, PIPE
@@ -273,9 +274,9 @@ def _get_answer_for_question(topic):
         query_text = re.sub('/[0-9]+$', '', query_text)
         query_text = re.sub('/[0-9]+$', '', query_text)
         detector = Detector(query_text)
-        print "query_text = ", query_text
+        print("query_text = ", query_text)
         supposed_lang = detector.languages[0].code
-        print "supposed lang = ", supposed_lang
+        print("supposed lang = ", supposed_lang)
         if len(topic_words) > 2 or supposed_lang in ['az', 'ru', 'uk', 'de', 'fr', 'es', 'it']:
             lang = supposed_lang
         if supposed_lang.startswith('zh_'):
@@ -284,7 +285,7 @@ def _get_answer_for_question(topic):
             lang = supposed_lang
 
     except UnknownLanguage:
-        print "Unknown language (%s)" % query_text
+        print("Unknown language (%s)" % query_text)
 
     if lang != 'en':
         topic = ['--human-language', lang, topic]
@@ -406,7 +407,7 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
 
         section_name, rest = query.split('/', 1)
         section_name = SO_NAME.get(section_name, section_name)
-        print "%s/%s" % (section_name, rest)
+        print("%s/%s" % (section_name, rest))
         return "%s/%s" % (section_name, rest)
 
 
@@ -422,7 +423,7 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
     # what type the query has
     start_time = time.time()
     topic_type = get_topic_type(topic)
-    print (time.time() - start_time)*1000
+    print((time.time() - start_time)*1000)
 
     # checking if the answer is in the cache
     if topic != "":

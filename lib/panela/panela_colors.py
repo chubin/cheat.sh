@@ -21,7 +21,12 @@ from colors import find_nearest_color, HEX_TO_ANSI, rgb_from_str
 import pyte
 
 # http://stackoverflow.com/questions/19782975/convert-rgb-color-to-the-nearest-color-in-palette-web-safe-color
-# pylint: disable=invalid-name
+
+try:
+    basestring        # Python 2
+except NameError:
+    basestring = str  # Python 3
+
 
 def color_mapping(clr):
     if clr == 'default':
@@ -378,8 +383,8 @@ class Panela:
             char_iter = itertools.repeat(char)
 
         for x, y in get_line((x1,y1), (x2, y2)):
-            char = char_iter.next()
-            color = color_iter.next()
+            char = next(char_iter)
+            color = next(color_iter)
             background = next(background_iter)
 
             self.put_point(x, y, char=char, color=color, background=background)

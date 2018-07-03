@@ -1,6 +1,7 @@
 """
 Adapters for the cheat sheets from the Learn X in Y project
 """
+from __future__ import print_function
 
 import os
 import re
@@ -29,7 +30,7 @@ class LearnXYAdapter(object):
         if "Comments" in self._topics_list:
             self._topics_list = [x for x in self._topics_list if x != "Comments"] + ["Comments"]
         self._topics_list += [":learn"]
-        print self.prefix, self._topics_list
+        print(self.prefix, self._topics_list)
 
     def _is_block_separator(self, before, now, after):
         if (re.match(r'////////*', before)
@@ -141,8 +142,8 @@ class LearnXYAdapter(object):
         for block_name, block_contents in self._blocks:
             if block_name == name:
 
-                print "\n".join(block_contents)
-                print name
+                print("\n".join(block_contents))
+                print(name)
                 return "\n".join(block_contents)
 
         return None
