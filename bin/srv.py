@@ -4,6 +4,7 @@
 """
 Main server program.
 """
+from __future__ import print_function
 
 from gevent.wsgi import WSGIServer
 from gevent.monkey import patch_all
@@ -120,8 +121,8 @@ def _proxy(*args, **kwargs):
         url_after = '?' + "&".join("arg=%s" % x for x in request.args['q'].split())
 
     url += url_after
-    print url
-    print request.get_data()
+    print(url)
+    print(request.get_data())
     resp = requests.request(
         method=request.method,
         url=url,

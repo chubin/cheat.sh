@@ -2,6 +2,7 @@
 Global configuration of the project.
 All hardcoded pathes should be (theoretically) here.
 """
+from __future__ import print_function
 
 import logging
 import os
@@ -29,7 +30,7 @@ def error(text):
     Log error `text` and produce a RuntimeError exception
     """
     if not text.startswith('Too many queries'):
-        print text
+        print(text)
     logging.error("ERROR %s", text)
     raise RuntimeError(text)
 
@@ -38,5 +39,5 @@ def log(text):
     Log error `text` (if it does not start with 'Too many queries')
     """
     if not text.startswith('Too many queries'):
-        print text
+        print(text)
         logging.info(text)
