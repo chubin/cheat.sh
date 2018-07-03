@@ -23,8 +23,10 @@
 # count words in text counter
 # group elements list
 
-__CHTSH_VERSION=2
+__CHTSH_VERSION=3
 __CHTSH_DATETIME="2018-06-02 22:26:46 +0200"
+
+export LESSSECURE=1
 
 STEALTH_MAX_SELECTION_LENGTH=5
 
@@ -86,35 +88,56 @@ elif [ "$1" == --shell ]; then
   shift
 fi
 
+prompt="cht.sh"
+
+prompt="cht.sh"
+opts=""
+input=""
+for o; do
+  if [[ "$o" == -* ]]; then
+    opts="${opts}${o#-}"
+  else
+    input="$input $o"
+  fi
+done
+query=$(echo "$input" | sed 's@ *$@@; s@^ *@@; s@ @/@; s@ @+@g')
+
 if [ "$shell_mode" != yes ]; then
-  opts=""
-  input=""
-  for o; do
-    if [[ "$o" == -* ]]; then
-      opts="${opts}${o#-}"
-    else
-      input="$input $o"
-    fi
-  done
-  query=$(echo "$input" | sed 's@ *$@@; s@^ *@@; s@ @/@; s@ @+@g')
   curl -s https://cht.sh/"$query"
   exit 0
+else
+  new_section="$1"
+  valid_sections=($(get_list_of_sections))
+  valid=no; for q in "${valid_sections[@]}"; do [[ "$q" == $new_section/ ]] && { valid=yes; break; }; done
+
+  if [[ $valid = yes ]]; then
+    section="$new_section"
+    this_query="$(echo "$input" | sed 's@ *[^ ]* *@@')"
+    this_prompt="\033[0;32mcht.sh/$section>\033[0m "
+  else
+    this_query="$input"
+    this_prompt="\033[0;32mcht.sh>\033[0m "
+  fi
+  if [ -n "$this_query" ] && [ -z "$CHEATSH_RESTART" ]; then
+    printf "$this_prompt$this_query\n"
+    curl -s https://cht.sh/"$query"
+  fi
 fi
 
 which xsel >& /dev/null || { echo 'DEPENDENCY: please install "xsel" for "copy"' >&2; }
 which rlwrap >& /dev/null || { echo 'DEPENDENCY: install "rlwrap" to use cht.sh in the shell mode' >&2; exit 1; }
 which curl >& /dev/null || { echo 'DEPENDENCY: install "curl" to use cht.sh' >&2; exit 1; }
 
-mkdir -p $HOME/.cht.sh/
+mkdir -p "$HOME/.cht.sh/"
 lines=$(tput lines)
-
-prompt="cht.sh"
-section="$1"
 
 TMP1=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
 trap 'rm -rf $TMP1 $TMP2' EXIT
+trap 'true' INT
 
-[ -e "$HOME/.cht.sh/.hushlogin" ] || { echo "type 'help' for the cht.sh shell help"; }
+if ! [ -e "$HOME/.cht.sh/.hushlogin" ] && [ -z "$this_query" ]; then
+  echo "type 'help' for the cht.sh shell help"
+fi
 
 while true; do
   if [ "$section" != "" ]; then
@@ -123,7 +146,9 @@ while true; do
     full_prompt="$prompt> "
   fi
 
-  input=$(rlwrap -H $HOME/.cht.sh/history -pgreen -C cht.sh -S "$full_prompt" bash "$0" --read)
+  input=$(
+    rlwrap -H $HOME/.cht.sh/history -pgreen -C cht.sh -S "$full_prompt" bash "$0" --read | sed 's/ *#.*//'
+  )
 
   case "$input" in
     '?'|h|help)
@@ -176,6 +201,10 @@ EOF
       break
       ;;
     copy|yank|c|y)
+      if [ -z "$DISPLAY" ]; then
+        echo copy: supported only in the Desktop version
+        continue
+      fi
       if [ -z "$input" ]; then
         echo copy: Make at least one query first.
         continue
@@ -187,6 +216,10 @@ EOF
       fi
       ;;
     ccopy|cc|C|Y)
+      if [ -z "$DISPLAY" ]; then
+        echo copy: supported only in the Desktop version
+        continue
+      fi
       if [ -z "$input" ]; then
         echo copy: Make at least one query first.
         continue
@@ -283,7 +316,7 @@ EOF
         if grep -q ^__CHTSH_VERSION= "$TMP2"; then
           args=(--shell)
           [ -n "$section" ] && args=("${args[@]}" "$section")
-          cp "$TMP2" "$0" && echo "Updated. Restarting..." && rm "$TMP2" && exec "$0" "${args[@]}"
+          cp "$TMP2" "$0" && echo "Updated. Restarting..." && rm "$TMP2" && CHEATSH_RESTART=1 exec "$0" "${args[@]}"
         else
           echo "Something went wrong. Please update manually"
         fi
