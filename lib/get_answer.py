@@ -20,6 +20,9 @@ import re
 import redis
 from fuzzywuzzy import process, fuzz
 from langdetect import detect
+from polyglot.detect import Detector
+from polyglot.detect.base import UnknownLanguage
+import time
 
 import beautifier
 from globals import MYDIR, PATH_TLDR_PAGES, PATH_CHEAT_PAGES, PATH_CHEAT_SHEETS, COLOR_STYLES
@@ -38,6 +41,7 @@ INTERNAL_TOPICS = [
     ':emacs',
     ':emacs-ivy',
     ":firstpage",
+    ":firstpage-v1",
     ":firstpage-v2",
     ':fish',
     ':help',
@@ -134,10 +138,14 @@ def _get_stat():
 #
 #
 
+TOPIC_TYPE_CACHE = {}
 def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     """
     Return topic type for `topic` or "unknown" if topic can't be determined.
     """
+    if topic in TOPIC_TYPE_CACHE:
+        return TOPIC_TYPE_CACHE[topic]
+
     result = 'unknown'
 
     if topic == "":
@@ -153,8 +161,11 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
                 result = "internal"
             elif is_valid_learnxy(topic):
                 result = 'learnxiny'
+            else:
+		# let us activate the 'question' feature for all subsections
+                result = 'question'
 
-    if result == 'unknown':
+    if result == 'unknown' or result == 'question':
         if topic in CHEAT_SHEETS_TOPICS:
             result = "cheat.sheets"
         elif topic.rstrip('/') in CHEAT_SHEETS_DIRS and topic.endswith('/'):
@@ -163,10 +174,12 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
             result = "cheat"
         elif topic in TLDR_TOPICS:
             result = "tldr"
-        elif '+' in topic:
-            result = "question"
+        elif '/' not in topic:
+            result = "unknown"
 
-    print topic, " ", result
+    TOPIC_TYPE_CACHE[topic] = result
+
+    #print topic, " ", result
     return result
 
 #
@@ -250,9 +263,29 @@ def _get_answer_for_question(topic):
     Find answer for the `topic` question.
     """
 
-    topic = " ".join(topic.replace('+', ' ').strip().split())
+    topic_words = topic.replace('+', ' ').strip().split()
+    topic = " ".join(topic_words)
 
-    lang = detect(topic)
+    lang = 'en'
+    try:
+        query_text = topic # " ".join(topic)
+        query_text = re.sub('^[^/]*/+', '', query_text.rstrip('/'))
+        query_text = re.sub('/[0-9]+$', '', query_text)
+        query_text = re.sub('/[0-9]+$', '', query_text)
+        detector = Detector(query_text)
+        print "query_text = ", query_text
+        supposed_lang = detector.languages[0].code
+        print "supposed lang = ", supposed_lang
+        if len(topic_words) > 2 or supposed_lang in ['az', 'ru', 'uk', 'de', 'fr', 'es', 'it']:
+            lang = supposed_lang
+        if supposed_lang.startswith('zh_'):
+            lang = 'zh'
+        if supposed_lang in ['ja', 'ko']:
+            lang = supposed_lang
+
+    except UnknownLanguage:
+        print "Unknown language (%s)" % query_text
+
     if lang != 'en':
         topic = ['--human-language', lang, topic]
     else:
@@ -383,13 +416,22 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
     topic = _rewrite_aliases(topic)
     topic = _rewrite_section_name(topic)
 
+    # this is pretty unoptimal
+    # so this part should be rewritten
+    # for the most queries we could say immediately
+    # what type the query has
+    start_time = time.time()
+    topic_type = get_topic_type(topic)
+    print (time.time() - start_time)*1000
+
     # checking if the answer is in the cache
     if topic != "":
         # temporary hack for "questions":
         # the topic name has to be prefixed with q:
         # so we can later delete them from redis
         # and we known that they need beautification
-        if '/' in topic and '+' in topic:
+        #if '/' in topic and '+' in topic:
+        if topic_type == 'question': #'/' in topic and '+' in topic:
             topic = _rewrite_section_name_for_q(topic)
             topic = "q:" + topic
             needs_beautification = True
@@ -401,7 +443,7 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
     # if answer was not found in the cache
     # try to find it in one of the repositories
     if not answer:
-        topic_type = get_topic_type(topic)
+        #topic_type = get_topic_type(topic)
 
         for topic_getter_type, topic_getter in TOPIC_GETTERS:
             if topic_type == topic_getter_type:
