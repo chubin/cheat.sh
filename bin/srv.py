@@ -14,8 +14,10 @@ import sys
 import logging
 import os
 
+import requests
+
 import jinja2
-from flask import Flask, request, send_from_directory, redirect
+from flask import Flask, request, send_from_directory, redirect, Response
 
 MYDIR = os.path.abspath(os.path.dirname(os.path.dirname('__file__')))
 sys.path.append("%s/lib/" % MYDIR)
@@ -102,6 +104,40 @@ def get_request_ip(req):
 
     return ip_addr
 
+
+def _proxy(*args, **kwargs):
+    # print "method=", request.method,
+    # print "url=", request.url.replace('/:shell-x/', ':3000/')
+    # print "headers=", {key: value for (key, value) in request.headers if key != 'Host'}
+    # print "data=", request.get_data()
+    # print "cookies=", request.cookies
+    # print "allow_redirects=", False
+
+    url_before, url_after = request.url.split('/:shell-x/', 1)
+    url = url_before + ':3000/'
+
+    if 'q' in request.args:
+        url_after = '?' + "&".join("arg=%s" % x for x in request.args['q'].split())
+
+    url += url_after
+    print url
+    print request.get_data()
+    resp = requests.request(
+        method=request.method,
+        url=url,
+        headers={key: value for (key, value) in request.headers if key != 'Host'},
+        data=request.get_data(),
+        cookies=request.cookies,
+        allow_redirects=False)
+
+    excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+    headers = [(name, value) for (name, value) in resp.raw.headers.items()
+               if name.lower() not in excluded_headers]
+
+    response = Response(resp.content, resp.status_code, headers)
+    return response
+
+
 @app.route("/", methods=['GET', 'POST'])
 @app.route("/<path:topic>", methods=["GET", "POST"])
 def answer(topic=None):
@@ -120,6 +156,9 @@ def answer(topic=None):
     user_agent = request.headers.get('User-Agent', '').lower()
     html_needed = is_html_needed(user_agent)
     options = parse_args(request.args)
+
+    if topic in ['apple-touch-icon-precomposed.png', 'apple-touch-icon.png', 'apple-touch-icon-120x120-precomposed.png']:
+        return ''
 
     request_id = request.cookies.get('id')
     if topic is not None and topic.lstrip('/') == ':last':
@@ -142,6 +181,10 @@ def answer(topic=None):
 
     if topic is None:
         topic = ":firstpage"
+
+    if topic.startswith(':shell-x/'):
+        return _proxy()
+        #return requests.get('http://127.0.0.1:3000'+topic[8:]).text
 
     ip_address = get_request_ip(request)
     if '+' in topic:
