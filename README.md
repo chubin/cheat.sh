@@ -250,6 +250,24 @@ Type `help` for other internal `cht.sh` commands.
 				  cht.sh/go> /python zip list
 ```
 
+The `cht.sh` client has its configuration file which is located at `~/.cht.sh/cht.sh.conf`.
+Use it to specify query options that you would use with each query.
+For example, to switch syntax highlighting off, create the file with the following
+content:
+
+```
+QUERY_OPTIONS="T"
+```
+
+Or if you want to use a special syntax highlighting theme:
+
+```
+QUERY_OPTIONS="style=native"
+```
+
+(`curl cht.sh/:styles-demo` to see all supported styles).
+
+
 ### Tab completion
 
 To activate tab completion support for `cht.sh`, add the `:bash_completion` script to your `~/.bashrc`:

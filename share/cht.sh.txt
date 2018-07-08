@@ -23,12 +23,24 @@
 # count words in text counter
 # group elements list
 
-__CHTSH_VERSION=3
-__CHTSH_DATETIME="2018-06-02 22:26:46 +0200"
+__CHTSH_VERSION=4
+__CHTSH_DATETIME="2018-07-08 22:26:46 +0200"
 
 export LESSSECURE=1
-
 STEALTH_MAX_SELECTION_LENGTH=5
+
+get_query_options()
+{
+  local query="$*"
+  if [ -n "$CHTSH_QUERY_OPTIONS" ]; then
+    if [[ $query == *\?* ]]; then
+      query="$query&${CHTSH_QUERY_OPTIONS}"
+    else
+      query="$query?${CHTSH_QUERY_OPTIONS}"
+    fi
+  fi
+  echo "$query"
+}
 
 do_query()
 {
@@ -39,7 +51,7 @@ do_query()
     b_opts=(-b "$HOME/.cht.sh/id")
   fi
 
-  curl "${b_opts[@]}" -s https://cht.sh/"$query" > "$TMP1"
+  curl "${b_opts[@]}" -s https://cht.sh/"$(get_query_options $query)" > "$TMP1"
 
   if [ -z "$lines" ] || [ "$(wc -l "$TMP1" | awk '{print $1}')" -lt "$lines" ]; then
     cat "$TMP1"
@@ -69,6 +81,11 @@ get_list_of_sections()
 {
   curl -s https://cht.sh/:list | grep -v '/.*/' | grep '/$'
 }
+
+if [ -e "$HOME"/.cht.sh/cht.sh.conf ]; then
+  # shellcheck disable=SC1090,SC2002
+  source <( cat "$HOME"/.cht.sh/cht.sh.conf | sed 's/#.*//' | grep -xv '' | sed s/^/CHTSH_/ ) >& /dev/null
+fi
 
 if [ "$1" == --read ]; then
   read -r a || a=exit
@@ -103,7 +120,7 @@ done
 query=$(echo "$input" | sed 's@ *$@@; s@^ *@@; s@ @/@; s@ @+@g')
 
 if [ "$shell_mode" != yes ]; then
-  curl -s https://cht.sh/"$query"
+  curl -s https://cht.sh/"$(get_query_options "$query")"
   exit 0
 else
   new_section="$1"
@@ -120,7 +137,7 @@ else
   fi
   if [ -n "$this_query" ] && [ -z "$CHEATSH_RESTART" ]; then
     printf "$this_prompt$this_query\n"
-    curl -s https://cht.sh/"$query"
+    curl -s https://cht.sh/"$(get_query_options "$query")"
   fi
 fi
 
@@ -209,7 +226,7 @@ EOF
         echo copy: Make at least one query first.
         continue
       else
-        curl -s https://cht.sh/"$query"?T > "$TMP1"
+        curl -s https://cht.sh/"$(get_query_options "$query"?T)" > "$TMP1"
         xsel -i < "$TMP1"
         echo "copy: $(wc -l "$TMP1" | awk '{print $1}') lines copied to the selection"
         continue
@@ -224,7 +241,7 @@ EOF
         echo copy: Make at least one query first.
         continue
       else
-        curl -s https://cht.sh/"$query"?TQ > "$TMP1"
+        curl -s https://cht.sh/"$(get_query_options "$query"?TQ)" > "$TMP1"
         xsel -i < "$TMP1"
         echo "copy: $(wc -l "$TMP1" | awk '{print $1}') lines copied to the selection"
         continue
