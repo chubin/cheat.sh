@@ -55,6 +55,10 @@ For example, to see how you can make `snapshots` of a filesystem/volume/somethin
     curl cht.sh/~snapshot
 ```
 
+<p align="center">
+  <img src='https://cheat.sh/files/cht.sh-url-structure.jpg'/>
+</p>
+
 Programming languages cheat sheets are located not directly in the root namespace,
 but in special namespaces, dedicated to them:
 
