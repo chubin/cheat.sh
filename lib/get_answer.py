@@ -279,8 +279,10 @@ def _get_answer_for_question(topic):
         print("supposed lang = ", supposed_lang)
         if len(topic_words) > 2 or supposed_lang in ['az', 'ru', 'uk', 'de', 'fr', 'es', 'it']:
             lang = supposed_lang
-        if supposed_lang.startswith('zh_'):
+        if supposed_lang.startswith('zh_') or supposed_lang == 'zh':
             lang = 'zh'
+        elif supposed_lang.startswith('pt_'):
+            lang = 'pt'
         if supposed_lang in ['ja', 'ko']:
             lang = supposed_lang
 
