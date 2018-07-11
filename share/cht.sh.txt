@@ -84,7 +84,7 @@ prepare_query()
 
 get_list_of_sections()
 {
-  curl -s https://cht.sh/:list | grep -v '/.*/' | grep '/$'
+  curl -s https://cht.sh/:list | grep -v '/.*/' | grep '/$' | xargs
 }
 
 gen_random_str()
