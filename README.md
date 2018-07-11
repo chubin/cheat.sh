@@ -17,6 +17,24 @@ What features should it have?
 
 Such a thing does exist.
 
+## Contents
+
+* [Features](#features)
+* [Usage](#usage)
+* [Command line client, cht.sh](#command-line-client-chtsh)
+  * [Installation](#installation)
+  * [Client usage](#client-usage)
+* [Editors integration](#editors-integration)
+* [Special pages](#special-pages)
+* [Search](#search)
+* [Programming languages cheat sheets](#programming-languages-cheat-sheets)
+* [Cheat sheets sources](#cheat-sheets-sources)
+* [How to contribute](#how-to-contribute)
+  * [How to edit a cheat sheet](#how-to-edit-a-cheat-sheet)
+  * [How to add a cheat sheet](#how-to-add-a-cheat-sheet)
+  * [How to add a cheat sheet repository](#how-to-add-a-cheat-sheet-repository)
+
+
 ## Features
 
 **cheat.sh**
@@ -171,12 +189,16 @@ has several useful features:
 * Tab completion support for shells (bash, fish, zsh);
 * Stealth mode.
 
+### Installation
+
 To install the client:
 
 ```
     curl https://cht.sh/:cht.sh > ~/bin/cht.sh
     chmod +x ~/bin/cht.sh
 ```
+
+### Client usage
 
 Now, you can use `cht.sh` instead of `curl`, and write your queries in more natural way,
 with spaces instead of `+`:
