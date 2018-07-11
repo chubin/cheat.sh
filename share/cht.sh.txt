@@ -29,6 +29,11 @@ __CHTSH_DATETIME="2018-07-08 22:26:46 +0200"
 export LESSSECURE=1
 STEALTH_MAX_SELECTION_LENGTH=5
 
+# for KSH93
+if ! local foo 2>/dev/null; then
+  alias local=typeset
+fi
+
 get_query_options()
 {
   local query="$*"
