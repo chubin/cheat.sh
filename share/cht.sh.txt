@@ -34,6 +34,11 @@ case "$OSTYPE" in
   *) is_macos=no ;;
 esac
 
+# for KSH93
+if ! local foo 2>/dev/null; then
+  alias local=typeset
+fi
+
 get_query_options()
 {
   local query="$*"
