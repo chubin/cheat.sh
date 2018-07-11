@@ -148,7 +148,7 @@ def _classify_lines(lines):
 
 def _wrap_lines(lines_classes, unindent_code=False):
     """
-    Wrap classified lines. Add the splitted lines to the stream.
+    Wrap classified lines. Add the split lines to the stream.
     If `unindent_code` is True, remove leading four spaces.
     """
 

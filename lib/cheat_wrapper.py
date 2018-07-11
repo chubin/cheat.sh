@@ -179,7 +179,7 @@ def _render_html(query, result, editable, repository_button, request_options):
 
     edit_button = ''
     if editable:
-        # It's possible that topic directory starts with omited underscore
+        # It's possible that topic directory starts with omitted underscore
         if '/' in query:
             query = '_' + query
         edit_page_link = 'https://github.com/chubin/cheat.sheets/edit/master/sheets/' + query
@@ -268,7 +268,7 @@ def _visualize(query, keyword, answers, request_options, html=None): # pylint: d
 def cheat_wrapper(query, request_options=None, html=False):
     """
     Giant megafunction that delivers cheat sheet for `query`.
-    If `html` is True, the answer is formated as HTML.
+    If `html` is True, the answer is formatted as HTML.
     Additional request options specified in `request_options`.
 
     This function is really really bad, and should be rewritten
