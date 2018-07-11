@@ -4,7 +4,7 @@
 Unified access to the best community driven cheat sheets repositories of the world.
 
 Let's imagine for a moment that there is such a thing as an ideal cheat sheet.
-How it should look like?
+What it should look like?
 What features should it have?
 
 * **concise** — it should be concise; it should contain only things you need and nothing else;
@@ -82,7 +82,7 @@ If there is no cheat sheet for some programming language query (and it is almost
 it is generated on the fly, basing on available cheat sheets and answers on StackOverflow.
 Of course, there is no guarantee that the returned cheat sheet will be a 100% hit, but it is almost always exactly what you are looking for.
 
-Try these (and your own) queries to get the impression of that, how the answers look like:
+Try these (and your own) queries to get the impression of that, what the answers look like:
 ```
     curl cht.sh/go/reverse+a+list
     curl cht.sh/python/random+list+elements
@@ -375,7 +375,7 @@ and eventually copying the code snippets you need into the clipboard
 and later pasting them into the editor,
 you can achieve the same instantly and without leaving the editor at all!
 
-Here is how it looks like in Vim:
+Here is what it looks like in Vim:
 
 1. If you have a question while editing a program, you can just type
 your question directly in the buffer and press `<leader>KK`. You will get
