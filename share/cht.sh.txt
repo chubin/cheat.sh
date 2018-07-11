@@ -149,7 +149,7 @@ mkdir -p "$HOME/.cht.sh/"
 lines=$(tput lines)
 
 TMP1=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
-trap 'rm -rf $TMP1 $TMP2' EXIT
+trap 'rm -f $TMP1 $TMP2' EXIT
 trap 'true' INT
 
 if ! [ -e "$HOME/.cht.sh/.hushlogin" ] && [ -z "$this_query" ]; then
