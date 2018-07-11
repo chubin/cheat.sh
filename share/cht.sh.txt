@@ -239,7 +239,7 @@ EOF
         if [ "$valid" = no ]; then
           echo "Invalid section: $new_section"
           echo "Valid sections:"
-          echo "${valid_sections[@]}" | xargs printf "%-10s\n" | tr ' ' .  | xargs -n 10 | sed 's/\./ /g; s/^/  /'
+          echo $valid_sections | xargs printf "%-10s\n" | tr ' ' .  | xargs -n 10 | sed 's/\./ /g; s/^/  /'
           continue
         else
           section="$new_section"
