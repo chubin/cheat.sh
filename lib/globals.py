@@ -1,6 +1,6 @@
 """
 Global configuration of the project.
-All hardcoded pathes should be (theoretically) here.
+All hardcoded paths should be (theoretically) here.
 """
 from __future__ import print_function
 

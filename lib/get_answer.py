@@ -245,7 +245,7 @@ def _get_cheat(topic):
 def _get_cheat_sheets(topic):
     """
     Get the cheat sheet topic from the own repository (cheat.sheets).
-    It's possible that topic directory starts with omited underscore
+    It's possible that topic directory starts with omitted underscore
     """
     filename = PATH_CHEAT_SHEETS + "%s" % topic
     if not os.path.exists(filename):

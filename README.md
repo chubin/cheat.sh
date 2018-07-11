@@ -162,7 +162,7 @@ Read more about the programming languages queries below.
 ## Command line client, cht.sh
 
 The cheat.sh service has its own command line client (`cht.sh`), that,
-comparing to quering the service directly with `curl`,
+comparing to querying the service directly with `curl`,
 has several useful features:
 
 * Special shell mode with a persistent queries context and readline support;
@@ -654,7 +654,7 @@ of the repository, whom belongs the current cheat sheet.
 You can edit the cheat sheet directly in your browser (you need a github account for it).
 There is a edit button in the top right corner. If you click on it, an editor will be open.
 There you will change the cheat sheet (under the hood: the upstrem repository is forked, your changes are
-commited in the forked repository, a pull request to the upstream repository owner is sent).
+committed in the forked repository, a pull request to the upstream repository owner is sent).
 
 ![cheat.sh cheat sheets repositories](http://cheat.sh/files/edit-cheat-sheet.png)
 

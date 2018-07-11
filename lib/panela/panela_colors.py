@@ -6,7 +6,7 @@ import itertools
 
 """
 
-After panela will be ready for it, it will be splitted out in a separate project,
+After panela will be ready for it, it will be split out in a separate project,
 that will be used for all chubin's console services.
 There are several features that not yet implemented (see ___doc___ in Panela)
 
@@ -206,7 +206,7 @@ class Panela:
         """
         Paste <panela> starting at <x1>, <y1>.
         If <extend> is True current panela space will be automatically extended
-        If <transparence> is True, then <panela> is overlayed and characters behind them are seen
+        If <transparence> is True, then <panela> is overlaid and characters behind them are seen
         """
 
         # FIXME:
@@ -278,7 +278,7 @@ class Panela:
 
     def put_point(self, col, row, char=None, color=None, background=None):
         """
-        Puts charachter with color and background color on the field.
+        Puts character with color and background color on the field.
         Char can be a Point or a character.
         """
 
@@ -305,7 +305,7 @@ class Panela:
     def put_line(self, x1, y1, x2, y2, char=None, color=None, background=None):
         """
         Draw line (x1, y1) - (x2, y2) fith foreground color <color>, background color <background>
-        and charachter <char>, if specified.
+        and character <char>, if specified.
         """
 
         def get_line(start, end):
