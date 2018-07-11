@@ -29,6 +29,11 @@ __CHTSH_DATETIME="2018-07-08 22:26:46 +0200"
 export LESSSECURE=1
 STEALTH_MAX_SELECTION_LENGTH=5
 
+case "$OSTYPE" in
+  darwin*) is_macos=yes ;;
+  *) is_macos=no ;;
+esac
+
 get_query_options()
 {
   local query="$*"
@@ -141,7 +146,9 @@ else
   fi
 fi
 
-which xsel >& /dev/null || { echo 'DEPENDENCY: please install "xsel" for "copy"' >&2; }
+if [ "$is_macos" != yes ]; then
+  which xsel >& /dev/null || { echo 'DEPENDENCY: please install "xsel" for "copy"' >&2; }
+fi
 which rlwrap >& /dev/null || { echo 'DEPENDENCY: install "rlwrap" to use cht.sh in the shell mode' >&2; exit 1; }
 which curl >& /dev/null || { echo 'DEPENDENCY: install "curl" to use cht.sh' >&2; exit 1; }
 
@@ -227,7 +234,11 @@ EOF
         continue
       else
         curl -s https://cht.sh/"$(get_query_options "$query"?T)" > "$TMP1"
-        xsel -i < "$TMP1"
+        if [ "$is_macos" != yes ]; then
+          xsel -i < "$TMP1"
+        else
+          cat "$TMP1" | pbcopy
+        fi
         echo "copy: $(wc -l "$TMP1" | awk '{print $1}') lines copied to the selection"
         continue
       fi
@@ -242,7 +253,11 @@ EOF
         continue
       else
         curl -s https://cht.sh/"$(get_query_options "$query"?TQ)" > "$TMP1"
-        xsel -i < "$TMP1"
+        if [ "$is_macos" != yes ]; then
+          xsel -i < "$TMP1"
+        else
+          cat "$TMP1" | pbcopy
+        fi
         echo "copy: $(wc -l "$TMP1" | awk '{print $1}') lines copied to the selection"
         continue
       fi
@@ -299,7 +314,11 @@ EOF
           arguments=$(echo "$input" | sed 's/stealth //; s/ /\&/')
         fi
         trap break SIGINT
-        past=$(xsel -o)
+        if [ "$is_macos" == yes ]; then
+          past=$(pbpaste)
+        else
+          past=$(xsel -o)
+        fi
         printf "\033[0;31mstealth:\033[0m you are in the stealth mode; select any text in any window for a query\n"
         printf "\033[0;31mstealth:\033[0m selections longer than $STEALTH_MAX_SELECTION_LENGTH words are ignored\n"
         if [ -n "$arguments" ]; then
@@ -307,7 +326,11 @@ EOF
         fi
         printf "\033[0;31mstealth:\033[0m use ^C to leave this mode\n"
         while true; do
-          current=$(xsel -o)
+          if [ $is_macos == yes ]; then
+            current=$(pbpaste)
+          else
+            current=$(xsel -o)
+          fi
           if [ "$past" != "$current" ]; then
             past=$current
             current_text="$(echo $current | tr -c '[a-zA-Z0-9]' ' ')"
