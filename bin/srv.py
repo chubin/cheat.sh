@@ -23,7 +23,7 @@ from flask import Flask, request, send_from_directory, redirect, Response
 MYDIR = os.path.abspath(os.path.dirname(os.path.dirname('__file__')))
 sys.path.append("%s/lib/" % MYDIR)
 
-from globals import FILE_QUERIES_LOG, LOG_FILE, TEMPLATES, STATIC
+from globals import FILE_QUERIES_LOG, LOG_FILE, TEMPLATES, STATIC, MALFORMED_RESPONSE_HTML_PAGE
 from limits import Limits
 from cheat_wrapper import cheat_wrapper
 from post import process_post_request
@@ -193,7 +193,10 @@ def answer(topic=None):
         if not_allowed:
             return "429 %s\n" % not_allowed, 429
 
-    result, found = cheat_wrapper(topic, request_options=options, html=is_html_needed(user_agent))
+    html_is_needed = is_html_needed(user_agent)
+    result, found = cheat_wrapper(topic, request_options=options, html=html_is_needed)
+    if 'Please come back in several hours' in result and html_is_needed:
+        return MALFORMED_RESPONSE_HTML_PAGE
 
     log_query(ip_address, found, topic, user_agent)
     return result

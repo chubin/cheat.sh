@@ -25,6 +25,8 @@ PATH_CHEAT_SHEETS_SPOOL = "/home/igor/cheat.sheets/spool/"
 
 COLOR_STYLES = sorted(list(get_all_styles()))
 
+MALFORMED_RESPONSE_HTML_PAGE = open(os.path.join(STATIC, 'malformed-response.html')).read()
+
 def error(text):
     """
     Log error `text` and produce a RuntimeError exception
