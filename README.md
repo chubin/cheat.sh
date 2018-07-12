@@ -362,7 +362,7 @@ She: Yes! Perfect! Exactly what I wanted to see!    |
 
 ```
 
-Or course, it is just fun, and you should never cheat in your coding interviews,
+Of course, it is just fun, and you should never cheat in your coding interviews,
 because you know what happens when you do.
 
 ![when you lie in your interview](http://cheat.sh/files/when-you-lie-katze.png)
