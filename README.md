@@ -4,16 +4,16 @@
 Unified access to the best community driven cheat sheets repositories of the world.
 
 Let's imagine for a moment that there is such a thing as an ideal cheat sheet.
-What it should look like?
+What should it look like?
 What features should it have?
 
-* **concise** — it should be concise; it should contain only things you need and nothing else;
-* **fast** — it should be possible to use it instantly;
-* **comprehensive** — it should contain answers for every question you could have;
-* **universal** — it should be available everywhere, as soon as needed, without any preparations;
-* **unobtrusive** — it does not distract you from your main task when you are using it;
-* **tutoring** — it helps you to learn the subject;
-* **inconspicuous** — it should be possible to use it completely unnoticed.
+* **Concise** — It should be concise; it should only contain the things you need, and nothing else.
+* **Fast** — It should be possible to use it instantly.
+* **Comprehensive** — It should contain answers for every question you could have.
+* **Universal** — It should be available everywhere, as soon as needed, without any preparations.
+* **Unobtrusive** — It does not distract you from your main task when you are using it.
+* **Tutoring** — It helps you to learn the subject.
+* **Inconspicuous** — It should be possible to use it completely unnoticed.
 
 Such a thing does exist.
 
@@ -21,14 +21,14 @@ Such a thing does exist.
 
 **cheat.sh**
 
-* has simple curl/browser interface;
-* covers 55 programming languages, several DBMSes, and more than 1000 most important UNIX/Linux commands;
-* provides access to the best community driven cheat sheets repositories in the world as well as to StackOverflow;
-* available everywhere, no installation needed;
-* ultrafast, returns answers, as a rule, within 100 ms;
-* has a convenient command line client, `cht.sh`, that is very advantageous and helpful, though not mandatory;
-* can be used directly from code editors, without opening a browser and not switching your mental context;
-* supports a special mode (stealth mode), where it can be used fully invisibly, not even touching a key and not making a sound.
+* Has a simple curl/browser interface.
+* Covers 55 programming languages, several DBMSes, and more than 1000 most important UNIX/Linux commands.
+* Provides access to the best community driven cheat sheets repositories in the world as well as to StackOverflow.
+* Available everywhere, no installation needed.
+* Ultrafast, returns answers, as a rule, within 100 ms.
+* Has a convenient command line client, `cht.sh`, that is very advantageous and helpful, though not mandatory.
+* Can be used directly from code editors, without opening a browser and not switching your mental context.
+* Supports a special mode (stealth mode), where it can be used fully invisibly, not even touching a key and not making a sound.
 
 <p align="center">
   <img src='https://cheat.sh/files/demo-curl.gif'/>
@@ -151,10 +151,10 @@ Full list of all options described below and in `/:help`.
 
 Try your own queries. Follow these rules:
 
-1. Try to be more specific (`/python/append+file` is better than `/python/file` and `/python/append`);
-2. Ask practical question if possible (yet theoretical question are possible too);
-3. Ask programming language questions only; specify the name of the programming language as the section name;
-4. Separate words with `+` instead of spaces;
+1. Try to be more specific (`/python/append+file` is better than `/python/file` and `/python/append`).
+2. Ask practical question if possible (yet theoretical question are possible too).
+3. Ask programming language questions only; specify the name of the programming language as the section name.
+4. Separate words with `+` instead of spaces.
 5. Do not use special characters, they are ignored anyway.
 
 Read more about the programming languages queries below.
@@ -165,10 +165,10 @@ The cheat.sh service has its own command line client (`cht.sh`), that,
 comparing to querying the service directly with `curl`,
 has several useful features:
 
-* Special shell mode with a persistent queries context and readline support;
-* Queries history;
-* Clipboard integration;
-* Tab completion support for shells (bash, fish, zsh);
+* Special shell mode with a persistent queries context and readline support.
+* Queries history.
+* Clipboard integration.
+* Tab completion support for shells (bash, fish, zsh).
 * Stealth mode.
 
 To install the client:
@@ -288,8 +288,8 @@ One of the important properties of any real cheat sheet,
 is that it could be used fully unnoticed.
 
 cheat.sh can be used completely unnoticed too. The cheat.sh client, `cht.sh`, has
-a special mode, called **stealth mode**, using that you don't even need to touch your
-keyboard to open some cheat sheet.
+a special mode, called **stealth mode**. Using that you don't even need to touch your
+keyboard to open a cheat sheet.
 
 In this mode, as soon as you select some text with the mouse (and thus it is added
 into the selection buffer of X Window System or into the clipboard) it's used
