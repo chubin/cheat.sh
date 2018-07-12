@@ -7,13 +7,13 @@ Let's imagine for a moment that there is such a thing as an ideal cheat sheet.
 What should it look like?
 What features should it have?
 
-* **concise** — it should be concise; it should only contain the things you need, and nothing else.
-* **fast** — it should be possible to use it instantly.
-* **comprehensive** — it should contain answers for every question you could have.
-* **universal** — it should be available everywhere, as soon as needed, without any preparations.
-* **unobtrusive** — it does not distract you from your main task when you are using it.
-* **tutoring** — it helps you to learn the subject.
-* **inconspicuous** — it should be possible to use it completely unnoticed.
+* **Concise** — It should be concise; it should only contain the things you need, and nothing else.
+* **Fast** — It should be possible to use it instantly.
+* **Comprehensive** — It should contain answers for every question you could have.
+* **Universal** — It should be available everywhere, as soon as needed, without any preparations.
+* **Unobtrusive** — It does not distract you from your main task when you are using it.
+* **Tutoring** — It helps you to learn the subject.
+* **Inconspicuous** — It should be possible to use it completely unnoticed.
 
 Such a thing does exist.
 
@@ -21,7 +21,7 @@ Such a thing does exist.
 
 **cheat.sh**
 
-* Has a simple curl/browser interface;
+* Has a simple curl/browser interface.
 * Covers 55 programming languages, several DBMSes, and more than 1000 most important UNIX/Linux commands.
 * Provides access to the best community driven cheat sheets repositories in the world as well as to StackOverflow.
 * Available everywhere, no installation needed.
