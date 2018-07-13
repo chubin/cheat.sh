@@ -49,9 +49,7 @@ def is_html_needed(user_agent):
     Basing on `user_agent`, return whether it needs HTML or ANSI
     """
     plaintext_clients = ['curl', 'wget', 'fetch', 'httpie', 'lwp-request', 'python-requests']
-    if any([x in user_agent for x in plaintext_clients]):
-        return False
-    return True
+    return not any([x in user_agent for x in plaintext_clients])
 
 @app.route('/files/<path:path>')
 def send_static(path):
