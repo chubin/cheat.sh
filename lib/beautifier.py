@@ -80,7 +80,7 @@ def _cleanup_lines(lines):
     return lines
 
 
-def _classify_lines(lines):
+def _line_type(line):
     """
     Classify each line and say which of them
     are text (0) and which of them are code (1).
@@ -92,39 +92,40 @@ def _classify_lines(lines):
     empty and is not code.
 
     If line is empty, it is considered to be
-    code if it surrounded but two other code lines
-    (or if it is the first/last line and it has
+    code if it surrounded but two other code lines,
+    or if it is the first/last line and it has
     code on the other side.
     """
+    if line.strip() == '':
+        return UNDEFINED
 
-    def _line_type(line):
-        if line.strip() == '':
-            return -1
+    # some line may start with spaces but still be not code.
+    # we need some heuristics here, but for the moment just
+    # whitelist such cases:
+    if line.strip().startswith('* ') or re.match(r'[0-9]+\.', line.strip()):
+        return TEXT
 
-        # some line may start with spaces but still be not code.
-        # we need some heuristics here, but for the moment just
-        # whitelist such cases:
-        if line.strip().startswith('* ') or re.match(r'[0-9]+\.', line.strip()):
-            return 0
+    if line.startswith('   '):
+        return CODE
+    return TEXT
 
-        if line.startswith('   '):
-            return 1
-        return 0
 
+
+def _classify_lines(lines):
     line_types = [_line_type(line) for line in lines]
 
     # pass 2:
     # adding empty code lines to the code
     for i in range(len(line_types) - 1):
-        if line_types[i] == 1 and line_types[i+1] == -1:
-            line_types[i+1] = -2
+        if line_types[i] == CODE and line_types[i+1] == UNDEFINED:
+            line_types[i+1] = CODE_WHITESPACE
             changed = True
 
     for i in range(len(line_types) - 1)[::-1]:
-        if line_types[i] == -1 and line_types[i+1] == 1:
-            line_types[i] = -2
+        if line_types[i] == UNDEFINED and line_types[i+1] == CODE:
+            line_types[i] = CODE_WHITESPACE
             changed = True
-    line_types = [1 if x == -2 else x for x in line_types]
+    line_types = [CODE if x == CODE_WHITESPACE else x for x in line_types]
 
     # pass 3:
     # fixing undefined line types (-1)
