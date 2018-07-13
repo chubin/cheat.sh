@@ -7,8 +7,8 @@ Supports three modes of normalization and commenting:
     2. Add comments
     3. Remove text, leave code only
 
-Since several operations are quite expensice,
-actively uses caching.
+Since several operations are quite expensive,
+it actively uses caching.
 
 Exported functions:
 
