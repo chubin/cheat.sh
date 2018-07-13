@@ -136,51 +136,42 @@ def _classify_lines(lines):
         # changing all lines types that are near the text
 
         for i in range(len(line_types) - 1):
-            if line_types[i] == 0 and line_types[i+1] == -1:
-                line_types[i+1] = 0
+            if line_types[i] == TEXT and line_types[i+1] == UNDEFINED:
+                line_types[i+1] = TEXT
                 changed = True
 
         for i in range(len(line_types) - 1)[::-1]:
-            if line_types[i] == -1 and line_types[i+1] == 0:
-                line_types[i] = 0
+            if line_types[i] == UNDEFINED and line_types[i+1] == TEXT:
+                line_types[i] = TEXT
                 changed = True
 
-    # everything what is still undefined, change to 1
-    line_types = [1 if x == -1 else x for x in line_types]
+    # everything what is still undefined, change to code type
+    line_types = [CODE if x == UNDEFINED else x for x in line_types]
     return line_types
+
+def _unindent_code(line, shift=0):
+    #if line.startswith('    '):
+    #    return line[4:]
+
+    if shift == -1 and line != '':
+        return ' ' + line
+
+    if shift > 0:
+        if line.startswith(' '*shift):
+            return line[shift:]
+
+    return line
+
+
 
 def _wrap_lines(lines_classes, unindent_code=False):
     """
     Wrap classified lines. Add the split lines to the stream.
     If `unindent_code` is True, remove leading four spaces.
     """
-
-    def _unindent_code(line, shift=0):
-        #if line.startswith('    '):
-        #    return line[4:]
-
-        if shift == -1 and line != '':
-            return ' ' + line
-
-        if shift > 0:
-            if line.startswith(' '*shift):
-                return line[shift:]
-
-        return line
-
     result = []
-    for line_tuple in lines_classes:
-        if line_tuple[0] == 1:
-            if unindent_code:
-                shift = 3 if unindent_code is True else unindent_code
-            else:
-                shift = -1
-            result.append((line_tuple[0], _unindent_code(line_tuple[1], shift=shift)))
-        else:
-            if line_tuple[1].strip() == "":
-                result.append((line_tuple[0], ""))
-            for line in textwrap.fill(line_tuple[1]).splitlines():
-                result.append((line_tuple[0], line))
+    for line_type,line_content in lines_classes:
+        _format_line(line_type,line_content)
 
     return result
 
