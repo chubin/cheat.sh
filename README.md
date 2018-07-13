@@ -7,17 +7,17 @@ Let's imagine for a moment that there is such a thing as an ideal cheat sheet.
 What should it look like?
 What features should it have?
 
-* **Concise** — It should be concise; it should only contain the things you need, and nothing else.
+* **Concise** — It should only contain the things you need, and nothing else.
 * **Fast** — It should be possible to use it instantly.
-* **Comprehensive** — It should contain answers for every question you could have.
-* **Universal** — It should be available everywhere, as soon as needed, without any preparations.
-* **Unobtrusive** — It does not distract you from your main task when you are using it.
-* **Tutoring** — It helps you to learn the subject.
+* **Comprehensive** — It should contain answers for every possible question.
+* **Universal** — It should be available everywhere, anytime, without any preparations.
+* **Unobtrusive** — It should not distract you from your main task.
+* **Tutoring** — It should help you to learn the subject.
 * **Inconspicuous** — It should be possible to use it completely unnoticed.
 
-Such a thing does exist.
+Such a thing exists.
 
-## Features
+## Features:
 
 **cheat.sh**
 
