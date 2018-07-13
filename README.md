@@ -291,7 +291,7 @@ To activate tab completion support for `cht.sh`, add the `:zsh` script to the fp
 
 ```
     $ curl https://cheat.sh/:zsh > ~/.zsh.d/_cht
-    $ echo "fpath=(path/to/zsh-completions/src $fpath)" >> ~/.zshrc
+    $ echo 'fpath=(~/.zsh.d/ $fpath)' >> ~/.zshrc
     $ # Open a new shell to load the plugin
 
 ### Stealth mode
