@@ -162,7 +162,7 @@ Read more about the programming languages queries below.
 ## Command line client, cht.sh
 
 The cheat.sh service has its own command line client (`cht.sh`), that,
-comparing to querying the service directly with `curl`,
+compared to querying the service directly with `curl`,
 has several useful features:
 
 * Special shell mode with a persistent queries context and readline support.
@@ -288,10 +288,10 @@ One of the important properties of any real cheat sheet,
 is that it could be used fully unnoticed.
 
 cheat.sh can be used completely unnoticed too. The cheat.sh client, `cht.sh`, has
-a special mode, called **stealth mode**. Using that you don't even need to touch your
+a special mode, called **stealth mode**. Using that, you don't even need to touch your
 keyboard to open a cheat sheet.
 
-In this mode, as soon as you select some text with the mouse (and thus it is added
+In this mode, as soon as you select some text with the mouse (and thus adding it
 into the selection buffer of X Window System or into the clipboard) it's used
 as a query string for cheat.sh, and the correspondent cheat sheet is automatically shown.
 
@@ -362,7 +362,7 @@ She: Yes! Perfect! Exactly what I wanted to see!    |
 
 ```
 
-Of course, it is just fun, and you should never cheat in your coding interviews,
+Of course, it is just for fun, and you should never cheat in your coding interviews,
 because you know what happens when you do.
 
 ![when you lie in your interview](http://cheat.sh/files/when-you-lie-katze.png)
@@ -647,12 +647,12 @@ Pie diagram reflecting cheat sheets sources distribution (by number of cheat she
 ### How to edit a cheat sheet
 
 If you want to edit a cheat.sh cheat sheet, you should edit it in the upstream repository.
-You will find the name of the source repository in a browser, when you open a cheat sheet.
-There are two github buttons in the bottom of the page: the second one is the button
-of the repository, whom belongs the current cheat sheet.
+You will find the name of the source repository in a browser when you open a cheat sheet.
+There are two github buttons at the bottom of the page: the second one is the button
+of the repository, which belongs the current cheat sheet.
 
 You can edit the cheat sheet directly in your browser (you need a github account for it).
-There is a edit button in the top right corner. If you click on it, an editor will be open.
+There is an edit button in the top right corner. If you click on it, an editor will be open.
 There you will change the cheat sheet (under the hood: the upstrem repository is forked, your changes are
 committed in the forked repository, a pull request to the upstream repository owner is sent).
 
