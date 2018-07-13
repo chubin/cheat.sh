@@ -41,35 +41,37 @@ from globals import PATH_VIM_ENVIRONMENT
 
 REDIS = redis.StrictRedis(host='localhost', port=6379, db=1)
 FNULL = open(os.devnull, 'w')
-
+TEXT = 0
+CODE = 1
+UNDEFINED = -1
+CODE_WHITESPACE = -2
 def _language_name(name):
     return VIM_NAME.get(name, name)
 
-def _cleanup_lines(lines):
-    """
-    Cleanup `lines` a little bit: remove empty lines at the beginning
-    and at the end; remove to much empty lines in between.
-    """
 
-    if lines == []:
-        return lines
-
-    # remove empty lines from the beginning
+def _remove_empty_lines_from_beginning(lines):
     start = 0
     while start < len(lines) and lines[start].strip() == '':
         start += 1
     lines = lines[start:]
-    if lines == []:
-        return lines
+    return lines
 
-    # remove empty lines from the end
+def _remove_empty_lines_from_end(lines):
     end = len(lines) - 1
     while end >= 0 and lines[end].strip() == '':
         end -= 1
     lines = lines[:end+1]
+    return lines
+
+def _cleanup_lines(lines):
+    """
+    Cleanup `lines` a little bit: remove empty lines at the beginning
+    and at the end; remove too many empty lines in between.
+    """
+    lines = _remove_empty_lines_from_beginning(lines)
+    lines = _remove_empty_lines_from_end(lines)
     if lines == []:
         return lines
-
     # remove repeating empty lines
     lines = list(chain.from_iterable(
         [(list(x[1]) if x[0] else [''])
