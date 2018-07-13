@@ -1,5 +1,5 @@
 
-![cheat.sh logo](http://cheat.sh/files/big-logo-v2.png)
+![cheat.sh logo](http://cheat.sh/files/big-logo-v2-fixed.png)
 
 Unified access to the best community driven cheat sheets repositories of the world.
 
