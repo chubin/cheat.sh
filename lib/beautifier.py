@@ -7,8 +7,8 @@ Supports three modes of normalization and commenting:
     2. Add comments
     3. Remove text, leave code only
 
-Since several operations are quite expensice,
-actively uses caching.
+Since several operations are quite expensive,
+it actively uses caching.
 
 Exported functions:
 
@@ -41,35 +41,37 @@ from globals import PATH_VIM_ENVIRONMENT
 
 REDIS = redis.StrictRedis(host='localhost', port=6379, db=1)
 FNULL = open(os.devnull, 'w')
-
+TEXT = 0
+CODE = 1
+UNDEFINED = -1
+CODE_WHITESPACE = -2
 def _language_name(name):
     return VIM_NAME.get(name, name)
 
-def _cleanup_lines(lines):
-    """
-    Cleanup `lines` a little bit: remove empty lines at the beginning
-    and at the end; remove to much empty lines in between.
-    """
 
-    if lines == []:
-        return lines
-
-    # remove empty lines from the beginning
+def _remove_empty_lines_from_beginning(lines):
     start = 0
     while start < len(lines) and lines[start].strip() == '':
         start += 1
     lines = lines[start:]
-    if lines == []:
-        return lines
+    return lines
 
-    # remove empty lines from the end
+def _remove_empty_lines_from_end(lines):
     end = len(lines) - 1
     while end >= 0 and lines[end].strip() == '':
         end -= 1
     lines = lines[:end+1]
+    return lines
+
+def _cleanup_lines(lines):
+    """
+    Cleanup `lines` a little bit: remove empty lines at the beginning
+    and at the end; remove too many empty lines in between.
+    """
+    lines = _remove_empty_lines_from_beginning(lines)
+    lines = _remove_empty_lines_from_end(lines)
     if lines == []:
         return lines
-
     # remove repeating empty lines
     lines = list(chain.from_iterable(
         [(list(x[1]) if x[0] else [''])
@@ -78,7 +80,7 @@ def _cleanup_lines(lines):
     return lines
 
 
-def _classify_lines(lines):
+def _line_type(line):
     """
     Classify each line and say which of them
     are text (0) and which of them are code (1).
@@ -90,39 +92,40 @@ def _classify_lines(lines):
     empty and is not code.
 
     If line is empty, it is considered to be
-    code if it surrounded but two other code lines
-    (or if it is the first/last line and it has
+    code if it surrounded but two other code lines,
+    or if it is the first/last line and it has
     code on the other side.
     """
+    if line.strip() == '':
+        return UNDEFINED
 
-    def _line_type(line):
-        if line.strip() == '':
-            return -1
+    # some line may start with spaces but still be not code.
+    # we need some heuristics here, but for the moment just
+    # whitelist such cases:
+    if line.strip().startswith('* ') or re.match(r'[0-9]+\.', line.strip()):
+        return TEXT
 
-        # some line may start with spaces but still be not code.
-        # we need some heuristics here, but for the moment just
-        # whitelist such cases:
-        if line.strip().startswith('* ') or re.match(r'[0-9]+\.', line.strip()):
-            return 0
+    if line.startswith('   '):
+        return CODE
+    return TEXT
 
-        if line.startswith('   '):
-            return 1
-        return 0
 
+
+def _classify_lines(lines):
     line_types = [_line_type(line) for line in lines]
 
     # pass 2:
     # adding empty code lines to the code
     for i in range(len(line_types) - 1):
-        if line_types[i] == 1 and line_types[i+1] == -1:
-            line_types[i+1] = -2
+        if line_types[i] == CODE and line_types[i+1] == UNDEFINED:
+            line_types[i+1] = CODE_WHITESPACE
             changed = True
 
     for i in range(len(line_types) - 1)[::-1]:
-        if line_types[i] == -1 and line_types[i+1] == 1:
-            line_types[i] = -2
+        if line_types[i] == UNDEFINED and line_types[i+1] == CODE:
+            line_types[i] = CODE_WHITESPACE
             changed = True
-    line_types = [1 if x == -2 else x for x in line_types]
+    line_types = [CODE if x == CODE_WHITESPACE else x for x in line_types]
 
     # pass 3:
     # fixing undefined line types (-1)
@@ -133,18 +136,31 @@ def _classify_lines(lines):
         # changing all lines types that are near the text
 
         for i in range(len(line_types) - 1):
-            if line_types[i] == 0 and line_types[i+1] == -1:
-                line_types[i+1] = 0
+            if line_types[i] == TEXT and line_types[i+1] == UNDEFINED:
+                line_types[i+1] = TEXT
                 changed = True
 
         for i in range(len(line_types) - 1)[::-1]:
-            if line_types[i] == -1 and line_types[i+1] == 0:
-                line_types[i] = 0
+            if line_types[i] == UNDEFINED and line_types[i+1] == TEXT:
+                line_types[i] = TEXT
                 changed = True
 
-    # everything what is still undefined, change to 1
-    line_types = [1 if x == -1 else x for x in line_types]
+    # everything what is still undefined, change to code type
+    line_types = [CODE if x == UNDEFINED else x for x in line_types]
     return line_types
+
+def _unindent_code(line, shift=0):
+    #if line.startswith('    '):
+    #    return line[4:]
+
+    if shift == -1 and line != '':
+        return ' ' + line
+
+    if shift > 0:
+        if line.startswith(' '*shift):
+            return line[shift:]
+
+    return line
 
 def _wrap_lines(lines_classes, unindent_code=False):
     """
@@ -152,32 +168,17 @@ def _wrap_lines(lines_classes, unindent_code=False):
     If `unindent_code` is True, remove leading four spaces.
     """
 
-    def _unindent_code(line, shift=0):
-        #if line.startswith('    '):
-        #    return line[4:]
-
-        if shift == -1 and line != '':
-            return ' ' + line
-
-        if shift > 0:
-            if line.startswith(' '*shift):
-                return line[shift:]
-
-        return line
-
     result = []
-    for line_tuple in lines_classes:
-        if line_tuple[0] == 1:
-            if unindent_code:
-                shift = 3 if unindent_code is True else unindent_code
-            else:
-                shift = -1
-            result.append((line_tuple[0], _unindent_code(line_tuple[1], shift=shift)))
+    for line_type,line_content in lines_classes:
+        if line_type == CODE:
+
+            shift = 3 if unindent_code else -1
+            result.append((line_type, _unindent_code(line_content, shift=shift)))
         else:
-            if line_tuple[1].strip() == "":
-                result.append((line_tuple[0], ""))
-            for line in textwrap.fill(line_tuple[1]).splitlines():
-                result.append((line_tuple[0], line))
+            if line_content.strip() == "":
+                result.append((line_type, ""))
+            for line in textwrap.fill(line_content).splitlines():
+                result.append((line_type, line))
 
     return result
 
