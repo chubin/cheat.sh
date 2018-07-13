@@ -274,6 +274,9 @@ QUERY_OPTIONS="style=native"
 
 ### Tab completion
 
+
+#### Bash Tab completion
+
 To activate tab completion support for `cht.sh`, add the `:bash_completion` script to your `~/.bashrc`:
 
 ```
@@ -281,6 +284,15 @@ To activate tab completion support for `cht.sh`, add the `:bash_completion` scri
     $ . ~/.bash.d/cht.sh
     $ # and add . ~/.bash.d/cht.sh to ~/.bashrc
 ```
+
+#### ZSH Tab completion
+
+To activate tab completion support for `cht.sh`, add the `:zsh` script to the fpath in your `~/.zshrc`:
+
+```
+    $ curl https://cheat.sh/:zsh > ~/.zsh.d/_cht
+    $ echo "fpath=(path/to/zsh-completions/src $fpath)" >> ~/.zshrc
+    $ # Open a new shell to load the plugin
 
 ### Stealth mode
 
