@@ -162,16 +162,23 @@ def _unindent_code(line, shift=0):
 
     return line
 
-
-
 def _wrap_lines(lines_classes, unindent_code=False):
     """
     Wrap classified lines. Add the split lines to the stream.
     If `unindent_code` is True, remove leading four spaces.
     """
+
     result = []
     for line_type,line_content in lines_classes:
-        _format_line(line_type,line_content)
+        if line_type == CODE:
+
+            shift = 3 if unindent_code else -1
+            result.append((line_type, _unindent_code(line_content, shift=shift)))
+        else:
+            if line_content.strip() == "":
+                result.append((line_type, ""))
+            for line in textwrap.fill(line_content).splitlines():
+                result.append((line_type, line))
 
     return result
 
