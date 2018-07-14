@@ -33,7 +33,7 @@ from tempfile import NamedTemporaryFile
 
 import redis
 
-MYDIR = os.path.abspath(os.path.dirname(os.path.dirname('__file__')))
+MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 sys.path.append("%s/lib/" % MYDIR)
 from languages_data import VIM_NAME
 from globals import PATH_VIM_ENVIRONMENT

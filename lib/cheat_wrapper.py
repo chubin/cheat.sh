@@ -17,7 +17,7 @@ import colored
 from pygments import highlight as pygments_highlight
 from pygments.formatters import Terminal256Formatter # pylint: disable=no-name-in-module
 
-MYDIR = os.path.abspath(os.path.dirname(os.path.dirname('__file__')))
+MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 sys.path.append("%s/lib/" % MYDIR)
 from globals import error, ANSI2HTML, COLOR_STYLES
 from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_FOOTER
