@@ -91,7 +91,7 @@ def _isdir(topic):
 def _get_answers_and_dirs():
     topics = glob.glob(PATH_CHEAT_SHEETS + "*")
     answer_dirs = [_remove_initial_underscore(os.path.split(topic)[1]) for topic in topics if _isdir(topic)]
-    answers = [ os.path.split(topic)[1] for topic in topics if not isdir(topic)]
+    answers = [ os.path.split(topic)[1] for topic in topics if not _isdir(topic)]
     return answer_dirs, answers
 
 def _update_cheat_sheets_topics():
