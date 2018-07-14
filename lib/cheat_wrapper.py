@@ -21,7 +21,7 @@ MYDIR = os.path.abspath(os.path.dirname(os.path.dirname('__file__')))
 sys.path.append("%s/lib/" % MYDIR)
 from globals import error, ANSI2HTML, COLOR_STYLES
 from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_FOOTER
-from languages_data import LEXER
+from languages_data import LEXER, LANGUAGE_ALIAS
 from get_answer import get_topic_type, get_topics_list, get_answer, find_answer_by_keyword
 from beautifier import code_blocks
 # import beautifier
@@ -92,13 +92,12 @@ def _colorize_ansi_answer(topic, answer, color_style,               # pylint: di
 
     color_style = color_style or "native"
     lexer_class = LEXER['bash']
-    for lexer_name, lexer_value in LEXER.items():
-        if topic.startswith("%s/" % lexer_name):
-            # color_style = color_style or "monokai"
-            if lexer_name == 'php':
-                answer = "<?\n%s?>\n" % answer
-            lexer_class = lexer_value
-            break
+    if '/' in topic:
+        section_name = topic.split('/', 1)[0].lower()
+        section_name = LANGUAGE_ALIAS.get(section_name, section_name)
+        lexer_class = LEXER.get(section_name, lexer_class)
+        if section_name == 'php':
+            answer = "<?\n%s?>\n" % answer
 
     if highlight_all:
         highlight = lambda answer: pygments_highlight(
