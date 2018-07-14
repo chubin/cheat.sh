@@ -59,29 +59,35 @@ INTERNAL_TOPICS = [
 def _get_filenames(path):
     return [os.path.split(topic)[1] for topic in glob.glob(path)]
 
-
 def _update_tldr_topics():
     return [ filename[:-3] for filename in _get_filenames(PATH_TLDR_PAGES) if filename.endswith('.md') ]
-
-TLDR_TOPICS = _update_tldr_topics()
 
 def _update_cheat_topics():
     return _get_filenames(PATH_CHEAT_PAGES)
 
+
+
+TLDR_TOPICS = _update_tldr_topics()
 CHEAT_TOPICS = _update_cheat_topics()
 
+def _sanitize_dirname(dirname):
+    dirname = os.path.basename(dirname)
+    if dirname.startswith('_'):
+        dirname = dirname[1:]
+    return dirname
+
+def _format_answer(dirname,filename):
+    return "%s/%s" % ( _sanitize_dirname(dirname), filename )
+
+def _get_answer_files_from_folder():
+    topics = map(glob.glob(PATH_CHEAT_SHEETS + "*/*"), os.path.split)
+    return [_format_answer(dirname,filename) for dirname, filename in topics if filename not in ['_info.yaml'] ]
+
 def _update_cheat_sheets_topics():
-    answer = []
+    answers = []
     answer_dirs = []
 
-    for topic in glob.glob(PATH_CHEAT_SHEETS + "*/*"):
-        dirname, filename = os.path.split(topic)
-        if filename in ['_info.yaml']:
-            continue
-        dirname = os.path.basename(dirname)
-        if dirname.startswith('_'):
-            dirname = dirname[1:]
-        answer.append("%s/%s" % (dirname, filename))
+    answers = _get_answer_files_from_folder()
 
     for topic in glob.glob(PATH_CHEAT_SHEETS + "*"):
         _, filename = os.path.split(topic)
@@ -92,9 +98,11 @@ def _update_cheat_sheets_topics():
         else:
             answer.append(filename)
     return answer, answer_dirs
+
 CHEAT_SHEETS_TOPICS, CHEAT_SHEETS_DIRS = _update_cheat_sheets_topics()
 
 CACHED_TOPICS_LIST = [[]]
+
 def get_topics_list(skip_dirs=False, skip_internal=False):
     """
     List of topics returned on /:list
