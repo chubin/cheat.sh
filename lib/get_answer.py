@@ -55,6 +55,10 @@ INTERNAL_TOPICS = [
     ':share',
     ]
 
+COLORIZED_INTERNAL_TOPICS = [
+    ':intro',
+]
+
 def _get_filenames(path):
     return [os.path.split(topic)[1] for topic in glob.glob(path)]
 
@@ -203,22 +207,19 @@ def _get_internal(topic):
                           if x.startswith(topic_type + "/")]
             return "\n".join(topic_list)+"\n"
 
+    answer = ""
     if topic == ":list":
-        return "\n".join(x for x in get_topics_list()) + "\n"
+        answer = "\n".join(x for x in get_topics_list()) + "\n"
+    elif topic == ':styles':
+        answer = "\n".join(COLOR_STYLES) + "\n"
+    elif topic == ":stat":
+        answer = _get_stat()+"\n"
+    elif topic in INTERNAL_TOPICS:
+        answer = open(os.path.join(MYDIR, "share", topic[1:]+".txt"), "r").read()
+        if topic in COLORIZED_INTERNAL_TOPICS:
+            answer = colorize_internal(answer)
 
-    if topic == ':styles':
-        return "\n".join(COLOR_STYLES) + "\n"
-
-    if topic == ":stat":
-        return _get_stat()+"\n"
-
-    if topic in INTERNAL_TOPICS:
-        if topic[1:] == 'intro':
-            return colorize_internal(open(os.path.join(MYDIR, "share", topic[1:]+".txt"), "r").read())
-        else:
-            return open(os.path.join(MYDIR, "share", topic[1:]+".txt"), "r").read()
-
-    return ""
+    return answer
 
 def _get_tldr(topic):
     cmd = ["tldr", topic]
