@@ -265,6 +265,9 @@ def _visualize(query, keyword, answers, request_options, html=None): # pylint: d
 
     return result, found
 
+def _sanitize_query(query):
+    return re.sub('[<>"]', '', query)
+
 def cheat_wrapper(query, request_options=None, html=False):
     """
     Giant megafunction that delivers cheat sheet for `query`.
@@ -296,6 +299,8 @@ def cheat_wrapper(query, request_options=None, html=False):
                 keyword = keyword[:-len(search_options)-1]
 
         return topic, keyword, search_options
+
+    query = _sanitize_query(query)
 
     # at the moment, we just remove trailing slashes
     # so queries python/ and python are equal
