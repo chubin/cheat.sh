@@ -56,13 +56,13 @@ INTERNAL_TOPICS = [
     ':share',
     ]
 
+def _get_filenames():
+    return [os.path.split(topic)[1] for topic in glob.glob(PATH_TLDR_PAGES)]
+
+
 def _update_tldr_topics():
-    answer = []
-    for topic in glob.glob(PATH_TLDR_PAGES):
-        _, filename = os.path.split(topic)
-        if filename.endswith('.md'):
-            answer.append(filename[:-3])
-    return answer
+    return [ filename[:-3] for filename in _get_filenames() if filename.endswith('.md') ]
+
 TLDR_TOPICS = _update_tldr_topics()
 
 def _update_cheat_topics():
