@@ -63,7 +63,8 @@ def _get_filenames(path):
     return [os.path.split(topic)[1] for topic in glob.glob(path)]
 
 def _update_tldr_topics():
-    return [ filename[:-3] for filename in _get_filenames(PATH_TLDR_PAGES) if filename.endswith('.md') ]
+    return [filename[:-3]
+            for filename in _get_filenames(PATH_TLDR_PAGES) if filename.endswith('.md')]
 
 def _update_cheat_topics():
     return _get_filenames(PATH_CHEAT_PAGES)
@@ -80,21 +81,23 @@ def _remove_initial_underscore(filename):
 
 def _sanitize_dirname(dirname):
     dirname = os.path.basename(dirname)
-    dirname = remove_initial_underscore(dirname)
+    dirname = _remove_initial_underscore(dirname)
     return dirname
 
-def _format_answer(dirname,filename):
-    return "%s/%s" % ( _sanitize_dirname(dirname), filename )
+def _format_answer(dirname, filename):
+    return "%s/%s" % (_sanitize_dirname(dirname), filename)
 
 def _get_answer_files_from_folder():
     topics = map(os.path.split, glob.glob(PATH_CHEAT_SHEETS + "*/*"))
-    return [_format_answer(dirname,filename) for dirname, filename in topics if filename not in ['_info.yaml'] ]
+    return [_format_answer(dirname, filename)
+            for dirname, filename in topics if filename not in ['_info.yaml']]
 def _isdir(topic):
     return os.path.isdir(topic)
 def _get_answers_and_dirs():
     topics = glob.glob(PATH_CHEAT_SHEETS + "*")
-    answer_dirs = [_remove_initial_underscore(os.path.split(topic)[1]) for topic in topics if _isdir(topic)]
-    answers = [ os.path.split(topic)[1] for topic in topics if not _isdir(topic)]
+    answer_dirs = [_remove_initial_underscore(os.path.split(topic)[1])
+                   for topic in topics if _isdir(topic)]
+    answers = [os.path.split(topic)[1] for topic in topics if not _isdir(topic)]
     return answer_dirs, answers
 
 def _update_cheat_sheets_topics():
