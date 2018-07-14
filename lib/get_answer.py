@@ -70,34 +70,34 @@ def _update_cheat_topics():
 TLDR_TOPICS = _update_tldr_topics()
 CHEAT_TOPICS = _update_cheat_topics()
 
+def _remove_initial_underscore(filename):
+    if filename.startswith('_'):
+        filename = filename[1:]
+    return filename
+
 def _sanitize_dirname(dirname):
     dirname = os.path.basename(dirname)
-    if dirname.startswith('_'):
-        dirname = dirname[1:]
+    dirname = remove_initial_underscore(dirname)
     return dirname
 
 def _format_answer(dirname,filename):
     return "%s/%s" % ( _sanitize_dirname(dirname), filename )
 
 def _get_answer_files_from_folder():
-    topics = map(glob.glob(PATH_CHEAT_SHEETS + "*/*"), os.path.split)
+    topics = map(os.path.split, glob.glob(PATH_CHEAT_SHEETS + "*/*"))
     return [_format_answer(dirname,filename) for dirname, filename in topics if filename not in ['_info.yaml'] ]
+def isdir(topic):
+    return os.path.isdir(topic)
+def _get_answers_and_dirs():
+    topics = glob.glob(PATH_CHEAT_SHEETS + "*")
+    answer_dirs = [_remove_initial_underscore(os.path.split(topic)[1]) for topic in topics if isdir(topic)]
+    answers = [ os.path.split(topic)[1] for topic in topics if not isdir(topic)]
+    return answer_dirs, answers
 
 def _update_cheat_sheets_topics():
-    answers = []
-    answer_dirs = []
-
     answers = _get_answer_files_from_folder()
-
-    for topic in glob.glob(PATH_CHEAT_SHEETS + "*"):
-        _, filename = os.path.split(topic)
-        if os.path.isdir(topic):
-            if filename.startswith('_'):
-                filename = filename[1:]
-            answer_dirs.append(filename+'/')
-        else:
-            answer.append(filename)
-    return answer, answer_dirs
+    cheatsheet_answers, cheatsheet_dirs = _get_answers_and_dirs()
+    return answers+cheatsheet_answers, cheatsheet_dirs
 
 CHEAT_SHEETS_TOPICS, CHEAT_SHEETS_DIRS = _update_cheat_sheets_topics()
 
