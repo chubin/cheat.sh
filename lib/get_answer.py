@@ -86,11 +86,11 @@ def _format_answer(dirname,filename):
 def _get_answer_files_from_folder():
     topics = map(os.path.split, glob.glob(PATH_CHEAT_SHEETS + "*/*"))
     return [_format_answer(dirname,filename) for dirname, filename in topics if filename not in ['_info.yaml'] ]
-def isdir(topic):
+def _isdir(topic):
     return os.path.isdir(topic)
 def _get_answers_and_dirs():
     topics = glob.glob(PATH_CHEAT_SHEETS + "*")
-    answer_dirs = [_remove_initial_underscore(os.path.split(topic)[1]) for topic in topics if isdir(topic)]
+    answer_dirs = [_remove_initial_underscore(os.path.split(topic)[1]) for topic in topics if _isdir(topic)]
     answers = [ os.path.split(topic)[1] for topic in topics if not isdir(topic)]
     return answer_dirs, answers
 
