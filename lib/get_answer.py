@@ -20,7 +20,6 @@ import os
 import re
 import redis
 from fuzzywuzzy import process, fuzz
-from langdetect import detect
 from polyglot.detect import Detector
 from polyglot.detect.base import UnknownLanguage
 import time
