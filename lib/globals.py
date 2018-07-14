@@ -8,7 +8,7 @@ import logging
 import os
 from pygments.styles import get_all_styles
 
-MYDIR = os.path.abspath(os.path.dirname(os.path.dirname('__file__')))
+MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 
 ANSI2HTML = os.path.join(MYDIR, "share/ansi2html.sh")
 
