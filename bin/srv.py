@@ -51,6 +51,9 @@ def is_html_needed(user_agent):
     plaintext_clients = ['curl', 'wget', 'fetch', 'httpie', 'lwp-request', 'python-requests']
     return all([x not in user_agent for x in plaintext_clients])
 
+def is_result_a_script(query):
+    return query in [':cht.sh']
+
 @app.route('/files/<path:path>')
 def send_static(path):
     """
@@ -191,13 +194,15 @@ def answer(topic=None):
         if not_allowed:
             return "429 %s\n" % not_allowed, 429
 
-    html_is_needed = is_html_needed(user_agent)
+    html_is_needed = is_html_needed(user_agent) and not is_result_a_script(topic)
     result, found = cheat_wrapper(topic, request_options=options, html=html_is_needed)
     if 'Please come back in several hours' in result and html_is_needed:
         return MALFORMED_RESPONSE_HTML_PAGE
 
     log_query(ip_address, found, topic, user_agent)
-    return result
+    if html_is_needed:
+        return result
+    return Response(result, mimetype='text/plain')
 
 SRV = WSGIServer(("", 8002), app) # log=None)
 SRV.serve_forever()
