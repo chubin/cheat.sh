@@ -382,7 +382,7 @@ because you know what happens when you do.
 
 ## Editors integration
 
-You can use *cheat.sh* directly from the editor (*Vim* and *Emacs* are currently supported).
+You can use *cheat.sh* directly from the editor (*Vim*, *Emacs* and *Visual Studio Code* are currently supported).
 Instead of opening your browser, googling, browsing Stack Overflow
 and eventually copying the code snippets you need into the clipboard
 and later pasting them into the editor,
@@ -467,9 +467,15 @@ Or, if you want to scroll and/or pause, the same on YouTube:
 ### Visual Studio Code
 
 * [vscode-snippet](https://github.com/mre/vscode-snippet)
+* Install it from [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=vscode-snippet.Snippet)
+
+Usage: 
+
+1. Hit <kbd>⌘ Command</kbd> + <kbd>⇧ Shift</kbd> + <kbd>p</kbd>
+2. Run `Snippet: Find`.
+3. Type your query and hit enter.
 
 [![vscode-snippet](https://raw.githubusercontent.com/mre/vscode-snippet/master/preview.gif)](https://github.com/mre/vscode-snippet)
-
 
 ## Special pages
 
