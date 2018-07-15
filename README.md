@@ -463,6 +463,14 @@ Or, if you want to scroll and/or pause, the same on YouTube:
 
 [![asciicast](https://asciinema.org/a/3xvqwrsu9g4taj5w526sb2t35.png)](https://asciinema.org/a/3xvqwrsu9g4taj5w526sb2t35)
 
+
+### Visual Studio Code
+
+* [vscode-snippet](https://github.com/mre/vscode-snippet)
+
+[![vscode-snippet](https://raw.githubusercontent.com/mre/vscode-snippet/master/preview.gif)](https://github.com/mre/vscode-snippet)
+
+
 ## Special pages
 
 There are several special pages (their names are always starting with a colon),
