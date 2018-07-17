@@ -23,12 +23,12 @@ Such a thing exists.
 
 * Has a simple curl/browser interface.
 * Covers 55 programming languages, several DBMSes, and more than 1000 most important UNIX/Linux commands.
-* Provides access to the best community driven cheat sheets repositories in the world as well as to StackOverflow.
+* Provides access to the best community driven cheat sheets repositories in the world, on par with StackOverflow.
 * Available everywhere, no installation needed.
-* Ultrafast, returns answers, as a rule, within 100 ms.
+* Ultrafast, returns answers within 100 ms, as a rule.
 * Has a convenient command line client, `cht.sh`, that is very advantageous and helpful, though not mandatory.
 * Can be used directly from code editors, without opening a browser and not switching your mental context.
-* Supports a special mode (stealth mode), where it can be used fully invisibly, not even touching a key and not making a sound.
+* Supports a special stealth mode where it can be used fully invisibly without ever touching a key and and making sounds.
 
 <p align="center">
   <img src='https://cheat.sh/files/demo-curl.gif'/>
@@ -59,8 +59,7 @@ For example, to see how you can make `snapshots` of a filesystem/volume/somethin
   <img src='https://cheat.sh/files/cht.sh-url-structure.jpg'/>
 </p>
 
-Programming languages cheat sheets are located not directly in the root namespace,
-but in special namespaces, dedicated to them:
+The programming language cheat sheets are located in special namespaces dedicated to them.
 
 ```
     curl cht.sh/go/Pointers
@@ -68,18 +67,18 @@ but in special namespaces, dedicated to them:
     curl cht.sh/python/lambda
 ```
 
-To get the list of available programming language cheat sheets, do a special query `:list`:
+To get the list of available programming language cheat sheets, use the special query `:list`:
 
 ```
     curl cht.sh/go/:list
 ```
 
-(almost) each programming language has a special page named `:learn`,
+Almost each programming language has a special page named `:learn`
 that describes the language basics (that's a direct mapping from the *"Learn X in Y"* project).
 It could be a good starting point if you've just started learning a language.
 
-If there is no cheat sheet for some programming language query (and it is almost always the case),
-it is generated on the fly, basing on available cheat sheets and answers on StackOverflow.
+If there is no cheat sheet for a programming language query (and it is almost always the case),
+it is generated on the fly, based on available cheat sheets and answers on StackOverflow.
 Of course, there is no guarantee that the returned cheat sheet will be a 100% hit, but it is almost always exactly what you are looking for.
 
 Try these (and your own) queries to get the impression of that, what the answers look like:
@@ -91,7 +90,7 @@ Try these (and your own) queries to get the impression of that, what the answers
     curl cht.sh/clojure/variadic+function
 ```
 
-If you don't like an answer for some of your queries, you can pick another one: for that, repeat the query with an additional parameter `/1`, `/2` etc. appended:
+If you don't like an answer for your queries, you can pick another one. For that, repeat the query with an additional parameter `/1`, `/2` etc. appended:
 
 ```
     curl cht.sh/python/random+string
@@ -162,8 +161,7 @@ Read more about the programming languages queries below.
 ## Command line client, cht.sh
 
 The cheat.sh service has its own command line client (`cht.sh`) that
-compared to querying the service directly with `curl`,
-has several useful features:
+has several useful features compared to querying the service directly with `curl`:
 
 * Special shell mode with a persistent queries context and readline support.
 * Queries history.
@@ -194,7 +192,7 @@ It is even more convenient to start the client in a special shell mode:
     cht.sh> go reverse a list
 ```
 
-If all your queries are supposed to be about the same language, you can change the context of the queries
+If all your queries are about the same language, you can change the context
 and spare repeating the programming language name:
 ```
     $ cht.sh --shell
@@ -297,8 +295,7 @@ To activate tab completion support for `cht.sh`, add the `:zsh` script to the *f
 
 ### Stealth mode
 
-One of the important properties of any real cheat sheet
-is that it could be used fully unnoticed.
+Being used fully unnoticed is one of the most important property of any cheat sheet.
 
 cheat.sh can be used completely unnoticed too. The cheat.sh client, `cht.sh`, has
 a special mode, called **stealth mode**. Using that, you don't even need to touch your
@@ -375,7 +372,7 @@ She: Yes! Perfect! Exactly what I wanted to see!    |
 
 ```
 
-Of course, it is just for fun, and you should never cheat in your coding interviews,
+Of course, this is just for fun, and you should never cheat in your coding interviews,
 because you know what happens when you do.
 
 ![when you lie in your interview](http://cheat.sh/files/when-you-lie-katze.png)
@@ -480,8 +477,8 @@ Usage:
 
 ## Special pages
 
-There are several special pages (their names are always starting with a colon),
-that are not cheat sheets and have special meaning.
+There are several special pages that are not cheat sheets.
+Their names start with colon and have special meaning.
 
 
 Getting started:
@@ -525,7 +522,7 @@ To search for a keyword, use the query:
     /~keyword
 ```
 
-In this case search is not recursive — it is conducted only in a pages of the specified level.
+In this case search is not recursive — it is conducted only in a page of the specified level.
 For example:
 
 ```
@@ -557,7 +554,7 @@ List of search options:
 
 Cheat sheets related to programming languages
 are organized in namespaces (subdirectories), that are named according
-to the programming languages.
+to the programming language.
 
 For each supported programming language
 there are several special cheat sheets: its own sheet, `hello`, `:list` and `:learn`.
