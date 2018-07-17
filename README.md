@@ -47,7 +47,7 @@ specifying the name of the command in the query:
 ```
 As you can see, you can use both HTTPS and HTTP to access the service, and both the long (cheat.sh) and the short (cht.sh) service names.
 
-Here `tar`, `curl`, `rsync`, and `tr` are names of the UNIX/Linux commands, you want to get cheat sheets for.
+Here `tar`, `curl`, `rsync`, and `tr` are names of the UNIX/Linux commands you want to get cheat sheets for.
 
 If you don't know the name of the command you need, you can search for it using the `~KEYWORD` notation.
 For example, to see how you can make `snapshots` of a filesystem/volume/something else:
@@ -74,9 +74,9 @@ To get the list of available programming language cheat sheets, do a special que
     curl cht.sh/go/:list
 ```
 
-(almost) each programming language has a special page, named `:learn`,
+(almost) each programming language has a special page named `:learn`,
 that describes the language basics (that's a direct mapping from the *"Learn X in Y"* project).
-It could be a good starting point, if you've just started learning a language.
+It could be a good starting point if you've just started learning a language.
 
 If there is no cheat sheet for some programming language query (and it is almost always the case),
 it is generated on the fly, basing on available cheat sheets and answers on StackOverflow.
@@ -161,7 +161,7 @@ Read more about the programming languages queries below.
 
 ## Command line client, cht.sh
 
-The cheat.sh service has its own command line client (`cht.sh`), that,
+The cheat.sh service has its own command line client (`cht.sh`) that
 compared to querying the service directly with `curl`,
 has several useful features:
 
@@ -256,7 +256,7 @@ Type `help` for other internal `cht.sh` commands.
 
 The `cht.sh` client has its configuration file which is located at `~/.cht.sh/cht.sh.conf`.
 Use it to specify query options that you would use with each query.
-For example, to switch syntax highlighting off, create the file with the following
+For example, to switch syntax highlighting off create the file with the following
 content:
 
 ```
@@ -297,7 +297,7 @@ To activate tab completion support for `cht.sh`, add the `:zsh` script to the *f
 
 ### Stealth mode
 
-One of the important properties of any real cheat sheet,
+One of the important properties of any real cheat sheet
 is that it could be used fully unnoticed.
 
 cheat.sh can be used completely unnoticed too. The cheat.sh client, `cht.sh`, has
@@ -382,7 +382,7 @@ because you know what happens when you do.
 
 ## Editors integration
 
-You can use *cheat.sh* directly from the editor (*Vim* and *Emacs* are currently supported).
+You can use *cheat.sh* directly from the editor (*Vim*, *Emacs* and *Visual Studio Code* are currently supported).
 Instead of opening your browser, googling, browsing Stack Overflow
 and eventually copying the code snippets you need into the clipboard
 and later pasting them into the editor,
@@ -462,6 +462,20 @@ Or, if you want to scroll and/or pause, the same on YouTube:
 * cheat.sh/:emacs-ivy — Emacs support for ivy users
 
 [![asciicast](https://asciinema.org/a/3xvqwrsu9g4taj5w526sb2t35.png)](https://asciinema.org/a/3xvqwrsu9g4taj5w526sb2t35)
+
+
+### Visual Studio Code
+
+* [vscode-snippet](https://github.com/mre/vscode-snippet)
+* Install it from [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=vscode-snippet.Snippet)
+
+Usage: 
+
+1. Hit <kbd>⌘ Command</kbd> + <kbd>⇧ Shift</kbd> + <kbd>p</kbd>
+2. Run `Snippet: Find`.
+3. Type your query and hit enter.
+
+[![vscode-snippet](https://raw.githubusercontent.com/mre/vscode-snippet/master/preview.gif)](https://github.com/mre/vscode-snippet)
 
 ## Special pages
 
