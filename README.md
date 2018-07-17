@@ -475,7 +475,8 @@ Usage:
 2. Run `Snippet: Find`.
 3. Type your query and hit enter.
 
-[![vscode-snippet](https://raw.githubusercontent.com/mre/vscode-snippet/master/preview.gif)](https://github.com/mre/vscode-snippet)
+[![vscode-snippet](https://cheat.sh/files/vscode-snippet-demo.gif)](https://github.com/mre/vscode-snippet)
+(GIF courtesy: Matthias Endler, @mre)
 
 ## Special pages
 
