@@ -356,7 +356,7 @@ You: What do you mean?                              |         pivot = array[0]
                                                     |         for x in array:
 She: I mean,                                        |             if x < pivot: less.append(x)
 She: do you really need all these ifs and fors?     |             if x == pivot: equal.append(x)
-She: Could you may be just use filter instead?      |             if x > pivot: greater.append(x)
+She: Could you maybe just use filter instead?      |             if x > pivot: greater.append(x)
                                                     |         return sort(less)+equal+sort(greater)
 You: quicksort with filter?                         |     else:
                                                     |         return array

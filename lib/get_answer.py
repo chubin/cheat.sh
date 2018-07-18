@@ -318,7 +318,7 @@ def _get_unknown(topic):
     possible_topics_text = "\n".join([("    * %s %s" % x) for x in possible_topics])
     return """
 Unknown topic.
-Do you mean one of these topics may be?
+Do you mean one of these topics maybe?
 
 %s
     """ % possible_topics_text
