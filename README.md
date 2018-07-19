@@ -1,21 +1,21 @@
 
-![cheat.sh logo](http://cheat.sh/files/big-logo-v2.png)
+![cheat.sh logo](http://cheat.sh/files/big-logo-v2-fixed.png)
 
 Unified access to the best community driven cheat sheets repositories of the world.
 
 Let's imagine for a moment that there is such a thing as an ideal cheat sheet.
-How it should look like?
+What should it look like?
 What features should it have?
 
-* **concise** — it should be concise; it should contain only things you need and nothing else;
-* **fast** — it should be possible to use it instantly;
-* **comprehensive** — it should contain answers for every question you could have;
-* **universal** — it should be available everywhere, as soon as needed, without any preparations;
-* **unobtrusive** — it does not distract you from your main task when you are using it;
-* **tutoring** — it helps you to learn the subject;
-* **inconspicuous** — it should be possible to use it completely unnoticed.
+* **Concise** — It should only contain the things you need, and nothing else.
+* **Fast** — It should be possible to use it instantly.
+* **Comprehensive** — It should contain answers for every possible question.
+* **Universal** — It should be available everywhere, anytime, without any preparations.
+* **Unobtrusive** — It should not distract you from your main task.
+* **Tutoring** — It should help you to learn the subject.
+* **Inconspicuous** — It should be possible to use it completely unnoticed.
 
-Such a thing does exist.
+Such a thing exists.
 
 ## Contents
 
@@ -35,18 +35,18 @@ Such a thing does exist.
   * [How to add a cheat sheet repository](#how-to-add-a-cheat-sheet-repository)
 
 
-## Features
+## Features:
 
 **cheat.sh**
 
-* has simple curl/browser interface;
-* covers 55 programming languages, several DBMSes, and more than 1000 most important UNIX/Linux commands;
-* provides access to the best community driven cheat sheets repositories in the world as well as to StackOverflow;
-* available everywhere, no installation needed;
-* ultrafast, returns answers, as a rule, within 100 ms;
-* has a convenient command line client, `cht.sh`, that is very advantageous and helpful, though not mandatory;
-* can be used directly from code editors, without opening a browser and not switching your mental context;
-* supports a special mode (stealth mode), where it can be used fully invisibly, not even touching a key and not making a sound.
+* Has a simple curl/browser interface.
+* Covers 55 programming languages, several DBMSes, and more than 1000 most important UNIX/Linux commands.
+* Provides access to the best community driven cheat sheets repositories in the world, on par with StackOverflow.
+* Available everywhere, no installation needed.
+* Ultrafast, returns answers within 100 ms, as a rule.
+* Has a convenient command line client, `cht.sh`, that is very advantageous and helpful, though not mandatory.
+* Can be used directly from code editors, without opening a browser and not switching your mental context.
+* Supports a special stealth mode where it can be used fully invisibly without ever touching a key and and making sounds.
 
 <p align="center">
   <img src='https://cheat.sh/files/demo-curl.gif'/>
@@ -65,7 +65,7 @@ specifying the name of the command in the query:
 ```
 As you can see, you can use both HTTPS and HTTP to access the service, and both the long (cheat.sh) and the short (cht.sh) service names.
 
-Here `tar`, `curl`, `rsync`, and `tr` are names of the UNIX/Linux commands, you want to get cheat sheets for.
+Here `tar`, `curl`, `rsync`, and `tr` are names of the UNIX/Linux commands you want to get cheat sheets for.
 
 If you don't know the name of the command you need, you can search for it using the `~KEYWORD` notation.
 For example, to see how you can make `snapshots` of a filesystem/volume/something else:
@@ -77,8 +77,7 @@ For example, to see how you can make `snapshots` of a filesystem/volume/somethin
   <img src='https://cheat.sh/files/cht.sh-url-structure.jpg'/>
 </p>
 
-Programming languages cheat sheets are located not directly in the root namespace,
-but in special namespaces, dedicated to them:
+The programming language cheat sheets are located in special namespaces dedicated to them.
 
 ```
     curl cht.sh/go/Pointers
@@ -86,21 +85,21 @@ but in special namespaces, dedicated to them:
     curl cht.sh/python/lambda
 ```
 
-To get the list of available programming language cheat sheets, do a special query `:list`:
+To get the list of available programming language cheat sheets, use the special query `:list`:
 
 ```
     curl cht.sh/go/:list
 ```
 
-(almost) each programming language has a special page, named `:learn`,
+Almost each programming language has a special page named `:learn`
 that describes the language basics (that's a direct mapping from the *"Learn X in Y"* project).
-It could be a good starting point, if you've just started learning a language.
+It could be a good starting point if you've just started learning a language.
 
-If there is no cheat sheet for some programming language query (and it is almost always the case),
-it is generated on the fly, basing on available cheat sheets and answers on StackOverflow.
+If there is no cheat sheet for a programming language query (and it is almost always the case),
+it is generated on the fly, based on available cheat sheets and answers on StackOverflow.
 Of course, there is no guarantee that the returned cheat sheet will be a 100% hit, but it is almost always exactly what you are looking for.
 
-Try these (and your own) queries to get the impression of that, how the answers look like:
+Try these (and your own) queries to get the impression of that, what the answers look like:
 ```
     curl cht.sh/go/reverse+a+list
     curl cht.sh/python/random+list+elements
@@ -109,7 +108,7 @@ Try these (and your own) queries to get the impression of that, how the answers 
     curl cht.sh/clojure/variadic+function
 ```
 
-If you don't like an answer for some of your queries, you can pick another one: for that, repeat the query with an additional parameter `/1`, `/2` etc. appended:
+If you don't like an answer for your queries, you can pick another one. For that, repeat the query with an additional parameter `/1`, `/2` etc. appended:
 
 ```
     curl cht.sh/python/random+string
@@ -169,24 +168,23 @@ Full list of all options described below and in `/:help`.
 
 Try your own queries. Follow these rules:
 
-1. Try to be more specific (`/python/append+file` is better than `/python/file` and `/python/append`);
-2. Ask practical question if possible (yet theoretical question are possible too);
-3. Ask programming language questions only; specify the name of the programming language as the section name;
-4. Separate words with `+` instead of spaces;
+1. Try to be more specific (`/python/append+file` is better than `/python/file` and `/python/append`).
+2. Ask practical question if possible (yet theoretical question are possible too).
+3. Ask programming language questions only; specify the name of the programming language as the section name.
+4. Separate words with `+` instead of spaces.
 5. Do not use special characters, they are ignored anyway.
 
 Read more about the programming languages queries below.
 
 ## Command line client, cht.sh
 
-The cheat.sh service has its own command line client (`cht.sh`), that,
-comparing to quering the service directly with `curl`,
-has several useful features:
+The cheat.sh service has its own command line client (`cht.sh`) that
+has several useful features compared to querying the service directly with `curl`:
 
-* Special shell mode with a persistent queries context and readline support;
-* Queries history;
-* Clipboard integration;
-* Tab completion support for shells (bash, fish, zsh);
+* Special shell mode with a persistent queries context and readline support.
+* Queries history.
+* Clipboard integration.
+* Tab completion support for shells (bash, fish, zsh).
 * Stealth mode.
 
 ### Installation
@@ -216,7 +214,7 @@ It is even more convenient to start the client in a special shell mode:
     cht.sh> go reverse a list
 ```
 
-If all your queries are supposed to be about the same language, you can change the context of the queries
+If all your queries are about the same language, you can change the context
 and spare repeating the programming language name:
 ```
     $ cht.sh --shell
@@ -278,7 +276,7 @@ Type `help` for other internal `cht.sh` commands.
 
 The `cht.sh` client has its configuration file which is located at `~/.cht.sh/cht.sh.conf`.
 Use it to specify query options that you would use with each query.
-For example, to switch syntax highlighting off, create the file with the following
+For example, to switch syntax highlighting off create the file with the following
 content:
 
 ```
@@ -296,6 +294,9 @@ QUERY_OPTIONS="style=native"
 
 ### Tab completion
 
+
+#### Bash Tab completion
+
 To activate tab completion support for `cht.sh`, add the `:bash_completion` script to your `~/.bashrc`:
 
 ```
@@ -304,16 +305,25 @@ To activate tab completion support for `cht.sh`, add the `:bash_completion` scri
     $ # and add . ~/.bash.d/cht.sh to ~/.bashrc
 ```
 
+#### ZSH Tab completion
+
+To activate tab completion support for `cht.sh`, add the `:zsh` script to the *fpath* in your `~/.zshrc`:
+
+```
+    $ curl https://cheat.sh/:zsh > ~/.zsh.d/_cht
+    $ echo 'fpath=(~/.zsh.d/ $fpath)' >> ~/.zshrc
+    $ # Open a new shell to load the plugin
+```
+
 ### Stealth mode
 
-One of the important properties of any real cheat sheet,
-is that it could be used fully unnoticed.
+Being used fully unnoticed is one of the most important property of any cheat sheet.
 
 cheat.sh can be used completely unnoticed too. The cheat.sh client, `cht.sh`, has
-a special mode, called **stealth mode**, using that you don't even need to touch your
-keyboard to open some cheat sheet.
+a special mode, called **stealth mode**. Using that, you don't even need to touch your
+keyboard to open a cheat sheet.
 
-In this mode, as soon as you select some text with the mouse (and thus it is added
+In this mode, as soon as you select some text with the mouse (and thus adding it
 into the selection buffer of X Window System or into the clipboard) it's used
 as a query string for cheat.sh, and the correspondent cheat sheet is automatically shown.
 
@@ -368,7 +378,7 @@ You: What do you mean?                              |         pivot = array[0]
                                                     |         for x in array:
 She: I mean,                                        |             if x < pivot: less.append(x)
 She: do you really need all these ifs and fors?     |             if x == pivot: equal.append(x)
-She: Could you may be just use filter instead?      |             if x > pivot: greater.append(x)
+She: Could you maybe just use filter instead?       |             if x > pivot: greater.append(x)
                                                     |         return sort(less)+equal+sort(greater)
 You: quicksort with filter?                         |     else:
                                                     |         return array
@@ -384,20 +394,20 @@ She: Yes! Perfect! Exactly what I wanted to see!    |
 
 ```
 
-Or course, it is just fun, and you should never cheat in your coding interviews,
+Of course, this is just for fun, and you should never cheat in your coding interviews,
 because you know what happens when you do.
 
 ![when you lie in your interview](http://cheat.sh/files/when-you-lie-katze.png)
 
 ## Editors integration
 
-You can use *cheat.sh* directly from the editor (*Vim* and *Emacs* are currently supported).
+You can use *cheat.sh* directly from the editor (*Vim*, *Emacs* and *Visual Studio Code* are currently supported).
 Instead of opening your browser, googling, browsing Stack Overflow
 and eventually copying the code snippets you need into the clipboard
 and later pasting them into the editor,
 you can achieve the same instantly and without leaving the editor at all!
 
-Here is how it looks like in Vim:
+Here is what it looks like in Vim:
 
 1. If you have a question while editing a program, you can just type
 your question directly in the buffer and press `<leader>KK`. You will get
@@ -472,10 +482,25 @@ Or, if you want to scroll and/or pause, the same on YouTube:
 
 [![asciicast](https://asciinema.org/a/3xvqwrsu9g4taj5w526sb2t35.png)](https://asciinema.org/a/3xvqwrsu9g4taj5w526sb2t35)
 
+
+### Visual Studio Code
+
+* [vscode-snippet](https://github.com/mre/vscode-snippet)
+* Install it from [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=vscode-snippet.Snippet)
+
+Usage: 
+
+1. Hit <kbd>⌘ Command</kbd> + <kbd>⇧ Shift</kbd> + <kbd>p</kbd>
+2. Run `Snippet: Find`.
+3. Type your query and hit enter.
+
+[![vscode-snippet](https://cheat.sh/files/vscode-snippet-demo.gif)](https://github.com/mre/vscode-snippet)
+(GIF courtesy: Matthias Endler, @mre)
+
 ## Special pages
 
-There are several special pages (their names are always starting with a colon),
-that are not cheat sheets and have special meaning.
+There are several special pages that are not cheat sheets.
+Their names start with colon and have special meaning.
 
 
 Getting started:
@@ -519,7 +544,7 @@ To search for a keyword, use the query:
     /~keyword
 ```
 
-In this case search is not recursive — it is conducted only in a pages of the specified level.
+In this case search is not recursive — it is conducted only in a page of the specified level.
 For example:
 
 ```
@@ -551,7 +576,7 @@ List of search options:
 
 Cheat sheets related to programming languages
 are organized in namespaces (subdirectories), that are named according
-to the programming languages.
+to the programming language.
 
 For each supported programming language
 there are several special cheat sheets: its own sheet, `hello`, `:list` and `:learn`.
@@ -669,14 +694,14 @@ Pie diagram reflecting cheat sheets sources distribution (by number of cheat she
 ### How to edit a cheat sheet
 
 If you want to edit a cheat.sh cheat sheet, you should edit it in the upstream repository.
-You will find the name of the source repository in a browser, when you open a cheat sheet.
-There are two github buttons in the bottom of the page: the second one is the button
-of the repository, whom belongs the current cheat sheet.
+You will find the name of the source repository in a browser when you open a cheat sheet.
+There are two github buttons at the bottom of the page: the second one is the button
+of the repository, which belongs the current cheat sheet.
 
 You can edit the cheat sheet directly in your browser (you need a github account for it).
-There is a edit button in the top right corner. If you click on it, an editor will be open.
+There is an edit button in the top right corner. If you click on it, an editor will be open.
 There you will change the cheat sheet (under the hood: the upstrem repository is forked, your changes are
-commited in the forked repository, a pull request to the upstream repository owner is sent).
+committed in the forked repository, a pull request to the upstream repository owner is sent).
 
 ![cheat.sh cheat sheets repositories](http://cheat.sh/files/edit-cheat-sheet.png)
 

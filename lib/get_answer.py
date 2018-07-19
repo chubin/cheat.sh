@@ -20,7 +20,6 @@ import os
 import re
 import redis
 from fuzzywuzzy import process, fuzz
-from langdetect import detect
 from polyglot.detect import Detector
 from polyglot.detect.base import UnknownLanguage
 import time
@@ -56,48 +55,60 @@ INTERNAL_TOPICS = [
     ':share',
     ]
 
+COLORIZED_INTERNAL_TOPICS = [
+    ':intro',
+]
+
+def _get_filenames(path):
+    return [os.path.split(topic)[1] for topic in glob.glob(path)]
+
 def _update_tldr_topics():
-    answer = []
-    for topic in glob.glob(PATH_TLDR_PAGES):
-        _, filename = os.path.split(topic)
-        if filename.endswith('.md'):
-            answer.append(filename[:-3])
-    return answer
-TLDR_TOPICS = _update_tldr_topics()
+    return [filename[:-3]
+            for filename in _get_filenames(PATH_TLDR_PAGES) if filename.endswith('.md')]
 
 def _update_cheat_topics():
-    answer = []
-    for topic in glob.glob(PATH_CHEAT_PAGES):
-        _, filename = os.path.split(topic)
-        answer.append(filename)
-    return answer
+    return _get_filenames(PATH_CHEAT_PAGES)
+
+
+
+TLDR_TOPICS = _update_tldr_topics()
 CHEAT_TOPICS = _update_cheat_topics()
 
+def _remove_initial_underscore(filename):
+    if filename.startswith('_'):
+        filename = filename[1:]
+    return filename
+
+def _sanitize_dirname(dirname):
+    dirname = os.path.basename(dirname)
+    dirname = _remove_initial_underscore(dirname)
+    return dirname
+
+def _format_answer(dirname, filename):
+    return "%s/%s" % (_sanitize_dirname(dirname), filename)
+
+def _get_answer_files_from_folder():
+    topics = map(os.path.split, glob.glob(PATH_CHEAT_SHEETS + "*/*"))
+    return [_format_answer(dirname, filename)
+            for dirname, filename in topics if filename not in ['_info.yaml']]
+def _isdir(topic):
+    return os.path.isdir(topic)
+def _get_answers_and_dirs():
+    topics = glob.glob(PATH_CHEAT_SHEETS + "*")
+    answer_dirs = [_remove_initial_underscore(os.path.split(topic)[1]).rstrip('/')+'/'
+                   for topic in topics if _isdir(topic)]
+    answers = [os.path.split(topic)[1] for topic in topics if not _isdir(topic)]
+    return answer_dirs, answers
+
 def _update_cheat_sheets_topics():
-    answer = []
-    answer_dirs = []
+    answers = _get_answer_files_from_folder()
+    cheatsheet_answers, cheatsheet_dirs = _get_answers_and_dirs()
+    return answers+cheatsheet_answers, cheatsheet_dirs
 
-    for topic in glob.glob(PATH_CHEAT_SHEETS + "*/*"):
-        dirname, filename = os.path.split(topic)
-        if filename in ['_info.yaml']:
-            continue
-        dirname = os.path.basename(dirname)
-        if dirname.startswith('_'):
-            dirname = dirname[1:]
-        answer.append("%s/%s" % (dirname, filename))
-
-    for topic in glob.glob(PATH_CHEAT_SHEETS + "*"):
-        _, filename = os.path.split(topic)
-        if os.path.isdir(topic):
-            if filename.startswith('_'):
-                filename = filename[1:]
-            answer_dirs.append(filename+'/')
-        else:
-            answer.append(filename)
-    return answer, answer_dirs
 CHEAT_SHEETS_TOPICS, CHEAT_SHEETS_DIRS = _update_cheat_sheets_topics()
 
 CACHED_TOPICS_LIST = [[]]
+
 def get_topics_list(skip_dirs=False, skip_internal=False):
     """
     List of topics returned on /:list
@@ -158,10 +169,13 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
         if '+' in topic_name:
             result = 'question'
         else:
-            if topic_type in _get_topics_dirs() and topic_name in [':list']:
+            #if topic_type in _get_topics_dirs() and topic_name in [':list']:
+            if topic_name in [':list']:
                 result = "internal"
             elif is_valid_learnxy(topic):
                 result = 'learnxiny'
+            elif topic_name in [':learn']:
+                result = "internal"
             else:
 		# let us activate the 'question' feature for all subsections
                 result = 'question'
@@ -199,22 +213,19 @@ def _get_internal(topic):
                           if x.startswith(topic_type + "/")]
             return "\n".join(topic_list)+"\n"
 
+    answer = ""
     if topic == ":list":
-        return "\n".join(x for x in get_topics_list()) + "\n"
+        answer = "\n".join(x for x in get_topics_list()) + "\n"
+    elif topic == ':styles':
+        answer = "\n".join(COLOR_STYLES) + "\n"
+    elif topic == ":stat":
+        answer = _get_stat()+"\n"
+    elif topic in INTERNAL_TOPICS:
+        answer = open(os.path.join(MYDIR, "share", topic[1:]+".txt"), "r").read()
+        if topic in COLORIZED_INTERNAL_TOPICS:
+            answer = colorize_internal(answer)
 
-    if topic == ':styles':
-        return "\n".join(COLOR_STYLES) + "\n"
-
-    if topic == ":stat":
-        return _get_stat()+"\n"
-
-    if topic in INTERNAL_TOPICS:
-        if topic[1:] == 'intro':
-            return colorize_internal(open(os.path.join(MYDIR, "share", topic[1:]+".txt"), "r").read())
-        else:
-            return open(os.path.join(MYDIR, "share", topic[1:]+".txt"), "r").read()
-
-    return ""
+    return answer
 
 def _get_tldr(topic):
     cmd = ["tldr", topic]
@@ -245,12 +256,15 @@ def _get_cheat(topic):
 def _get_cheat_sheets(topic):
     """
     Get the cheat sheet topic from the own repository (cheat.sheets).
-    It's possible that topic directory starts with omited underscore
+    It's possible that topic directory starts with omitted underscore
     """
     filename = PATH_CHEAT_SHEETS + "%s" % topic
     if not os.path.exists(filename):
         filename = PATH_CHEAT_SHEETS + "_%s" % topic
-    return open(filename, "r").read().decode('utf-8')
+    if os.path.isdir(filename):
+        return ""
+    else:
+        return open(filename, "r").read().decode('utf-8')
 
 def _get_cheat_sheets_dir(topic):
     answer = []
@@ -310,7 +324,7 @@ def _get_unknown(topic):
     possible_topics_text = "\n".join([("    * %s %s" % x) for x in possible_topics])
     return """
 Unknown topic.
-Do you mean one of these topics may be?
+Do you mean one of these topics maybe?
 
 %s
     """ % possible_topics_text

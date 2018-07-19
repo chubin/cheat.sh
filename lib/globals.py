@@ -1,6 +1,6 @@
 """
 Global configuration of the project.
-All hardcoded pathes should be (theoretically) here.
+All hardcoded paths should be (theoretically) here.
 """
 from __future__ import print_function
 
@@ -8,7 +8,7 @@ import logging
 import os
 from pygments.styles import get_all_styles
 
-MYDIR = os.path.abspath(os.path.dirname(os.path.dirname('__file__')))
+MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 
 ANSI2HTML = os.path.join(MYDIR, "share/ansi2html.sh")
 
@@ -24,6 +24,8 @@ PATH_CHEAT_SHEETS = "/home/igor/cheat.sheets/sheets/"
 PATH_CHEAT_SHEETS_SPOOL = "/home/igor/cheat.sheets/spool/"
 
 COLOR_STYLES = sorted(list(get_all_styles()))
+
+MALFORMED_RESPONSE_HTML_PAGE = open(os.path.join(STATIC, 'malformed-response.html')).read()
 
 def error(text):
     """

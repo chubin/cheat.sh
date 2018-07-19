@@ -453,7 +453,7 @@ function encode(string,start,end,i,ret,pos,sc,buf) {
      }
      if(dumpStatus==dsNew) {
        # After moving/clearing we are now ready to write
-       # somthing to the screen so start recording now
+       # something to the screen so start recording now
        ret=ret"\n"
        dumpStatus=dsActive
      }

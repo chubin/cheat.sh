@@ -20,10 +20,10 @@ import requests
 import jinja2
 from flask import Flask, request, send_from_directory, redirect, Response
 
-MYDIR = os.path.abspath(os.path.dirname(os.path.dirname('__file__')))
+MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 sys.path.append("%s/lib/" % MYDIR)
 
-from globals import FILE_QUERIES_LOG, LOG_FILE, TEMPLATES, STATIC
+from globals import FILE_QUERIES_LOG, LOG_FILE, TEMPLATES, STATIC, MALFORMED_RESPONSE_HTML_PAGE
 from limits import Limits
 from cheat_wrapper import cheat_wrapper
 from post import process_post_request
@@ -49,9 +49,10 @@ def is_html_needed(user_agent):
     Basing on `user_agent`, return whether it needs HTML or ANSI
     """
     plaintext_clients = ['curl', 'wget', 'fetch', 'httpie', 'lwp-request', 'python-requests']
-    if any([x in user_agent for x in plaintext_clients]):
-        return False
-    return True
+    return all([x not in user_agent for x in plaintext_clients])
+
+def is_result_a_script(query):
+    return query in [':cht.sh']
 
 @app.route('/files/<path:path>')
 def send_static(path):
@@ -193,10 +194,15 @@ def answer(topic=None):
         if not_allowed:
             return "429 %s\n" % not_allowed, 429
 
-    result, found = cheat_wrapper(topic, request_options=options, html=is_html_needed(user_agent))
+    html_is_needed = is_html_needed(user_agent) and not is_result_a_script(topic)
+    result, found = cheat_wrapper(topic, request_options=options, html=html_is_needed)
+    if 'Please come back in several hours' in result and html_is_needed:
+        return MALFORMED_RESPONSE_HTML_PAGE
 
     log_query(ip_address, found, topic, user_agent)
-    return result
+    if html_is_needed:
+        return result
+    return Response(result, mimetype='text/plain')
 
 SRV = WSGIServer(("", 8002), app) # log=None)
 SRV.serve_forever()

@@ -17,11 +17,11 @@ import colored
 from pygments import highlight as pygments_highlight
 from pygments.formatters import Terminal256Formatter # pylint: disable=no-name-in-module
 
-MYDIR = os.path.abspath(os.path.dirname(os.path.dirname('__file__')))
+MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 sys.path.append("%s/lib/" % MYDIR)
 from globals import error, ANSI2HTML, COLOR_STYLES
 from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_FOOTER
-from languages_data import LEXER
+from languages_data import LEXER, LANGUAGE_ALIAS
 from get_answer import get_topic_type, get_topics_list, get_answer, find_answer_by_keyword
 from beautifier import code_blocks
 # import beautifier
@@ -92,13 +92,12 @@ def _colorize_ansi_answer(topic, answer, color_style,               # pylint: di
 
     color_style = color_style or "native"
     lexer_class = LEXER['bash']
-    for lexer_name, lexer_value in LEXER.items():
-        if topic.startswith("%s/" % lexer_name):
-            # color_style = color_style or "monokai"
-            if lexer_name == 'php':
-                answer = "<?\n%s?>\n" % answer
-            lexer_class = lexer_value
-            break
+    if '/' in topic:
+        section_name = topic.split('/', 1)[0].lower()
+        section_name = LANGUAGE_ALIAS.get(section_name, section_name)
+        lexer_class = LEXER.get(section_name, lexer_class)
+        if section_name == 'php':
+            answer = "<?\n%s?>\n" % answer
 
     if highlight_all:
         highlight = lambda answer: pygments_highlight(
@@ -179,7 +178,7 @@ def _render_html(query, result, editable, repository_button, request_options):
 
     edit_button = ''
     if editable:
-        # It's possible that topic directory starts with omited underscore
+        # It's possible that topic directory starts with omitted underscore
         if '/' in query:
             query = '_' + query
         edit_page_link = 'https://github.com/chubin/cheat.sheets/edit/master/sheets/' + query
@@ -258,17 +257,20 @@ def _visualize(query, keyword, answers, request_options, html=None): # pylint: d
     else:
         repository_button = _github_button(topic_type)
 
-    if html:
+    if html and query:
         result = _render_html(
             query, result, editable, repository_button, request_options)
 
 
     return result, found
 
+def _sanitize_query(query):
+    return re.sub('[<>"]', '', query)
+
 def cheat_wrapper(query, request_options=None, html=False):
     """
     Giant megafunction that delivers cheat sheet for `query`.
-    If `html` is True, the answer is formated as HTML.
+    If `html` is True, the answer is formatted as HTML.
     Additional request options specified in `request_options`.
 
     This function is really really bad, and should be rewritten
@@ -296,6 +298,8 @@ def cheat_wrapper(query, request_options=None, html=False):
                 keyword = keyword[:-len(search_options)-1]
 
         return topic, keyword, search_options
+
+    query = _sanitize_query(query)
 
     # at the moment, we just remove trailing slashes
     # so queries python/ and python are equal
