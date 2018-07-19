@@ -26,21 +26,21 @@ PALETTES = {
     },
 }
 
-PALETTES_REVERSE = {
-    0: {
-        1: Back.WHITE + Fore.BLACK,
-        2: Style.DIM,
-    },
-    1: {
-        1: Back.CYAN + Fore.BLACK,
-        2: Style.DIM,
-    },
-    2: {
-        1: Back.RED + Fore.BLACK,
-        2: Style.DIM,
-    },
-}
 
+
+def _reverse_palette(code):
+    return {
+        1 : Fore.BLACK + _back_color(code),
+        2 : Style.DIM
+    } 
+
+def _back_color(code):
+    if code == 0 or code.lower()=="white":
+        return Back.WHITE
+    if code == 1 or code.lower()=="cyan":
+        return Back.WHITE
+    if code == 2 or code.lower()=="red":
+        return Back.WHITE
 
 def colorize_internal(text, palette_number=1):
     """
@@ -48,7 +48,7 @@ def colorize_internal(text, palette_number=1):
     """
 
     palette = PALETTES[palette_number]
-    palette_reverse = PALETTES_REVERSE[palette_number]
+    palette_reverse = _reverse_palette(palette_number)
 
     def _colorize_curlies_block(text):
 
