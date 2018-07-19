@@ -49,15 +49,22 @@ def colorize_internal(text, palette_number=1):
 
     palette = PALETTES[palette_number]
     palette_reverse = _reverse_palette(palette_number)
-
-    def _colorize_curlies_block(text):
+    def _process_text(text):
         text = text.group()[1:-1]
         factor = 1
         if text.startswith('-'):
             text = text[1:]
             factor = -1
         stripped = text.lstrip('0123456789')
-        color_number = int(text[:len(text)-len(stripped)])*factor
+        return (text, stripped, factor)
+
+    def _extract_color_number(text,stripped,factor = 1):
+        return int(text[:len(text)-len(stripped)])*factor
+
+    def _colorize_curlies_block(text):
+        text, stripped, factor = _process_text(text)
+        color_number = _extract_color_number(text,stripped,factor)
+
         if stripped.startswith('='):
             stripped = stripped[1:]
 
