@@ -257,7 +257,7 @@ def _visualize(query, keyword, answers, request_options, html=None): # pylint: d
     else:
         repository_button = _github_button(topic_type)
 
-    if html:
+    if html and query:
         result = _render_html(
             query, result, editable, repository_button, request_options)
 
