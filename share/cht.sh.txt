@@ -405,7 +405,7 @@ EOF
       continue
       ;;
     version)
-      insttime=$(ls -lT -- "$0" | sed 's/  / /g' | cut -d ' ' -f 6-9)
+      insttime=$(ls -l -- "$0" | sed 's/  */ /g' | cut -d ' ' -f 6-8)
       echo "cht.sh version $__CHTSH_VERSION of $__CHTSH_DATETIME; installed at: $insttime"
       TMP2=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
       if curl -s https://cht.sh/:cht.sh > "$TMP2"; then
