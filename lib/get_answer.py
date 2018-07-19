@@ -169,10 +169,13 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
         if '+' in topic_name:
             result = 'question'
         else:
-            if topic_type in _get_topics_dirs() and topic_name in [':list']:
+            #if topic_type in _get_topics_dirs() and topic_name in [':list']:
+            if topic_name in [':list']:
                 result = "internal"
             elif is_valid_learnxy(topic):
                 result = 'learnxiny'
+            elif topic_name in [':learn']:
+                result = "internal"
             else:
 		# let us activate the 'question' feature for all subsections
                 result = 'question'
@@ -258,7 +261,10 @@ def _get_cheat_sheets(topic):
     filename = PATH_CHEAT_SHEETS + "%s" % topic
     if not os.path.exists(filename):
         filename = PATH_CHEAT_SHEETS + "_%s" % topic
-    return open(filename, "r").read().decode('utf-8')
+    if os.path.isdir(filename):
+        return ""
+    else:
+        return open(filename, "r").read().decode('utf-8')
 
 def _get_cheat_sheets_dir(topic):
     answer = []
