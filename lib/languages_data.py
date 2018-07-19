@@ -62,6 +62,7 @@ LEXER = {
     "tcsh"      : pygments.lexers.TcshLexer,
     "vb"        : pygments.lexers.VbNetLexer,
     "vbnet" :   pygments.lexers.VbNetLexer,
+    "vim"       : pygments.lexers.VimLexer,
 
     # experimental
     "arduino":  pygments.lexers.ArduinoLexer,
