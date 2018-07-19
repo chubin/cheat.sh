@@ -31,7 +31,7 @@ PALETTES = {
 def _reverse_palette(code):
     return {
         1 : Fore.BLACK + _back_color(code),
-        2 : Style.DIM
+        2 : Style.DIM 
     } 
 
 def _back_color(code):
@@ -62,10 +62,9 @@ def colorize_internal(text, palette_number=1):
         if stripped.startswith('='):
             stripped = stripped[1:]
 
-        reverse = False
-        if color_number < 0:
+        reverse = (color_number < 0)
+        if reverse:
             color_number = -color_number
-            reverse = True
 
         if reverse:
             stripped = palette_reverse[color_number] + stripped + Style.RESET_ALL
