@@ -38,9 +38,9 @@ def _back_color(code):
     if code == 0 or code.lower()=="white":
         return Back.WHITE
     if code == 1 or code.lower()=="cyan":
-        return Back.WHITE
+        return Back.CYAN
     if code == 2 or code.lower()=="red":
-        return Back.WHITE
+        return Back.RED
 
 def colorize_internal(text, palette_number=1):
     """
@@ -51,7 +51,6 @@ def colorize_internal(text, palette_number=1):
     palette_reverse = _reverse_palette(palette_number)
 
     def _colorize_curlies_block(text):
-
         text = text.group()[1:-1]
         factor = 1
         if text.startswith('-'):
