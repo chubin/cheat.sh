@@ -475,6 +475,16 @@ Usage:
 [![vscode-snippet](https://cheat.sh/files/vscode-snippet-demo.gif)](https://github.com/mre/vscode-snippet)
 (GIF courtesy: Matthias Endler, @mre)
 
+### Sublime
+
+* [cheat.sh-sublime-plugin](https://github.com/gauravk-in/cheat.sh-sublime-plugin/)
+
+Usage:
+
+1.  Write your query string.
+2.  Select the query string.
+3.  Press <kbd>Cmd</kbd> + <kbd>⇧ Shift</kbd> + <kbd>B</kbd> to replace the selected query string by the answer generated from `cht.sh`.
+
 ## Special pages
 
 There are several special pages that are not cheat sheets.
