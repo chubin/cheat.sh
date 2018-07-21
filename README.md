@@ -635,7 +635,7 @@ At the moment, cheat.sh covers the 55 following programming languages (alphabeti
 |`perl6/`   |Perl 6    |✓     |✓         |         |✓            |
 |`php/`     |PHP       |✓     |          |         |✓            |
 |`pike/`    |Pike      |      |          |         |✓            |
-|`python/`  |Python    |✓     |          |         |✓            |
+|`python/`  |Python    |✓     |✓         |         |✓            |
 |`python3/` |Python 3  |✓     |          |         |✓            |
 |`r/`       |R         |✓     |          |         |✓            |
 |`racket/`  |Racket    |✓     |          |         |✓            |
