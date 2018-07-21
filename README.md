@@ -17,25 +17,7 @@ What features should it have?
 
 Such a thing exists.
 
-## Contents
-
-* [Features](#features)
-* [Usage](#usage)
-* [Command line client, cht.sh](#command-line-client-chtsh)
-  * [Installation](#installation)
-  * [Client usage](#client-usage)
-* [Editors integration](#editors-integration)
-* [Special pages](#special-pages)
-* [Search](#search)
-* [Programming languages cheat sheets](#programming-languages-cheat-sheets)
-* [Cheat sheets sources](#cheat-sheets-sources)
-* [How to contribute](#how-to-contribute)
-  * [How to edit a cheat sheet](#how-to-edit-a-cheat-sheet)
-  * [How to add a cheat sheet](#how-to-add-a-cheat-sheet)
-  * [How to add a cheat sheet repository](#how-to-add-a-cheat-sheet-repository)
-
-
-## Features:
+## Features
 
 **cheat.sh**
 
@@ -51,6 +33,29 @@ Such a thing exists.
 <p align="center">
   <img src='https://cheat.sh/files/demo-curl.gif'/>
 </p>
+
+## Contents
+
+* [Features](#features)
+* [Usage](#usage)
+* [Command line client, cht.sh](#command-line-client-chtsh)
+  * [Installation](#installation)
+  * [Client usage](#client-usage)
+  * [Tab-completion](#tab-completion)
+  * [Stealth mode](#stealth-mode)
+* [Editors integration](#editors-integration)
+  * [Vim](#vim)
+  * [Emacs](#emacs)
+  * [Visual Studio Code](#visual-studio-code)
+  * [Sublime](#sublime)
+* [Special pages](#special-pages)
+* [Search](#search)
+* [Programming languages cheat sheets](#programming-languages-cheat-sheets)
+* [Cheat sheets sources](#cheat-sheets-sources)
+* [How to contribute](#how-to-contribute)
+  * [How to edit a cheat sheet](#how-to-edit-a-cheat-sheet)
+  * [How to add a cheat sheet](#how-to-add-a-cheat-sheet)
+  * [How to add a cheat sheet repository](#how-to-add-a-cheat-sheet-repository)
 
 ## Usage
 
