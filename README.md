@@ -692,12 +692,12 @@ all over the world
 
 |Cheat sheets           |Repository                                            | Users | Creation Date |
 |-----------------------|------------------------------------------------------|------------|---------------|
-|UNIX/Linux, programming|[cheat.sheets](https://github.com/chubin/cheat.sheets)| 6/54       | May 1, 2017   |
-|UNIX/Linux commands    |[tldr-pages/tldr](https://github.com/tldr-pages/tldr) | 541/17360  | Dec 8, 2013   |
-|UNIX/Linux commands    |[chrisallenlane/cheat](https://github.com/chrisallenlane/cheat)|105/4193|Jul 28, 2013|
-|Programming languages  |[adambard/learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs)|1096/5285|Jun 23, 2013|
-|Go                     |[a8m/go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)|29/3034|Feb 9, 2014|
-|Perl                   |[pkrumnis/perl1line.txt](https://github.com/pkrumins/perl1line.txt)|4/165|Nov 4, 2011|
+|UNIX/Linux, programming|[cheat.sheets](https://github.com/chubin/cheat.sheets)| 14/100       | May 1, 2017   |
+|UNIX/Linux commands    |[tldr-pages/tldr](https://github.com/tldr-pages/tldr) | 559/17702  | Dec 8, 2013   |
+|UNIX/Linux commands    |[chrisallenlane/cheat](https://github.com/chrisallenlane/cheat)|104/4315|Jul 28, 2013|
+|Programming languages  |[adambard/learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs)|1099/5394|Jun 23, 2013|
+|Go                     |[a8m/go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)|29/3235|Feb 9, 2014|
+|Perl                   |[pkrumnis/perl1line.txt](https://github.com/pkrumins/perl1line.txt)|5/171|Nov 4, 2011|
 |Programming languages  |[StackOverflow](https://stackoverflow.com)|9M |Sep 15, 2008|
 
 Pie diagram reflecting cheat sheets sources distribution (by number of cheat sheets on cheat.sh originating from a repository):
