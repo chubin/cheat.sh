@@ -435,7 +435,7 @@ and press `<leader>KE`: explanation for the warning will be opened in a new buff
 
 Here is Vim configuration example:
 
-```
+```vim
 " some configuration above ...
 
 let mapleader=" "
