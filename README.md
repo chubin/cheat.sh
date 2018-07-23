@@ -124,7 +124,7 @@ If you don't like an answer for your queries, you can pick another one. For that
 Cheat sheets are formatted as code of the queried programming language (at least we are trying our best to do so)
 so they can be pasted into a program in this language directly. Text comments, if there are any, are formatted according to the language syntax.
 
-```
+```lua
     $ curl cht.sh/lua/table+keys
     -- lua: retrieve list of keys in a table
 
@@ -147,7 +147,7 @@ so they can be pasted into a program in this language directly. Text comments, i
 
 If you don't need text comments in the answer, you can eliminate them
 using a special option `?Q`:
-```
+```lua
     $ curl cht.sh/lua/table+keys?Q
     local keyset={}
     local n=0
