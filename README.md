@@ -500,7 +500,8 @@ Usage:
 3. Type your query and hit enter.
 
 [![vscode-snippet](https://cheat.sh/files/vscode-snippet-demo.gif)](https://github.com/mre/vscode-snippet)
-(GIF courtesy: Matthias Endler, @mre)
+
+*(GIF courtesy: Matthias Endler, @mre)*
 
 ### Sublime
 
@@ -511,6 +512,10 @@ Usage:
 1.  Write your query string.
 2.  Select the query string.
 3.  Press <kbd>Cmd</kbd> + <kbd>⇧ Shift</kbd> + <kbd>B</kbd> to replace the selected query string by the answer generated from `cht.sh`.
+
+[![cheat.sh-sublime-plugin-demo](https://cheat.sh/files/demo-sublime.gif)](https://github.com/gauravk-in/cheat.sh-sublime-plugin)
+
+*(GIF courtesy: Gaurav Kukreja, @gauravk-in)*
 
 ## Special pages
 
