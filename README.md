@@ -79,7 +79,7 @@ For example, to see how you can make `snapshots` of a filesystem/volume/somethin
 ```
 
 <p align="center">
-  <img src='https://cheat.sh/files/cht.sh-url-structure.jpg'/>
+  <img src='https://cheat.sh/files/cht.sh-url-structure.png'/>
 </p>
 
 The programming language cheat sheets are located in special namespaces dedicated to them.
