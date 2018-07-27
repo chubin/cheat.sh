@@ -738,6 +738,12 @@ class LearnRubyAdapter(LearnXYAdapter):
         return answer
 
 class LearnSwiftAdapter(LearnXYAdapter):
+    "Learn Solidity in Y Minutes"
+    prefix = "solidity"
+    _filename = "solidity.html.markdown"
+    _splitted = False
+
+class LearnSwiftAdapter(LearnXYAdapter):
     "Learn Swift in Y Minutes"
     prefix = "swift"
     _filename = "swift.html.markdown"

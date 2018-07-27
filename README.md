@@ -22,7 +22,7 @@ Such a thing exists.
 **cheat.sh**
 
 * Has a simple curl/browser interface.
-* Covers 55 programming languages, several DBMSes, and more than 1000 most important UNIX/Linux commands.
+* Covers 56 programming languages, several DBMSes, and more than 1000 most important UNIX/Linux commands.
 * Provides access to the best community driven cheat sheets repositories in the world, on par with StackOverflow.
 * Available everywhere, no installation needed.
 * Ultrafast, returns answers within 100 ms, as a rule.
@@ -675,6 +675,7 @@ At the moment, cheat.sh covers the 55 following programming languages (alphabeti
 |`rust/`    |Rust      |✓     |          |         |✓            |
 |`scala/`   |Scala     |✓     |          |         |✓            |
 |`scheme/`  |Scheme    |✓     |          |         |✓            |
+|`solidity/`|Solidity  |✓     |          |         |✓            |
 |`swift/`   |Swift     |✓     |          |         |✓            |
 |`tcsh/`    |Tcsh      |✓     |          |         |✓            |
 |`tcl/`     |Tcl       |✓     |          |         |✓            |

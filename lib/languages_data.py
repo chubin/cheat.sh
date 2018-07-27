@@ -54,6 +54,7 @@ LEXER = {
     "racket"    : pygments.lexers.RacketLexer,
     "ruby"      : pygments.lexers.RubyLexer,
     "rust"      : pygments.lexers.RustLexer,
+    "solidity"  : pygments.lexers.JavascriptLexer,
     "scala"     : pygments.lexers.ScalaLexer,
     "scheme":   pygments.lexers.SchemeLexer,
     "sql"   :   pygments.lexers.SqlLexer,
@@ -105,6 +106,7 @@ VIM_NAME = {
     'python3'   :   'python',
     'python-3.x':   'python',
     'tcsh'      :   'sh',
+    'solidity'  :   'js',
 }
 
 SO_NAME = {

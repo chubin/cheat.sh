@@ -98,7 +98,7 @@ def _get_answers_and_dirs():
     answer_dirs = [_remove_initial_underscore(os.path.split(topic)[1]).rstrip('/')+'/'
                    for topic in topics if _isdir(topic)]
     answers = [os.path.split(topic)[1] for topic in topics if not _isdir(topic)]
-    return answer_dirs, answers
+    return answers, answer_dirs
 
 def _update_cheat_sheets_topics():
     answers = _get_answer_files_from_folder()
@@ -181,6 +181,8 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
                 result = 'question'
 
     if result == 'unknown' or result == 'question':
+        print("result = ", result)
+        print(CHEAT_SHEETS_TOPICS)
         if topic in CHEAT_SHEETS_TOPICS:
             result = "cheat.sheets"
         elif topic.rstrip('/') in CHEAT_SHEETS_DIRS and topic.endswith('/'):
@@ -191,6 +193,7 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
             result = "tldr"
         elif '/' not in topic:
             result = "unknown"
+        print("result = ", result)
 
     TOPIC_TYPE_CACHE[topic] = result
 
