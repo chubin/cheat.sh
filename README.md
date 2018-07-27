@@ -178,6 +178,7 @@ Try your own queries. Follow these rules:
 3. Ask programming language questions only; specify the name of the programming language as the section name.
 4. Separate words with `+` instead of spaces.
 5. Do not use special characters, they are ignored anyway.
+6. If you want to eliminate cheat sheets containing some word, add it to the query with `+-`: `python/multiply+matrices+-numpy`
 
 Read more about the programming languages queries below.
 
