@@ -6,7 +6,7 @@ Main server program.
 """
 from __future__ import print_function
 
-from gevent.wsgi import WSGIServer
+from gevent.pywsgi import WSGIServer
 from gevent.monkey import patch_all
 patch_all()
 
@@ -204,5 +204,5 @@ def answer(topic=None):
         return result
     return Response(result, mimetype='text/plain')
 
-SRV = WSGIServer(("", 8002), app) # log=None)
+SRV = WSGIServer(("0.0.0.0", 8002), app) # log=None)
 SRV.serve_forever()
