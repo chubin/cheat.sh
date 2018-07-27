@@ -18,10 +18,10 @@ TEMPLATES = os.path.join(MYDIR, 'share/templates')
 STATIC = os.path.join(MYDIR, 'share/static')
 PATH_VIM_ENVIRONMENT = os.path.join(MYDIR, 'share/vim')
 
-PATH_TLDR_PAGES = "/home/igor/.tldr/cache/pages/*/*.md"
-PATH_CHEAT_PAGES = "/usr/local/lib/python2.7/dist-packages/cheat/cheatsheets/*"
-PATH_CHEAT_SHEETS = "/home/igor/cheat.sheets/sheets/"
-PATH_CHEAT_SHEETS_SPOOL = "/home/igor/cheat.sheets/spool/"
+PATH_TLDR_PAGES = os.path.join(MYDIR, "cheatsheets/tldr/*/*.md")
+PATH_CHEAT_PAGES = os.path.join(MYDIR, "cheatsheets/cheat/*")
+PATH_CHEAT_SHEETS = os.path.join(MYDIR, "cheatsheets/sheets/")
+PATH_CHEAT_SHEETS_SPOOL = os.path.join(MYDIR, "cheatsheets/spool/")
 
 COLOR_STYLES = sorted(list(get_all_styles()))
 
