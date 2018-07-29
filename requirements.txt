@@ -7,3 +7,6 @@ fuzzywuzzy
 redis
 colored
 langdetect
+cffi
+polyglot
+colorama

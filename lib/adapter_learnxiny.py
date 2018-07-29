@@ -5,6 +5,7 @@ from __future__ import print_function
 
 import os
 import re
+from globals import MYDIR
 
 class LearnXYAdapter(object):
 
@@ -12,7 +13,7 @@ class LearnXYAdapter(object):
     Parent class of all languages adapters
     """
 
-    _learn_xy_path = "/home/igor/git/github.com/adambard/learnxinyminutes-docs"
+    _learn_xy_path = os.path.join(MYDIR, "cheatsheets/learnxinyminutes-docs")
     _replace_with = {}
     _filename = ''
     prefix = ''
