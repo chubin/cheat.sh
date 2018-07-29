@@ -311,7 +311,7 @@ def _get_answer_for_question(topic):
     else:
         topic = [topic]
 
-    cmd = ["/home/igor/cheat.sh/bin/get-answer-for-question"] + topic
+    cmd = [os.path.join(MYDIR, "bin/get-answer-for-question")] + topic
     proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
     answer = proc.communicate()[0].decode('utf-8')
     return answer

@@ -3,6 +3,7 @@
 import sys
 import colored
 import itertools
+from globals import MYDIR
 
 """
 
@@ -632,8 +633,9 @@ class Template(object):
 def main():
     "Only for experiments"
 
+    pagepath = os.join.path(MYDIR, "share/firstpage-v2.pnl")
     template = Template()
-    template.read("/home/igor/cheat.sh/share/firstpage-v2.pnl")
+    template.read(pagepath)
     template.apply_mask()
     sys.stdout.write(template.show())
 
