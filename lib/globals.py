@@ -24,11 +24,13 @@ if USE_OS_PACKAGES:
     PATH_CHEAT_PAGES = "/usr/local/lib/python2.7/dist-packages/cheat/cheatsheets/*"
     PATH_CHEAT_SHEETS = "/home/igor/cheat.sheets/sheets/"
     PATH_CHEAT_SHEETS_SPOOL = "/home/igor/cheat.sheets/spool/"
+    PATH_LEARNXINY = "/home/igor/git/github.com/adambard/learnxinyminutes-docs"
 else:
     PATH_TLDR_PAGES = os.path.join(MYDIR, "cheatsheets/tldr/*/*.md")
     PATH_CHEAT_PAGES = os.path.join(MYDIR, "cheatsheets/cheat/*")
     PATH_CHEAT_SHEETS = os.path.join(MYDIR, "cheatsheets/sheets/")
     PATH_CHEAT_SHEETS_SPOOL = os.path.join(MYDIR, "cheatsheets/spool/")
+    PATH_LEARNXINY = os.path.join(MYDIR, "cheatsheets/learnxinyminutes-docs")
 
 COLOR_STYLES = sorted(list(get_all_styles()))
 
