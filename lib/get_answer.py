@@ -420,6 +420,12 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
 
     def _rewrite_section_name_for_q(query):
         """
+        FIXME: we rewrite the section name too earlier,
+        what means that we have to use SO names everywhere,
+        where actually canonified internal names shoud be used.
+        After this thing is fixed, we should:
+        * fix naming in cache
+        * fix VIM_NAMES
         """
         if '/' not in query:
             return query
