@@ -533,6 +533,12 @@ class LearnLuaAdapter(LearnXYAdapter):
             answer = answer[:1]
         return answer
 
+class LearnMathematicaAdapter(LearnXYAdapter):
+    "Learn Mathematica in Y Minutes"
+    prefix = "mathematica"
+    _filename = "wolfram.html.markdown"
+    _splitted = False
+
 class LearnMatlabAdapter(LearnXYAdapter):
     "Learn Matlab in Y Minutes"
     prefix = "matlab"

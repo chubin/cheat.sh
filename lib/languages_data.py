@@ -40,6 +40,7 @@ LEXER = {
     "kotlin"    : pygments.lexers.KotlinLexer,
     "lisp"      : pygments.lexers.CommonLispLexer,
     "lua"       : pygments.lexers.LuaLexer,
+    "mathematica": pygments.lexers.MathematicaLexer,
     "matlab"    : pygments.lexers.MatlabLexer,
     "mongo" :   pygments.lexers.JavascriptLexer,
     "objective-c": pygments.lexers.ObjectiveCppLexer,
@@ -91,6 +92,9 @@ LANGUAGE_ALIAS = {
     'sh'        :   'bash',
     'visualbasic':  'vb',
     'vba'       :   'vb',
+    'wolfram'   :   'mathematica',
+    'mma'       :   'mathematica',
+    'wolfram-mathematica': 'mathematica',
 }
 
 VIM_NAME = {
@@ -107,6 +111,8 @@ VIM_NAME = {
     'python-3.x':   'python',
     'tcsh'      :   'sh',
     'solidity'  :   'js',
+    'mathematica':  'mma',
+    'wolfram-mathematica': 'mma',
 }
 
 SO_NAME = {
@@ -114,4 +120,5 @@ SO_NAME = {
     'js'        :   'javascript',
     'python3'   :   'python-3.x',
     'vb'        :   'vba',
+    'mathematica':  'wolfram-mathematica',
 }
