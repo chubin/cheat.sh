@@ -1,5 +1,6 @@
 # vim: encoding=utf-8
 
+import os
 import sys
 import colored
 import itertools
@@ -633,7 +634,7 @@ class Template(object):
 def main():
     "Only for experiments"
 
-    pagepath = os.join.path(MYDIR, "share/firstpage-v2.pnl")
+    pagepath = os.path.join(MYDIR, "share/firstpage-v2.pnl")
     template = Template()
     template.read(pagepath)
     template.apply_mask()
