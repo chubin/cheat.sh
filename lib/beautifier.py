@@ -36,10 +36,10 @@ import redis
 MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 sys.path.append("%s/lib/" % MYDIR)
 from languages_data import VIM_NAME
-from globals import PATH_VIM_ENVIRONMENT
+from globals import PATH_VIM_ENVIRONMENT, REDISHOST
 # pylint: enable=wrong-import-position,wrong-import-order
 
-REDIS = redis.StrictRedis(host='localhost', port=6379, db=1)
+REDIS = redis.StrictRedis(host=REDISHOST, port=6379, db=1)
 FNULL = open(os.devnull, 'w')
 TEXT = 0
 CODE = 1

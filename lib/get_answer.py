@@ -25,13 +25,13 @@ from polyglot.detect.base import UnknownLanguage
 import time
 
 import beautifier
-from globals import MYDIR, PATH_TLDR_PAGES, PATH_CHEAT_PAGES, PATH_CHEAT_SHEETS, COLOR_STYLES
+from globals import MYDIR, PATH_TLDR_PAGES, PATH_CHEAT_PAGES, PATH_CHEAT_SHEETS, COLOR_STYLES, REDISHOST
 from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnxy
 from languages_data import LANGUAGE_ALIAS, SO_NAME
 from colorize_internal import colorize_internal
 # pylint: enable=wrong-import-position,wrong-import-order
 
-REDIS = redis.StrictRedis(host='localhost', port=6379, db=0)
+REDIS = redis.StrictRedis(host=REDISHOST, port=6379, db=0)
 
 MAX_SEARCH_LEN = 20
 
