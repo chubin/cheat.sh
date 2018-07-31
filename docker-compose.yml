@@ -8,7 +8,7 @@ services:
     ports:
       - "8002:8002"
   redis:
-    image: redis:3.2-alpine
+    image: redis:4-alpine
     volumes:
       - redis_data:/data
 volumes:
