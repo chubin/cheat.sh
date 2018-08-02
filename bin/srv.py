@@ -6,8 +6,9 @@ Main server program.
 """
 from __future__ import print_function
 
-from gevent.pywsgi import WSGIServer
 from gevent.monkey import patch_all
+from gevent.pywsgi import WSGIServer
+
 patch_all()
 
 # pylint: disable=wrong-import-position,wrong-import-order
