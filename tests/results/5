@@ -1,0 +1,216 @@
+[38;5;172m## curl cht.sh[0m
+
+To access a cheat sheet you can simply issue a plain HTTP or HTTPS request
+specifying the topic name in the query URL:
+
+    [36mcurl cheat.sh[0m[32m/tar[0m
+    [36mcurl https://cheat.sh[0m[32m/tar[0m
+
+You can use the full service name, [32mcheat.sh[0m, or the shorter variant, [32mcht.sh[0m.
+They are equivalent:
+
+    [36mcurl https://[0m[32mcht.sh[0m[36m/tar[0m
+    [36mcurl https://[0m[32mcheat.sh[0m[36m/tar[0m
+
+The preferred access protocol is HTTPS, and you should use it always when possible.
+
+Cheat sheets in the root namespaces cover UNIX/Linux commands.
+
+Cheat sheets covering programming languages are located in subsections:
+
+    [36mcurl cht.sh/[0m[32mgo/func[0m
+
+All cheat sheets in a subsection can be listed using a special query [32m:list[0m :
+
+    [36mcurl cht.sh/go/[0m[32m:list[0m
+
+There are several other special queries. All of them are starting with a [32mcolon[0m.
+See [32m/:help[0m for the full list of the special queries.
+
+
+[38;5;172m## Search[0m
+
+If a cheat sheet is too large, you can cut the needed part out using an
+additional search parameter. In this case, only the paragraph that contains the
+search term will be displayed:
+
+    [36mcurl cht.sh/tar[0m[32m~extract[0m
+
+If the name of the cheat sheet is omitted, and only the serch query is specified,
+all cheat sheets in the namespace are scanned, and the found occurrencies
+are displayed:
+
+    [36mcurl cht.sh/[0m[32m~extract[0m
+
+
+[38;5;172m## Options[0m
+
+cheat.sh queries as well as search queries have many options.
+They can be specified as a part of the query string in the URL, after [32m?[0m.
+Short single letter options could be written all jointly together,
+and long options are separated with [32m&[0m. For example, to switch 
+syntax highlighting off the [32mT[0m switch is used:
+
+    [36mcurl cht.sh/tar[0m[32m?T[0m
+
+Full list of all available cheat.sh options as well as description of all modes
+of operation can be found in [32m/:help[0m,
+
+    [36mcurl cht.sh[0m[32m/:help[0m
+
+
+[38;5;172m## cht.sh client[0m
+
+Though it's perfectly possible to access cheat.sh using [36mcurl[0m (or any other
+HTTP client) alone, there is a special client, that has several advantages
+comparing to plain curling: [32mcht.sh[0m.
+
+To install the client in [32m~/bin[0m:
+
+    [36mcurl[0m [32mhttps://cht.sh/:cht.sh[0m [36m> ~/bin/cht.sh[0m
+    [36mchmod +x ~/bin/cht.sh[0m
+
+Queries look the same, but you can separate words in the query with [36mspaces[0m,
+instead of [36m+[0m as when using curl, what looks more natural:
+
+    [36mcht.sh[0m [32mpython zip lists[0m
+
+
+[38;5;172m## cht.sh shell[0m
+
+If you always issuing queries about the same programming language, it's can be
+more convenient to run the client in the shell mode and specify the queries
+context:
+
+    [36m$[0m [32mcht.sh --shell python[0m
+    [36mcht.sh/python> zip lists[0m
+
+Of course, you can start the shell without the context too:
+
+    [36m$[0m [32mcht.sh --shell[0m
+    [36mcht.sh> python zip lists[0m
+    [36mcht.sh> go http query[0m
+    [36mcht.sh> js iterate list[0m
+
+If you ue predominantly one language but sometime issuing queries about other,
+you may prepend the query with [32m/[0m:
+
+    [36mcht.sh/python>[0m [32mzip lists[0m
+    [36mcht.sh/python>[0m [32m/go http query[0m
+    [36mcht.sh/python>[0m [32m/js iterate list[0m
+
+
+[38;5;172m## :learn[0m
+
+If you are just start learning a new programming language, and you have no
+distinct queries for the moment, cheat.sh can be a good starting point too. As
+you know, it exports cheat sheets from the best cheat sheet repositories, and
+one of them is [36mLearn X in Y[0m, a repository of concise documentation devoted
+to learning programming languages from scratch (and not only them).
+
+If you want start learning a new programming language, do (use less -R because
+the output could be quite big): 
+
+    [36mcurl cht.sh/elixir/[0m[32m:learn[0m [36m| less -R[0m
+
+Or simply [32m:learn[0m with cht.sh (you don't need [32mless -R[0m here, because
+[36mcht.sh[0m starts pager if needed automatically):
+
+    [2mcht.sh/elixir>[0m [32m:learn[0m
+
+
+[38;5;172m## Programming languages questions[0m
+
+One of the most important features of cheat.sh is that you can ask it any
+questions about programming languages and instantly get answers on them. You
+can use both direct HTTP queries or the cht.sh client for that:
+
+    [36mcurl cht.sh/[0m[32mpython/reverse+list[0m
+    
+    [2mcht.sh/python>[0m [32mreverse list[0m
+
+In the latter case you don't need + to separate the words in the query, you can
+do it in a more natural way, with spaces.
+
+If context in the cht.sh shell is not specified, you have to write the
+programming language name as the first word in the query:
+
+    [2mcht.sh>[0m [32mpython reverse list[0m
+
+But if you are using only one programming language and all queries are about
+it, it's better to change the current context and 
+
+
+[38;5;172m## Comments[0m
+
+Text in the answers is syntactically formatted as comment in the correspondent
+programming language
+
+When using cht.sh, you can copy the result of the last query into the selection
+buffer (you may also call it "clibpoard") using [32mC[0m (or [32mc[0m, with text):
+
+    [36mcht.sh/python> reverse list[0m
+    [2m...[0m
+    [36mcht.sh/python>[0m [32mC[0m
+    [2m1 lines copied[0m
+
+
+[38;5;172m## bash TAB-completion for cht.sh[0m
+
+One of the advantages of the [36mcht.sh[0m client comparing to plain curl is that you
+can use TAB completion when writing its queries in [36mbash[0m
+(other supported shells: [36mzsh[0m and [36mfish[0m).
+
+Install the TAB completion script for that. Assuming you use bash, you have to do:
+
+    [36mmkdir -p ~/.bash.d/[0m
+    [36mcurl[0m [32mhttps://cht.sh/:bash_completion[0m [36m> ~/.bash.d/cht.sh[0m
+    [36mecho 'source ~/.bash.d/cht.sh' >> ~/.bashrc[0m
+    [36msource ~/.bash.d/cht.sh[0m
+
+
+[38;5;172m## Editor[0m
+
+You can access cheat.sh directly from editors: [36mVim[0m and [36mEmacs[0m.
+It's a very important feature! You should absolutely like it.
+
+[36mImagine:[0m
+instead of switching to your browser, googling, browsing Stack Overflow
+and eventually copying the code snippets you need and later pasting them into
+the editor, you can achieve the same instantly and without leaving
+the editor at all!
+
+Here is how it looks like:
+
+1. In Vim, if you have a question while editing a program, you can just type
+your question [36mdirectly in the buffer[0m and press [32m<leader>KK[0m. You will get
+the answer to your question in [36mpager[0m. (with [32m<leader>KB[0m you'll get the answer
+in a separate [36mbuffer[0m).
+
+2. If you like the answer. You can manually paste it from the buffer or
+the pager, or if you are lazy you can use [32m<leader>KP[0m to paste it under
+your question ([32m<leader>KR[0m will replace your question). If you want the
+answer without the comments, [32m<leader>KC[0m replays the last query
+toggling them.
+
+You have to install cheat.sh [36mVim/Emacs plugins[0m for the editor support.
+See [32m/:vim[0m or [32m/:emacs[0m with the detailed installation instructions.
+
+
+[38;5;172m## Feature requests, feedback and contribution[0m
+
+If you want to submit a new community driver repository for cheat.sh please
+open a ticket on the project page on GitHub.
+
+If you want to modify an existing cheat sheet, please check the source of the
+cheat sheet (it is always displayed in the cheat sheet bottom line).
+
+If you want to add a new cheat sheet, add it here:
+[36mhttps://github.com/chubin/cheat.sheets[0m
+
+If you want to suggest a new feature for cheat.sh, or if you've found a bug,
+please open a new issue on github:
+[36mhttps://github.com/chubin/cheat.sh[0m
+
+If you want to get the major project updates, follow @igor_chubin in Twitter
+or this RSS feed: [36mhttps://twitrss.me/twitter_user_to_rss/?user=igor_chubin[0m

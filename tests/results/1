@@ -1,0 +1,17 @@
+[38;5;246m# Displays everything in the target directory[39m
+[38;5;252mls[39m[38;5;252m [39m[38;5;252mpath/to/the/target/directory[39m
+
+[38;5;246m# Displays everything including hidden files[39m
+[38;5;252mls[39m[38;5;252m [39m[38;5;252m-a[39m
+
+[38;5;246m# Displays all files, along with the size (with unit suffixes) and timestamp[39m
+[38;5;252mls[39m[38;5;252m [39m[38;5;252m-lh[39m[38;5;252m [39m
+
+[38;5;246m# Display files, sorted by size[39m
+[38;5;252mls[39m[38;5;252m [39m[38;5;252m-S[39m
+
+[38;5;246m# Display directories only[39m
+[38;5;252mls[39m[38;5;252m [39m[38;5;252m-d[39m[38;5;252m [39m[38;5;252m*/[39m
+
+[38;5;246m# Display directories only, include hidden[39m
+[38;5;252mls[39m[38;5;252m [39m[38;5;252m-d[39m[38;5;252m [39m[38;5;252m.*/[39m[38;5;252m [39m[38;5;252m*/[39m
