@@ -443,7 +443,6 @@ Features supported by cheat.sh plugins for different editors:
 |Multiple answers   |     |✓      |   |      |
 |Warnings as queries|     |       |✓  |      |
 |Session id         |     |       |✓  |      |
-|-------------------|-----|-------|---|------|
 
 ### Vim
 
