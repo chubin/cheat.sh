@@ -1,8 +1,7 @@
 version: '2'
 services:
   app:
-    build:
-      context: .
+    image: bglopez/cheat.sh
     depends_on:
       - redis
     ports:

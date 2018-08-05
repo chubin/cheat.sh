@@ -1,7 +1,8 @@
 version: '2'
 services:
   app:
-    image: cheat.sh
+    build:
+      context: .
     depends_on:
       - redis
     ports:
