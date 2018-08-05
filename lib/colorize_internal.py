@@ -26,21 +26,21 @@ PALETTES = {
     },
 }
 
-PALETTES_REVERSE = {
-    0: {
-        1: Back.WHITE + Fore.BLACK,
-        2: Style.DIM,
-    },
-    1: {
-        1: Back.CYAN + Fore.BLACK,
-        2: Style.DIM,
-    },
-    2: {
-        1: Back.RED + Fore.BLACK,
-        2: Style.DIM,
-    },
-}
 
+
+def _reverse_palette(code):
+    return {
+        1 : Fore.BLACK + _back_color(code),
+        2 : Style.DIM 
+    } 
+
+def _back_color(code):
+    if code == 0 or code.lower()=="white":
+        return Back.WHITE
+    if code == 1 or code.lower()=="cyan":
+        return Back.CYAN
+    if code == 2 or code.lower()=="red":
+        return Back.RED
 
 def colorize_internal(text, palette_number=1):
     """
@@ -48,24 +48,29 @@ def colorize_internal(text, palette_number=1):
     """
 
     palette = PALETTES[palette_number]
-    palette_reverse = PALETTES_REVERSE[palette_number]
-
-    def _colorize_curlies_block(text):
-
+    palette_reverse = _reverse_palette(palette_number)
+    def _process_text(text):
         text = text.group()[1:-1]
         factor = 1
         if text.startswith('-'):
             text = text[1:]
             factor = -1
         stripped = text.lstrip('0123456789')
-        color_number = int(text[:len(text)-len(stripped)])*factor
+        return (text, stripped, factor)
+
+    def _extract_color_number(text,stripped,factor = 1):
+        return int(text[:len(text)-len(stripped)])*factor
+
+    def _colorize_curlies_block(text):
+        text, stripped, factor = _process_text(text)
+        color_number = _extract_color_number(text,stripped,factor)
+
         if stripped.startswith('='):
             stripped = stripped[1:]
 
-        reverse = False
-        if color_number < 0:
+        reverse = (color_number < 0)
+        if reverse:
             color_number = -color_number
-            reverse = True
 
         if reverse:
             stripped = palette_reverse[color_number] + stripped + Style.RESET_ALL
