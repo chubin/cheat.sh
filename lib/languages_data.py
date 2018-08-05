@@ -122,3 +122,72 @@ SO_NAME = {
     'vb'        :   'vba',
     'mathematica':  'wolfram-mathematica',
 }
+
+
+#
+# conversion of internal programmin language names
+# into canonical cheat.sh names
+#
+
+ATOM_FT_NAME = {
+}
+
+EMACS_FT_NAME = {
+}
+
+SUBLIME_FT_NAME = {
+}
+
+VIM_FT_NAME = {
+    'asm':          'assembler',
+    'javascript':   'js',
+}
+
+VSCODE_FT_NAME = {
+}
+
+def rewrite_editor_section_name(section_name):
+    """
+    section name cen be specified in form "editor:editor-filetype"
+    and it will be rewritten into form "filetype"
+    basing on the editor filetypes names data.
+    If editor name is unknown, it is just cut off:  notepad:js => js
+
+    Known editors:
+        * atom
+        * vim
+        * emacs
+        * sublime
+        * vscode
+
+    >>> rewrite_editor_section_name('js')
+    'js'
+    >>> rewrite_editor_section_name('vscode:js')
+    'js'
+    """
+    if ':' not in section_name:
+        return section_name
+
+    editor_name, section_name = section_name.split(':', 1)
+    editor_name_mapping = {
+        'atom':     ATOM_FT_NAME,
+        'emacs':    EMACS_FT_NAME,
+        'sublime':  SUBLIME_FT_NAME,
+        'vim':      VIM_FT_NAME,
+        'vscode':   VSCODE_FT_NAME,
+    }
+    if editor_name not in editor_name_mapping:
+        return section_name
+    return editor_name_mapping[editor_name].get(section_name, section_name)
+
+def get_lexer_name(section_name):
+    """
+    Rewrite `section_name` for the further lexer search (for syntax highlighting)
+    """
+    if ':' in section_name:
+        section_name = rewrite_editor_section_name(section_name)
+    return LANGUAGE_ALIAS.get(section_name, section_name)
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
