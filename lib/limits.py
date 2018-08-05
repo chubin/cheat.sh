@@ -21,6 +21,28 @@ from globals import log
 
 _WHITELIST = ['5.9.243.177']
 
+
+def _time_caps(m, h, d):
+    return {
+            'min':   m,
+            'hour':  h,
+            'day':   d,
+            }
+
+def _log_visit(interval, ip):
+    if ip_address not in self.counter[interval]:
+        self.counter[interval][ip_address] = 0
+    self.counter[interval][ip_address] += 1
+
+def _limit_exceeded(interval, ip):
+    visits = self.counter[interval][ip_address]
+    limit = self.limit[interval]
+    return  visits > limit
+
+def _report_excessive_visits(interval, ip):
+    log("%s LIMITED [%s for %s]" % (ip_address, self.limit[interval], interval))
+
+
 class Limits(object):
     """
     Queries limitation (by IP).
