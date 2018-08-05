@@ -1,12 +1,12 @@
 """
-Connection limitatation.
+Connection limitation.
 
 Number of connections from one IP is limited.
-We have nothing against scripting and automated queries,
-even in opposite, we encourage them, but there are some
+We have nothing against scripting and automated queries.
+Even the opposite, we encourage them. But there are some
 connection limits that even we can't handle.
-Currently the limits set low, but they will be relaxed
-in future.
+Currently the limits are quite restrictive, but they will be relaxed
+in the future.
 
 Usage:
 
