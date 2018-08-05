@@ -407,7 +407,9 @@ because you know what happens when you do.
 
 ## Editors integration
 
-You can use *cheat.sh* directly from the editor (*Vim*, *Emacs* and *Visual Studio Code* are currently supported).
+You can use *cheat.sh* directly from the editor
+(*Emacs*, *Sublime*, *Vim*, and *Visual Studio Code* are currently supported;
+not all features are supported by all plugins though; see below).
 Instead of opening your browser, googling, browsing Stack Overflow
 and eventually copying the code snippets you need into the clipboard
 and later pasting them into the editor,
@@ -429,6 +431,19 @@ toggling them.
 If you use some static analysis plugin such as *syntastic* (for Vim), you can use
 its warning and error messages as cheat.sh queries: place the cursor on the problem line
 and press `<leader>KE`: explanation for the warning will be opened in a new buffer.
+
+Features supported by cheat.sh plugins for different editors:
+
+|Feature            |Emacs|Sublime|Vim|VSCode|
+|-------------------|-----|-------|---|------|
+|Command queries    |✓    |✓      |✓  |✓     |
+|Queries from buffer|     |       |✓  |✓     |
+|Toggle comments    |     |       |✓  |      |
+|Prev/next answer   |     |       |✓  |      |
+|Multiple answers   |     |✓      |   |      |
+|Warnings as queries|     |       |✓  |      |
+|Session id         |     |       |✓  |      |
+|-------------------|-----|-------|---|------|
 
 ### Vim
 
