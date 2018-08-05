@@ -54,27 +54,20 @@ class Limits(object):
 
     def __init__(self):
         self.intervals = ['min', 'hour', 'day']
-        self.divisor = {
-            'min':      60,
-            'hour':     3600,
-            'day':      86400,
-            }
+
+        self.divisor = _time_caps(60, 3600, 86400)
+        self.limit = _time_caps(30, 600, 1000)
+        self.last_update = _time_caps(0, 0, 0)
+
         self.counter = {
             'min':      {},
             'hour':     {},
             'day':      {},
             }
-        self.limit = {
-            'min':      30,
-            'hour':     600,
-            'day':      1000,
-            }
-        self.last_update = {
-            'min':      0,
-            'hour':     0,
-            'day':      0,
-            }
+
         self._clear_counters_if_needed()
+
+     
 
     def check_ip(self, ip_address):
         """
@@ -85,11 +78,9 @@ class Limits(object):
             return None
         self._clear_counters_if_needed()
         for interval in self.intervals:
-            if ip_address not in self.counter[interval]:
-                self.counter[interval][ip_address] = 0
-            self.counter[interval][ip_address] += 1
-            if self.limit[interval] <= self.counter[interval][ip_address]:
-                log("%s LIMITED [%s for %s]" % (ip_address, self.limit[interval], interval))
+            _log_visit(interval, ip)
+            if _limit_exceeded(interval, ip):
+                _report_excessive_visits(interval, ip)
                 return ("Not so fast! Number of queries per %s is limited to %s"
                         % (interval, self.limit[interval]))
         return None
