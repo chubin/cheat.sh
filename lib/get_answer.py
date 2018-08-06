@@ -27,7 +27,7 @@ import time
 import beautifier
 from globals import MYDIR, PATH_TLDR_PAGES, PATH_CHEAT_PAGES, PATH_CHEAT_SHEETS, COLOR_STYLES, REDISHOST
 from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnxy
-from languages_data import LANGUAGE_ALIAS, SO_NAME
+from languages_data import LANGUAGE_ALIAS, SO_NAME, rewrite_editor_section_name
 from colorize_internal import colorize_internal
 # pylint: enable=wrong-import-position,wrong-import-order
 
@@ -37,6 +37,7 @@ MAX_SEARCH_LEN = 20
 
 INTERNAL_TOPICS = [
     ':cht.sh',
+    ':cht.sh-posix',
     ':bash_completion',
     ':emacs',
     ':emacs-ivy',
@@ -431,8 +432,10 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
             return query
 
         section_name, rest = query.split('/', 1)
+        if ':' in section_name:
+            section_name = rewrite_editor_section_name(section_name)
+
         section_name = SO_NAME.get(section_name, section_name)
-        print("%s/%s" % (section_name, rest))
         return "%s/%s" % (section_name, rest)
 
 

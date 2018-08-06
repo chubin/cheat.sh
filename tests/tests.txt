@@ -1,0 +1,14 @@
+cht.sh python :list
+cht.sh ls
+cht.sh ls?T
+cht.sh btrfs
+cht.sh btrfs~volume
+cht.sh :intro
+cht.sh :help
+cht.sh :cht.sh
+cht.sh python copy file
+cht.sh python/copy+file
+cht.sh python/copy+file?Q
+cht.sh python/copy+file?QT
+cht.sh /
+cht.sh //

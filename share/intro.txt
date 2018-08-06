@@ -163,7 +163,7 @@ can use TAB completion when writing its queries in {1bash}
 
 Install the TAB completion script for that. Assuming you use bash, you have to do:
 
-    {1mkdir -p ~/.bash.d/cht.sh}
+    {1mkdir -p ~/.bash.d/}
     {1curl} {2https://cht.sh/:bash_completion} {1> ~/.bash.d/cht.sh}
     {1echo 'source ~/.bash.d/cht.sh' >> ~/.bashrc}
     {1source ~/.bash.d/cht.sh}
