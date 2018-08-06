@@ -147,13 +147,13 @@ EMACS_FT_NAME = {
     "d-mode"               : "d",
     "dart-mode"            : "dart",
     "dylan-mode"           : "dylan",
-    # delphi -- not in Melpa, but I think there's one out there.
+    "delphi-mode"          : "delphi",
     "emacs-lisp-mode"      : "elisp",
     # elixir
     "elm-mode"             : "elm",
     "erlang-mode"          : "erlang",
     # factor
-    # forth
+    "forth-mode"           : "forth",
     "fortran-mode"         : "fortran",
     "fsharp-mode"          : "fsharp",
     "go-mode"              : "go",
@@ -169,14 +169,14 @@ EMACS_FT_NAME = {
     "kotlin-mode"          : "kotlin",
     "lisp-interaction-mode": "lisp",
     "lisp-mode"            : "lisp",
-    # lua
+    "lua-mode"             : "lua",
     # mathematica
     "matlab-mode"          : "matlab",
     # mongo
     "objc-mode"            : "objective-c",
     # ocaml
     "perl-mode"            : "perl",
-    # perl6
+    "perl6-mode":          : "perl6",
     "php-mode"             : "php",
     # psql
     "python-mode"          : "python",
@@ -192,7 +192,7 @@ EMACS_FT_NAME = {
     "swift-mode"           : "swift",
     "tcl-mode"             : "tcl",
     # tcsh
-    # vb
+    "visual-basic-mode"    : "vb",
     # vbnet
     # vim
 }
