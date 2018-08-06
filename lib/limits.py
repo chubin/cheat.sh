@@ -21,18 +21,12 @@ from globals import log
 
 _WHITELIST = ['5.9.243.177']
 
-
-def _time_caps(m, h, d):
+def _time_caps(minutes, hours, days):
     return {
-            'min':   m,
-            'hour':  h,
-            'day':   d,
-            }
-
-
-
-
-
+        'min':   minutes,
+        'hour':  hours,
+        'day':   days,
+        }
 
 class Limits(object):
     """
@@ -58,22 +52,21 @@ class Limits(object):
 
         self._clear_counters_if_needed()
 
-     
     def _log_visit(self, interval, ip_address):
         if ip_address not in self.counter[interval]:
             self.counter[interval][ip_address] = 0
         self.counter[interval][ip_address] += 1
 
-	def _limit_exceeded(self, interval, ip_address):
-		visits = self.counter[interval][ip_address]
-		limit = self._get_limit(interval)
-		return  visits > limit
+    def _limit_exceeded(self, interval, ip_address):
+        visits = self.counter[interval][ip_address]
+        limit = self._get_limit(interval)
+        return  visits > limit
 
     def _get_limit(self, interval):
         return self.limit[interval]
 
-	def _report_excessive_visits(self, interval, ip_address):
-		log("%s LIMITED [%s for %s]" % (ip_address, self._get_limit(interval), interval))
+    def _report_excessive_visits(self, interval, ip_address):
+        log("%s LIMITED [%s for %s]" % (ip_address, self._get_limit(interval), interval))
 
     def check_ip(self, ip_address):
         """
@@ -88,7 +81,7 @@ class Limits(object):
             if self._limit_exceeded(interval, ip_address):
                 self._report_excessive_visits(interval, ip_address)
                 return ("Not so fast! Number of queries per %s is limited to %s"
-                        % (interval, self._get_limit(interval) ))
+                        % (interval, self._get_limit(interval)))
         return None
 
     def reset(self):
