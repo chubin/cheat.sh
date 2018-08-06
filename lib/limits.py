@@ -101,6 +101,6 @@ class Limits(object):
     def _clear_counters_if_needed(self):
         current_time = int(time.time())
         for interval in self.intervals:
-            if current_time / self.divisor[interval] != self.last_update[interval]:
+            if current_time // self.divisor[interval] != self.last_update[interval]:
                 self.counter[interval] = {}
                 self.last_update[interval] = current_time / self.divisor[interval]
