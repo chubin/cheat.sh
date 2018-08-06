@@ -169,7 +169,7 @@ EMACS_FT_NAME = {
     "kotlin-mode"          : "kotlin",
     "lisp-interaction-mode": "lisp",
     "lisp-mode"            : "lisp",
-    # lua
+    "lua-mode"             : "lua",
     # mathematica
     "matlab-mode"          : "matlab",
     # mongo
