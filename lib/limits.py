@@ -59,21 +59,21 @@ class Limits(object):
         self._clear_counters_if_needed()
 
      
-    def _log_visit(self, interval, ip):
+    def _log_visit(self, interval, ip_address):
         if ip_address not in self.counter[interval]:
             self.counter[interval][ip_address] = 0
         self.counter[interval][ip_address] += 1
 
-	def _limit_exceeded(self, interval, ip):
+	def _limit_exceeded(self, interval, ip_address):
 		visits = self.counter[interval][ip_address]
-		limit = self.get_limit(interval)
+		limit = self._get_limit(interval)
 		return  visits > limit
 
     def _get_limit(self, interval):
         return self.limit[interval]
 
-	def _report_excessive_visits(self, interval, ip):
-		log("%s LIMITED [%s for %s]" % (ip_address, self.get_limit(interval), interval))
+	def _report_excessive_visits(self, interval, ip_address):
+		log("%s LIMITED [%s for %s]" % (ip_address, self._get_limit(interval), interval))
 
     def check_ip(self, ip_address):
         """
@@ -84,11 +84,11 @@ class Limits(object):
             return None
         self._clear_counters_if_needed()
         for interval in self.intervals:
-            self._log_visit(interval, ip)
-            if self._limit_exceeded(interval, ip):
-                self._report_excessive_visits(interval, ip)
+            self._log_visit(interval, ip_address)
+            if self._limit_exceeded(interval, ip_address):
+                self._report_excessive_visits(interval, ip_address)
                 return ("Not so fast! Number of queries per %s is limited to %s"
-                        % (interval, self.get_limit(interval) ))
+                        % (interval, self._get_limit(interval) ))
         return None
 
     def reset(self):
