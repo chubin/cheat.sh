@@ -133,6 +133,68 @@ ATOM_FT_NAME = {
 }
 
 EMACS_FT_NAME = {
+    "asm-mode"             : "asm",
+    "awk-mode"             : "awk",
+    "sh-mode"              : "bash",
+    # basic
+    "brainfuck-mode"       : "bf",
+    # chapel
+    "clojure-mode"         : "clojure",
+    "coffee-mode"          : "coffee",
+    "c++-mode"             : "cpp",
+    "c-mode"               : "c",
+    "csharp-mode"          : "csharp",
+    "d-mode"               : "d",
+    "dart-mode"            : "dart",
+    "dylan-mode"           : "dylan",
+    "delphi-mode"          : "delphi",
+    "emacs-lisp-mode"      : "elisp",
+    # elixir
+    "elm-mode"             : "elm",
+    "erlang-mode"          : "erlang",
+    # factor
+    "forth-mode"           : "forth",
+    "fortran-mode"         : "fortran",
+    "fsharp-mode"          : "fsharp",
+    "go-mode"              : "go",
+    "groovy-mode"          : "groovy",
+    "haskell-mode"         : "haskell",
+    # "hy-mode"
+    "java-mode"            : "java",
+    "js-jsx-mode"          : "js",
+    "js-mode"              : "js",
+    "js2-jsx-mode"         : "js",
+    "js2-mode"             : "js",
+    "julia-mode"           : "julia",
+    "kotlin-mode"          : "kotlin",
+    "lisp-interaction-mode": "lisp",
+    "lisp-mode"            : "lisp",
+    "lua-mode"             : "lua",
+    # mathematica
+    "matlab-mode"          : "matlab",
+    # mongo
+    "objc-mode"            : "objective-c",
+    # ocaml
+    "perl-mode"            : "perl",
+    "perl6-mode"           : "perl6",
+    "php-mode"             : "php",
+    # psql
+    "python-mode"          : "python",
+    # python3
+    # r -- ess looks it, but I don't know the mode name off hand
+    "racket-mode"          : "racket",
+    "ruby-mode"            : "ruby",
+    "rust-mode"            : "rust",
+    "solidity-mode"        : "solidity",
+    "scala-mode"           : "scala",
+    "scheme-mode"          : "scheme",
+    "sql-mode"             : "sql",
+    "swift-mode"           : "swift",
+    "tcl-mode"             : "tcl",
+    # tcsh
+    "visual-basic-mode"    : "vb",
+    # vbnet
+    # vim
 }
 
 SUBLIME_FT_NAME = {
