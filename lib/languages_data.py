@@ -176,7 +176,7 @@ EMACS_FT_NAME = {
     "objc-mode"            : "objective-c",
     # ocaml
     "perl-mode"            : "perl",
-    "perl6-mode":          : "perl6",
+    "perl6-mode"           : "perl6",
     "php-mode"             : "php",
     # psql
     "python-mode"          : "python",
