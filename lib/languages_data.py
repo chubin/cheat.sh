@@ -153,7 +153,7 @@ EMACS_FT_NAME = {
     "elm-mode"             : "elm",
     "erlang-mode"          : "erlang",
     # factor
-    # forth
+    "forth-mode"           : "forth",
     "fortran-mode"         : "fortran",
     "fsharp-mode"          : "fsharp",
     "go-mode"              : "go",
