@@ -192,7 +192,7 @@ EMACS_FT_NAME = {
     "swift-mode"           : "swift",
     "tcl-mode"             : "tcl",
     # tcsh
-    # vb
+    "visual-basic-mode"    : "vb",
     # vbnet
     # vim
 }
