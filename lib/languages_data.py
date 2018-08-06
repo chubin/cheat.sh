@@ -147,7 +147,7 @@ EMACS_FT_NAME = {
     "d-mode"               : "d",
     "dart-mode"            : "dart",
     "dylan-mode"           : "dylan",
-    # delphi -- not in Melpa, but I think there's one out there.
+    "delphi-mode"          : "delphi",
     "emacs-lisp-mode"      : "elisp",
     # elixir
     "elm-mode"             : "elm",
