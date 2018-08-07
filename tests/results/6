@@ -1,0 +1,85 @@
+Usage:
+    
+    $ curl cheat.sh/TOPIC       show cheat sheet on the TOPIC      
+    $ curl cheat.sh/TOPIC/SUB   show cheat sheet on the SUB topic in TOPIC      
+    $ curl cheat.sh/~KEYWORD    search cheat sheets for KEYWORD
+
+Options:
+
+    ?OPTIONS
+
+    q                  quiet mode, don't show github/twitter buttons
+    T                  text only, no ANSI sequences
+    style=STYLE        color style
+
+    c                  do not comment text, do not shift code (QUERY+ only)
+    C                  do not comment text, shift code (QUERY+ only)
+    Q                  code only, don't show text (QUERY+ only)
+
+Options can be combined together in this way:
+
+    curl 'cheat.sh/for?qT&style=bw'
+    
+(when using & in shell, don't forget to specify the quotes or escape & with \)
+
+Special pages:
+
+    :help               this page
+    :list               list all cheat sheets
+    :post               how to post new cheat sheet
+    :cht.sh             shell client (cht.sh)
+    :bash_completion    bash function for tab completion
+    :styles             list of color styles
+    :styles-demo        show color styles usage examples
+
+Shell client:
+
+    $ curl https://cht.sh/:cht.sh > ~/bin/cht.sh
+    $ chmod +x ~/bin/cht.sh
+    $ cht.sh python :learn
+    $ cht.sh --shell
+
+Tab completion:
+
+    $ mkdir -p ~/.bash.d/
+    $ curl cheat.sh/:bash_completion > ~/.bash.d/cht.sh
+    $ . ~/.bash.d/cht.sh
+    $ echo '. ~/.bash.d/cht.sh' >> ~/.bashrc
+
+Editor integration:
+
+    :emacs              see the page for the Emacs configuration
+    :vim                see the page for the Vim configuration
+
+Search:
+
+    /~snapshot          look for "snapshot" in the first level cheat sheets 
+    /~ssh~passphrase    several keywords can be combined together using ~
+    /scala/~closure     look for "closure" in scala cheat sheets
+    /~snapshot/r        look for "snapshot" in all cheat sheets recursively
+
+You can use special search options after the closing slash:
+
+    /~shot/bi           case insensitive (i), word boundaries (b)
+
+List of search options:
+
+    b   word boundaries
+    i   case insensitive search
+    r   recursive
+
+Programming languages topics:
+
+each programming language topic has the following subptopics:
+
+    hello               hello world + how to start the program
+    :learn              big cheat sheet for learning language from scratch
+    :list               list of topics        
+
+Support programming languages:
+
+    go 
+    scala
+    rust
+    python
+    php
