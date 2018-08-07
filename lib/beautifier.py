@@ -150,14 +150,10 @@ def _classify_lines(lines):
     return line_types
 
 def _unindent_code(line, shift=0):
-    #if line.startswith('    '):
-    #    return line[4:]
-
     if shift == -1 and line != '':
         return ' ' + line
 
-    if shift > 0:
-        if line.startswith(' '*shift):
+    if shift > 0 and line.startswith(' '*shift):
             return line[shift:]
 
     return line
@@ -245,8 +241,6 @@ def _beautify(text, filetype, add_comments=False, remove_text=False):
     lines = _cleanup_lines(lines)
     lines_classes = zip(_classify_lines(lines), lines)
     lines_classes = _wrap_lines(lines_classes, unindent_code=unindent_code)
-    #for x,y in lines_classes:
-    #   print "%s: %s" % (x, y)
 
     if remove_text:
         lines = [line[1] for line in lines_classes if line[0] == 1]

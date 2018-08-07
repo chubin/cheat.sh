@@ -169,13 +169,10 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
         if '+' in topic_name:
             result = 'question'
         else:
-            #if topic_type in _get_topics_dirs() and topic_name in [':list']:
-            if topic_name in [':list']:
+            if (topic_name in [':list']) or (topic_name in [':learn']):
                 result = "internal"
             elif is_valid_learnxy(topic):
                 result = 'learnxiny'
-            elif topic_name in [':learn']:
-                result = "internal"
             else:
 		# let us activate the 'question' feature for all subsections
                 result = 'question'
@@ -197,7 +194,6 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
 
     TOPIC_TYPE_CACHE[topic] = result
 
-    #print topic, " ", result
     return result
 
 #
@@ -240,10 +236,10 @@ def _get_tldr(topic):
         line = line[2:]
         if line.startswith('-'):
             line = '# '+line[2:]
-        elif line == "":
-            pass
         elif not line.startswith(' '):
             line = "# "+line
+        else:
+            pass
 
         fixed_answer.append(line)
 
@@ -469,7 +465,6 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
     # if answer was not found in the cache
     # try to find it in one of the repositories
     if not answer:
-        #topic_type = get_topic_type(topic)
 
         for topic_getter_type, topic_getter in TOPIC_GETTERS:
             if topic_type == topic_getter_type:
