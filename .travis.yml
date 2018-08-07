@@ -1,19 +1,6 @@
 dist: trusty
 sudo: required
 
-addons:
-  sonarcloud:
-    organization: "bglopez-github"
-    token:
-      secure: "ne5w+ViZwv72RRlAiPhFiXpC1fy5KU9e/KaROjFGMPEOIobMLlcpKUJdVlJD1a+n9v6ZloywaCmRBu9eoxk7+2+7S8eE4xd1Ndf5AE4c4VKXhGASmzI4Vfq4ceePLcv+vF9v3S7HAwu4owlKJM2/6q1nUEugO6pSV9UC83tm2yaHuTRnREiT7HVPfvg538jOvnMC6YrSIC8EKA7dhCVEpExxXxg1tyRD19jmd1IaiREH2URI69Oy18kzbvg1qQWYkvVgUHdyt4MpkX34sWFicILEBANZm4k1Q0hxdD2hdWeiaxqrSCX8K2pBaQacssVjIZ/rQoxNQcbJJ1u4/sYiKqiJwGKtnNGj8Eh3XHIvLILb2FeRB/OqsDUUWuUmTw3ByzpqhGlGCxmuosK7ODvyDGHiSJf0XiYn02drOmKMbuai38SkW/QKb7NOJKxGt6HDfxiXvVRZiHsHVbNO8btItonYEU+4otnJ5vCs8K1C0chbISEVekx8zOtPHtwv2I6lvqLTiv+Gpo3z8uTfrURQp7zOsZVVuNiqUFumpsHltFjLHifQcMckN0QjI/AR8R4prqc/j5ZfOO28tgyp4LXSquUQm8Twygd+XeEoOP1vnz6L2vcNhf8exQ/hif/+qS0TBtAWuyAEyoPzon6sY6NxOaCicnspNIWCfwDb9TA5WJ0="
-      branches: master
-
-jdk:
-  - oraclejdk8
-
-script:
-  - sonar-scanner
-
 language:
   - generic
 
