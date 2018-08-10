@@ -35,7 +35,7 @@ case "$OSTYPE" in
 esac
 
 # for KSH93
-if ! local foo 2>/dev/null; then
+if echo $KSH_VERSION | grep -q ' 93' && ! local foo 2>/dev/null; then
   alias local=typeset
 fi
 
