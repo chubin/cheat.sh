@@ -442,6 +442,7 @@ Features supported by cheat.sh plugins for different editors:
 |Prev/next answer   |     |       |✓  |      |
 |Multiple answers   |     |✓      |   |      |
 |Warnings as queries|     |       |✓  |      |
+|Queries history    |     |       |✓  |      |
 |Session id         |     |       |✓  |      |
 
 ### Vim
