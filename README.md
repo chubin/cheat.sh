@@ -201,6 +201,7 @@ To install the client:
     curl https://cht.sh/:cht.sh > ~/bin/cht.sh
     chmod +x ~/bin/cht.sh
 ```
+Note: The package "rlwrap" is a required dependency to run in shell mode. Install this using `sudo apt install rlwrap`
 
 ### Client usage
 
@@ -214,7 +215,6 @@ with spaces instead of `+`:
 ```
 
 It is even more convenient to start the client in a special shell mode:
-
 ```
     $ cht.sh --shell
     cht.sh> go reverse a list
