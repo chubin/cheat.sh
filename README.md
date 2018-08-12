@@ -455,6 +455,7 @@ Features supported by cheat.sh plugins for different editors:
 |Warnings as queries|     |       |✓  |      |
 |Queries history    |     |       |✓  |      |
 |Session id         |     |       |✓  |      |
+|Configurable server|     |       |✓  |      |
 
 ### Vim
 
