@@ -17,6 +17,8 @@ What features should it have?
 
 Such a thing exists.
 
+[![Build Status](https://travis-ci.org/bglopez/cheat.sh.svg?branch=master)](https://travis-ci.org/bglopez/cheat.sh)
+
 ## Features
 
 **cheat.sh**
@@ -43,6 +45,8 @@ Such a thing exists.
   * [Client usage](#client-usage)
   * [Tab-completion](#tab-completion)
   * [Stealth mode](#stealth-mode)
+* [Self-Hosting](#self-hosting)
+  * [Docker](#docker)
 * [Editors integration](#editors-integration)
   * [Vim](#vim)
   * [Emacs](#emacs)
@@ -404,6 +408,13 @@ Of course, this is just for fun, and you should never cheat in your coding inter
 because you know what happens when you do.
 
 ![when you lie in your interview](http://cheat.sh/files/when-you-lie-katze.png)
+
+## Self-Hosting
+
+### Docker
+
+Currently the easiest way to get a self-hosted instance running is by using the docker-compose.yml file provided in the extra/docker folder.
+This pulls down the latest image with baked in cheatsheets and starts the app and a Redis instance to back it, making the service available on port 8002 of the local host. This is currently an early implementation and should probably not be used for anything outside of internal/dev/personal use right now.
 
 ## Editors integration
 

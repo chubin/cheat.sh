@@ -9,6 +9,7 @@ import os
 from pygments.styles import get_all_styles
 
 MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
+REDISHOST = 'redis'
 
 ANSI2HTML = os.path.join(MYDIR, "share/ansi2html.sh")
 
@@ -18,7 +19,7 @@ TEMPLATES = os.path.join(MYDIR, 'share/templates')
 STATIC = os.path.join(MYDIR, 'share/static')
 PATH_VIM_ENVIRONMENT = os.path.join(MYDIR, 'share/vim')
 
-USE_OS_PACKAGES = True # change it False if you pull cheat sheets repositories from GitHub
+USE_OS_PACKAGES = False # change it False if you pull cheat sheets repositories from GitHub
 if USE_OS_PACKAGES:
     PATH_TLDR_PAGES = "/home/igor/.tldr/cache/pages/*/*.md"
     PATH_CHEAT_PAGES = "/usr/local/lib/python2.7/dist-packages/cheat/cheatsheets/*"

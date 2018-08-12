@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ## this doesn't error check, if it breaks and destroys things I'm sorry
 

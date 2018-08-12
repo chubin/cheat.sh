@@ -1,0 +1,14 @@
+version: '2'
+services:
+  app:
+    image: bglopez/cheat.sh
+    depends_on:
+      - redis
+    ports:
+      - "8002:8002"
+  redis:
+    image: redis:4-alpine
+    volumes:
+      - redis_data:/data
+volumes:
+  redis_data:
