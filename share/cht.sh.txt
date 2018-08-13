@@ -313,7 +313,7 @@ EOF
         if [ "$input" != stealth ]; then
           arguments=$(echo "$input" | sed 's/stealth //; s/ /\&/')
         fi
-        trap break SIGINT
+        trap break INT
         if [ "$is_macos" == yes ]; then
           past=$(pbpaste)
         else
@@ -345,7 +345,7 @@ EOF
           fi
           sleep 1;
         done
-        trap - SIGINT
+        trap - INT
         continue
       ;;
     update)

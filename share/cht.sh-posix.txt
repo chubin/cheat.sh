@@ -351,8 +351,8 @@ EOF
         if [ "$input" != stealth ]; then
           arguments=$(echo "$input" | sed 's/stealth //; s/ /\&/')
         fi
-        trap break SIGINT
-        if [ "$is_macos" == yes ]; then
+        trap break INT
+        if [ "$is_macos" = yes ]; then
           past=$(pbpaste)
         else
           past=$(xsel -o)
@@ -364,7 +364,7 @@ EOF
         fi
         printf "\033[0;31mstealth:\033[0m use ^C to leave this mode\n"
         while true; do
-          if [ $is_macos == yes ]; then
+          if [ "$is_macos" = yes ]; then
             current=$(pbpaste)
           else
             current=$(xsel -o)
@@ -383,7 +383,7 @@ EOF
           fi
           sleep 1;
         done
-        trap - SIGINT
+        trap - INT
         continue
       ;;
     update)
