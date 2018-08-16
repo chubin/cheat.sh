@@ -37,7 +37,6 @@ MAX_SEARCH_LEN = 20
 
 INTERNAL_TOPICS = [
     ':cht.sh',
-    ':cht.sh-posix',
     ':bash_completion',
     ':emacs',
     ':emacs-ivy',
