@@ -42,7 +42,7 @@ fi
 # any better test not involving either OS matching or actual query?
 if [ `uname -s` = OpenBSD ] && [ -x /usr/bin/ftp ]; then
   curl() {
-    local opt args="-U curl/7.61.0 -o -"
+    local opt args="-o -"
     while getopts "b:s" opt; do
       case $opt in
         b) args="$args -c $OPTARG";;
