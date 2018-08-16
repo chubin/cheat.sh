@@ -24,7 +24,7 @@ from flask import Flask, request, send_from_directory, redirect, Response
 MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 sys.path.append("%s/lib/" % MYDIR)
 
-from globals import FILE_QUERIES_LOG, LOG_FILE, TEMPLATES, STATIC, MALFORMED_RESPONSE_HTML_PAGE
+from globals import FILE_QUERIES_LOG, LOG_FILE, TEMPLATES, STATIC, MALFORMED_RESPONSE_HTML_PAGE, SERVER_ADDRESS, SERVER_PORT
 from limits import Limits
 from cheat_wrapper import cheat_wrapper
 from post import process_post_request
@@ -205,5 +205,5 @@ def answer(topic=None):
         return result
     return Response(result, mimetype='text/plain')
 
-SRV = WSGIServer(("0.0.0.0", 8002), app) # log=None)
+SRV = WSGIServer((SERVER_ADDRESS, SERVER_PORT), app) # log=None)
 SRV.serve_forever()

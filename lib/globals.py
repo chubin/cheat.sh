@@ -1,6 +1,7 @@
 """
 Global configuration of the project.
-All hardcoded paths should be (theoretically) here.
+All hardcoded pathes and other data should be
+(theoretically) here.
 """
 from __future__ import print_function
 
@@ -10,6 +11,9 @@ from pygments.styles import get_all_styles
 
 USE_OS_PACKAGES = True  # set to False if you pull cheat sheets repositories from GitHub
 DOCKERIZED = False      # set to True if the service is running in a Docker container
+
+SERVER_ADDRESS = '0.0.0.0'
+SERVER_PORT = 8002
 
 MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 
