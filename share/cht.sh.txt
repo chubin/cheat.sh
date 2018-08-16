@@ -29,8 +29,8 @@ __CHTSH_DATETIME="2018-07-08 22:26:46 +0200"
 export LESSSECURE=1
 STEALTH_MAX_SELECTION_LENGTH=5
 
-case "$OSTYPE" in
-  darwin*) is_macos=yes ;;
+case `uname -s` in
+  Darwin) is_macos=yes ;;
   *) is_macos=no ;;
 esac
 
