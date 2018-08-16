@@ -7,6 +7,7 @@ from __future__ import print_function
 
 import logging
 import os
+import yaml
 from pygments.styles import get_all_styles
 
 USE_OS_PACKAGES = True  # set to False if you pull cheat sheets repositories from GitHub
@@ -16,6 +17,7 @@ SERVER_ADDRESS = '0.0.0.0'
 SERVER_PORT = 8002
 
 MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
+_CONF_FILE = os.path.join(MYDIR, 'etc/config.yaml')
 
 if DOCKERIZED:
     REDISHOST = 'redis'
@@ -42,6 +44,20 @@ else:
     PATH_CHEAT_SHEETS = os.path.join(MYDIR, "cheatsheets/sheets/")
     PATH_CHEAT_SHEETS_SPOOL = os.path.join(MYDIR, "cheatsheets/spool/")
     PATH_LEARNXINY = os.path.join(MYDIR, "cheatsheets/learnxinyminutes-docs")
+
+#
+# Reading configuration from etc/config.yaml
+# config overrides default settings
+#
+if os.path.exists(_CONF_FILE):
+    _CONFIG = yaml.load(_CONF_FILE)
+    if 'server' in _CONFIG:
+        _SERVER_CONFIG = _CONFIG['server']
+        if 'address' in _SERVER_CONFIG:
+            SERVER_ADDRESS = _SERVER_CONFIG['address']
+        if 'port' in _SERVER_CONFIG:
+            SERVER_ADDRESS = _SERVER_CONFIG['port']
+
 
 COLOR_STYLES = sorted(list(get_all_styles()))
 
