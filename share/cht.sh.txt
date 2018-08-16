@@ -39,6 +39,22 @@ if echo $KSH_VERSION | grep -q ' 93' && ! local foo 2>/dev/null; then
   alias local=typeset
 fi
 
+# any better test not involving either OS matching or actual query?
+if [ `uname -s` = OpenBSD ] && [ -x /usr/bin/ftp ]; then
+  curl() {
+    local opt args="-o -"
+    while getopts "b:s" opt; do
+      case $opt in
+        b) args="$args -c $OPTARG";;
+        s) args="$args -M -V";;
+        *) echo "internal error: unsupported cURL option '$opt'" >&2; exit 1;;
+      esac
+    done
+    shift $(($OPTIND - 1))
+    /usr/bin/ftp $args "$@"
+  }
+fi
+
 get_query_options()
 {
   local query="$*"
