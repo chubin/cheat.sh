@@ -49,7 +49,7 @@ def is_html_needed(user_agent):
     """
     Basing on `user_agent`, return whether it needs HTML or ANSI
     """
-    plaintext_clients = ['curl', 'wget', 'fetch', 'httpie', 'lwp-request', 'OpenBSD ftp', 'python-requests']
+    plaintext_clients = ['curl', 'wget', 'fetch', 'httpie', 'lwp-request', 'openbsd ftp', 'python-requests']
     return all([x not in user_agent for x in plaintext_clients])
 
 def is_result_a_script(query):
