@@ -39,22 +39,6 @@ if echo $KSH_VERSION | grep -q ' 93' && ! local foo 2>/dev/null; then
   alias local=typeset
 fi
 
-# any better test not involving either OS matching or actual query?
-if [ `uname -s` = OpenBSD ] && [ -x /usr/bin/ftp ]; then
-  curl() {
-    local opt args="-o -"
-    while getopts "b:s" opt; do
-      case $opt in
-        b) args="$args -c $OPTARG";;
-        s) args="$args -M -V";;
-        *) echo "internal error: unsupported cURL option '$opt'" >&2; exit 1;;
-      esac
-    done
-    shift $(($OPTIND - 1))
-    /usr/bin/ftp $args "$@"
-  }
-fi
-
 get_query_options()
 {
   local query="$*"
@@ -144,6 +128,31 @@ fi
 
 [ -z "$CHTSH_URL" ] && CHTSH_URL=https://cht.sh
 
+# any better test not involving either OS matching or actual query?
+if [ `uname -s` = OpenBSD ] && [ -x /usr/bin/ftp ]; then
+  curl() {
+    local opt args="-o -"
+    while getopts "b:s" opt; do
+      case $opt in
+        b) args="$args -c $OPTARG";;
+        s) args="$args -M -V";;
+        *) echo "internal error: unsupported cURL option '$opt'" >&2; exit 1;;
+      esac
+    done
+    shift $(($OPTIND - 1))
+    /usr/bin/ftp $args "$@"
+  }
+else
+  command -v curl   >/dev/null || { echo 'DEPENDENCY: install "curl" to use cht.sh' >&2; exit 1; }
+  _CURL=$(command -v curl)
+  if [ x"$CHTSH_CURL_OPTIONS" != x ]; then
+    curl() {
+      $_CURL ${CHTSH_CURL_OPTIONS} "$@"
+    }
+  fi
+fi
+
+
 if [ "$1" = --read ]; then
   read -r a || a=exit
   printf "%s\n" "$a"
@@ -200,7 +209,6 @@ if [ "$is_macos" != yes ]; then
   command -v xsel >/dev/null ||   echo 'DEPENDENCY: please install "xsel" for "copy"' >&2
 fi
 command -v rlwrap >/dev/null || { echo 'DEPENDENCY: install "rlwrap" to use cht.sh in the shell mode' >&2; exit 1; }
-command -v curl   >/dev/null || { echo 'DEPENDENCY: install "curl" to use cht.sh' >&2; exit 1; }
 
 mkdir -p "$HOME/.cht.sh/"
 lines=$(tput lines)

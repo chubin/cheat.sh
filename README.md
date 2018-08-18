@@ -305,6 +305,7 @@ QUERY_OPTIONS="style=native"
 Other cht.sh configuration parameters:
 
 ```
+CHTSH_CURL_OPTIONS="-A curl"        # curl options used for cht.sh queries
 CHTSH_URL=https://cht.sh            # URL of the cheat.sh server
 ```
 
