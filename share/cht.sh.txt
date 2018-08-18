@@ -133,9 +133,13 @@ gen_random_str()
   fi
 )
 
-if [ -e "$HOME"/.cht.sh/cht.sh.conf ]; then
+if [ -z "$CHTSH_CONF" ]; then
+  CHTSH_CONF="$HOME"/.cht.sh/cht.sh.conf
+fi
+
+if [ -e "$CHTSH_CONF" ]; then
   # shellcheck disable=SC1090,SC2002
-  . "$HOME"/.cht.sh/cht.sh.conf
+  . "$CHTSH_CONF"
 fi
 
 if [ "$1" = --read ]; then
