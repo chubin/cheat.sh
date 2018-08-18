@@ -302,6 +302,11 @@ QUERY_OPTIONS="style=native"
 
 (`curl cht.sh/:styles-demo` to see all supported styles).
 
+Other cht.sh configuration parameters:
+
+```
+CHTSH_URL=https://cht.sh            # URL of the cheat.sh server
+```
 
 ### Tab completion
 

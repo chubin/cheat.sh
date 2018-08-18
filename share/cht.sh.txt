@@ -71,7 +71,7 @@ do_query()
 {
   local query="$*"
   local b_opts=
-  local uri="https://cht.sh/\"\$(get_query_options $query)\""
+  local uri="${CHTSH_URL}/\"\$(get_query_options $query)\""
 
   if [ -e "$HOME/.cht.sh/id" ]; then
     b_opts="-b \"\$HOME/.cht.sh/id\""
@@ -105,7 +105,7 @@ prepare_query()
 
 get_list_of_sections()
 {
-  curl -s https://cht.sh/:list | grep -v '/.*/' | grep '/$' | xargs
+  curl -s "${CHTSH_URL}"/:list | grep -v '/.*/' | grep '/$' | xargs
 }
 
 gen_random_str()
@@ -142,6 +142,8 @@ if [ -e "$CHTSH_CONF" ]; then
   . "$CHTSH_CONF"
 fi
 
+[ -z "$CHTSH_URL" ] && CHTSH_URL=https://cht.sh
+
 if [ "$1" = --read ]; then
   read -r a || a=exit
   printf "%s\n" "$a"
@@ -161,8 +163,6 @@ elif [ x"$1" = x--shell ]; then
 fi
 
 prompt="cht.sh"
-
-prompt="cht.sh"
 opts=""
 input=""
 for o; do
@@ -175,7 +175,7 @@ done
 query=$(echo "$input" | sed 's@ *$@@; s@^ *@@; s@ @/@; s@ @+@g')
 
 if [ "$shell_mode" != yes ]; then
-  curl -s https://cht.sh/"$(get_query_options "$query")"
+  curl -s "${CHTSH_URL}"/"$(get_query_options "$query")"
   exit 0
 else
   new_section="$1"
@@ -192,7 +192,7 @@ else
   fi
   if [ -n "$this_query" ] && [ -z "$CHEATSH_RESTART" ]; then
     printf "$this_prompt$this_query\n"
-    curl -s https://cht.sh/"$(get_query_options "$query")"
+    curl -s "${CHTSH_URL}"/"$(get_query_options "$query")"
   fi
 fi
 
@@ -291,7 +291,7 @@ EOF
         echo copy: Make at least one query first.
         continue
       else
-        curl -s https://cht.sh/"$(get_query_options "$query"?T)" > "$TMP1"
+        curl -s "${CHTSH_URL}"/"$(get_query_options "$query"?T)" > "$TMP1"
         if [ "$is_macos" != yes ]; then
           xsel -i < "$TMP1"
         else
@@ -310,7 +310,7 @@ EOF
         echo copy: Make at least one query first.
         continue
       else
-        curl -s https://cht.sh/"$(get_query_options "$query"?TQ)" > "$TMP1"
+        curl -s "${CHTSH_URL}"/"$(get_query_options "$query"?TQ)" > "$TMP1"
         if [ "$is_macos" != yes ]; then
           xsel -i < "$TMP1"
         else
@@ -407,9 +407,9 @@ EOF
         continue
       ;;
     update)
-      [ -w "$0" ] || { echo "The script is readonly; please update manually: curl -s https://cht.sh/:bash | sudo tee $0"; continue; }
+      [ -w "$0" ] || { echo "The script is readonly; please update manually: curl -s "${CHTSH_URL}"/:bash | sudo tee $0"; continue; }
       TMP2=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
-      curl -s https://cht.sh/:cht.sh > "$TMP2"
+      curl -s "${CHTSH_URL}"/:cht.sh > "$TMP2"
       if ! cmp "$0" "$TMP2" > /dev/null 2>&1; then
         if grep -q ^__CHTSH_VERSION= "$TMP2"; then
           # section was vaildated by us already
@@ -428,7 +428,7 @@ EOF
       insttime=$(ls -l -- "$0" | sed 's/  */ /g' | cut -d ' ' -f 6-8)
       echo "cht.sh version $__CHTSH_VERSION of $__CHTSH_DATETIME; installed at: $insttime"
       TMP2=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
-      if curl -s https://cht.sh/:cht.sh > "$TMP2"; then
+      if curl -s "${CHTSH_URL}"/:cht.sh > "$TMP2"; then
         if ! cmp "$0" "$TMP2" > /dev/null 2>&1; then
           echo "Update needed (type 'update' for that)".
         else
