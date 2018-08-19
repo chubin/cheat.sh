@@ -301,7 +301,7 @@ EOF
       else
         curl -s "${CHTSH_URL}"/"$(get_query_options "$query"?T)" > "$TMP1"
         if [ "$is_macos" != yes ]; then
-          xsel -i < "$TMP1"
+          xsel -bi < "$TMP1"
         else
           cat "$TMP1" | pbcopy
         fi
@@ -320,7 +320,7 @@ EOF
       else
         curl -s "${CHTSH_URL}"/"$(get_query_options "$query"?TQ)" > "$TMP1"
         if [ "$is_macos" != yes ]; then
-          xsel -i < "$TMP1"
+          xsel -bi < "$TMP1"
         else
           cat "$TMP1" | pbcopy
         fi
