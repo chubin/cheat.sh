@@ -1,0 +1,143 @@
+.\"Copyright (c) 2018 Vadim Zhukov <zhuk@openbsd.org>
+.\"
+.\"Permission to use, copy, modify, and distribute this software for any
+.\"purpose with or without fee is hereby granted, provided that the above
+.\"copyright notice and this permission notice appear in all copies.
+.\"
+.\"THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\"WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\"MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\"ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\"WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\"ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\"OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.Dd August 19, 2018
+.Dt CHT 1
+.Os
+.Sh NAME
+.Nm cht
+.Nd software development cheat sheets search
+.Sh SYNOPSIS
+.Nm cht
+.Op Fl ? | -help
+.Op Fl s | Fl -stealth
+.Op Fl -shell
+.Oo Ar lang Oo Ar query ... Oc Oc
+.Sh DESCRIPTION
+The
+.Nm
+utility sends
+Ar query
+to server providing cheat sheets for numerous developer tasks.
+Queries are done via HTTP(S), normally via
+.Xr curl 1 (
+but there could be OS specifics).
+The options are as follows:
+.Bl -tag -offset ab -width thirteenchars
+.It Fl s , Fl -stealth
+Starts
+.Nm
+in stealth mode (described below).
+.It Fl -shell
+Starts
+.Nm
+in shell mode (described below).
+.It Fl ? , Fl -help
+Displays usage information.
+.El
+.Pp
+Running
+.Nm
+without parameters is same as
+.Fl -shell .
+.Sh SHELL MODE
+In shell mode,
+.Nm
+displays prompt:
+.Bd -literal -offset indent
+cht>
+.Ed
+.Pp
+Entered commands are saved in history file.
+.Pp
+The following commands are understood:
+.Bl -tag -offset ab -width ab
+.It Cm cc , Cm ccopy , Cm C , Cm Y
+Put last answer without comments into clipboard.
+.It Cm cd Op Ar lang
+Change the language context to
+Ar lang .
+When run without
+Ar lang
+argument, the context is removed.
+.It Cm c , Cm copy , Cm y , Cm yank
+Put last answer into clipboard.
+.It Cm exit , Cm quit
+Exit the
+.Nm
+shell.
+.It Cm help
+Show help.
+.It Cm hush
+Disable showing single line help at
+.Nm
+start.
+.It Cm id Op Ar ID
+Get or set unique session ID, that is sent to server.
+This may be useful for debugging or statistics purposes.
+By default, no ID is generated.
+If
+.Ar ID
+is
+.Sq reset ,
+then ID gets assigned some random value.
+If
+.Ar ID
+is
+.Sq remove ,
+then ID gets removed.
+.It Cm stealth
+Enable stealth mode.
+In this mode,
+.Nm
+monitors changes of X buffer containing selected text and automatically
+query server with new selected text.
+No prompt is shown.
+The INT signal (sent via ^C usually) switches to normal shell mode.
+.It Cm update
+Self-update the
+.Nm
+executable.
+.It Cm version
+Show current
+.Nm
+version information.
+.It Cm /:help
+Display remote server help.
+.El
+Any other command is interpreted the same way as
+.Ar query
+on command line.
+.Sh FILES
+.Bl -tag -width -compact
+.It Pa ~/.cht.sh/
+Directory where
+.Nm
+keeps its configuration.
+.It Pa ~/.cht.sh/cht.sh.conf
+Startup configuration file in form of Bourne shell script.
+.El
+.Sh EXIT STATUS
+.Ex -std cht
+.Sh EXAMPLES
+TODO
+.Sh HISTORY
+First version of
+.Nm
+was published in 2017.
+.Sh AUTHORS
+.Nm
+itself:
+.An Igor Chubin Aq Mt igor@chub.in
+This manual page:
+.An Vadim Zhukov Aq Mt zhuk@openbsd.org
