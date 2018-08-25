@@ -291,13 +291,13 @@ For example, to switch syntax highlighting off create the file with the followin
 content:
 
 ```
-QUERY_OPTIONS="T"
+CHTSH_QUERY_OPTIONS="T"
 ```
 
 Or if you want to use a special syntax highlighting theme:
 
 ```
-QUERY_OPTIONS="style=native"
+CHTSH_QUERY_OPTIONS="style=native"
 ```
 
 (`curl cht.sh/:styles-demo` to see all supported styles).
