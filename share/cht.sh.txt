@@ -460,5 +460,5 @@ while true; do
     version)        cmd_name=version;;
     *)              cmd_name="query $cmd_name";;
   esac
-  cmd_$cmd_name $cmdargs 
+  cmd_$cmd_name $cmd_args 
 done
