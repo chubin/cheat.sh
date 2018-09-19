@@ -278,7 +278,7 @@ Type `help` for other internal `cht.sh` commands.
 	update  - self update (only if the scriptfile is writeable)
 	version - show current cht.sh version
 	/:help  - service help
-	QUERY   - space ceparated query staring (examples are below)
+	QUERY   - space separated query staring (examples are below)
 				  cht.sh> python zip list
 				  cht.sh/python> zip list
 				  cht.sh/go> /python zip list
@@ -495,7 +495,7 @@ In this example, several Vim plugins are used:
 * [scrooloose/syntastic](https://github.com/vim-syntastic/syntastic) — Syntax checking plugin
 * [cheat.sh-vim](https://github.com/dbeniamine/cheat.sh-vim) — Vim support
 
-Syntastic shows warnings and errors (found by code analysys tools: `jshint`, `merlin`, `pylint`, `shellcheckt etc.),
+Syntastic shows warnings and errors (found by code analysis tools: `jshint`, `merlin`, `pylint`, `shellcheckt etc.),
 and `cheat.sh-vim` shows you explanations for the errors and warnings
 and answers on programming languages queries written in the editor.
 
