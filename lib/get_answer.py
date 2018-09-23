@@ -282,7 +282,12 @@ def _get_answer_for_question(topic):
     Find answer for the `topic` question.
     """
 
-    topic_words = topic.replace('+', ' ').strip().split()
+    topic_words = topic.replace('+', ' ').strip()
+    # some clients send queries with - instead of + so we have to rewrite them to
+    topic = re.sub(r"(?<!-)-", ' ', topic)
+
+    topic_words = topic.split()
+
     topic = " ".join(topic_words)
 
     lang = 'en'
