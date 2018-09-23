@@ -38,12 +38,27 @@ if USE_OS_PACKAGES:
     PATH_CHEAT_SHEETS = "/home/igor/cheat.sheets/sheets/"
     PATH_CHEAT_SHEETS_SPOOL = "/home/igor/cheat.sheets/spool/"
     PATH_LEARNXINY = "/home/igor/git/github.com/adambard/learnxinyminutes-docs"
+    PATH_LATENZ = "/home/igor/git/github.com/chubin/late.nz/bin"
 else:
     PATH_TLDR_PAGES = os.path.join(MYDIR, "cheatsheets/tldr/*/*.md")
     PATH_CHEAT_PAGES = os.path.join(MYDIR, "cheatsheets/cheat/*")
     PATH_CHEAT_SHEETS = os.path.join(MYDIR, "cheatsheets/sheets/")
     PATH_CHEAT_SHEETS_SPOOL = os.path.join(MYDIR, "cheatsheets/spool/")
     PATH_LEARNXINY = os.path.join(MYDIR, "cheatsheets/learnxinyminutes-docs")
+    PATH_LATENZ = os.path.join(MYDIR, "late.nz/bin")
+
+GITHUB_REPOSITORY = {
+    "late.nz"           :   'chubin/late.nz',
+    "cheat.sheets"      :   'chubin/cheat.sheets',
+    "cheat.sheets dir"  :   'chubin/cheat.sheets',
+    "tldr"              :   'tldr-pages/tldr',
+    "cheat"             :   'chrisallenlane/cheat',
+    "learnxiny"         :   'adambard/learnxinyminutes-docs',
+    "internal"          :   '',
+    "search"            :   '',
+    "unknown"           :   '',
+}
+
 
 #
 # Reading configuration from etc/config.yaml

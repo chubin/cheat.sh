@@ -19,7 +19,7 @@ from pygments.formatters import Terminal256Formatter # pylint: disable=no-name-i
 
 MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 sys.path.append("%s/lib/" % MYDIR)
-from globals import error, ANSI2HTML, COLOR_STYLES
+from globals import error, ANSI2HTML, COLOR_STYLES, GITHUB_REPOSITORY
 from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_FOOTER
 from languages_data import LEXER, get_lexer_name
 from get_answer import get_topic_type, get_topics_list, get_answer, find_answer_by_keyword
@@ -122,18 +122,7 @@ def _colorize_ansi_answer(topic, answer, color_style,               # pylint: di
 
 def _github_button(topic_type):
 
-    repository = {
-        "cheat.sheets"      :   'chubin/cheat.sheets',
-        "cheat.sheets dir"  :   'chubin/cheat.sheets',
-        "tldr"              :   'tldr-pages/tldr',
-        "cheat"             :   'chrisallenlane/cheat',
-        "learnxiny"         :   'adambard/learnxinyminutes-docs',
-        "internal"          :   '',
-        "search"            :   '',
-        "unknown"           :   '',
-    }
-
-    full_name = repository.get(topic_type, '')
+    full_name = GITHUB_REPOSITORY.get(topic_type, '')
     if not full_name:
         return ''
 
