@@ -160,7 +160,8 @@ def answer(topic=None):
     html_needed = is_html_needed(user_agent)
     options = parse_args(request.args)
 
-    if topic in ['apple-touch-icon-precomposed.png', 'apple-touch-icon.png', 'apple-touch-icon-120x120-precomposed.png']:
+    if topic in ['apple-touch-icon-precomposed.png', 'apple-touch-icon.png', 'apple-touch-icon-120x120-precomposed.png'] \
+        or (topic is not None and any(topic.endswith('/'+x) for x in ['favicon.ico'])):
         return ''
 
     request_id = request.cookies.get('id')
