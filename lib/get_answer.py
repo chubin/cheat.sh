@@ -14,6 +14,7 @@ from gevent.subprocess import Popen, PIPE
 patch_all()
 
 # pylint: disable=wrong-import-position,wrong-import-order
+import sys
 import collections
 import glob
 import os
@@ -25,7 +26,8 @@ from polyglot.detect.base import UnknownLanguage
 import time
 
 import beautifier
-from globals import MYDIR, PATH_TLDR_PAGES, PATH_CHEAT_PAGES, PATH_CHEAT_SHEETS, COLOR_STYLES, REDISHOST
+from globals import MYDIR, PATH_TLDR_PAGES, PATH_CHEAT_PAGES, PATH_CHEAT_SHEETS, PATH_LATENZ, \
+                    COLOR_STYLES, REDISHOST
 from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnxy
 from languages_data import LANGUAGE_ALIAS, SO_NAME, rewrite_editor_section_name
 from colorize_internal import colorize_internal
@@ -176,6 +178,9 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
             else:
 		# let us activate the 'question' feature for all subsections
                 result = 'question'
+
+    if topic.lower() in ['latencies', 'late.nz', 'latency']:
+        result = 'late.nz'
 
     if result == 'unknown' or result == 'question':
         print("result = ", result)
@@ -328,11 +333,17 @@ Do you mean one of these topics maybe?
 %s
     """ % possible_topics_text
 
+def _get_latenz(topic):
+    sys.path.append(PATH_LATENZ)
+    import latencies
+    return latencies.render()
+
 # pylint: disable=bad-whitespace
 #
 # topic_type, function_getter
 # should be replaced with a decorator
 TOPIC_GETTERS = (
+    ('late.nz',             _get_latenz),
     ("cheat.sheets",        _get_cheat_sheets),
     ("cheat.sheets dir",    _get_cheat_sheets_dir),
     ("tldr",                _get_tldr),
