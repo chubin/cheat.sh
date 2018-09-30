@@ -10,3 +10,4 @@ langdetect
 cffi
 polyglot
 colorama
+pyyaml
