@@ -416,6 +416,17 @@ because you know what happens when you do.
 
 ![when you lie in your interview](http://cheat.sh/files/when-you-lie-katze.png)
 
+### Windows command line client
+
+You can access cheat.sh from Windows command line too.
+
+Use cheat.sh command line client for that: [cht.exe](https://github.com/tpanj/cht.exe).
+It supports:
+
+* output colorization;
+* command line options;
+* its own configuration file.
+
 ## Self-Hosting
 
 ### Docker
