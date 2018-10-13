@@ -171,10 +171,10 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
         if '+' in topic_name:
             result = 'question'
         else:
-            if (topic_name in [':list']) or (topic_name in [':learn']):
+            if (topic_name in [':list', ':learn']):
                 result = "internal"
-            elif is_valid_learnxy(topic):
-                result = 'learnxiny'
+                if topic_name == ':learn' and is_valid_learnxy(topic):
+                    result = 'learnxiny'
             else:
 		# let us activate the 'question' feature for all subsections
                 result = 'question'
