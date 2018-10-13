@@ -183,7 +183,6 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
         result = 'late.nz'
 
     if result == 'unknown' or result == 'question':
-        print("result = ", result)
         print(CHEAT_SHEETS_TOPICS)
         if topic in CHEAT_SHEETS_TOPICS:
             result = "cheat.sheets"
@@ -195,7 +194,6 @@ def get_topic_type(topic): # pylint: disable=too-many-locals,too-many-branches,t
             result = "tldr"
         elif '/' not in topic:
             result = "unknown"
-        print("result = ", result)
 
     TOPIC_TYPE_CACHE[topic] = result
 
@@ -297,9 +295,7 @@ def _get_answer_for_question(topic):
         query_text = re.sub('/[0-9]+$', '', query_text)
         query_text = re.sub('/[0-9]+$', '', query_text)
         detector = Detector(query_text)
-        print("query_text = ", query_text)
         supposed_lang = detector.languages[0].code
-        print("supposed lang = ", supposed_lang)
         if len(topic_words) > 2 or supposed_lang in ['az', 'ru', 'uk', 'de', 'fr', 'es', 'it', 'nl']:
             lang = supposed_lang
         if supposed_lang.startswith('zh_') or supposed_lang == 'zh':
@@ -462,7 +458,6 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
     # what type the query has
     start_time = time.time()
     topic_type = get_topic_type(topic)
-    print((time.time() - start_time)*1000)
 
     # checking if the answer is in the cache
     if topic != "":
