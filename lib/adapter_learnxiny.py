@@ -173,6 +173,12 @@ class LearnBfAdapter(LearnXYAdapter):
     _filename = "bf.html.markdown"
     _splitted = False
 
+class LearnCAdapter(LearnXYAdapter):
+    "Learn C in Y Minutes"
+    prefix = "c"
+    _filename = "c.html.markdown"
+    _splitted = False
+
 class LearnChapelAdapter(LearnXYAdapter):
     "Learn Chapel in Y Minutes"
     prefix = "chapel"
@@ -744,7 +750,13 @@ class LearnRubyAdapter(LearnXYAdapter):
             answer = answer[:1]
         return answer
 
-class LearnSwiftAdapter(LearnXYAdapter):
+class LearnRustAdapter(LearnXYAdapter):
+    "Learn Rust in Y Minutes"
+    prefix = "rust"
+    _filename = "rust.html.markdown"
+    _splitted = False
+
+class LearnSolidityAdapter(LearnXYAdapter):
     "Learn Solidity in Y Minutes"
     prefix = "solidity"
     _filename = "solidity.html.markdown"
