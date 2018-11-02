@@ -381,7 +381,7 @@ cmd_stealth() {
       current_text="$(echo $current | tr -c '[a-zA-Z0-9]' ' ')"
       if [ $(echo $current_text | wc -w) -gt "$STEALTH_MAX_SELECTION_LENGTH" ]; then
         echo "\033[0;31mstealth:\033[0m selection length is longer than $STEALTH_MAX_SELECTION_LENGTH words; ignoring"
-        return
+        continue
       else
         printf "\n\033[0;31mstealth: \033[7m $current_text\033[0m\n"
         query=$(prepare_query "$section" "$current_text" "$arguments")
