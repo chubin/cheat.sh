@@ -202,9 +202,18 @@ has several useful features compared to querying the service directly with `curl
 To install the client:
 
 ```
+    mkdir -p ~/bin/
     curl https://cht.sh/:cht.sh > ~/bin/cht.sh
     chmod +x ~/bin/cht.sh
 ```
+
+or to install it globally (for all users):
+
+```
+    curl https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh
+    chmod +x /usr/local/bin/cht.sh
+```
+
 Note: The package "rlwrap" is a required dependency to run in shell mode. Install this using `sudo apt install rlwrap`
 
 ### Client usage
