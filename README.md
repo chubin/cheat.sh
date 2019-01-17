@@ -429,12 +429,17 @@ because you know what happens when you do.
 
 You can access cheat.sh from Windows command line too.
 
-Use cheat.sh command line client for that: [cht.exe](https://github.com/tpanj/cht.exe).
+Use cheat.sh command line client for that: [`cht.exe`](https://github.com/tpanj/cht.exe).
 It supports:
 
 * output colorization;
 * command line options;
 * its own configuration file.
+
+You can also use [`scoop`](https://github.com/lukesampson/scoop) command-line installer for Windows to get it:
+```batch
+scoop install cht
+```
 
 ## Self-Hosting
 
