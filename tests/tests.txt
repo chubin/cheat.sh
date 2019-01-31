@@ -12,3 +12,6 @@ cht.sh python/copy+file?Q
 cht.sh python/copy+file?QT
 cht.sh /
 cht.sh //
+cht.sh python/:learn
+cht.sh latencies
+cht.sh az                     # chubin/cheat.sheets
