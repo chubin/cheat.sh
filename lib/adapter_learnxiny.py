@@ -788,7 +788,7 @@ class LearnVisualBasicAdapter(LearnXYAdapter):
 
 ADAPTERS = {cls.prefix: cls() for cls in vars()['LearnXYAdapter'].__subclasses__()}
 
-def get_learnxiny(topic):
+def get_learnxiny(topic, request_options=None):
     """
     Return cheat sheet for `topic`
     or empty string if nothing found

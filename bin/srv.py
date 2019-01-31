@@ -107,6 +107,52 @@ def get_request_ip(req):
 
     return ip_addr
 
+def get_answer_language(request):
+    """
+    Return preferred answer language based on
+    domain name, query arguments and headers
+    """
+
+    def _parse_accept_language(accept_language):
+        languages = accept_language.split(",")
+        locale_q_pairs = []
+
+        for language in languages:
+            try:
+                if language.split(";")[0] == language:
+                    # no q => q = 1
+                    locale_q_pairs.append((language.strip(), "1"))
+                else:
+                    locale = language.split(";")[0].strip()
+                    weight = language.split(";")[1].split("=")[1]
+                    locale_q_pairs.append((locale, weight))
+            except IndexError:
+                pass
+
+        return locale_q_pairs
+
+    def _find_supported_language(accepted_languages):
+        for lang_tuple in accepted_languages:
+            lang = lang_tuple[0]
+            if '-' in lang:
+                lang = lang.split('-', 1)[0]
+            return lang
+        return None
+
+    lang = None
+    hostname = request.headers['Host']
+    if hostname.endswith('.cheat.sh'):
+        lang = hostname[:-9]
+
+    if 'lang' in request.args:
+        lang = request.args.get('lang')
+
+    header_accept_language = request.headers.get('Accept-Language', '')
+    if lang is None and header_accept_language:
+        lang = _find_supported_language(
+            _parse_accept_language(header_accept_language))
+
+    return lang
 
 def _proxy(*args, **kwargs):
     # print "method=", request.method,
@@ -189,6 +235,10 @@ def answer(topic=None):
     if topic.startswith(':shell-x/'):
         return _proxy()
         #return requests.get('http://127.0.0.1:3000'+topic[8:]).text
+
+    lang = get_answer_language(request)
+    if lang:
+        options['lang'] = lang
 
     ip_address = get_request_ip(request)
     if '+' in topic:

@@ -423,7 +423,20 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
             return query
 
         section_name, rest = query.split('/', 1)
+
+        if ':' in section_name:
+            # if ':' is in section_name, it means, that we want to
+            # translate the answer in the specified human language
+            # (experimental)
+            language, section_name = section_name.split(':', 1)
+        else:
+            language = ""
+
         section_name = LANGUAGE_ALIAS.get(section_name, section_name)
+
+        if language:
+            section_name = language + ":" + section_name
+
         return "%s/%s" % (section_name, rest)
 
     def _rewrite_section_name_for_q(query):
