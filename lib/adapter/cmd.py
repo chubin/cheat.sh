@@ -3,6 +3,7 @@ from gevent.subprocess import Popen, PIPE
 patch_all()
 
 import sys
+import abc
 import os
 import glob
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -12,56 +13,82 @@ from globals import PATH_TLDR_PAGES, PATH_CHEAT_PAGES
 def _get_filenames(path):
     return [os.path.split(topic)[1] for topic in glob.glob(path)]
 
-def get_tldr_list():
-    return [filename[:-3]
-            for filename in _get_filenames(PATH_TLDR_PAGES) if filename.endswith('.md')]
+class Cmd(object):
+    def __init__(self):
+        self._list = self._get_list()
 
-_TLDR_LIST = get_tldr_list()
-def tldr_is_found(topic):
-    return topic in _TLDR_LIST
+    @abc.abstractmethod
+    def _get_list(self):
+        return []
 
-def get_tldr(topic, request_options=None):
-    cmd = ["tldr", topic]
-    proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
-    answer = proc.communicate()[0]
+    def get_list(self):
+        return self._list
 
-    fixed_answer = []
-    for line in answer.splitlines():
-        line = line[2:]
-        if line.startswith('-'):
-            line = '# '+line[2:]
-        elif not line.startswith(' '):
-            line = "# "+line
-        else:
-            pass
+    def is_found(self, topic):
+        return topic in self._list
 
-        fixed_answer.append(line)
+    @abc.abstractmethod
+    def get_page(self, topic, request_options=None):
+        pass
 
-    answer = "\n".join(fixed_answer) + "\n"
-    return answer.decode('utf-8')
+class Tldr(Cmd):
+    def _get_list(self):
+        return [filename[:-3]
+                for filename in _get_filenames(PATH_TLDR_PAGES) if filename.endswith('.md')]
 
-def get_cheat_list():
-    return _get_filenames(PATH_CHEAT_PAGES)
+    def get_page(self, topic, request_options=None):
+        cmd = ["tldr", topic]
+        proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
+        answer = proc.communicate()[0]
 
-_CHEAT_LIST = get_cheat_list()
-def cheat_is_found(topic):
-    return topic in _CHEAT_LIST
+        fixed_answer = []
+        for line in answer.splitlines():
+            line = line[2:]
+            if line.startswith('-'):
+                line = '# '+line[2:]
+            elif not line.startswith(' '):
+                line = "# "+line
+            else:
+                pass
 
-def get_cheat(topic, request_options=None):
-    cmd = ["cheat", topic]
-    proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
-    answer = proc.communicate()[0].decode('utf-8')
-    return answer
+            fixed_answer.append(line)
 
-def get_translation(topic, request_options=None):
-    from_, topic = topic.split('/', 1)
-    to_ = request_options.get('lang', 'en')
-    if '-' in from_:
-        from_, to_ = from_.split('-', 1)
+        answer = "\n".join(fixed_answer) + "\n"
+        return answer.decode('utf-8')
 
-    cmd = ["/home/igor/cheat.sh/bin/get_translation",
-        from_, to_, topic.replace('+', ' ')]
-    print("calling:", cmd)
-    proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
-    answer = proc.communicate()[0].decode('utf-8')
-    return answer
+class Cheat(Cmd):
+    def _get_list(self):
+        return _get_filenames(PATH_CHEAT_PAGES)
+
+    def get_page(self, topic, request_options=None):
+        cmd = ["cheat", topic]
+        proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
+        answer = proc.communicate()[0].decode('utf-8')
+        return answer
+
+class Fosdem(Cmd):
+    def _get_list(self):
+        return ['fosdem']
+
+    def get_page(self, topic, request_options=None):
+        cmd = ["sudo", "/home/igor/bin/current-fosdem-slide"]
+        proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
+        answer = proc.communicate()[0].decode('utf-8')
+        return answer
+
+class Translation(Cmd):
+    def _get_list(self):
+        return []
+
+    def get_page(self, topic, request_options=None):
+        from_, topic = topic.split('/', 1)
+        to_ = request_options.get('lang', 'en')
+        if '-' in from_:
+            from_, to_ = from_.split('-', 1)
+
+        cmd = ["/home/igor/cheat.sh/bin/get_translation",
+            from_, to_, topic.replace('+', ' ')]
+        print("calling:", cmd)
+        proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
+        answer = proc.communicate()[0].decode('utf-8')
+        return answer

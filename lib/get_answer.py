@@ -48,32 +48,36 @@ class Router(object):
         self._cached_topics_list = []
         self._cached_topic_type = {}
 
-        self.adapter_internal = adapter.internal.InternalPages(
-            get_topic_type=self.get_topic_type,
-            get_topics_list=self.get_topics_list)
-        self.adapter_unknown = adapter.internal.UnknownPages(
-            get_topic_type=self.get_topic_type,
-            get_topics_list=self.get_topics_list)
+        self._adapter = {
+            "internal": adapter.internal.InternalPages(
+                get_topic_type=self.get_topic_type,
+                get_topics_list=self.get_topics_list),
+            "unknown": adapter.internal.UnknownPages(
+                get_topic_type=self.get_topic_type,
+                get_topics_list=self.get_topics_list),
+            "tldr": adapter.cmd.Tldr(),
+            "cheat": adapter.cmd.Cheat(),
+            "fosdem": adapter.cmd.Fosdem(),
+            "translation": adapter.cmd.Translation(),
+        }
 
         self._topic_list = {
             "late.nz": adapter.latenz.get_list(),
-            "internal": self.adapter_internal.get_list(),
-            "tldr": adapter.cmd.get_tldr_list(),
-            "cheat": adapter.cmd.get_cheat_list(),
             "cheat.sheets": adapter.cheat_sheets.get_list(),
             "cheat.sheets dir": adapter.cheat_sheets.get_dirs_list(),
             "learnxiny": get_learnxiny_list(),
         }
+        for key, obj in self._adapter.items():
+            self._topic_list[key] = obj.get_list()
 
         self._topic_found = {
             "late.nz": adapter.latenz.is_found,
-            "internal": self.adapter_internal.is_found,
-            "tldr": adapter.cmd.tldr_is_found,
-            "cheat": adapter.cmd.cheat_is_found,
             "cheat.sheets": adapter.cheat_sheets.is_found,
             "cheat.sheets dir": adapter.cheat_sheets.is_dir_found,
             "learnxiny": is_valid_learnxy,
         }
+        for key, obj in self._adapter.items():
+            self._topic_found[key] = obj.is_found
 
 # topic_type, function_getter
 # should be replaced with a decorator
@@ -82,13 +86,14 @@ class Router(object):
             ("late.nz",             adapter.latenz.get_answer),
             ("cheat.sheets",        adapter.cheat_sheets.get_page),
             ("cheat.sheets dir",    adapter.cheat_sheets.get_dir),
-            ("tldr",                adapter.cmd.get_tldr),
-            ("internal",            self.adapter_internal.get_page),
-            ("cheat",               adapter.cmd.get_cheat),
             ("learnxiny",           get_learnxiny),
-            ("translation",         adapter.cmd.get_translation),
             ("question",            adapter.question.get_page),
-            ("unknown",             self.adapter_unknown.get_page),
+            ("fosdem",              self._adapter["fosdem"].get_page),
+            ("tldr",                self._adapter["tldr"].get_page),
+            ("internal",            self._adapter["internal"].get_page),
+            ("cheat",               self._adapter["cheat"].get_page),
+            ("translation",         self._adapter["translation"].get_page),
+            ("unknown",             self._adapter["unknown"].get_page),
         )
 # pylint: enable=bad-whitespace
 
@@ -138,7 +143,7 @@ class Router(object):
                 if self._topic_found['cheat.sheets dir'](topic):
                     return "cheat.sheets dir"
 
-            for source in ['cheat.sheets', 'cheat', 'tldr', 'late.nz']:
+            for source in ['cheat.sheets', 'cheat', 'tldr', 'late.nz', 'fosdem']:
                 if self._topic_found[source](topic):
                     return source
 

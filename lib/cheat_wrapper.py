@@ -217,7 +217,7 @@ def _visualize(query, keyword, answers, request_options, html=None): # pylint: d
 
         if topic_type == "internal" and highlight:
             answer = _colorize_internal(topic, answer, html)
-        elif topic_type == "late.nz":
+        elif topic_type in ["late.nz", "fosdem"]:
             pass
         else:
             answer = _colorize_ansi_answer(
