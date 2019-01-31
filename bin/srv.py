@@ -206,5 +206,9 @@ def answer(topic=None):
         return result
     return Response(result, mimetype='text/plain')
 
-SRV = WSGIServer((SERVER_ADDRESS, SERVER_PORT), app) # log=None)
-SRV.serve_forever()
+if 'CHEATSH_PORT' in os.environ:
+    SRV = WSGIServer((SERVER_ADDRESS, int(os.environ.get('CHEATSH_PORT'))), app) # log=None)
+    SRV.serve_forever()
+else:
+    SRV = WSGIServer((SERVER_ADDRESS, SERVER_PORT), app) # log=None)
+    SRV.serve_forever()

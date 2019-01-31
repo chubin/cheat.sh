@@ -471,7 +471,8 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
             topic = "q:" + topic
             needs_beautification = True
 
-        answer = REDIS.get(topic)
+        if REDIS:
+            answer = REDIS.get(topic)
         if answer:
             answer = answer.decode('utf-8')
 
@@ -488,8 +489,9 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
             answer = _get_unknown(topic)
 
         # saving answers in the cache
-        if topic_type not in ["search", "internal", "unknown"]:
-            REDIS.set(topic, answer)
+        if REDIS:
+            if topic_type not in ["search", "internal", "unknown"]:
+                REDIS.set(topic, answer)
 
     if needs_beautification:
         filetype = 'bash'
