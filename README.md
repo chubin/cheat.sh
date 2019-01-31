@@ -202,9 +202,18 @@ has several useful features compared to querying the service directly with `curl
 To install the client:
 
 ```
+    mkdir -p ~/bin/
     curl https://cht.sh/:cht.sh > ~/bin/cht.sh
     chmod +x ~/bin/cht.sh
 ```
+
+or to install it globally (for all users):
+
+```
+    curl https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh
+    chmod +x /usr/local/bin/cht.sh
+```
+
 Note: The package "rlwrap" is a required dependency to run in shell mode. Install this using `sudo apt install rlwrap`
 
 ### Client usage
@@ -420,12 +429,17 @@ because you know what happens when you do.
 
 You can access cheat.sh from Windows command line too.
 
-Use cheat.sh command line client for that: [cht.exe](https://github.com/tpanj/cht.exe).
+Use cheat.sh command line client for that: [`cht.exe`](https://github.com/tpanj/cht.exe).
 It supports:
 
 * output colorization;
 * command line options;
 * its own configuration file.
+
+You can also use [`scoop`](https://github.com/lukesampson/scoop) command-line installer for Windows to get it:
+```batch
+scoop install cht
+```
 
 ## Self-Hosting
 
@@ -471,7 +485,7 @@ Features supported by cheat.sh plugins for different editors:
 |Prev/next answer   |     |       |✓  |      |
 |Multiple answers   |     |✓      |   |      |
 |Warnings as queries|     |       |✓  |      |
-|Queries history    |     |       |✓  |      |
+|Queries history    |     |       |✓  |✓     |
 |Session id         |     |       |✓  |      |
 |Configurable server|✓    |       |✓  |✓     |
 
