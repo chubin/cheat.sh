@@ -59,6 +59,7 @@ GITHUB_REPOSITORY = {
     "unknown"           :   '',
 }
 
+MAX_SEARCH_LEN = 20
 
 #
 # Reading configuration from etc/config.yaml

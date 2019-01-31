@@ -284,7 +284,6 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
     # so this part should be rewritten
     # for the most queries we could say immediately
     # what type the query has
-    start_time = time.time()
     topic_type = get_topic_type(topic)
 
     # checking if the answer is in the cache
