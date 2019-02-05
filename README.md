@@ -52,6 +52,7 @@ Such a thing exists.
   * [Emacs](#emacs)
   * [Visual Studio Code](#visual-studio-code)
   * [Sublime](#sublime)
+  * [IntelliJ IDEA](#intellij-idea)
 * [Special pages](#special-pages)
 * [Search](#search)
 * [Programming languages cheat sheets](#programming-languages-cheat-sheets)
@@ -477,17 +478,17 @@ and press `<leader>KE`: explanation for the warning will be opened in a new buff
 
 Features supported by cheat.sh plugins for different editors:
 
-|Feature            |Emacs|Sublime|Vim|VSCode|
-|-------------------|-----|-------|---|------|
-|Command queries    |✓    |✓      |✓  |✓     |
-|Queries from buffer|     |       |✓  |✓     |
-|Toggle comments    |     |       |✓  |      |
-|Prev/next answer   |     |       |✓  |      |
-|Multiple answers   |     |✓      |   |      |
-|Warnings as queries|     |       |✓  |      |
-|Queries history    |     |       |✓  |✓     |
-|Session id         |     |       |✓  |      |
-|Configurable server|✓    |       |✓  |✓     |
+|Feature            |Emacs|Sublime|Vim|VSCode|IDEA|
+|-------------------|-----|-------|---|------|----|
+|Command queries    |✓    |✓      |✓  |✓     |✓   |
+|Queries from buffer|     |       |✓  |✓     |    |
+|Toggle comments    |     |       |✓  |      |    |
+|Prev/next answer   |     |       |✓  |      |    |
+|Multiple answers   |     |✓      |   |      |    |
+|Warnings as queries|     |       |✓  |      |    |
+|Queries history    |     |       |✓  |✓     |    |
+|Session id         |     |       |✓  |      |    |
+|Configurable server|✓    |       |✓  |✓     |    |
 
 ### Vim
 
@@ -576,6 +577,21 @@ Usage:
 [![cheat.sh-sublime-plugin-demo](https://cheat.sh/files/demo-sublime.gif)](https://github.com/gauravk-in/cheat.sh-sublime-plugin)
 
 *(GIF courtesy: Gaurav Kukreja, @gauravk-in)*
+
+### IntelliJ IDEA 
+
+* [idea-cheatsh-plugin](https://github.com/szymonprz/idea-cheatsh-plugin)
+* Install from [idea plugins marketplace](https://plugins.jetbrains.com/plugin/11942-cheat-sh-code-snippets) 
+
+Usage: 
+
+1. Write query string
+2. Select the query string
+3. Press keyboard shortcut <kbd>Alt</kbd> + <kbd>C</kbd> , <kbd>S</kbd> to replace the selected query string by the answer
+
+[![idea-cheatsh-plugin](https://cheat.sh/files/idea-demo.gif)](https://github.com/szymonprz/idea-cheatsh-plugin)
+
+*(GIF courtesy: Szymon Przebierowski, @szymonprz)*
 
 ## Special pages
 
