@@ -132,5 +132,5 @@ class Rosetta(Adapter):
         return False
 
     def __init__(self):
-        Adapter.__init__()
+        Adapter.__init__(self)
         self._rosetta_code_name = self._load_rosetta_code_names()

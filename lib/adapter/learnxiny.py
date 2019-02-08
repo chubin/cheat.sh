@@ -552,6 +552,12 @@ class LearnMatlabAdapter(LearnXYAdapter):
     _filename = "matlab.html.markdown"
     _splitted = False
 
+class LearnOctaveAdapter(LearnXYAdapter):
+    "Learn Octave in Y Minutes"
+    prefix = "octave"
+    _filename = "matlab.html.markdown"
+    _splitted = False
+
 class LearnKotlinAdapter(LearnXYAdapter):
     """
     Learn Kotlin in Y Minutes

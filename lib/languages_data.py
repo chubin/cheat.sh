@@ -45,6 +45,7 @@ LEXER = {
     "mongo" :   pygments.lexers.JavascriptLexer,
     "objective-c": pygments.lexers.ObjectiveCppLexer,
     "ocaml"     : pygments.lexers.OcamlLexer,
+    "octave"    : pygments.lexers.OctaveLexer,
     "perl"      : pygments.lexers.PerlLexer,
     "perl6"     : pygments.lexers.Perl6Lexer,
     "php"       : pygments.lexers.PhpLexer,
@@ -95,6 +96,7 @@ LANGUAGE_ALIAS = {
     'wolfram'   :   'mathematica',
     'mma'       :   'mathematica',
     'wolfram-mathematica': 'mathematica',
+    'm'         :   'octave',
 }
 
 VIM_NAME = {
@@ -203,6 +205,7 @@ SUBLIME_FT_NAME = {
 VIM_FT_NAME = {
     'asm':          'assembler',
     'javascript':   'js',
+    'octave':       'matlab',
 }
 
 VSCODE_FT_NAME = {
