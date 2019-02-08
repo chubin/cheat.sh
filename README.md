@@ -482,7 +482,7 @@ Features supported by cheat.sh plugins for different editors:
 |-------------------|-----|-------|---|------|----|
 |Command queries    |✓    |✓      |✓  |✓     |✓   |
 |Queries from buffer|     |       |✓  |✓     |    |
-|Toggle comments    |     |       |✓  |      |    |
+|Toggle comments    |     |       |✓  |      |✓   |
 |Prev/next answer   |     |       |✓  |      |    |
 |Multiple answers   |     |✓      |   |      |    |
 |Warnings as queries|     |       |✓  |      |    |
