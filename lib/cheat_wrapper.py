@@ -209,6 +209,7 @@ def _visualize(query, keyword, answers, request_options, html=None): # pylint: d
 
         topic_type = get_topic_type(topic)
         highlight = (highlight
+                     and not topic.endswith('/:list')
                      and topic not in [":list", ":bash_completion"]
                      and topic_type not in ["unknown"]
                     )

@@ -24,6 +24,8 @@ import adapter.cmd
 import adapter.latenz
 import adapter.question
 import adapter.internal
+import adapter.rosetta
+import adapter.learnxiny
 
 class Router(object):
 
@@ -59,6 +61,7 @@ class Router(object):
             "cheat": adapter.cmd.Cheat(),
             "fosdem": adapter.cmd.Fosdem(),
             "translation": adapter.cmd.Translation(),
+            "rosetta": adapter.rosetta.Rosetta(),
         }
 
         self._topic_list = {
@@ -89,6 +92,7 @@ class Router(object):
             ("learnxiny",           get_learnxiny),
             ("question",            adapter.question.get_page),
             ("fosdem",              self._adapter["fosdem"].get_page),
+            ("rosetta",             self._adapter["rosetta"].get_page),
             ("tldr",                self._adapter["tldr"].get_page),
             ("internal",            self._adapter["internal"].get_page),
             ("cheat",               self._adapter["cheat"].get_page),
@@ -106,7 +110,7 @@ class Router(object):
             return self._cached_topics_list
 
         # merging all top level lists
-        sources_to_merge = ['tldr', 'cheat', 'cheat.sheets', 'learnxiny']
+        sources_to_merge = ['tldr', 'cheat', 'cheat.sheets', 'learnxiny', 'rosetta']
         if not skip_dirs:
             sources_to_merge.append("cheat.sheets dir")
         if not skip_internal:
@@ -134,6 +138,8 @@ class Router(object):
 
             if topic == "":
                 return "search"
+            if re.match('[^/]*/rosetta(/|$)', topic):
+                return "rosetta"
             if topic.startswith(":"):
                 return "internal"
             if topic.endswith("/:list"):
