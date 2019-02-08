@@ -9,29 +9,12 @@ import glob
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from globals import PATH_TLDR_PAGES, PATH_CHEAT_PAGES
+from adapter import Adapter
 
 def _get_filenames(path):
     return [os.path.split(topic)[1] for topic in glob.glob(path)]
 
-class Cmd(object):
-    def __init__(self):
-        self._list = self._get_list()
-
-    @abc.abstractmethod
-    def _get_list(self):
-        return []
-
-    def get_list(self):
-        return self._list
-
-    def is_found(self, topic):
-        return topic in self._list
-
-    @abc.abstractmethod
-    def get_page(self, topic, request_options=None):
-        pass
-
-class Tldr(Cmd):
+class Tldr(Adapter):
     def _get_list(self):
         return [filename[:-3]
                 for filename in _get_filenames(PATH_TLDR_PAGES) if filename.endswith('.md')]
@@ -56,7 +39,7 @@ class Tldr(Cmd):
         answer = "\n".join(fixed_answer) + "\n"
         return answer.decode('utf-8')
 
-class Cheat(Cmd):
+class Cheat(Adapter):
     def _get_list(self):
         return _get_filenames(PATH_CHEAT_PAGES)
 
@@ -66,17 +49,17 @@ class Cheat(Cmd):
         answer = proc.communicate()[0].decode('utf-8')
         return answer
 
-class Fosdem(Cmd):
+class Fosdem(Adapter):
     def _get_list(self):
         return ['fosdem']
 
     def get_page(self, topic, request_options=None):
-        cmd = ["sudo", "/home/igor/bin/current-fosdem-slide"]
+        cmd = ["sudo", "/usr/local/bin/current-fosdem-slide"]
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
         answer = proc.communicate()[0].decode('utf-8')
         return answer
 
-class Translation(Cmd):
+class Translation(Adapter):
     def _get_list(self):
         return []
 

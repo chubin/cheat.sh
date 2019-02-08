@@ -18,7 +18,6 @@ import beautifier
 from globals import REDISHOST, MAX_SEARCH_LEN
 from languages_data import LANGUAGE_ALIAS, SO_NAME, rewrite_editor_section_name
 
-from adapter_learnxiny import get_learnxiny, get_learnxiny_list, is_valid_learnxy
 import adapter.cheat_sheets
 import adapter.cmd
 import adapter.latenz
@@ -68,7 +67,7 @@ class Router(object):
             "late.nz": adapter.latenz.get_list(),
             "cheat.sheets": adapter.cheat_sheets.get_list(),
             "cheat.sheets dir": adapter.cheat_sheets.get_dirs_list(),
-            "learnxiny": get_learnxiny_list(),
+            "learnxiny": adapter.learnxiny.get_learnxiny_list(),
         }
         for key, obj in self._adapter.items():
             self._topic_list[key] = obj.get_list()
@@ -77,7 +76,7 @@ class Router(object):
             "late.nz": adapter.latenz.is_found,
             "cheat.sheets": adapter.cheat_sheets.is_found,
             "cheat.sheets dir": adapter.cheat_sheets.is_dir_found,
-            "learnxiny": is_valid_learnxy,
+            "learnxiny": adapter.learnxiny.is_valid_learnxy,
         }
         for key, obj in self._adapter.items():
             self._topic_found[key] = obj.is_found
@@ -89,7 +88,7 @@ class Router(object):
             ("late.nz",             adapter.latenz.get_answer),
             ("cheat.sheets",        adapter.cheat_sheets.get_page),
             ("cheat.sheets dir",    adapter.cheat_sheets.get_dir),
-            ("learnxiny",           get_learnxiny),
+            ("learnxiny",           adapter.learnxiny.get_learnxiny),
             ("question",            adapter.question.get_page),
             ("fosdem",              self._adapter["fosdem"].get_page),
             ("rosetta",             self._adapter["rosetta"].get_page),
@@ -122,7 +121,7 @@ class Router(object):
         answer = sorted(set(answer.keys()))
 
         # doing it in this strange way to save the order of the topics
-        for topic in get_learnxiny_list():
+        for topic in adapter.learnxiny.get_learnxiny_list():
             if topic not in answer:
                 answer.append(topic)
 
@@ -160,7 +159,7 @@ class Router(object):
 
             # topic contains '/'
             #
-            if is_valid_learnxy(topic):
+            if adapter.learnxiny.is_valid_learnxy(topic):
                 return 'learnxiny'
             topic_type = topic.split('/', 1)[0]
             if topic_type in ['ru', 'fr'] or re.match(r'[a-z][a-z]-[a-z][a-z]$', topic_type):
