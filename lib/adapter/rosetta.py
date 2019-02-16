@@ -59,14 +59,29 @@ class Rosetta(Adapter):
         answer = "".join("%s\n" % x for x in sorted(answer))
         return answer
 
-    def _get_task(self, lang, query):
-        if lang not in self._rosetta_code_name:
-            return ""
-
+    @staticmethod
+    def _parse_query(query):
         if '/' in query:
             task, subquery = query.split('/', 1)
         else:
             task, subquery = query, None
+        return task, subquery
+
+    def _get_output_format(self, topic):
+        if '/' in topic:
+            subquery = topic.split('/')[-1]
+        else:
+            subquery = topic
+
+        if subquery in [':list']:
+            return 'text'
+        return self._output_format
+
+    def _get_task(self, lang, query):
+        if lang not in self._rosetta_code_name:
+            return ""
+
+        task, subquery = self._parse_query(query)
 
         if task == ':list':
             return self._rosetta_get_list(lang)

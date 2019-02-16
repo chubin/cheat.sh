@@ -37,6 +37,9 @@ class Adapter(object):
         """
         pass
 
+    def _get_output_format(self, _topic):
+        return self._output_format
+
     def get_page_dict(self, topic, request_options=None):
         """
         Return page dict for `topic`
@@ -45,6 +48,6 @@ class Adapter(object):
             'topic': topic,
             'topic_type': self._adapter_name,
             'answer': self._get_page(topic, request_options=request_options),
-            'format': self._output_format,
+            'format': self._get_output_format(topic),
             }
         return answer_dict
