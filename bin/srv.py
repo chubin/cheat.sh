@@ -247,7 +247,11 @@ def answer(topic=None):
             return "429 %s\n" % not_allowed, 429
 
     html_is_needed = is_html_needed(user_agent) and not is_result_a_script(topic)
-    result, found = cheat_wrapper(topic, request_options=options, html=html_is_needed)
+    if html_is_needed:
+        output_format='html'
+    else:
+        output_format='ansi'
+    result, found = cheat_wrapper(topic, request_options=options, output_format=output_format)
     if 'Please come back in several hours' in result and html_is_needed:
         return MALFORMED_RESPONSE_HTML_PAGE
 

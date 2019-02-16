@@ -7,7 +7,8 @@ from fuzzywuzzy import process, fuzz
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from globals import MYDIR, COLOR_STYLES
-from colorize_internal import colorize_internal
+from adapter import Adapter
+from fmt.internal import colorize_internal
 
 _INTERNAL_TOPICS = [
     ":cht.sh",
@@ -33,9 +34,13 @@ _COLORIZED_INTERNAL_TOPICS = [
     ':intro',
 ]
 
-class InternalPages(object):
+class InternalPages(Adapter):
+
+    _adapter_name = 'internal'
+    _output_format = 'ansi'
 
     def __init__(self, get_topic_type=None, get_topics_list=None):
+        Adapter.__init__(self)
         self.get_topic_type = get_topic_type
         self.get_topics_list = get_topics_list
 
@@ -50,9 +55,8 @@ class InternalPages(object):
             answer += "%s %s\n" % (key, val)
         return answer
 
-
     @staticmethod
-    def get_list():
+    def get_list(prefix=None):
         return _INTERNAL_TOPICS
 
     def _get_list_answer(self, topic, request_options=None):
@@ -70,7 +74,7 @@ class InternalPages(object):
 
         return answer
 
-    def get_page(self, topic, request_options=None):
+    def _get_page(self, topic, request_options=None):
         if topic.endswith('/:list') or topic.lstrip('/') == ':list':
             return self._get_list_answer(topic)
 
@@ -91,15 +95,18 @@ class InternalPages(object):
 
 class UnknownPages(InternalPages):
 
+    _adapter_name = 'unknown'
+    _output_format = 'text'
+
     @staticmethod
-    def get_list():
+    def get_list(prefix=None):
         return []
 
     @staticmethod
     def is_found(topic):
         return False
 
-    def get_page(self, topic, request_options=None):
+    def _get_page(self, topic, request_options=None):
         topics_list = self.get_topics_list()
         if topic.startswith(':'):
             topics_list = [x for x in topics_list if x.startswith(':')]

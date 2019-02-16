@@ -24,6 +24,8 @@ class Rosetta(Adapter):
     """
 
     __section_name = 'rosetta'
+    _adapter_name = "rosetta"
+    _output_format = "code"
 
     @staticmethod
     def _load_rosetta_code_names():
@@ -101,7 +103,7 @@ class Rosetta(Adapter):
         ) % number_of_pages
         return answer
 
-    def get_page(self, topic, request_options=None):
+    def _get_page(self, topic, request_options=None):
 
         if '/' not in topic:
             return self._rosetta_get_list(topic)
@@ -118,11 +120,10 @@ class Rosetta(Adapter):
 
         return self._get_task(lang, topic)
 
-    def _get_list(self):
+    def _get_list(self, prefix=None):
         return []
 
-    def get_list(self):
-        # return self._get_list()
+    def get_list(self, prefix=None):
         answer = [self.__section_name]
         for i in self._rosetta_code_name:
             answer.append('%s/%s/' % (i, self.__section_name))

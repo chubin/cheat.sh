@@ -20,11 +20,11 @@ from languages_data import LANGUAGE_ALIAS, SO_NAME, rewrite_editor_section_name
 
 import adapter.cheat_sheets
 import adapter.cmd
-import adapter.latenz
-import adapter.question
 import adapter.internal
-import adapter.rosetta
+import adapter.latenz
 import adapter.learnxiny
+import adapter.question
+import adapter.rosetta
 
 class Router(object):
 
@@ -61,42 +61,39 @@ class Router(object):
             "fosdem": adapter.cmd.Fosdem(),
             "translation": adapter.cmd.Translation(),
             "rosetta": adapter.rosetta.Rosetta(),
+            "late.nz": adapter.latenz.Latenz(),
+            "question": adapter.question.Question(),
+            "cheat.sheets": adapter.cheat_sheets.CheatSheets(),
+            "cheat.sheets dir": adapter.cheat_sheets.CheatSheetsDir(),
+            "learnxiny": adapter.learnxiny.LearnXinY(),
         }
 
         self._topic_list = {
-            "late.nz": adapter.latenz.get_list(),
-            "cheat.sheets": adapter.cheat_sheets.get_list(),
-            "cheat.sheets dir": adapter.cheat_sheets.get_dirs_list(),
-            "learnxiny": adapter.learnxiny.get_learnxiny_list(),
+            key: obj.get_list()
+            for key, obj in self._adapter.items()
         }
-        for key, obj in self._adapter.items():
-            self._topic_list[key] = obj.get_list()
 
         self._topic_found = {
-            "late.nz": adapter.latenz.is_found,
-            "cheat.sheets": adapter.cheat_sheets.is_found,
-            "cheat.sheets dir": adapter.cheat_sheets.is_dir_found,
-            "learnxiny": adapter.learnxiny.is_valid_learnxy,
+            key: obj.is_found
+            for key, obj in self._adapter.items()
         }
-        for key, obj in self._adapter.items():
-            self._topic_found[key] = obj.is_found
 
 # topic_type, function_getter
 # should be replaced with a decorator
 # pylint: disable=bad-whitespace
         self.topic_getters = (
-            ("late.nz",             adapter.latenz.get_answer),
-            ("cheat.sheets",        adapter.cheat_sheets.get_page),
-            ("cheat.sheets dir",    adapter.cheat_sheets.get_dir),
-            ("learnxiny",           adapter.learnxiny.get_learnxiny),
-            ("question",            adapter.question.get_page),
-            ("fosdem",              self._adapter["fosdem"].get_page),
-            ("rosetta",             self._adapter["rosetta"].get_page),
-            ("tldr",                self._adapter["tldr"].get_page),
-            ("internal",            self._adapter["internal"].get_page),
-            ("cheat",               self._adapter["cheat"].get_page),
-            ("translation",         self._adapter["translation"].get_page),
-            ("unknown",             self._adapter["unknown"].get_page),
+            ("cheat.sheets",        self._adapter["cheat.sheets"].get_page_dict),
+            ("cheat.sheets dir",    self._adapter["cheat.sheets dir"].get_page_dict),
+            ("learnxiny",           self._adapter["learnxiny"].get_page_dict),
+            ("question",            self._adapter["question"].get_page_dict),
+            ("fosdem",              self._adapter["fosdem"].get_page_dict),
+            ("late.nz",             self._adapter["late.nz"].get_page_dict),
+            ("rosetta",             self._adapter["rosetta"].get_page_dict),
+            ("tldr",                self._adapter["tldr"].get_page_dict),
+            ("internal",            self._adapter["internal"].get_page_dict),
+            ("cheat",               self._adapter["cheat"].get_page_dict),
+            ("translation",         self._adapter["translation"].get_page_dict),
+            ("unknown",             self._adapter["unknown"].get_page_dict),
         )
 # pylint: enable=bad-whitespace
 
@@ -120,10 +117,10 @@ class Router(object):
             answer.update({name:key for name in self._topic_list[key]})
         answer = sorted(set(answer.keys()))
 
-        # doing it in this strange way to save the order of the topics
-        for topic in adapter.learnxiny.get_learnxiny_list():
-            if topic not in answer:
-                answer.append(topic)
+        # # doing it in this strange way to save the order of the topics
+        # for topic in adapter.learnxiny.get_learnxiny_list():
+        #     if topic not in answer:
+        #         answer.append(topic)
 
         self._cached_topics_list = answer
         return answer
@@ -159,7 +156,7 @@ class Router(object):
 
             # topic contains '/'
             #
-            if adapter.learnxiny.is_valid_learnxy(topic):
+            if self._adapter['learnxiny'].is_found(topic):
                 return 'learnxiny'
             topic_type = topic.split('/', 1)[0]
             if topic_type in ['ru', 'fr'] or re.match(r'[a-z][a-z]-[a-z][a-z]$', topic_type):
@@ -337,10 +334,20 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
             if filetype.startswith('q:'):
                 filetype = filetype[2:]
 
-        answer = beautifier.beautify(answer.encode('utf-8'), filetype, request_options)
+        answer['answer'] = beautifier.beautify(answer['answer'].encode('utf-8'), filetype, request_options)
+
+    # if isinstance(answer, str):
+    #     answer_dict = {
+    #         'topic': topic,
+    #         'topic_type': topic_type,
+    #         'answer':   answer,
+    #         'format': 'code',
+    #         }
+    # else:
+    answer_dict = answer
 
     if not keyword:
-        return answer
+        return answer_dict
 
     #
     # shorten the answer, because keyword is specified
@@ -357,6 +364,7 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
         return ""
 
     answer = _join_paragraphs(paragraphs)
+
     return answer
 
 def find_answer_by_keyword(directory, keyword, options="", request_options=None):
@@ -379,10 +387,13 @@ def find_answer_by_keyword(directory, keyword, options="", request_options=None)
 
         answer = get_answer(topic, keyword, options=options, request_options=request_options)
         if answer:
-            answer_paragraphs.append((topic, answer))
+            answer_paragraphs.append(answer)
 
         if len(answer_paragraphs) > MAX_SEARCH_LEN:
-            answer_paragraphs.append(("LIMITED", "LIMITED TO %s ANSWERS" % MAX_SEARCH_LEN))
+            answer_paragraphs.append({
+                'topic_type': 'LIMITED',
+                'answer': "LIMITED TO %s ANSWERS" % MAX_SEARCH_LEN,
+            })
             break
 
     return answer_paragraphs

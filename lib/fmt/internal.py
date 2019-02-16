@@ -93,3 +93,38 @@ def colorize_internal(text, palette_number=1):
     text = re.sub("{.*?}", _colorize_curlies_block, text)
     text = re.sub("#(.*?)\n", _colorize_headers, text)
     return text
+
+def colorize_internal_firstpage_v1(answer):
+    """
+    Colorize "/:firstpage-v1".
+    Legacy.
+    """
+
+    def _colorize_line(line):
+        if line.startswith('T'):
+            line = colored.fg("grey_62") + line + colored.attr('reset')
+            line = re.sub(r"\{(.*?)\}", colored.fg("orange_3") + r"\1"+colored.fg('grey_35'), line)
+            return line
+
+        line = re.sub(r"\[(F.*?)\]",
+                      colored.bg("black") + colored.fg("cyan") + r"[\1]"+colored.attr('reset'),
+                      line)
+        line = re.sub(r"\[(g.*?)\]",
+                      colored.bg("dark_gray")+colored.fg("grey_0")+r"[\1]"+colored.attr('reset'),
+                      line)
+        line = re.sub(r"\{(.*?)\}",
+                      colored.fg("orange_3") + r"\1"+colored.attr('reset'),
+                      line)
+        line = re.sub(r"<(.*?)>",
+                      colored.fg("cyan") + r"\1"+colored.attr('reset'),
+                      line)
+        return line
+
+    lines = answer.splitlines()
+    answer_lines = lines[:9]
+    answer_lines.append(colored.fg('grey_35')+lines[9]+colored.attr('reset'))
+    for line in lines[10:]:
+        answer_lines.append(_colorize_line(line))
+    answer = "\n".join(answer_lines) + "\n"
+
+    return answer
