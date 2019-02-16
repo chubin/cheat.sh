@@ -4,7 +4,6 @@ Main module, answers hub.
 Exports:
 
     get_topics_list()
-    get_topic_type()
     get_answer()
     find_answer_by_keyword()
 """
@@ -38,10 +37,6 @@ class Router(object):
 
     Function get_topic_type() delivers name of the adapter,
     that will process the query.
-
-    Refactoring of the class is almost done.
-    The next steps to do:
-    * _topic_list, _topic_found and topic_getters should be merged together.
     """
 
     def __init__(self):
@@ -73,30 +68,6 @@ class Router(object):
             for key, obj in self._adapter.items()
         }
 
-        self._topic_found = {
-            key: obj.is_found
-            for key, obj in self._adapter.items()
-        }
-
-# topic_type, function_getter
-# should be replaced with a decorator
-# pylint: disable=bad-whitespace
-        self.topic_getters = (
-            ("cheat.sheets",        self._adapter["cheat.sheets"].get_page_dict),
-            ("cheat.sheets dir",    self._adapter["cheat.sheets dir"].get_page_dict),
-            ("learnxiny",           self._adapter["learnxiny"].get_page_dict),
-            ("question",            self._adapter["question"].get_page_dict),
-            ("fosdem",              self._adapter["fosdem"].get_page_dict),
-            ("late.nz",             self._adapter["late.nz"].get_page_dict),
-            ("rosetta",             self._adapter["rosetta"].get_page_dict),
-            ("tldr",                self._adapter["tldr"].get_page_dict),
-            ("internal",            self._adapter["internal"].get_page_dict),
-            ("cheat",               self._adapter["cheat"].get_page_dict),
-            ("translation",         self._adapter["translation"].get_page_dict),
-            ("unknown",             self._adapter["unknown"].get_page_dict),
-        )
-# pylint: enable=bad-whitespace
-
     def get_topics_list(self, skip_dirs=False, skip_internal=False):
         """
         List of topics returned on /:list
@@ -105,7 +76,6 @@ class Router(object):
         if self._cached_topics_list:
             return self._cached_topics_list
 
-        # merging all top level lists
         sources_to_merge = ['tldr', 'cheat', 'cheat.sheets', 'learnxiny', 'rosetta']
         if not skip_dirs:
             sources_to_merge.append("cheat.sheets dir")
@@ -117,55 +87,54 @@ class Router(object):
             answer.update({name:key for name in self._topic_list[key]})
         answer = sorted(set(answer.keys()))
 
-        # # doing it in this strange way to save the order of the topics
-        # for topic in adapter.learnxiny.get_learnxiny_list():
-        #     if topic not in answer:
-        #         answer.append(topic)
-
         self._cached_topics_list = answer
         return answer
 
-    def get_topic_type(self, topic): # pylint: disable=too-many-locals,too-many-branches,too-many-statements
+    def get_topic_type(self, topic):
         """
         Return topic type for `topic` or "unknown" if topic can't be determined.
         """
 
         def __get_topic_type(topic):
 
-            if topic == "":
-                return "search"
-            if re.match('[^/]*/rosetta(/|$)', topic):
-                return "rosetta"
-            if topic.startswith(":"):
-                return "internal"
-            if topic.endswith("/:list"):
-                return "internal"
-            if topic.endswith('/'):
-                topic = topic.rstrip('/')
-                if self._topic_found['cheat.sheets dir'](topic):
-                    return "cheat.sheets dir"
+            routing_table = [
+                ("^$", "search"),
+                ("^[^/]*/rosetta(/|$)", "rosetta"),
+                ("^:", "internal"),
+                ("/:list$", "internal"),
+                ("/$", "cheat.sheets dir"),
+                ("", "cheat.sheets"),
+                ("", "cheat"),
+                ("", "tldr"),
+                ("", "late.nz"),
+                ("", "fosdem"),
+                ("^[/]*$", "unknown"),
+                ("", "learnxiny"),
+                ("^[a-z][a-z]-[a-z][a-z]$", "translation"),
+            ]
 
-            for source in ['cheat.sheets', 'cheat', 'tldr', 'late.nz', 'fosdem']:
-                if self._topic_found[source](topic):
-                    return source
+            for regexp, route in routing_table:
+                if re.search(regexp, topic):
+                    if route in self._adapter:
+                        if self._adapter[route].is_found(topic):
+                            return route
+                    else:
+                        return route
 
-            if '/' not in topic:
-                #if '+' in topic_name:
-                #    return 'question'
-                return "unknown"
-
-            # topic contains '/'
-            #
-            if self._adapter['learnxiny'].is_found(topic):
-                return 'learnxiny'
-            topic_type = topic.split('/', 1)[0]
-            if topic_type in ['ru', 'fr'] or re.match(r'[a-z][a-z]-[a-z][a-z]$', topic_type):
-                return 'translation'
             return 'question'
 
         if topic not in self._cached_topic_type:
             self._cached_topic_type[topic] = __get_topic_type(topic)
         return self._cached_topic_type[topic]
+
+    def get_page_dict(self, query, request_options=None):
+        """
+        Return answer_dict for the `query`.
+        """
+
+        topic_type = self.get_topic_type(query)
+        return self._adapter[topic_type]\
+               .get_page_dict(query, request_options=request_options)
 
 if os.environ.get('REDIS_HOST', '').lower() != 'none':
     REDIS = redis.StrictRedis(host=REDISHOST, port=6379, db=0)
@@ -173,10 +142,7 @@ else:
     REDIS = None
 
 _ROUTER = Router()
-
-get_topic_type = _ROUTER.get_topic_type
 get_topics_list = _ROUTER.get_topics_list
-TOPIC_GETTERS = _ROUTER.topic_getters
 
 def get_answer(topic, keyword, options="", request_options=None): # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     """
@@ -291,7 +257,7 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
     # so this part should be rewritten
     # for the most queries we could say immediately
     # what type the query has
-    topic_type = get_topic_type(topic)
+    topic_type = _ROUTER.get_topic_type(topic)
 
     # checking if the answer is in the cache
     if topic != "":
@@ -313,18 +279,11 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
     # if answer was not found in the cache
     # try to find it in one of the repositories
     if not answer:
-
-        for topic_getter_type, topic_getter in TOPIC_GETTERS:
-            if topic_type == topic_getter_type:
-                answer = topic_getter(topic, request_options=request_options)
-                break
-        if not answer:
-            topic_type = "unknown"
-            answer = dict(TOPIC_GETTERS)['unknown'](topic)
+        answer = _ROUTER.get_page_dict(topic, request_options=request_options)
 
         # saving answers in the cache
         if REDIS:
-            if topic_type not in ["search", "internal", "unknown"]:
+            if answer and answer['topic_type'] not in ["search", "internal", "unknown"]:
                 REDIS.set(topic, answer)
 
     if needs_beautification:
@@ -334,22 +293,12 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
             if filetype.startswith('q:'):
                 filetype = filetype[2:]
 
-        answer['answer'] = beautifier.beautify(answer['answer'].encode('utf-8'), filetype, request_options)
-
-    # if isinstance(answer, str):
-    #     answer_dict = {
-    #         'topic': topic,
-    #         'topic_type': topic_type,
-    #         'answer':   answer,
-    #         'format': 'code',
-    #         }
-    # else:
-    answer_dict = answer
+        answer['answer'] = beautifier.beautify(
+            answer['answer'].encode('utf-8'), filetype, request_options)
 
     if not keyword:
-        return answer_dict
+        return answer
 
-    #
     # shorten the answer, because keyword is specified
     #
     insensitive = 'i' in options

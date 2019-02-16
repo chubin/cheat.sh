@@ -78,3 +78,6 @@ class CheatSheetsDir(CheatSheets):
             answer.append(os.path.basename(f_name))
         topics = sorted(answer)
         return "\n".join(topics) + "\n"
+
+    def is_found(self, topic):
+        return CheatSheets.is_found(self, topic.rstrip('/'))

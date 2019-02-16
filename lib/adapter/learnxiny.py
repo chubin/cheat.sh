@@ -31,7 +31,7 @@ class LearnXYAdapter(object):
         self._topics_list = [x for x, _ in self._blocks]
         if "Comments" in self._topics_list:
             self._topics_list = [x for x in self._topics_list if x != "Comments"] + ["Comments"]
-        self._topics_list += [":learn"]
+        self._topics_list += [":learn", ":list"]
         print(self.prefix, self._topics_list)
 
     def _is_block_separator(self, before, now, after):

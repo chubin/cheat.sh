@@ -91,7 +91,10 @@ class InternalPages(Adapter):
         return answer
 
     def is_found(self, topic):
-        return topic in self.get_list()
+        return (
+            topic in self.get_list()
+            or topic.endswith('/:list')
+        )
 
 class UnknownPages(InternalPages):
 
@@ -104,7 +107,7 @@ class UnknownPages(InternalPages):
 
     @staticmethod
     def is_found(topic):
-        return False
+        return True
 
     def _get_page(self, topic, request_options=None):
         topics_list = self.get_topics_list()

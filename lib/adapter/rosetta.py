@@ -67,16 +67,6 @@ class Rosetta(Adapter):
             task, subquery = query, None
         return task, subquery
 
-    def _get_output_format(self, topic):
-        if '/' in topic:
-            subquery = topic.split('/')[-1]
-        else:
-            subquery = topic
-
-        if subquery in [':list']:
-            return 'text'
-        return self._output_format
-
     def _get_task(self, lang, query):
         if lang not in self._rosetta_code_name:
             return ""
@@ -145,7 +135,7 @@ class Rosetta(Adapter):
         return answer
 
     def is_found(self, _):
-        return False
+        return True
 
     def __init__(self):
         Adapter.__init__(self)

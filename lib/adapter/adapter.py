@@ -37,7 +37,14 @@ class Adapter(object):
         """
         pass
 
-    def _get_output_format(self, _topic):
+    def _get_output_format(self, topic):
+        if '/' in topic:
+            subquery = topic.split('/')[-1]
+        else:
+            subquery = topic
+
+        if subquery in [':list']:
+            return 'text'
         return self._output_format
 
     def get_page_dict(self, topic, request_options=None):
