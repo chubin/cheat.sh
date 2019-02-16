@@ -13,9 +13,10 @@ import os
 import re
 import redis
 
-import beautifier
 from globals import REDISHOST, MAX_SEARCH_LEN
 from languages_data import LANGUAGE_ALIAS, SO_NAME, rewrite_editor_section_name
+
+import fmt.comments
 
 import adapter.cheat_sheets
 import adapter.cmd
@@ -253,20 +254,16 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
     topic = _rewrite_aliases(topic)
     topic = _rewrite_section_name(topic)
 
-    # this is pretty unoptimal
-    # so this part should be rewritten
-    # for the most queries we could say immediately
-    # what type the query has
+    # This is pretty unoptimal, so this part should be rewritten.
+    # For the most queries we could say immediately, # what type the query has.
     topic_type = _ROUTER.get_topic_type(topic)
 
-    # checking if the answer is in the cache
+    # Checking if the answer is in the cache
     if topic != "":
-        # temporary hack for "questions":
-        # the topic name has to be prefixed with q:
-        # so we can later delete them from redis
-        # and we known that they need beautification
-        #if '/' in topic and '+' in topic:
-        if topic_type == 'question': #'/' in topic and '+' in topic:
+        # Temporary hack for "questions": # the topic name has to be prefixed with `q:`
+        # so we can later delete them from REDIS.
+        # And we known that they need beautification
+        if topic_type == 'question':
             topic = _rewrite_section_name_for_q(topic)
             topic = "q:" + topic
             needs_beautification = True
@@ -276,8 +273,7 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
         if answer:
             answer = answer.decode('utf-8')
 
-    # if answer was not found in the cache
-    # try to find it in one of the repositories
+    # If answer was not found in the cache, try to find it in one of the repositories
     if not answer:
         answer = _ROUTER.get_page_dict(topic, request_options=request_options)
 
@@ -293,7 +289,7 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
             if filetype.startswith('q:'):
                 filetype = filetype[2:]
 
-        answer['answer'] = beautifier.beautify(
+        answer['answer'] = fmt.comments.beautify(
             answer['answer'].encode('utf-8'), filetype, request_options)
 
     if not keyword:
