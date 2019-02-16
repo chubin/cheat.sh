@@ -37,7 +37,7 @@ class CheatSheets(Adapter):
 
     _adapter_name = "cheat.sheets"
     _output_format = "code"
-    
+
     def __init__(self):
         self._answers = []
         self._cheatsheet_answers = []
