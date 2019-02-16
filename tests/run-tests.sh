@@ -18,7 +18,6 @@ failed=0
   fi
 } > "$TMP3"
 while read -r number test_line; do
-  number=$((number-1))
   test_line="${test_line// #.*//}"
   if [[ $test_line = "cht.sh "* ]]; then
     test_line="${test_line//cht.sh /}"
