@@ -39,7 +39,11 @@ from languages_data import VIM_NAME
 from globals import PATH_VIM_ENVIRONMENT, REDISHOST
 # pylint: enable=wrong-import-position,wrong-import-order
 
-REDIS = redis.StrictRedis(host=REDISHOST, port=6379, db=1)
+if os.environ.get('REDIS_HOST', '').lower() != 'none':
+    REDIS = redis.StrictRedis(host=REDISHOST, port=6379, db=1)
+else:
+    REDIS = None
+
 FNULL = open(os.devnull, 'w')
 TEXT = 0
 CODE = 1
@@ -297,14 +301,17 @@ def beautify(text, lang, options):
         # if mode is unknown, just don't transform the text at all
         return text
 
-    digest = "t:%s:%s:%s" % (hashlib.md5(text).hexdigest(), lang, mode)
-    answer = REDIS.get(digest)
-    if answer:
-        return answer
+    if REDIS:
+        digest = "t:%s:%s:%s" % (hashlib.md5(text).hexdigest(), lang, mode)
+        answer = REDIS.get(digest)
+        if answer:
+            return answer
 
     answer = _beautify(text, lang, **beauty_options)
 
-    REDIS.set(digest, answer)
+    if REDIS:
+        REDIS.set(digest, answer)
+
     return answer
 
 def __main__():
