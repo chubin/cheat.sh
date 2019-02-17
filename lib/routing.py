@@ -18,6 +18,7 @@ from languages_data import LANGUAGE_ALIAS, SO_NAME, rewrite_editor_section_name
 
 import fmt.comments
 
+import cache
 import adapter.cheat_sheets
 import adapter.cmd
 import adapter.internal

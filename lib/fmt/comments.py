@@ -31,18 +31,13 @@ import re
 from itertools import groupby, chain
 from tempfile import NamedTemporaryFile
 
-import redis
+import cache
 
 MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 sys.path.append("%s/lib/" % MYDIR)
 from languages_data import VIM_NAME
-from globals import PATH_VIM_ENVIRONMENT, REDISHOST
+from globals import PATH_VIM_ENVIRONMENT
 # pylint: enable=wrong-import-position,wrong-import-order
-
-if os.environ.get('REDIS_HOST', '').lower() != 'none':
-    REDIS = redis.StrictRedis(host=REDISHOST, port=6379, db=1)
-else:
-    REDIS = None
 
 FNULL = open(os.devnull, 'w')
 TEXT = 0
@@ -301,16 +296,12 @@ def beautify(text, lang, options):
         # if mode is unknown, just don't transform the text at all
         return text
 
-    if REDIS:
-        digest = "t:%s:%s:%s" % (hashlib.md5(text).hexdigest(), lang, mode)
-        answer = REDIS.get(digest)
-        if answer:
-            return answer
-
+    digest = "t:%s:%s:%s" % (hashlib.md5(text).hexdigest(), lang, mode)
+    answer = cache.get(digest)
+    if answer:
+        return answer
     answer = _beautify(text, lang, **beauty_options)
-
-    if REDIS:
-        REDIS.set(digest, answer)
+    cache.put(digest, answer)
 
     return answer
 

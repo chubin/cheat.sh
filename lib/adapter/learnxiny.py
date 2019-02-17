@@ -794,6 +794,9 @@ _ADAPTERS = {cls.prefix: cls() for cls in vars()['LearnXYAdapter'].__subclasses_
 
 class LearnXinY(Adapter):
 
+    _output_format = 'code'
+    _cache_needed = True
+
     def __init__(self):
         self.adapters = _ADAPTERS
         Adapter.__init__(self)

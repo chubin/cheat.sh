@@ -18,6 +18,7 @@ class Tldr(Adapter):
 
     _adapter_name = "tldr"
     _output_format = "code"
+    _cache_needed = True
 
     def _get_list(self, prefix=None):
         return [filename[:-3]
@@ -47,6 +48,7 @@ class Cheat(Adapter):
 
     _adapter_name = "cheat"
     _output_format = "code"
+    _cache_needed = True
 
     def _get_list(self, prefix=None):
         return _get_filenames(PATH_CHEAT_PAGES)
@@ -75,6 +77,7 @@ class Translation(Adapter):
 
     _adapter_name = "translation"
     _output_format = "text"
+    _cache_needed = True
 
     def _get_list(self, prefix=None):
         return []

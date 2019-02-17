@@ -13,11 +13,13 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from globals import MYDIR
 
 from adapter import Adapter
+from languages_data import SO_NAME
 
 class Question(Adapter):
 
     _adapter_name = "question"
-    _output_format = "code"
+    _output_format = "text+code"
+    _cache_needed = True
 
     def _get_page(self, topic, request_options=None):
         """

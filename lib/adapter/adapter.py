@@ -4,6 +4,7 @@ class Adapter(object):
 
     _adapter_name = None
     _output_format = 'code'
+    _cache_needed = False
 
     def __init__(self):
         self._list = {None: self._get_list()}
@@ -29,6 +30,13 @@ class Adapter(object):
         CAUTION: only root is checked
         """
         return topic in self._list[None]
+
+    def is_cache_needed(self):
+        """
+        Return True if answers should be cached.
+        Return False if answers should not be cached.
+        """
+        return self._cache_needed
 
     @abc.abstractmethod
     def _get_page(self, topic, request_options=None):
