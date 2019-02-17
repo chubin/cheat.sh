@@ -124,3 +124,16 @@ Do you mean one of these topics maybe?
 
 %s
     """ % possible_topics_text
+
+class Search(Adapter):
+
+    _adapter_name = 'search'
+    _output_format = 'text'
+    _cache_needed = False
+
+    @staticmethod
+    def get_list(prefix=None):
+        return []
+
+    def is_found(topic):
+        return True

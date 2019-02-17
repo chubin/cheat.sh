@@ -32,7 +32,9 @@ class Question(Adapter):
             section_name, topic = topic.split('/', 1)
             if ':' in section_name:
                 _, section_name = section_name.split(':', 1)
+            section_name = SO_NAME.get(section_name, section_name)
             topic = "%s/%s" % (section_name, topic)
+
 
         # some clients send queries with - instead of + so we have to rewrite them to
         topic = re.sub(r"(?<!-)-", ' ', topic)

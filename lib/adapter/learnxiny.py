@@ -825,6 +825,9 @@ class LearnXinY(Adapter):
         Return whether `topic` is a valid learnxiny topic
         """
 
+        if '/' not in topic:
+            return False
+
         lang, topic = topic.split('/', 1)
         if lang not in self.adapters:
             return False

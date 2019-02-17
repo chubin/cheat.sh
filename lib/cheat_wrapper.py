@@ -11,7 +11,11 @@ Exports:
 import re
 import json
 
-from get_answer import get_answer, find_answer_by_keyword, get_topics_list
+from routing import get_answer_dict, get_topics_list
+from search import find_answers_by_keyword
+from languages_data import LANGUAGE_ALIAS, rewrite_editor_section_name
+import postprocessing
+
 import frontend.html
 import frontend.ansi
 
@@ -21,6 +25,28 @@ def cheat_wrapper(query, request_options=None, output_format='ansi'):
     If `html` is True, the answer is formatted as HTML.
     Additional request options specified in `request_options`.
     """
+
+    def _rewrite_aliases(word):
+        if word == ':bash.completion':
+            return ':bash_completion'
+        return word
+
+    def _rewrite_section_name(query):
+        """
+        Rewriting special section names:
+        * EDITOR:NAME => emacs:go-mode
+        """
+
+        if '/' not in query:
+            return query
+
+        section_name, rest = query.split('/', 1)
+
+        if ':' in section_name:
+            section_name = rewrite_editor_section_name(section_name)
+        section_name = LANGUAGE_ALIAS.get(section_name, section_name)
+
+        return "%s/%s" % (section_name, rest)
 
     def _sanitize_query(query):
         return re.sub('[<>"]', '', query)
@@ -48,6 +74,9 @@ def cheat_wrapper(query, request_options=None, output_format='ansi'):
         return topic, keyword, search_options
 
     query = _sanitize_query(query)
+    query = _rewrite_aliases(query)
+    query = _rewrite_section_name(query)
+
 
     # at the moment, we just remove trailing slashes
     # so queries python/ and python are equal
@@ -55,10 +84,16 @@ def cheat_wrapper(query, request_options=None, output_format='ansi'):
     topic, keyword, search_options = _parse_query(query)
 
     if keyword:
-        answers = find_answer_by_keyword(
+        answers = find_answers_by_keyword(
             topic, keyword, options=search_options, request_options=request_options)
     else:
-        answers = [get_answer(topic, keyword, request_options=request_options)]
+        answers = [get_answer_dict(topic, request_options=request_options)]
+
+    answers = [
+        postprocessing.postprocess(
+            answer, keyword, search_options, request_options=request_options)
+        for answer in answers
+    ]
 
     answer_data = {
         'query': query,

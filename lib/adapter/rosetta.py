@@ -23,7 +23,7 @@ class Rosetta(Adapter):
     Adapter for RosettaCode
     """
 
-    __section_name = 'rosetta'
+    __section_name = "rosetta"
     _adapter_name = "rosetta"
     _output_format = "code"
 

@@ -1,22 +1,14 @@
 """
-Main module, answers hub.
+Queries routing and caching.
 
 Exports:
 
     get_topics_list()
-    get_answer()
-    find_answer_by_keyword()
+    get_answer_dict()
 """
 from __future__ import print_function
 
-import os
 import re
-import redis
-
-from globals import REDISHOST, MAX_SEARCH_LEN
-from languages_data import LANGUAGE_ALIAS, SO_NAME, rewrite_editor_section_name
-
-import fmt.comments
 
 import cache
 import adapter.cheat_sheets
@@ -30,16 +22,28 @@ import adapter.rosetta
 class Router(object):
 
     """
-    Implementation of query routing.
-    Routing is done basing on the data exported by the adapters.
-    (mainly by functions get_list() and is_found()).
+    Implementation of query routing. Routing is based on `routing_table`
+    and the data exported by the adapters (functions `get_list()` and `is_found()`).
 
-    Function get_topics_list() returns available topics
-    (that are accessible at /:list).
-
-    Function get_topic_type() delivers name of the adapter,
-    that will process the query.
+    `get_topics_list()` returns available topics (accessible at /:list).
+    `get_answer_dict()` return answer for the query.
     """
+
+    routing_table = [
+        ("^$", "search"),
+        ("^[^/]*/rosetta(/|$)", "rosetta"),
+        ("^:", "internal"),
+        ("/:list$", "internal"),
+        ("/$", "cheat.sheets dir"),
+        ("", "cheat.sheets"),
+        ("", "cheat"),
+        ("", "tldr"),
+        ("", "late.nz"),
+        ("", "fosdem"),
+        ("^[^/]*$", "unknown"),
+        ("", "learnxiny"),
+        ("^[a-z][a-z]-[a-z][a-z]$", "translation"),
+    ]
 
     def __init__(self):
 
@@ -53,6 +57,7 @@ class Router(object):
             "unknown": adapter.internal.UnknownPages(
                 get_topic_type=self.get_topic_type,
                 get_topics_list=self.get_topics_list),
+            "search": adapter.internal.Search(),
             "tldr": adapter.cmd.Tldr(),
             "cheat": adapter.cmd.Cheat(),
             "fosdem": adapter.cmd.Fosdem(),
@@ -99,37 +104,20 @@ class Router(object):
 
         def __get_topic_type(topic):
 
-            routing_table = [
-                ("^$", "search"),
-                ("^[^/]*/rosetta(/|$)", "rosetta"),
-                ("^:", "internal"),
-                ("/:list$", "internal"),
-                ("/$", "cheat.sheets dir"),
-                ("", "cheat.sheets"),
-                ("", "cheat"),
-                ("", "tldr"),
-                ("", "late.nz"),
-                ("", "fosdem"),
-                ("^[/]*$", "unknown"),
-                ("", "learnxiny"),
-                ("^[a-z][a-z]-[a-z][a-z]$", "translation"),
-            ]
-
-            for regexp, route in routing_table:
+            for regexp, route in self.routing_table:
                 if re.search(regexp, topic):
                     if route in self._adapter:
                         if self._adapter[route].is_found(topic):
                             return route
                     else:
                         return route
-
             return 'question'
 
         if topic not in self._cached_topic_type:
             self._cached_topic_type[topic] = __get_topic_type(topic)
         return self._cached_topic_type[topic]
 
-    def get_page_dict(self, query, request_options=None):
+    def _get_page_dict(self, query, request_options=None):
         """
         Return answer_dict for the `query`.
         """
@@ -138,162 +126,52 @@ class Router(object):
         return self._adapter[topic_type]\
                .get_page_dict(query, request_options=request_options)
 
-if os.environ.get('REDIS_HOST', '').lower() != 'none':
-    REDIS = redis.StrictRedis(host=REDISHOST, port=6379, db=0)
-else:
-    REDIS = None
-
-_ROUTER = Router()
-get_topics_list = _ROUTER.get_topics_list
-
-def get_answer(topic, keyword, options="", request_options=None): # pylint: disable=too-many-locals,too-many-branches,too-many-statements
-    """
-    Find cheat sheet for the topic.
-    If `keyword` is None or rempty, return the whole answer.
-    Otherwise cut the paragraphs containing keywords.
-
-    Args:
-        topic (str):    the name of the topic of the cheat sheet
-        keyword (str):  the name of the keywords to search in the cheat sheets
-
-    Returns:
-        string:         the cheat sheet
-    """
-
-    def _join_paragraphs(paragraphs):
-        answer = "\n".join(paragraphs)
-        return answer
-
-    def _split_paragraphs(text):
-        answer = []
-        paragraph = ""
-        for line in text.splitlines():
-            if line == "":
-                answer.append(paragraph)
-                paragraph = ""
-            else:
-                paragraph += line+"\n"
-        answer.append(paragraph)
-        return answer
-
-    def _paragraph_contains(paragraph, keyword, insensitive=False, word_boundaries=True):
+    def get_answer_dict(self, topic, request_options=None):
         """
-        Check if `paragraph` contains `keyword`.
-        Several keywords can be joined together using ~
-        For example: ~ssh~passphrase
+        Find cheat sheet for the topic.
+
+        Args:
+            `topic` (str):    the name of the topic of the cheat sheet
+
+        Returns:
+            answer_dict:      the answer dictionary
         """
-        answer = True
 
-        if '~' in keyword:
-            keywords = keyword.split('~')
-        else:
-            keywords = [keyword]
+        topic_type = self.get_topic_type(topic)
 
-        for kwrd in keywords:
-            regex = re.escape(kwrd)
-            if not word_boundaries:
-                regex = r"\b%s\b" % kwrd
-
-            if insensitive:
-                answer = answer and bool(re.search(regex, paragraph, re.IGNORECASE))
-            else:
-                answer = answer and bool(re.search(regex, paragraph))
-
-        return answer
-
-    def _rewrite_aliases(word):
-        if word == ':bash.completion':
-            return ':bash_completion'
-        return word
-
-    def _rewrite_section_name(query):
-        """
-        """
-        if '/' not in query:
-            return query
-
-        section_name, rest = query.split('/', 1)
-
-        if ':' in section_name:
-            # if ':' is in section_name, it means, that we want to
-            # translate the answer in the specified human language
-            # (experimental)
-            language, section_name = section_name.split(':', 1)
-        else:
-            language = ""
-
-        section_name = LANGUAGE_ALIAS.get(section_name, section_name)
-
-        if language:
-            section_name = language + ":" + section_name
-
-        return "%s/%s" % (section_name, rest)
-
-    def _rewrite_section_name_for_q(query):
-        """
-        FIXME: we rewrite the section name too earlier,
-        what means that we have to use SO names everywhere,
-        where actually canonified internal names shoud be used.
-        After this thing is fixed, we should:
-        * fix naming in cache
-        * fix VIM_NAMES
-        """
-        if '/' not in query:
-            return query
-
-        section_name, rest = query.split('/', 1)
-        if ':' in section_name:
-            section_name = rewrite_editor_section_name(section_name)
-
-        section_name = SO_NAME.get(section_name, section_name)
-        return "%s/%s" % (section_name, rest)
-
-
-    answer = None
-    needs_beautification = False
-
-    topic = _rewrite_aliases(topic)
-    topic = _rewrite_section_name(topic)
-
-    # This is pretty unoptimal, so this part should be rewritten.
-    # For the most queries we could say immediately, # what type the query has.
-    topic_type = _ROUTER.get_topic_type(topic)
-
-    # Checking if the answer is in the cache
-    if topic != "":
-        # Temporary hack for "questions": # the topic name has to be prefixed with `q:`
-        # so we can later delete them from REDIS.
-        # And we known that they need beautification
+        # 'question' queries are pretty expensive, that's why they should be handled
+        # in a special way:
+        # we do not drop the old style cache entries and try to reuse them if possible
         if topic_type == 'question':
-            topic = _rewrite_section_name_for_q(topic)
-            topic = "q:" + topic
-            needs_beautification = True
+            answer = cache.get('q:' + topic)
+            if answer:
+                if isinstance(answer, dict):
+                    return answer
+                return {
+                    'topic': topic,
+                    'topic_type': 'question',
+                    'answer': answer,
+                    'format': 'text+code',
+                    }
 
-        if REDIS:
-            answer = REDIS.get(topic)
-        if answer:
-            answer = answer.decode('utf-8')
+            answer = self._get_page_dict(topic, request_options=request_options)
+            cache.put('q:' + topic, answer)
+            return answer
 
-    # If answer was not found in the cache, try to find it in one of the repositories
-    if not answer:
-        answer = _ROUTER.get_page_dict(topic, request_options=request_options)
+        # Try to find cacheable queries in the cache.
+        # If answer was not found in the cache, resolve it in a normal way and save in the cache
+        cache_needed = self._adapter[topic_type].is_cache_needed()
+        if cache_needed:
+            answer = cache.get(topic)
+            if not isinstance(answer, dict):
+                answer = None
+            if answer:
+                return answer
 
-        # saving answers in the cache
-        if REDIS:
-            if answer and answer['topic_type'] not in ["search", "internal", "unknown"]:
-                REDIS.set(topic, answer)
+        answer = self._get_page_dict(topic, request_options=request_options)
 
-    if needs_beautification:
-        filetype = 'bash'
-        if '/' in topic:
-            filetype = topic.split('/', 1)[0]
-            if filetype.startswith('q:'):
-                filetype = filetype[2:]
-
-        answer['answer'] = fmt.comments.beautify(
-            answer['answer'].encode('utf-8'), filetype, request_options)
-
-    if not keyword:
+        if cache_needed and answer:
+            cache.put(topic, answer)
         return answer
 
 # pylint: disable=invalid-name

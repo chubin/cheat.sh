@@ -21,7 +21,7 @@ class Adapter(object):
         if prefix in self._list:
             return self._list[prefix]
 
-        self._list[prefix] = self._get_list(prefix=prefix)
+        self._list[prefix] = set(self._get_list(prefix=prefix))
         return self._list[prefix]
 
     def is_found(self, topic):
