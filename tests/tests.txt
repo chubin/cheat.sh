@@ -2,7 +2,7 @@ python/:list
 ls
 ls?T
 btrfs
-btrfs~volume
+btrfs~volume                # search on page
 :intro
 :help
 :cht.sh
@@ -18,3 +18,7 @@ az                          # chubin/cheat.sheets
 python/rosetta/Substring    # rosetta
 python/rosetta/Substring?T  # rosetta
 python/rosetta/:list        # rosetta
+js/:learn                   # short names check
+javascript/:learn           # short names check
+emacs:go-mode/:list         # special editor names
+mkffs.ffatt                 # unknown
