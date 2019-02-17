@@ -296,50 +296,7 @@ def get_answer(topic, keyword, options="", request_options=None): # pylint: disa
     if not keyword:
         return answer
 
-    # shorten the answer, because keyword is specified
-    #
-    insensitive = 'i' in options
-    word_boundaries = 'b' in options
-
-    paragraphs = _split_paragraphs(answer)
-    paragraphs = [p for p in paragraphs
-                  if _paragraph_contains(p, keyword,
-                                         insensitive=insensitive,
-                                         word_boundaries=word_boundaries)]
-    if paragraphs == []:
-        return ""
-
-    answer = _join_paragraphs(paragraphs)
-
-    return answer
-
-def find_answer_by_keyword(directory, keyword, options="", request_options=None):
-    """
-    Search in the whole tree of all cheatsheets or in its subtree `directory`
-    by `keyword`
-    """
-
-    recursive = 'r' in options
-
-    answer_paragraphs = []
-    for topic in get_topics_list(skip_internal=True, skip_dirs=True):
-
-        if not topic.startswith(directory):
-            continue
-
-        subtopic = topic[len(directory):]
-        if not recursive and '/' in subtopic:
-            continue
-
-        answer = get_answer(topic, keyword, options=options, request_options=request_options)
-        if answer:
-            answer_paragraphs.append(answer)
-
-        if len(answer_paragraphs) > MAX_SEARCH_LEN:
-            answer_paragraphs.append({
-                'topic_type': 'LIMITED',
-                'answer': "LIMITED TO %s ANSWERS" % MAX_SEARCH_LEN,
-            })
-            break
-
-    return answer_paragraphs
+# pylint: disable=invalid-name
+_ROUTER = Router()
+get_topics_list = _ROUTER.get_topics_list
+get_answer_dict = _ROUTER.get_answer_dict
