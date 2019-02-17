@@ -102,12 +102,21 @@ def _visualize(answers, request_options, search_mode=False):
         answer = answer_dict['answer']
         found = found and not topic_type == 'unknown'
 
+        if search_mode and topic != 'LIMITED':
+            if not highlight:
+                result += "\n[%s]\n" % topic
+            else:
+                result += "\n%s%s %s %s%s\n" % (
+                    colored.bg('dark_gray'), colored.attr("res_underlined"),
+                    topic,
+                    colored.attr("res_underlined"), colored.attr('reset'))
+
         if answer_dict['format'] in ['ansi', 'text']:
             result += answer
         elif topic == ':firstpage-v1':
             result += fmt.internal.colorize_internal_firstpage_v1(answer)
         elif topic == 'LIMITED':
-            result += _limited_answer(answer)
+            result += _limited_answer(topic)
         else:
             result += _colorize_ansi_answer(
                 topic, answer, color_style,
@@ -116,14 +125,6 @@ def _visualize(answers, request_options, search_mode=False):
                                 and not request_options.get('add_comments')
                                 and not request_options.get('remove_text')))
 
-        if search_mode:
-            if not highlight:
-                result += "\n[%s]\n" % topic
-            else:
-                result += "\n%s%s %s %s%s\n" % (
-                    colored.bg('dark_gray'), colored.attr("res_underlined"),
-                    topic,
-                    colored.attr("res_underlined"), colored.attr('reset'))
 
     result = result.strip('\n') + "\n"
     return result, found
