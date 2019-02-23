@@ -54,7 +54,7 @@ class Cheat(Adapter):
         return _get_filenames(PATH_CHEAT_PAGES)
 
     def _get_page(self, topic, request_options=None):
-        cmd = ["cheat", topic]
+        cmd = ["/usr/local/bin/cheat", topic]
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
         answer = proc.communicate()[0].decode('utf-8')
         return answer
