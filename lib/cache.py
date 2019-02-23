@@ -8,7 +8,7 @@ if os.environ.get('REDIS_HOST', '').lower() != 'none':
 else:
     _REDIS = None
 
-if os.environ.get('REDIS_PREFIX', '').lower() != 'none':
+if os.environ.get('REDIS_PREFIX', ''):
     _REDIS_PREFIX = os.environ.get('REDIS_PREFIX', '') + ':'
 else:
     _REDIS_PREFIX = ''
