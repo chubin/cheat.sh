@@ -34,7 +34,7 @@ PATH_VIM_ENVIRONMENT = os.path.join(MYDIR, 'share/vim')
 
 if USE_OS_PACKAGES:
     PATH_TLDR_PAGES = "/home/igor/.tldr/cache/pages/*/*.md"
-    PATH_CHEAT_PAGES = "/usr/local/lib/python2.7/dist-packages/cheat/cheatsheets/*"
+    PATH_CHEAT_PAGES = "/usr/share/cheat/*"
     PATH_CHEAT_SHEETS = "/home/igor/cheat.sheets/sheets/"
     PATH_CHEAT_SHEETS_SPOOL = "/home/igor/cheat.sheets/spool/"
     PATH_LEARNXINY = "/home/igor/git/github.com/adambard/learnxinyminutes-docs"

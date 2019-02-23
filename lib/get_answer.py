@@ -168,6 +168,7 @@ class Router(object):
 
         if topic not in self._cached_topic_type:
             self._cached_topic_type[topic] = __get_topic_type(topic)
+        print("%s %s" % (topic, self._cached_topic_type[topic]))
         return self._cached_topic_type[topic]
 
 if os.environ.get('REDIS_HOST', '').lower() != 'none':
