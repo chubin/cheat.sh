@@ -25,8 +25,8 @@ def visualize(answer_data, request_options):
     if len(answers) == 1:
         repository_button = _github_button(answers[0]['topic_type'])
 
-    result = frontend.ansi.visualize(answer_data, request_options)
-    return _render_html(query, result, editable, repository_button, topics_list, request_options)
+    result, found = frontend.ansi.visualize(answer_data, request_options)
+    return _render_html(query, result, editable, repository_button, topics_list, request_options), found
 
 def _github_button(topic_type):
 
