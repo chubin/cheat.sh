@@ -28,10 +28,10 @@ from pygments.formatters import Terminal256Formatter        # pylint: disable=no
                                                             # pylint: disable=wrong-import-position
 sys.path.append(os.path.abspath(os.path.join(__file__, '..')))
 from globals import COLOR_STYLES
-import languages_data
-import beautifier                                           # pylint: enable=wrong-import-position
+import languages_data                                       # pylint: enable=wrong-import-position
 
 import fmt.internal
+import fmt.comments
 
 def visualize(answer_data, request_options):
     """
@@ -72,7 +72,7 @@ def _colorize_ansi_answer(topic, answer, color_style,       # pylint: disable=to
         highlight = lambda x: x
 
     if highlight_code:
-        blocks = beautifier.code_blocks(
+        blocks = fmt.comments.code_blocks(
             answer, wrap_lines=True, unindent_code=(4 if unindent_code else False))
         highlighted_blocks = []
         for block in blocks:
