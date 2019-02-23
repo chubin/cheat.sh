@@ -1,17 +1,24 @@
-cht.sh python :list
-cht.sh ls
-cht.sh ls?T
-cht.sh btrfs
-cht.sh btrfs~volume
-cht.sh :intro
-cht.sh :help
-cht.sh :cht.sh
+python/:list
+ls
+ls?T
+btrfs
+btrfs~volume                # search on page
+:intro
+:help
+:cht.sh
 cht.sh python copy file
-cht.sh python/copy+file
-cht.sh python/copy+file?Q
-cht.sh python/copy+file?QT
-cht.sh /
-cht.sh //
-cht.sh python/:learn
-cht.sh latencies
-cht.sh az                     # chubin/cheat.sheets
+python/copy+file
+python/copy+file?Q
+python/copy+file?QT
+/
+//
+python/:learn
+latencies
+az                          # chubin/cheat.sheets
+python/rosetta/Substring    # rosetta
+python/rosetta/Substring?T  # rosetta
+python/rosetta/:list        # rosetta
+js/:learn                   # short names check
+javascript/:learn           # short names check
+emacs:go-mode/:list         # special editor names
+mkffs.ffatt                 # unknown

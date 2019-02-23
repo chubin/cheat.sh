@@ -15,11 +15,16 @@ def _get_filenames(path):
     return [os.path.split(topic)[1] for topic in glob.glob(path)]
 
 class Tldr(Adapter):
-    def _get_list(self):
+
+    _adapter_name = "tldr"
+    _output_format = "code"
+    _cache_needed = True
+
+    def _get_list(self, prefix=None):
         return [filename[:-3]
                 for filename in _get_filenames(PATH_TLDR_PAGES) if filename.endswith('.md')]
 
-    def get_page(self, topic, request_options=None):
+    def _get_page(self, topic, request_options=None):
         cmd = ["tldr", topic]
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
         answer = proc.communicate()[0]
@@ -40,32 +45,44 @@ class Tldr(Adapter):
         return answer.decode('utf-8')
 
 class Cheat(Adapter):
-    def _get_list(self):
+
+    _adapter_name = "cheat"
+    _output_format = "code"
+    _cache_needed = True
+
+    def _get_list(self, prefix=None):
         return _get_filenames(PATH_CHEAT_PAGES)
 
-    def get_page(self, topic, request_options=None):
+    def _get_page(self, topic, request_options=None):
         cmd = ["/usr/local/bin/cheat", topic]
-        print(cmd)
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
         answer = proc.communicate()[0].decode('utf-8')
-        print("answer=%s"% answer)
         return answer
 
 class Fosdem(Adapter):
-    def _get_list(self):
+
+    _adapter_name = "fosdem"
+    _output_format = "ansi"
+
+    def _get_list(self, prefix=None):
         return ['fosdem']
 
-    def get_page(self, topic, request_options=None):
+    def _get_page(self, topic, request_options=None):
         cmd = ["sudo", "/usr/local/bin/current-fosdem-slide"]
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
         answer = proc.communicate()[0].decode('utf-8')
         return answer
 
 class Translation(Adapter):
-    def _get_list(self):
+
+    _adapter_name = "translation"
+    _output_format = "text"
+    _cache_needed = True
+
+    def _get_list(self, prefix=None):
         return []
 
-    def get_page(self, topic, request_options=None):
+    def _get_page(self, topic, request_options=None):
         from_, topic = topic.split('/', 1)
         to_ = request_options.get('lang', 'en')
         if '-' in from_:

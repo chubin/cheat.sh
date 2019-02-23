@@ -7,6 +7,8 @@ import os
 import re
 from globals import PATH_LEARNXINY
 
+from adapter import Adapter
+
 class LearnXYAdapter(object):
 
     """
@@ -23,14 +25,13 @@ class LearnXYAdapter(object):
     _block_cut_end = 0
 
     def __init__(self):
-
         self._whole_cheatsheet = self._read_cheatsheet()
         self._blocks = self._extract_blocks()
 
         self._topics_list = [x for x, _ in self._blocks]
         if "Comments" in self._topics_list:
             self._topics_list = [x for x in self._topics_list if x != "Comments"] + ["Comments"]
-        self._topics_list += [":learn"]
+        self._topics_list += [":learn", ":list"]
         print(self.prefix, self._topics_list)
 
     def _is_block_separator(self, before, now, after):
@@ -111,7 +112,7 @@ class LearnXYAdapter(object):
                 return True
         return False
 
-    def get_list(self, prefix=False):
+    def get_list(self, prefix=None):
         """
         Get list of topics for `prefix`
         """
@@ -119,7 +120,7 @@ class LearnXYAdapter(object):
             return ["%s/%s" % (self.prefix, x) for x in self._topics_list]
         return self._topics_list
 
-    def get_cheat_sheet(self, name, partial=False):
+    def get_page(self, name, partial=False):
         """
         Return specified cheat sheet `name` for the language.
         If `partial`, cheat sheet name may be shortened
@@ -142,9 +143,6 @@ class LearnXYAdapter(object):
 
         for block_name, block_contents in self._blocks:
             if block_name == name:
-
-                print("\n".join(block_contents))
-                print(name)
                 return "\n".join(block_contents)
 
         return None
@@ -792,34 +790,46 @@ class LearnVisualBasicAdapter(LearnXYAdapter):
     _filename = "visualbasic.html.markdown"
     _splitted = False
 
-ADAPTERS = {cls.prefix: cls() for cls in vars()['LearnXYAdapter'].__subclasses__()}
+_ADAPTERS = {cls.prefix: cls() for cls in vars()['LearnXYAdapter'].__subclasses__()}
 
-def get_learnxiny(topic, request_options=None):
-    """
-    Return cheat sheet for `topic`
-    or empty string if nothing found
-    """
-    lang, topic = topic.split('/', 1)
-    if lang not in ADAPTERS:
-        return ''
-    return ADAPTERS[lang].get_cheat_sheet(topic)
+class LearnXinY(Adapter):
 
-def get_learnxiny_list():
-    """
-    Return list of all learnxiny topics
-    """
-    answer = []
-    for language_adapter in ADAPTERS.values():
-        answer += language_adapter.get_list(prefix=True)
-    return answer
+    _output_format = 'code'
+    _cache_needed = True
 
-def is_valid_learnxy(topic):
-    """
-    Return whether `topic` is a valid learnxiny topic
-    """
+    def __init__(self):
+        self.adapters = _ADAPTERS
+        Adapter.__init__(self)
 
-    lang, topic = topic.split('/', 1)
-    if lang not in ADAPTERS:
-        return False
+    def _get_page(self, topic, request_options=None):
+        """
+        Return cheat sheet for `topic`
+        or empty string if nothing found
+        """
+        lang, topic = topic.split('/', 1)
+        if lang not in self.adapters:
+            return ''
+        return self.adapters[lang].get_page(topic)
 
-    return ADAPTERS[lang].is_valid(topic)
+    def _get_list(self, prefix=None):
+        """
+        Return list of all learnxiny topics
+        """
+        answer = []
+        for language_adapter in self.adapters.values():
+            answer += language_adapter.get_list(prefix=True)
+        return answer
+
+    def is_found(self, topic):
+        """
+        Return whether `topic` is a valid learnxiny topic
+        """
+
+        if '/' not in topic:
+            return False
+
+        lang, topic = topic.split('/', 1)
+        if lang not in self.adapters:
+            return False
+
+        return self.adapters[lang].is_valid(topic)

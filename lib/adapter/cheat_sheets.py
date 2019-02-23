@@ -5,6 +5,8 @@ import glob
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from globals import PATH_CHEAT_SHEETS
 
+from adapter import Adapter
+
 def _remove_initial_underscore(filename):
     if filename.startswith('_'):
         filename = filename[1:]
@@ -31,41 +33,51 @@ def _get_answers_and_dirs():
     answers = [os.path.split(topic)[1] for topic in topics if not _isdir(topic)]
     return answers, answer_dirs
 
-def _update_cheat_sheets_topics():
-    answers = _get_answer_files_from_folder()
-    cheatsheet_answers, cheatsheet_dirs = _get_answers_and_dirs()
-    return answers+cheatsheet_answers, cheatsheet_dirs
+class CheatSheets(Adapter):
 
-def get_list():
-    return _update_cheat_sheets_topics()[0]
+    _adapter_name = "cheat.sheets"
+    _output_format = "code"
 
-def get_dirs_list():
-    return _update_cheat_sheets_topics()[1]
+    def __init__(self):
+        self._answers = []
+        self._cheatsheet_answers = []
+        self._cheatsheet_dirs = []
+        Adapter.__init__(self)
 
-_CHEAT_SHEETS_LIST = get_list()
-def is_found(topic):
-    return topic in _CHEAT_SHEETS_LIST
+    def _update_cheat_sheets_topics(self):
+        self._answers = _get_answer_files_from_folder()
+        self._cheatsheet_answers, self._cheatsheet_dirs = _get_answers_and_dirs()
+        return self._answers + self._cheatsheet_answers, self._cheatsheet_dirs
 
-_CHEAT_SHEETS_DIRS = get_dirs_list()
-def is_dir_found(topic):
-    return topic in _CHEAT_SHEETS_DIRS
+    def _get_list(self, prefix=None):
+        return self._update_cheat_sheets_topics()[0]
 
-def get_page(topic, request_options=None):
-    """
-    Get the cheat sheet topic from the own repository (cheat.sheets).
-    It's possible that topic directory starts with omitted underscore
-    """
-    filename = PATH_CHEAT_SHEETS + "%s" % topic
-    if not os.path.exists(filename):
-        filename = PATH_CHEAT_SHEETS + "_%s" % topic
-    if os.path.isdir(filename):
-        return ""
-    else:
+    def _get_page(self, topic, request_options=None):
+        """
+        Get the cheat sheet topic from the own repository (cheat.sheets).
+        It's possible that topic directory starts with omitted underscore
+        """
+        filename = PATH_CHEAT_SHEETS + "%s" % topic
+        if not os.path.exists(filename):
+            filename = PATH_CHEAT_SHEETS + "_%s" % topic
+        if os.path.isdir(filename):
+            return ""
         return open(filename, "r").read().decode('utf-8')
 
-def get_dir(topic, request_options=None):
-    answer = []
-    for f_name in glob.glob(PATH_CHEAT_SHEETS + "%s/*" % topic.rstrip('/')):
-        answer.append(os.path.basename(f_name))
-    topics = sorted(answer)
-    return "\n".join(topics) + "\n"
+class CheatSheetsDir(CheatSheets):
+
+    _adapter_name = "cheat.sheets dir"
+    _output_format = "text"
+
+    def _get_list(self, prefix=None):
+        return self._update_cheat_sheets_topics()[1]
+
+    def _get_page(self, topic, request_options=None):
+        answer = []
+        for f_name in glob.glob(PATH_CHEAT_SHEETS + "%s/*" % topic.rstrip('/')):
+            answer.append(os.path.basename(f_name))
+        topics = sorted(answer)
+        return "\n".join(topics) + "\n"
+
+    def is_found(self, topic):
+        return CheatSheets.is_found(self, topic.rstrip('/'))

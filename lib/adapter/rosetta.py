@@ -23,7 +23,9 @@ class Rosetta(Adapter):
     Adapter for RosettaCode
     """
 
-    __section_name = 'rosetta'
+    __section_name = "rosetta"
+    _adapter_name = "rosetta"
+    _output_format = "code"
 
     @staticmethod
     def _load_rosetta_code_names():
@@ -57,14 +59,19 @@ class Rosetta(Adapter):
         answer = "".join("%s\n" % x for x in sorted(answer))
         return answer
 
-    def _get_task(self, lang, query):
-        if lang not in self._rosetta_code_name:
-            return ""
-
+    @staticmethod
+    def _parse_query(query):
         if '/' in query:
             task, subquery = query.split('/', 1)
         else:
             task, subquery = query, None
+        return task, subquery
+
+    def _get_task(self, lang, query):
+        if lang not in self._rosetta_code_name:
+            return ""
+
+        task, subquery = self._parse_query(query)
 
         if task == ':list':
             return self._rosetta_get_list(lang)
@@ -101,7 +108,7 @@ class Rosetta(Adapter):
         ) % number_of_pages
         return answer
 
-    def get_page(self, topic, request_options=None):
+    def _get_page(self, topic, request_options=None):
 
         if '/' not in topic:
             return self._rosetta_get_list(topic)
@@ -118,18 +125,17 @@ class Rosetta(Adapter):
 
         return self._get_task(lang, topic)
 
-    def _get_list(self):
+    def _get_list(self, prefix=None):
         return []
 
-    def get_list(self):
-        # return self._get_list()
+    def get_list(self, prefix=None):
         answer = [self.__section_name]
         for i in self._rosetta_code_name:
             answer.append('%s/%s/' % (i, self.__section_name))
         return answer
 
     def is_found(self, _):
-        return False
+        return True
 
     def __init__(self):
         Adapter.__init__(self)
