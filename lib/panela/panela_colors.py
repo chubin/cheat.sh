@@ -565,6 +565,9 @@ class Template(object):
         self.code = []
         self.panela = None
 
+        self.width = 0
+        self.height = 0
+
         self._colors = {
             'A': '#00cc00',
             'B': '#00cc00',
@@ -607,13 +610,12 @@ class Template(object):
                 elif self._mode == 'code':
                     self.mask.append(line)
 
+        self.width = max([len(line) for line in self.page])
+        self.height = len(self.page)
+
     def apply_mask(self):
 
-        lines = self.page
-        x_size = max([len(x) for x in lines])
-        y_size = len(lines)
-
-        self.panela = Panela(x=x_size, y=y_size)
+        self.panela = Panela(x=self.width, y=self.height)
         self.panela.read_ansi("".join("%s\n" % x for x in self.page))
 
         for i, line in enumerate(self.mask):
