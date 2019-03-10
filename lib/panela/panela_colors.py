@@ -570,6 +570,7 @@ class Template(object):
 
         # [x, y, char, color, bg_color], ...
         # colors are in #000000 format or None
+        # char is None for the end of line
         self.data = []
 
         self._colors = {
@@ -622,6 +623,7 @@ class Template(object):
         self.data = []
 
         for y, line in enumerate(lines):
+            x = 0
             for x, char in enumerate(line):
                 color = None
                 bg_color = None
@@ -632,6 +634,39 @@ class Template(object):
                         bg_color = self._bg_colors.get(m)
 
                 self.data.append([x, y, char, color, bg_color])
+            # end of line
+            self.data.append([x, y, None, None, None])
+
+    def render_html(self, colorize=True):
+
+        prev_color = None
+        prev_bg = None
+
+        for x, y, char, color, bg_color in self.data:
+            if char == None:  # end of line
+                if colorize:
+                    if prev_color != None:
+                        sys.stdout.write("</span>")
+                    prev_color = None
+                sys.stdout.write("\n")
+            else:
+                if colorize:
+                    if color != prev_color:
+                        if prev_color != None:
+                            sys.stdout.write("</span>")
+                        if color != None:
+                            sys.stdout.write("<span style=\"color: %s\">" % color)
+                        prev_color = color
+
+                if char == '<':
+                    sys.stdout.write("&lt;")
+                elif char == '>':
+                    sys.stdout.write("&gt;")
+                elif char == '&':
+                    sys.stdout.write("&amp;")
+                else:
+                    sys.stdout.write(char)
+
 
     def apply_mask(self):
 

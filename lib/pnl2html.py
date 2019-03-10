@@ -5,6 +5,12 @@ import os
 
 head = '''\
 <title></title>
+<style>
+body {
+  color: white;
+  background-color: black;
+}
+</style>
 <pre>
 '''
 
@@ -27,8 +33,11 @@ if __name__ == '__main__':
     pnl = Template()
     pnl.read(pnlfile)
     pnl.parse()
-    pnl.apply_mask()
-    print(pnl.show())
+    pnl.render_html()
+
+    #pnl.apply_mask()
+    #print(pnl.show())
+
 
     print(foot)
 
