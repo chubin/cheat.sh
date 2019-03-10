@@ -26,6 +26,7 @@ if __name__ == '__main__':
 
     pnl = Template()
     pnl.read(pnlfile)
+    pnl.parse()
     pnl.apply_mask()
     print(pnl.show())
 

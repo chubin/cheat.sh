@@ -568,6 +568,10 @@ class Template(object):
         self.width = 0
         self.height = 0
 
+        # [x, y, char, color, bg_color], ...
+        # colors are in #000000 format or None
+        self.data = []
+
         self._colors = {
             'A': '#00cc00',
             'B': '#00cc00',
@@ -613,17 +617,30 @@ class Template(object):
         self.width = max([len(line) for line in self.page])
         self.height = len(self.page)
 
+    def parse(self):
+        lines = self.page
+        self.data = []
+
+        for y, line in enumerate(lines):
+            for x, char in enumerate(line):
+                color = None
+                bg_color = None
+                if y < len(self.mask):
+                    if x < len(self.mask[y]):
+                        m = self.mask[y][x]
+                        color = self._colors.get(m)
+                        bg_color = self._bg_colors.get(m)
+
+                self.data.append([x, y, char, color, bg_color])
+
     def apply_mask(self):
 
         self.panela = Panela(x=self.width, y=self.height)
         self.panela.read_ansi("".join("%s\n" % x for x in self.page))
 
-        for i, line in enumerate(self.mask):
-            for j, char in enumerate(line):
-                if char in self._colors or char in self._bg_colors:
-                    color = self._colors.get(char)
-                    bg_color = self._bg_colors.get(char)
-                    self.panela.put_point(j, i, color=color, background=bg_color)
+        for x, y, _, color, bg_color in self.data:
+            if color or bg_color:
+                self.panela.put_point(x, y, color=color, background=bg_color)
 
     def show(self):
 
@@ -640,6 +657,7 @@ def main():
     pagepath = os.path.join(MYDIR, "share/firstpage-v2.pnl")
     template = Template()
     template.read(pagepath)
+    template.parse()
     template.apply_mask()
     sys.stdout.write(template.show())
 
