@@ -4,7 +4,6 @@ import os
 import sys
 import colored
 import itertools
-from globals import MYDIR
 
 """
 
@@ -633,6 +632,8 @@ class Template(object):
 
 def main():
     "Only for experiments"
+
+    from globals import MYDIR
 
     pagepath = os.path.join(MYDIR, "share/firstpage-v2.pnl")
     template = Template()
