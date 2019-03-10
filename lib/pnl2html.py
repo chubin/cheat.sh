@@ -16,11 +16,18 @@ foot = '''
 if __name__ == '__main__':
     if not sys.argv[1:]:
         sys.exit('usage: pnl2html.py <filename.pnl>')
+    pnlfile = sys.argv[1]
+    if not os.path.isfile(pnlfile):
+        sys.exit("error: " + pnlfile + " does not exist")
 
-    from panela import panela_colors
+    from panela.panela_colors import Template
 
-    with open(sys.argv[1], 'rb') as pnlfile:
-        print(head)
-        print("... TODO panela html render ...")
-        print(foot)
+    print(head)
+
+    pnl = Template()
+    pnl.read(pnlfile)
+    pnl.apply_mask()
+    print(pnl.show())
+
+    print(foot)
 
