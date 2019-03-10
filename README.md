@@ -17,7 +17,7 @@ What features should it have?
 
 Such a thing exists.
 
-[![Build Status](https://travis-ci.org/bglopez/cheat.sh.svg?branch=master)](https://travis-ci.org/bglopez/cheat.sh)
+[![Build Status](https://travis-ci.org/chubin/cheat.sh.svg?branch=master)](https://travis-ci.org/chubin/cheat.sh)
 
 ## Features
 
