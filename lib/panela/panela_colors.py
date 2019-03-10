@@ -18,7 +18,7 @@ TODO:
 """
 
 from wcwidth import wcswidth
-from colors import find_nearest_color, HEX_TO_ANSI, rgb_from_str
+from .colors import find_nearest_color, HEX_TO_ANSI, rgb_from_str
 import pyte
 
 # http://stackoverflow.com/questions/19782975/convert-rgb-color-to-the-nearest-color-in-palette-web-safe-color

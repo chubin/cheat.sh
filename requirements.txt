@@ -14,3 +14,7 @@ PyICU
 pycld2
 colorama
 pyyaml
+
+# panela reqiurements
+wcwidth
+pyte
