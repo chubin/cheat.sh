@@ -16,9 +16,9 @@
 | $ cht.sh go/f<tab><tab>| | $ cht.sh --shell       | | $ cht.sh go zip lists  |
 | go/for   go/func       | | cht.sh> help           | | Ask any question using |
 | $ cht.sh go/for        | | ...                    | | cht.sh or curl cht.sh: |
-| ...                    | |                        | | /go/zip+lists          |
-|                        | |                        | | (use /,+ when curling) |
-|                        | |                        | |                        |
+| ...                    | | $ curl cht.sh/:cht.sh  | | /go/zip+lists          |
+|                        | | #!/bin/sh              | | (use /,+ when curling) |
+|                        | | ...                    | |                        |
 +---- TAB-completion ----+ +-- interactive shell ---+ +- programming questions-+
 +------------------------+ +------------------------+ +------------------------+
 | $ curl cht.sh/:help    | | $ vim prg.py           | | $ time curl cht.sh/    |
@@ -49,7 +49,7 @@ DDDDDDDDDDDDDDDDDDDDDDDDDD DDDDDDDDDDDDDDDDDDDDDDDDDD DDDDDDDDDDDDDDDDDDDDDDDDDD
 D $ CCCCCCCCCCCBBBBBBBBBBD D $ CCCCCC BBBBBBB       D D $ CCCCCC BBBBBBBBBBBB  D
 D go/for   go/func       D D HHHHHHH help           D D ask any question using D
 D $ cht.sh go/for        D D ...                    D D cht.sh or curl cht.sh: D
-D ...                    D D                        D D /goHzipHlists          D
+D ...                    D D $ BBBB CCCCCCCCCCCCCCC D D /goHzipHlists          D
 D                        D D                        D D (use H,H when curling) D
 D                        D D                        D D                        D
 DDDDDEEEEEEEEEEEEEEEEDDDDD DDDEEEEEEEEEEEEEEEEEEEDDDD DDEEEEEEEEEEEEEEEEEEEEEEDD
