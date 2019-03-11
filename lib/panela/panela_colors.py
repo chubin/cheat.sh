@@ -636,7 +636,7 @@ class Template(object):
             # end of line
             self.data.append([x, y, None, None, None])
 
-    def render_html(self, colorize=True):
+    def render_html(self, colorize=True, writer=sys.stdout):
 
         prev_style = (None, None)
 
@@ -645,30 +645,30 @@ class Template(object):
             if char == None:  # end of line
                 if colorize:
                     if prev_style != (None, None):
-                        sys.stdout.write("</span>")
+                        writer.write("</span>")
                     prev_style = (None, None)
-                sys.stdout.write("\n")
+                writer.write("\n")
             else:
                 if colorize:
                     if style != prev_style:
                         if prev_style != (None, None):
-                            sys.stdout.write("</span>")
+                            writer.write("</span>")
                         if style != (None, None):
                             fore = style[0] if style[0] else 'unset'
                             back = style[1] if style[1] else 'unset'
-                            sys.stdout.write("<span style=\"" +
+                            writer.write("<span style=\"" +
                                     "color: %s; " % fore +
                                     "background-color: %s\">" % back)
                         prev_style = style
 
                 if char == '<':
-                    sys.stdout.write("&lt;")
+                    writer.write("&lt;")
                 elif char == '>':
-                    sys.stdout.write("&gt;")
+                    writer.write("&gt;")
                 elif char == '&':
-                    sys.stdout.write("&amp;")
+                    writer.write("&amp;")
                 else:
-                    sys.stdout.write(char)
+                    writer.write(char)
 
 
     def apply_mask(self):
