@@ -4,7 +4,8 @@ import sys
 import os
 
 head = '''\
-<title></title>
+<!doctype html>
+<title>cheat.sh - pnl2html</title>
 <style>
 body {
   color: white;
