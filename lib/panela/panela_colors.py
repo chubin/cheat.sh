@@ -12,7 +12,6 @@ that will be used for all chubin's console services.
 There are several features that not yet implemented (see ___doc___ in Panela)
 
 TODO:
-    * html output
     * png output
 
 """
@@ -639,24 +638,26 @@ class Template(object):
 
     def render_html(self, colorize=True):
 
-        prev_color = None
-        prev_bg = None
+        prev_style = (None, None)
 
         for x, y, char, color, bg_color in self.data:
+            style = (color, bg_color)
             if char == None:  # end of line
                 if colorize:
-                    if prev_color != None:
+                    if prev_style != (None, None):
                         sys.stdout.write("</span>")
-                    prev_color = None
+                    prev_style = (None, None)
                 sys.stdout.write("\n")
             else:
                 if colorize:
-                    if color != prev_color:
-                        if prev_color != None:
+                    if style != prev_style:
+                        if prev_style != (None, None):
                             sys.stdout.write("</span>")
-                        if color != None:
-                            sys.stdout.write("<span style=\"color: %s\">" % color)
-                        prev_color = color
+                        if style != (None, None):
+                            sys.stdout.write("<span style=\"" +
+                                    "color: %s; " % style[0] +
+                                    "background-color: %s\">" % style[1])
+                        prev_style = style
 
                 if char == '<':
                     sys.stdout.write("&lt;")
