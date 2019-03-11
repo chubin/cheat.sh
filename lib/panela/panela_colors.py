@@ -654,9 +654,11 @@ class Template(object):
                         if prev_style != (None, None):
                             sys.stdout.write("</span>")
                         if style != (None, None):
+                            fore = style[0] if style[0] else 'unset'
+                            back = style[1] if style[1] else 'unset'
                             sys.stdout.write("<span style=\"" +
-                                    "color: %s; " % style[0] +
-                                    "background-color: %s\">" % style[1])
+                                    "color: %s; " % fore +
+                                    "background-color: %s\">" % back)
                         prev_style = style
 
                 if char == '<':
