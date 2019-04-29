@@ -5,6 +5,7 @@ All hardcoded pathes and other data should be
 """
 from __future__ import print_function
 
+import sys
 import logging
 import os
 import yaml
@@ -80,6 +81,10 @@ if os.path.exists(_CONF_FILE):
 COLOR_STYLES = sorted(list(get_all_styles()))
 
 MALFORMED_RESPONSE_HTML_PAGE = open(os.path.join(STATIC, 'malformed-response.html')).read()
+
+def fatal(text):
+    sys.stderr.write("ERROR: %s\n" % text)
+    sys.exit(1)
 
 def error(text):
     """
