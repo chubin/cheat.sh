@@ -32,7 +32,8 @@ class LearnXYAdapter(object):
         if "Comments" in self._topics_list:
             self._topics_list = [x for x in self._topics_list if x != "Comments"] + ["Comments"]
         self._topics_list += [":learn", ":list"]
-        print(self.prefix, self._topics_list)
+        if self._whole_cheatsheet:
+            print(self.prefix, self._topics_list)
 
     def _is_block_separator(self, before, now, after):
         if (re.match(r'////////*', before)
@@ -62,6 +63,11 @@ class LearnXYAdapter(object):
     def _read_cheatsheet(self):
         filename = os.path.join(self._learn_xy_path, self._filename)
 
+        # if cheat sheets are not there (e.g. were not yet fetched),
+        # just skip it
+        if not os.path.exists(filename):
+            return None
+
         with open(filename) as f_cheat_sheet:
             code_mode = False
             answer = []
@@ -82,6 +88,9 @@ class LearnXYAdapter(object):
             return []
 
         lines = self._whole_cheatsheet
+        if lines is None:
+            return []
+
         answer = []
 
         block = []
