@@ -46,7 +46,20 @@ class Tldr(GitRepositoryAdapter):
         answer = "\n".join(fixed_answer) + "\n"
         return answer.decode('utf-8')
 
-class Cheat(Adapter):
+    @classmethod
+    def get_updates_list(cls, updated_files_list):
+        """
+        If a .md file was updated, invalidate cache
+        entry with the name of this file
+        """
+        answer = []
+
+        for entry in updated_files_list:
+            if entry.endswith('.md'):
+                answer.append(entry.split('/')[-1][:-3])
+        return answer
+
+class Cheat(GitRepositoryAdapter):
 
     _adapter_name = "cheat"
     _output_format = "code"

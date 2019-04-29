@@ -106,3 +106,169 @@ class Adapter(with_metaclass(AdapterMC, object)):
             'format': self._get_output_format(topic),
             }
         return answer_dict
+
+    @classmethod
+    def local_repository_location(cls):
+        """
+        Return local repository location.
+        If name `self._repository_url` for the class is not specified, return None
+        It is possible that several adapters has the same repository_url,
+        in this case they should use the same local directory.
+        If for some reason the local repository location should be overriden
+        (e.g. if several different branches of the same repository are used)
+        if should set in `self._local_repository_location` of the adapter.
+        """
+
+        dirname = None
+
+        if cls._local_repository_location:
+            dirname = cls._local_repository_location
+
+        if not dirname and cls._repository_url:
+            dirname = cls._repository_url
+            if dirname.startswith('https://'):
+                dirname = dirname[8:]
+            elif dirname.startswith('http://'):
+                dirname = dirname[7:]
+
+        # if we did not manage to find out dirname up to this point,
+        # that means that neither repository url, not repository location
+        # is specified for the adapter, so it should be skipped
+        if not dirname:
+            return None
+
+        if dirname.startswith('/'):
+            return dirname
+
+        # it is possible that several repositories will
+        # be mapped to the same location name
+        # (because only the last part of the path is used)
+        # in this case provide the name in _local_repository_location
+        # (detected by fetch.py)
+        if '/' in dirname:
+            dirname = dirname.split('/')[-1]
+
+        path = os.path.join(LOCAL_REPOSITORIES, dirname)
+        return path
+
+    @classmethod
+    def repository_url(cls):
+        """
+        Return URL of the upstream repository
+        """
+        return cls._repository_url
+
+    @classmethod
+    def fetch_command(cls):
+        """
+        Initial fetch of the repository.
+        Return cmdline that has to be executed to fetch the repository.
+        Skipping if `self._repository_url` is not specified
+        """
+        if not cls._repository_url:
+            return None
+
+        # in this case `fetch` has to be implemented
+        # in the distinct adapter subclass
+        raise RuntimeError(
+            "Do not known how to handle this repository: %s" % cls._repository_url)
+
+    @classmethod
+    def update_command(cls):
+        """
+        Update of the repository.
+        Return cmdline that has to be executed to update the repository
+        inside `local_repository_location()`.
+        """
+
+        if not cls._repository_url:
+            return None
+
+        local_repository_dir = cls.local_repository_location()
+        if not local_repository_dir:
+            return None
+
+        # in this case `update` has to be implemented
+        # in the distinct adapter subclass
+        raise RuntimeError(
+            "Do not known how to handle this repository: %s" % cls._repository_url)
+
+    @classmethod
+    def current_state_command(cls):
+        """
+        Get current state of repository (current revision).
+        This is used to find what cache entries should be invalidated.
+        """
+
+        if not cls._repository_url:
+            return None
+
+        local_repository_dir = cls.local_repository_location()
+        if not local_repository_dir:
+            return None
+
+        # in this case `update` has to be implemented
+        # in the distinct adapter subclass
+        raise RuntimeError(
+            "Do not known how to handle this repository: %s" % cls._repository_url)
+
+    @classmethod
+    def save_state(cls, state):
+        """
+        Save state `state` of the repository.
+        Must be called after the cache clean up.
+        """
+        local_repository_dir = cls.local_repository_location()
+        state_filename = os.path.join(local_repository_dir, '.cached_revision')
+        open(state_filename, 'w').write(state)
+
+    @classmethod
+    def get_state(cls):
+        """
+        Return the saved `state` of the repository.
+        If state cannot be read, return None
+        """
+
+        local_repository_dir = cls.local_repository_location()
+        state_filename = os.path.join(local_repository_dir, '.cached_revision')
+        if os.path.exists(state_filename):
+            state = open(state_filename, 'r').read()
+        return state
+
+    @classmethod
+    def get_updates_list_command(cls):
+        """
+        Return the command to get the list of updates
+        since the last update whose id is saved as the repository state (`cached_state`).
+        The list is used to invalidate the cache.
+        """
+        return None
+
+    @classmethod
+    def get_updates_list(cls, updated_files_list):
+        """
+        Return the pages that have to be invalidated if the files `updates_files_list`
+        were updated in the repository.
+        """
+        if not cls._cheatsheet_files_prefix:
+            return updated_files_list
+
+        answer = []
+        cut_len = len(cls._cheatsheet_files_prefix)
+        for entry in updated_files_list:
+            if entry.startswith(cls._cheatsheet_files_prefix):
+                answer.append(entry[cut_len:])
+            else:
+                answer.append(entry)
+        return answer
+
+
+def all_adapters():
+    """
+    Return list of all known adapters
+    """
+    def _all_subclasses(cls):
+        return set(cls.__subclasses__()).union(set(
+            [s for c in cls.__subclasses__() for s in _all_subclasses(c)]
+        ))
+    return list(_all_subclasses(Adapter))

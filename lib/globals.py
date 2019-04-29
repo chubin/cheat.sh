@@ -20,6 +20,8 @@ SERVER_PORT = 8002
 MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 _CONF_FILE = os.path.join(MYDIR, 'etc/config.yaml')
 
+LOCAL_REPOSITORIES = os.path.join(os.environ['HOME'], '.cheat.sh', 'upstream')
+
 if DOCKERIZED:
     REDISHOST = 'redis'
 else:
