@@ -1,10 +1,50 @@
-import abc
+"""
+`Adapter`, base class of the adapters.
+"""
 
-class Adapter(object):
+import abc
+import os
+from six import with_metaclass
+
+from globals import LOCAL_REPOSITORIES
+
+class AdapterMC(type):
+    """
+    Adapater Metaclass.
+    Defines string representation of adapters
+    """
+    def __repr__(cls):
+        if hasattr(cls, '_class_repr'):
+            return getattr(cls, '_class_repr')()
+        return super(AdapterMC, cls).__repr__()
+
+class Adapter(with_metaclass(AdapterMC, object)):
+    """
+    An abstract class, defines methods:
+
+    (cheat sheets retrieval)
+    * get_list
+    * is_found
+    * is_cache_needed
+
+    (repositories management)
+    " fetch
+    * update
+
+    and several properties that have to be set in each adapter subclass.
+
+    """
 
     _adapter_name = None
     _output_format = 'code'
     _cache_needed = False
+    _repository_url = None
+    _local_repository_location = None
+    _cheatsheet_files_prefix = None
+
+    @classmethod
+    def _class_repr(cls):
+        return '[Adapter: %s (%s)]' % (cls._adapter_name, cls.__name__)
 
     def __init__(self):
         self._list = {None: self._get_list()}

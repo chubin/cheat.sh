@@ -7,7 +7,7 @@ import os
 import re
 from globals import PATH_LEARNXINY
 
-from adapter import Adapter
+from git_adapter import GitRepositoryAdapter    # pylint: disable=relative-import
 
 class LearnXYAdapter(object):
 
@@ -792,15 +792,20 @@ class LearnVisualBasicAdapter(LearnXYAdapter):
 
 _ADAPTERS = {cls.prefix: cls() for cls in vars()['LearnXYAdapter'].__subclasses__()}
 
-class LearnXinY(Adapter):
+class LearnXinY(GitRepositoryAdapter):
 
+    """
+    Adapter for the LearnXinY project
+    """
+
+    _adapter_name = 'learnxiny'
     _output_format = 'code'
     _cache_needed = True
     _repository_url = "https://github.com/adambard/learnxinyminutes-docs"
 
     def __init__(self):
         self.adapters = _ADAPTERS
-        Adapter.__init__(self)
+        GitRepositoryAdapter.__init__(self)
 
     def _get_page(self, topic, request_options=None):
         """

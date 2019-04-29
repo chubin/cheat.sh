@@ -10,11 +10,12 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from globals import PATH_TLDR_PAGES, PATH_CHEAT_PAGES
 from adapter import Adapter
+from git_adapter import GitRepositoryAdapter
 
 def _get_filenames(path):
     return [os.path.split(topic)[1] for topic in glob.glob(path)]
 
-class Tldr(Adapter):
+class Tldr(GitRepositoryAdapter):
 
     _adapter_name = "tldr"
     _output_format = "code"

@@ -5,7 +5,7 @@ import glob
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from globals import PATH_CHEAT_SHEETS
 
-from adapter import Adapter
+from git_adapter import GitRepositoryAdapter
 
 def _remove_initial_underscore(filename):
     if filename.startswith('_'):
@@ -33,7 +33,7 @@ def _get_answers_and_dirs():
     answers = [os.path.split(topic)[1] for topic in topics if not _isdir(topic)]
     return answers, answer_dirs
 
-class CheatSheets(Adapter):
+class CheatSheets(GitRepositoryAdapter):
 
     _adapter_name = "cheat.sheets"
     _output_format = "code"
@@ -43,7 +43,7 @@ class CheatSheets(Adapter):
         self._answers = []
         self._cheatsheet_answers = []
         self._cheatsheet_dirs = []
-        Adapter.__init__(self)
+        GitRepositoryAdapter.__init__(self)
 
     def _update_cheat_sheets_topics(self):
         self._answers = _get_answer_files_from_folder()
