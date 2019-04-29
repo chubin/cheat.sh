@@ -37,6 +37,7 @@ class CheatSheets(Adapter):
 
     _adapter_name = "cheat.sheets"
     _output_format = "code"
+    _repository_url = "https://github.com/chubin/cheat.sheets"
 
     def __init__(self):
         self._answers = []

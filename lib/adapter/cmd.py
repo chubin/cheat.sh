@@ -19,6 +19,7 @@ class Tldr(Adapter):
     _adapter_name = "tldr"
     _output_format = "code"
     _cache_needed = True
+    _repository_url = "https://github.com/tldr-pages/tldr"
 
     def _get_list(self, prefix=None):
         return [filename[:-3]
@@ -49,6 +50,8 @@ class Cheat(Adapter):
     _adapter_name = "cheat"
     _output_format = "code"
     _cache_needed = True
+    _repository_url = "https://github.com/cheat/cheat"
+    _cheatsheet_files_prefix = "cheat/cheatsheets/"
 
     def _get_list(self, prefix=None):
         return _get_filenames(PATH_CHEAT_PAGES)

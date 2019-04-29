@@ -8,6 +8,7 @@ class Latenz(Adapter):
 
     _adapter_name = "late.nz"
     _output_format = "ansi"
+    _repository_url = "https://github.com/chubin/late.nz"
 
     def _get_page(self, topic, request_options=None):
         sys.path.append(PATH_LATENZ)

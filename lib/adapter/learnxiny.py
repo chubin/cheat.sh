@@ -796,6 +796,7 @@ class LearnXinY(Adapter):
 
     _output_format = 'code'
     _cache_needed = True
+    _repository_url = "https://github.com/adambard/learnxinyminutes-docs"
 
     def __init__(self):
         self.adapters = _ADAPTERS
