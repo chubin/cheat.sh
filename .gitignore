@@ -1,4 +1,5 @@
 *.pyc
+*.swp
 log/
 ve/
 share/vim/.vim/
