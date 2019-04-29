@@ -43,3 +43,16 @@ def get(key):
             pass
         return value
     return None
+
+def delete(key):
+    """
+    Remove `key` from the database
+    """
+
+    if _REDIS:
+        if _REDIS_PREFIX:
+            key = _REDIS_PREFIX + key
+
+        _REDIS.delete(key)
+
+    return None
