@@ -11,3 +11,4 @@ cffi
 polyglot
 colorama
 pyyaml
+python-Levenshtein
