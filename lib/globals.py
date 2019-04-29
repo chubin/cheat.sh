@@ -69,7 +69,7 @@ MAX_SEARCH_LEN = 20
 # config overrides default settings
 #
 if os.path.exists(_CONF_FILE):
-    _CONFIG = yaml.load(_CONF_FILE)
+    _CONFIG = yaml.load(_CONF_FILE, Loader=yaml.SafeLoader)
     if 'server' in _CONFIG:
         _SERVER_CONFIG = _CONFIG['server']
         if 'address' in _SERVER_CONFIG:
