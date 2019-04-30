@@ -90,7 +90,7 @@ def _colorize_ansi_answer(topic, answer, color_style,       # pylint: disable=to
 def _visualize(answers, request_options, search_mode=False):
 
     highlight = not bool(request_options and request_options.get('no-terminal'))
-    color_style = request_options.get('style', '')
+    color_style = (request_options or {}).get('style', '')
     if color_style not in COLOR_STYLES:
         color_style = ''
 
