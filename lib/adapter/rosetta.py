@@ -13,8 +13,9 @@ import yaml
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # pylint: disable=wrong-import-position,wrong-import-order
-from globals import PATH_CHEAT_SHEETS, ROSETTA_PATH
+from globals import ROSETTA_PATH
 from adapter import Adapter             # pylint: disable=relative-import
+from cheat_sheets import CheatSheets
 # pylint: enable=wrong-import-position,wrong-import-order
 
 class Rosetta(Adapter):
@@ -30,7 +31,9 @@ class Rosetta(Adapter):
     @staticmethod
     def _load_rosetta_code_names():
         answer = {}
-        for filename in glob.glob(os.path.join(PATH_CHEAT_SHEETS, '*/_info.yaml')):
+
+        lang_files_location = CheatSheets.local_repository_location()
+        for filename in glob.glob(os.path.join(lang_files_location, '*/_info.yaml')):
             text = open(filename, 'r').read()
             data = yaml.load(text)
             if data is None:
