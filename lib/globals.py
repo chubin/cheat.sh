@@ -36,17 +36,11 @@ STATIC = os.path.join(MYDIR, 'share/static')
 PATH_VIM_ENVIRONMENT = os.path.join(MYDIR, 'share/vim')
 
 if USE_OS_PACKAGES:
-    PATH_TLDR_PAGES = "/home/igor/.tldr/cache/pages/*/*.md"
-    PATH_CHEAT_PAGES = "/usr/share/cheat/*"
-    PATH_CHEAT_SHEETS = "/home/igor/cheat.sheets/sheets/"
     PATH_CHEAT_SHEETS_SPOOL = "/home/igor/cheat.sheets/spool/"
     PATH_LEARNXINY = "/home/igor/git/github.com/adambard/learnxinyminutes-docs"
     PATH_LATENZ = "/home/igor/git/github.com/chubin/late.nz/bin"
     ROSETTA_PATH = '/home/igor/git/github.com/acmeism/RosettaCodeData'
 else:
-    PATH_TLDR_PAGES = os.path.join(MYDIR, "cheatsheets/tldr/*/*.md")
-    PATH_CHEAT_PAGES = os.path.join(MYDIR, "cheatsheets/cheat/*")
-    PATH_CHEAT_SHEETS = os.path.join(MYDIR, "cheatsheets/sheets/")
     PATH_CHEAT_SHEETS_SPOOL = os.path.join(MYDIR, "cheatsheets/spool/")
     PATH_LEARNXINY = os.path.join(MYDIR, "cheatsheets/learnxinyminutes-docs")
     PATH_LATENZ = os.path.join(MYDIR, "late.nz/bin")
