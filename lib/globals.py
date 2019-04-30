@@ -85,6 +85,11 @@ COLOR_STYLES = sorted(list(get_all_styles()))
 MALFORMED_RESPONSE_HTML_PAGE = open(os.path.join(STATIC, 'malformed-response.html')).read()
 
 def fatal(text):
+    """
+    Fatal error function.
+
+    The function is being used in the standalone mode only
+    """
     sys.stderr.write("ERROR: %s\n" % text)
     sys.exit(1)
 

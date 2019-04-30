@@ -78,6 +78,16 @@ class Adapter(with_metaclass(AdapterMC, object)):
         """
         return self._cache_needed
 
+    @staticmethod
+    def _format_page(text):
+        """
+        Preformatting page hook.
+        Converts `text` (as in the initial repository)
+        to text (as to be displayed).
+        """
+
+        return text
+
     @abc.abstractmethod
     def _get_page(self, topic, request_options=None):
         """
