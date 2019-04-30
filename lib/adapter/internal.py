@@ -135,5 +135,5 @@ class Search(Adapter):
     def get_list(prefix=None):
         return []
 
-    def is_found(topic):
-        return True
+    def is_found(self, topic):
+        return False
