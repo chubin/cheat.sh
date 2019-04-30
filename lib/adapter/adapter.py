@@ -40,7 +40,9 @@ class Adapter(with_metaclass(AdapterMC, object)):
     _cache_needed = False
     _repository_url = None
     _local_repository_location = None
-    _cheatsheet_files_prefix = None
+    _cheatsheet_files_prefix = ""
+    _cheatsheet_files_extension = ""
+    _pages_list = []
 
     @classmethod
     def _class_repr(cls):
@@ -51,7 +53,7 @@ class Adapter(with_metaclass(AdapterMC, object)):
 
     @abc.abstractmethod
     def _get_list(self, prefix=None):
-        return []
+        return self._pages_list
 
     def get_list(self, prefix=None):
         """
