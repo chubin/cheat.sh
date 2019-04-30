@@ -2,11 +2,57 @@
 Implementation of `GitRepositoryAdapter`, adapter that is used to handle git repositories
 """
 
+import glob
 import os
 
 from adapter import Adapter # pylint: disable=relative-import
 
-class GitRepositoryAdapter(Adapter):    #pylint: disable=abstract-method
+def _get_filenames(path):
+    return [os.path.split(topic)[1] for topic in glob.glob(path)]
+
+class RepositoryAdapter(Adapter):
+    """
+    Implements methos needed to handle standard
+    repository based adapters.
+    """
+
+    def _get_list(self, prefix=None):
+        """
+        List of files in the cheat sheets directory
+        with the extenstion removed
+        """
+
+        answer = _get_filenames(
+            os.path.join(
+                self.local_repository_location(),
+                self._cheatsheet_files_prefix,
+                '*'+self._cheatsheet_files_extension))
+
+        ext = self._cheatsheet_files_extension
+        if ext:
+            answer = [filename[:-len(ext)]
+                      for filename in answer
+                      if filename.endswith(ext)]
+
+        return answer
+
+    def _get_page(self, topic, request_options=None):
+
+        filename = os.path.join(
+            self.local_repository_location(),
+            self._cheatsheet_files_prefix,
+            topic)
+
+        if os.path.exists(filename):
+            answer = self._format_page(open(filename, 'r').read())
+        else:
+            # though it should not happen
+            answer = filename + " " + str(self.__class__)
+
+        return answer.decode('utf-8')
+
+
+class GitRepositoryAdapter(RepositoryAdapter):    #pylint: disable=abstract-method
     """
     Implements all methods needed to handle cache handling
     for git-repository-based adatpers
