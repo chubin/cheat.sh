@@ -5,3 +5,5 @@ from . import latenz
 from . import learnxiny
 from . import question
 from . import rosetta
+from . import cheat_cheat
+from . import tldr
