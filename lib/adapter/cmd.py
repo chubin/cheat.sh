@@ -1,103 +1,61 @@
+"""
+"""
+
+# pylint: disable=relative-import,wrong-import-position,unused-argument,abstract-method
+
 from gevent.monkey import patch_all
 from gevent.subprocess import Popen, PIPE
 patch_all()
 
-import sys
-import abc
-import os
-import glob
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from globals import PATH_TLDR_PAGES, PATH_CHEAT_PAGES
 from adapter import Adapter
-from git_adapter import GitRepositoryAdapter
 
-def _get_filenames(path):
-    return [os.path.split(topic)[1] for topic in glob.glob(path)]
+class CommandAdapter(Adapter):
+    """
+    """
 
-class Tldr(GitRepositoryAdapter):
+    _command = []
 
-    _adapter_name = "tldr"
-    _output_format = "code"
-    _cache_needed = True
-    _repository_url = "https://github.com/tldr-pages/tldr"
-
-    def _get_list(self, prefix=None):
-        return [filename[:-3]
-                for filename in _get_filenames(PATH_TLDR_PAGES) if filename.endswith('.md')]
+    def _get_command(self, topic, request_options=None):
+        return self._command
 
     def _get_page(self, topic, request_options=None):
-        cmd = ["tldr", topic]
-        proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
-        answer = proc.communicate()[0]
+        cmd = self._get_command(topic, request_options=request_options)
+        if cmd:
+            proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
+            answer = proc.communicate()[0].decode('utf-8')
+            return answer
+        return ""
 
-        fixed_answer = []
-        for line in answer.splitlines():
-            line = line[2:]
-            if line.startswith('-'):
-                line = '# '+line[2:]
-            elif not line.startswith(' '):
-                line = "# "+line
-            else:
-                pass
+class Fosdem(CommandAdapter):
 
-            fixed_answer.append(line)
+    """
+    Show the output of the `current-fosdem-slide` command,
+    which shows the current slide open in some terminal.
+    This was used during the talk at FOSDEM 2019.
 
-        answer = "\n".join(fixed_answer) + "\n"
-        return answer.decode('utf-8')
+    https://www.youtube.com/watch?v=PmiK0JCdh5A
 
-    @classmethod
-    def get_updates_list(cls, updated_files_list):
-        """
-        If a .md file was updated, invalidate cache
-        entry with the name of this file
-        """
-        answer = []
+    `sudo` is used here beause the session was running under
+    a different user; to be able to use the command via sudo,
+    the following `/etc/suders` entry was added:
 
-        for entry in updated_files_list:
-            if entry.endswith('.md'):
-                answer.append(entry.split('/')[-1][:-3])
-        return answer
+    srv    ALL=(ALL:ALL) NOPASSWD: /usr/local/bin/current-fosdem-slide
 
-class Cheat(GitRepositoryAdapter):
-
-    _adapter_name = "cheat"
-    _output_format = "code"
-    _cache_needed = True
-    _repository_url = "https://github.com/cheat/cheat"
-    _cheatsheet_files_prefix = "cheat/cheatsheets/"
-
-    def _get_list(self, prefix=None):
-        return _get_filenames(PATH_CHEAT_PAGES)
-
-    def _get_page(self, topic, request_options=None):
-        cmd = ["/usr/local/bin/cheat", topic]
-        proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
-        answer = proc.communicate()[0].decode('utf-8')
-        return answer
-
-class Fosdem(Adapter):
+    Here `srv` is the user under which the cheat.sh server was running
+    """
 
     _adapter_name = "fosdem"
     _output_format = "ansi"
+    _pages_list = [":fosdem"]
+    _command = ["sudo", "/usr/local/bin/current-fosdem-slide"]
 
-    def _get_list(self, prefix=None):
-        return ['fosdem']
-
-    def _get_page(self, topic, request_options=None):
-        cmd = ["sudo", "/usr/local/bin/current-fosdem-slide"]
-        proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
-        answer = proc.communicate()[0].decode('utf-8')
-        return answer
-
-class Translation(Adapter):
+class Translation(CommandAdapter):
+    """
+    """
 
     _adapter_name = "translation"
     _output_format = "text"
     _cache_needed = True
-
-    def _get_list(self, prefix=None):
-        return []
 
     def _get_page(self, topic, request_options=None):
         from_, topic = topic.split('/', 1)
@@ -105,9 +63,5 @@ class Translation(Adapter):
         if '-' in from_:
             from_, to_ = from_.split('-', 1)
 
-        cmd = ["/home/igor/cheat.sh/bin/get_translation",
-            from_, to_, topic.replace('+', ' ')]
-        print("calling:", cmd)
-        proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
-        answer = proc.communicate()[0].decode('utf-8')
-        return answer
+        return ["/home/igor/cheat.sh/bin/get_translation",
+                from_, to_, topic.replace('+', ' ')]
