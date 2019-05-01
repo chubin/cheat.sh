@@ -18,6 +18,7 @@ import adapter.latenz
 import adapter.learnxiny
 import adapter.question
 import adapter.rosetta
+from globals import CONFIG
 
 class Router(object):
 
@@ -50,6 +51,10 @@ class Router(object):
         self._cached_topics_list = []
         self._cached_topic_type = {}
 
+        adapter_class = adapter.all_adapters(as_dict=True)
+
+        active_adapters = set(CONFIG['adapters.active'] + CONFIG['adapters.mandatory'])
+
         self._adapter = {
             "internal": adapter.internal.InternalPages(
                 get_topic_type=self.get_topic_type,
@@ -57,18 +62,11 @@ class Router(object):
             "unknown": adapter.internal.UnknownPages(
                 get_topic_type=self.get_topic_type,
                 get_topics_list=self.get_topics_list),
-            "search": adapter.internal.Search(),
-            "tldr": adapter.tldr.Tldr(),
-            "cheat": adapter.cheat_cheat.Cheat(),
-            "fosdem": adapter.cmd.Fosdem(),
-            "translation": adapter.cmd.Translation(),
-            "rosetta": adapter.rosetta.Rosetta(),
-            "late.nz": adapter.latenz.Latenz(),
-            "question": adapter.question.Question(),
-            "cheat.sheets": adapter.cheat_sheets.CheatSheets(),
-            "cheat.sheets dir": adapter.cheat_sheets.CheatSheetsDir(),
-            "learnxiny": adapter.learnxiny.LearnXinY(),
         }
+
+        for by_name in active_adapters:
+            if by_name not in self._adapter:
+                self._adapter[by_name] = adapter_class[by_name]()
 
         self._topic_list = {
             key: obj.get_list()
@@ -83,11 +81,12 @@ class Router(object):
         if self._cached_topics_list:
             return self._cached_topics_list
 
-        sources_to_merge = ['tldr', 'cheat', 'cheat.sheets', 'learnxiny', 'rosetta']
-        if not skip_dirs:
-            sources_to_merge.append("cheat.sheets dir")
-        if not skip_internal:
-            sources_to_merge.append("internal")
+        skip = ['fosdem']
+        if skip_dirs:
+            skip.append("cheat.sheets dir")
+        if skip_internal:
+            skip.append("internal")
+        sources_to_merge = [x for x in self._adapter if x not in skip]
 
         answer = {}
         for key in sources_to_merge:

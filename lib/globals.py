@@ -58,6 +58,24 @@ GITHUB_REPOSITORY = {
     "unknown"           :   '',
 }
 
+CONFIG = {
+    'adapters.active': [
+        "tldr",
+        "cheat",
+        "fosdem",
+        "translation",
+        "rosetta",
+        "late.nz",
+        "question",
+        "cheat.sheets",
+        "cheat.sheets dir",
+        "learnxiny",
+        ],
+    'adapters.mandatory': [
+        "search",
+        ],
+    }
+
 MAX_SEARCH_LEN = 20
 
 #
