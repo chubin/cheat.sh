@@ -51,6 +51,13 @@ class Adapter(with_metaclass(AdapterMC, object)):
     def __init__(self):
         self._list = {None: self._get_list()}
 
+    @classmethod
+    def name(cls):
+        """
+        Return name of the adapter
+        """
+        return cls._adapter_name
+
     @abc.abstractmethod
     def _get_list(self, prefix=None):
         return self._pages_list
@@ -274,13 +281,23 @@ class Adapter(with_metaclass(AdapterMC, object)):
                 answer.append(entry)
         return answer
 
-
-def all_adapters():
+def all_adapters(as_dict=False):
     """
     Return list of all known adapters
+    If `as_dict` is True, return dict {'name': adapter} instead of a list.
     """
     def _all_subclasses(cls):
         return set(cls.__subclasses__()).union(set(
             [s for c in cls.__subclasses__() for s in _all_subclasses(c)]
         ))
+
+    if as_dict:
+        return {x.name():x for x in _all_subclasses(Adapter)}
     return list(_all_subclasses(Adapter))
+
+def adapter_by_name(name):
+    """
+    Return adapter having this name,
+    or None if nothing found
+    """
+    return all_adapters(as_dict=True).get(name)
