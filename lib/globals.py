@@ -39,11 +39,9 @@ USE_OS_PACKAGES = True  # set to False if you pull cheat sheets repositories fro
 if USE_OS_PACKAGES:
     PATH_CHEAT_SHEETS_SPOOL = "/home/igor/cheat.sheets/spool/"
     PATH_LEARNXINY = "/home/igor/git/github.com/adambard/learnxinyminutes-docs"
-    ROSETTA_PATH = '/home/igor/git/github.com/acmeism/RosettaCodeData'
 else:
     PATH_CHEAT_SHEETS_SPOOL = os.path.join(MYDIR, "cheatsheets/spool/")
     PATH_LEARNXINY = os.path.join(MYDIR, "cheatsheets/learnxinyminutes-docs")
-    ROSETTA_PATH = os.path.join(MYDIR, "acmeism/RosettaCodeData")
 
 GITHUB_REPOSITORY = {
     "late.nz"           :   'chubin/late.nz',

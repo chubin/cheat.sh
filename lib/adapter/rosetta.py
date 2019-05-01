@@ -6,17 +6,14 @@ Exports:
     Rosetta(Adapter)
 """
 
-import sys
+# pylint: disable=relative-import
+
 import os
 import glob
 import yaml
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# pylint: disable=wrong-import-position,wrong-import-order
-from globals import ROSETTA_PATH
-from adapter import Adapter             # pylint: disable=relative-import
+from adapter import Adapter
 from cheat_sheets import CheatSheets
-# pylint: enable=wrong-import-position,wrong-import-order
 
 class Rosetta(Adapter):
 
@@ -24,9 +21,11 @@ class Rosetta(Adapter):
     Adapter for RosettaCode
     """
 
-    __section_name = "rosetta"
     _adapter_name = "rosetta"
     _output_format = "code"
+    _local_repository_location = "RosettaCodeData"
+
+    __section_name = "rosetta"
 
     @staticmethod
     def _load_rosetta_code_names():
@@ -52,9 +51,9 @@ class Rosetta(Adapter):
         lang = self._rosetta_code_name[query]
         answer = []
         if task:
-            glob_path = os.path.join(ROSETTA_PATH, 'Lang', lang, task, '*')
+            glob_path = os.path.join(self.local_repository_location(), 'Lang', lang, task, '*')
         else:
-            glob_path = os.path.join(ROSETTA_PATH, 'Lang', lang, '*')
+            glob_path = os.path.join(self.local_repository_location(), 'Lang', lang, '*')
         for filename in glob.glob(glob_path):
             taskname = os.path.basename(filename)
             answer.append(taskname)
@@ -91,7 +90,8 @@ class Rosetta(Adapter):
 
         lang_name = self._rosetta_code_name[lang]
 
-        tasks = sorted(glob.glob(os.path.join(ROSETTA_PATH, 'Lang', lang_name, task, '*')))
+        tasks = sorted(glob.glob(
+            os.path.join(self.local_repository_location(), 'Lang', lang_name, task, '*')))
         if not tasks:
             return ""
 
