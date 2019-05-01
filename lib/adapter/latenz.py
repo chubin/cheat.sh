@@ -1,17 +1,29 @@
+"""
+Adapter for the curlable latencies numbers (chubin/late.nz)
+This module can be an example of a adapter for a python project.
+
+The adapter exposes one page ("latencies") and several its aliases
+("latencies", "late.nz", "latency")
+"""
+
+# pylint: disable=relative-import
+
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from globals import PATH_LATENZ
 from adapter import Adapter
 
 class Latenz(Adapter):
+
+    """
+    chubin/late.nz Adapter
+    """
 
     _adapter_name = "late.nz"
     _output_format = "ansi"
     _repository_url = "https://github.com/chubin/late.nz"
 
     def _get_page(self, topic, request_options=None):
-        sys.path.append(PATH_LATENZ)
+        sys.path.append(os.path.join(self.local_repository_location(), 'bin'))
         import latencies
         return latencies.render()
 
