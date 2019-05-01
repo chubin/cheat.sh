@@ -45,7 +45,7 @@ def main(args):
 
     query, request_options = parse_cmdline(args)
     answer, _ = cheat_wrapper.cheat_wrapper(query, request_options=request_options)
-    sys.stdout.write(answer)
+    sys.stdout.write(answer.encode("utf-8"))
 
 if __name__ == '__main__':
     main(sys.argv[1:])
