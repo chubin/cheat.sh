@@ -11,7 +11,6 @@ import os
 import yaml
 from pygments.styles import get_all_styles
 
-USE_OS_PACKAGES = True  # set to False if you pull cheat sheets repositories from GitHub
 DOCKERIZED = False      # set to True if the service is running in a Docker container
 
 SERVER_ADDRESS = '0.0.0.0'
@@ -31,10 +30,12 @@ ANSI2HTML = os.path.join(MYDIR, "share/ansi2html.sh")
 
 LOG_FILE = os.path.join(MYDIR, 'log/main.log')
 FILE_QUERIES_LOG = os.path.join(MYDIR, 'log/queries.log')
+
 TEMPLATES = os.path.join(MYDIR, 'share/templates')
 STATIC = os.path.join(MYDIR, 'share/static')
 PATH_VIM_ENVIRONMENT = os.path.join(MYDIR, 'share/vim')
 
+USE_OS_PACKAGES = True  # set to False if you pull cheat sheets repositories from GitHub
 if USE_OS_PACKAGES:
     PATH_CHEAT_SHEETS_SPOOL = "/home/igor/cheat.sheets/spool/"
     PATH_LEARNXINY = "/home/igor/git/github.com/adambard/learnxinyminutes-docs"
