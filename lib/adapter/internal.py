@@ -27,7 +27,6 @@ _INTERNAL_TOPICS = [
     ":styles-demo",
     ":vim",
     ":zsh",
-    ":share",
     ]
 
 _COLORIZED_INTERNAL_TOPICS = [
