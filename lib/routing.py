@@ -18,7 +18,7 @@ import adapter.latenz
 import adapter.learnxiny
 import adapter.question
 import adapter.rosetta
-from globals import CONFIG
+from config import CONFIG
 
 class Router(object):
 
@@ -32,7 +32,6 @@ class Router(object):
 
     def __init__(self):
 
-        self.routing_table = CONFIG['routing.table']
         self._cached_topics_list = []
         self._cached_topic_type = {}
 
@@ -57,6 +56,9 @@ class Router(object):
             key: obj.get_list()
             for key, obj in self._adapter.items()
         }
+
+        self.routing_table = CONFIG["routing.main"]
+        self.routing_table = CONFIG["routing.pre"] + self.routing_table + CONFIG["routing.post"]
 
     def get_topics_list(self, skip_dirs=False, skip_internal=False):
         """

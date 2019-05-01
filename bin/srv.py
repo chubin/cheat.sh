@@ -1,47 +1,52 @@
 #!/usr/bin/env python
 # vim: set encoding=utf-8
+# pylint: disable=wrong-import-position,wrong-import-order
 
 """
 Main server program.
+
+Configuration parameters:
+
+    path.internal.malformed
+    path.internal.static
+    path.internal.templates
+    path.log.main
+    path.log.queries
 """
+
 from __future__ import print_function
 
 from gevent.monkey import patch_all
 from gevent.pywsgi import WSGIServer
-
 patch_all()
 
-# pylint: disable=wrong-import-position,wrong-import-order
 import sys
 import logging
 import os
-
 import requests
-
 import jinja2
 from flask import Flask, request, send_from_directory, redirect, Response
 
-MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
-sys.path.append("%s/lib/" % MYDIR)
-
-from globals import FILE_QUERIES_LOG, LOG_FILE, TEMPLATES, STATIC, MALFORMED_RESPONSE_HTML_PAGE, SERVER_ADDRESS, SERVER_PORT
+sys.path.append(os.path.abspath(os.path.join(__file__, "..", "..", "lib")))
+from config import CONFIG
 from limits import Limits
 from cheat_wrapper import cheat_wrapper
 from post import process_post_request
 from options import parse_args
 
 from stateful_queries import save_query, last_query
-# pylint: disable=wrong-import-position,wrong-import-order
 
-if not os.path.exists(os.path.dirname(LOG_FILE)):
-    os.makedirs(os.path.dirname(LOG_FILE))
-logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG, format='%(asctime)s %(message)s')
+if not os.path.exists(os.path.dirname(CONFIG["path.log.main"])):
+    os.makedirs(os.path.dirname(CONFIG["path.log.main"]))
+logging.basicConfig(
+    filename=CONFIG["path.log.main"],
+    level=logging.DEBUG,
+    format='%(asctime)s %(message)s')
 
 app = Flask(__name__) # pylint: disable=invalid-name
 app.jinja_loader = jinja2.ChoiceLoader([
     app.jinja_loader,
-    jinja2.FileSystemLoader(TEMPLATES),
-])
+    jinja2.FileSystemLoader(CONFIG["path.internal.templates"])])
 
 LIMITS = Limits()
 
@@ -61,7 +66,7 @@ def send_static(path):
     Return static file `path`.
     Can be served by the HTTP frontend.
     """
-    return send_from_directory(STATIC, path)
+    return send_from_directory(CONFIG["path.internal.static"], path)
 
 @app.route('/favicon.ico')
 def send_favicon():
@@ -69,7 +74,7 @@ def send_favicon():
     Return static file `favicon.ico`.
     Can be served by the HTTP frontend.
     """
-    return send_from_directory(STATIC, 'favicon.ico')
+    return send_from_directory(CONFIG["path.internal.static"], 'favicon.ico')
 
 @app.route('/malformed-response.html')
 def send_malformed():
@@ -77,14 +82,15 @@ def send_malformed():
     Return static file `malformed-response.html`.
     Can be served by the HTTP frontend.
     """
-    return send_from_directory(STATIC, 'malformed-response.html')
+    dirname, filename = os.path.split(CONFIG["path.internal.malformed"])
+    return send_from_directory(dirname, filename)
 
 def log_query(ip_addr, found, topic, user_agent):
     """
     Log processed query and some internal data
     """
     log_entry = "%s %s %s %s" % (ip_addr, found, topic, user_agent)
-    with open(FILE_QUERIES_LOG, 'a') as my_file:
+    with open(CONFIG["path.log.queries"], 'a') as my_file:
         my_file.write(log_entry.encode('utf-8')+"\n")
 
 def get_request_ip(req):
@@ -253,7 +259,8 @@ def answer(topic=None):
         output_format='ansi'
     result, found = cheat_wrapper(topic, request_options=options, output_format=output_format)
     if 'Please come back in several hours' in result and html_is_needed:
-        return MALFORMED_RESPONSE_HTML_PAGE
+        malformed_response = open(os.path.join(CONFIG["path.internal.malformed"])).read()
+        return malformed_response
 
     log_query(ip_address, found, topic, user_agent)
     if html_is_needed:
@@ -261,8 +268,8 @@ def answer(topic=None):
     return Response(result, mimetype='text/plain')
 
 if 'CHEATSH_PORT' in os.environ:
-    SRV = WSGIServer((SERVER_ADDRESS, int(os.environ.get('CHEATSH_PORT'))), app) # log=None)
+    SRV = WSGIServer((CONFIG['server.bind'], int(os.environ.get('CHEATSH_PORT'))), app) # log=None)
     SRV.serve_forever()
 else:
-    SRV = WSGIServer((SERVER_ADDRESS, SERVER_PORT), app) # log=None)
+    SRV = WSGIServer((CONFIG['server.bind'], CONFIG['server.port']), app) # log=None)
     SRV.serve_forever()

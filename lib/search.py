@@ -14,16 +14,19 @@ It should be implemented on the adapter basis:
     4. eage page are cut by keyword
     5. results are paginated
 
+Configuration parameters:
+
+    search.limit
 """
 
-from globals import MAX_SEARCH_LEN
+from config import CONFIG
 from routing import get_answer_dict, get_topics_list
 
 def _limited_entry():
     return {
         'topic_type': 'LIMITED',
         "topic": "LIMITED",
-        'answer': "LIMITED TO %s ANSWERS" % MAX_SEARCH_LEN,
+        'answer': "LIMITED TO %s ANSWERS" % CONFIG['search.limit'],
         'format': "code",
     }
 
@@ -50,7 +53,7 @@ def find_answers_by_keyword(directory, keyword, options="", request_options=None
         if answer and answer.get('answer') and keyword.lower() in answer.get('answer', '').lower():
             answers_found.append(answer)
 
-        if len(answers_found) > MAX_SEARCH_LEN:
+        if len(answers_found) > CONFIG['search.limit']:
             answers_found.append(
                 _limited_entry()
             )

@@ -1,3 +1,9 @@
+"""
+Configuration parameters:
+
+    path.internal.bin
+"""
+
 from gevent.monkey import patch_all
 from gevent.subprocess import Popen, PIPE
 patch_all()
@@ -9,9 +15,7 @@ import re
 from polyglot.detect import Detector
 from polyglot.detect.base import UnknownLanguage
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from globals import MYDIR
-
+from config import CONFIG
 from adapter import Adapter
 from languages_data import SO_NAME
 
@@ -68,7 +72,7 @@ class Question(Adapter):
         else:
             topic = [topic]
 
-        cmd = [os.path.join(MYDIR, "bin/get-answer-for-question")] + topic
+        cmd = [os.path.join(CONFIG["path.internal.bin"], "bin/get-answer-for-question")] + topic
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
         answer = proc.communicate()[0].decode('utf-8')
         return answer

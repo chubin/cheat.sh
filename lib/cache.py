@@ -1,17 +1,32 @@
+"""
+Cache implementation.
+Currently only two types of cache are allowed:
+    * "none"    cache switched off
+    * "redis"   use redis for cache
+
+Configuration parameters:
+
+    cache.type = redis | none
+    cache.redis.db
+    cache.redis.host
+    cache.redis.port
+"""
+
 import os
 import json
 import redis
-from globals import REDISHOST
+from config import CONFIG
 
-if os.environ.get('REDIS_HOST', '').lower() != 'none':
-    _REDIS = redis.StrictRedis(host=REDISHOST, port=6379, db=0)
-else:
-    _REDIS = None
+_REDIS = None
+if CONFIG['cache.type'] == 'redis':
+    _REDIS = redis.StrictRedis(
+        host=CONFIG['cache.redis.host'],
+        port=CONFIG['cache.redis.port'],
+        db=CONFIG['cache.redis.db'])
 
-if os.environ.get('REDIS_PREFIX', ''):
-    _REDIS_PREFIX = os.environ.get('REDIS_PREFIX', '') + ':'
-else:
-    _REDIS_PREFIX = ''
+_REDIS_PREFIX = ''
+if CONFIG.get("cache.redis.prefix", ""):
+    _REDIS_PREFIX = CONFIG["cache.redis.prefix"] + ":"
 
 def put(key, value):
     """

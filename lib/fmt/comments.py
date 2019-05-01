@@ -14,30 +14,29 @@ Exported functions:
 
     beautify(text, lang, options)
     code_blocks(text)
+
+Configuration parameters:
 """
+
+# pylint: disable=wrong-import-position,wrong-import-order
+
 from __future__ import print_function
 
 from gevent.monkey import patch_all
 from gevent.subprocess import Popen
 patch_all()
 
-# pylint: disable=wrong-import-position,wrong-import-order
 import sys
 import os
 import textwrap
 import hashlib
 import re
-
 from itertools import groupby, chain
 from tempfile import NamedTemporaryFile
 
-import cache
-
-MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
-sys.path.append("%s/lib/" % MYDIR)
+from config import CONFIG
 from languages_data import VIM_NAME
-from globals import PATH_VIM_ENVIRONMENT
-# pylint: enable=wrong-import-position,wrong-import-order
+import cache
 
 FNULL = open(os.devnull, 'w')
 TEXT = 0
@@ -193,7 +192,7 @@ def _run_vim_script(script_lines, text_lines):
     textfile.file.close()
 
     my_env = os.environ.copy()
-    my_env['HOME'] = PATH_VIM_ENVIRONMENT
+    my_env['HOME'] = CONFIG["path.internal.vim"]
 
     cmd = ["script", "-q", "-c",
            "vim -S %s %s" % (script_vim.name, textfile.name)]

@@ -1,12 +1,16 @@
 """
 POST requests processing.
 Currently used only for new cheat sheets submission.
+
+Configuration parameters:
+
+    path.spool
 """
 
 import string
 import os
 import random
-from globals import PATH_CHEAT_SHEETS_SPOOL
+from config import CONFIG
 
 def _save_cheatsheet(topic_name, cheatsheet):
     """
@@ -16,7 +20,7 @@ def _save_cheatsheet(topic_name, cheatsheet):
 
     nonce = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(9))
     filename = topic_name.replace('/', '.') + "." + nonce
-    filename = os.path.join(PATH_CHEAT_SHEETS_SPOOL, filename)
+    filename = os.path.join(CONFIG["path.spool"], filename)
 
     open(filename, 'w').write(cheatsheet)
 

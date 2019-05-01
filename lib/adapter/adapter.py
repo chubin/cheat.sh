@@ -1,12 +1,15 @@
 """
 `Adapter`, base class of the adapters.
+
+Configuration parameters:
+
+    path.repositories
 """
 
 import abc
 import os
 from six import with_metaclass
-
-from globals import LOCAL_REPOSITORIES
+from config import CONFIG
 
 class AdapterMC(type):
     """
@@ -167,7 +170,7 @@ class Adapter(with_metaclass(AdapterMC, object)):
         if '/' in dirname:
             dirname = dirname.split('/')[-1]
 
-        path = os.path.join(LOCAL_REPOSITORIES, dirname)
+        path = os.path.join(CONFIG['path.repositories'], dirname)
         return path
 
     @classmethod

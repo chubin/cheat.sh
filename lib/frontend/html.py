@@ -1,3 +1,10 @@
+"""
+
+Configuration parameters:
+
+    path.internal.ansi2html
+"""
+
 from gevent.monkey import patch_all
 from gevent.subprocess import Popen, PIPE
 patch_all()
@@ -10,10 +17,25 @@ import re
 MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 sys.path.append("%s/lib/" % MYDIR)
 
-from globals import error, ANSI2HTML, GITHUB_REPOSITORY
+from config import CONFIG
+from globals import error
 from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_FOOTER
 import frontend.ansi
 # pylint: disable=wrong-import-position,wrong-import-order
+
+# temporary having it here, but actually we have the same data
+# in the adapter module
+GITHUB_REPOSITORY = {
+    "late.nz"           :   'chubin/late.nz',
+    "cheat.sheets"      :   'chubin/cheat.sheets',
+    "cheat.sheets dir"  :   'chubin/cheat.sheets',
+    "tldr"              :   'tldr-pages/tldr',
+    "cheat"             :   'chrisallenlane/cheat',
+    "learnxiny"         :   'adambard/learnxinyminutes-docs',
+    "internal"          :   '',
+    "search"            :   '',
+    "unknown"           :   '',
+}
 
 def visualize(answer_data, request_options):
     query = answer_data['query']
@@ -55,7 +77,7 @@ def _render_html(query, result, editable, repository_button, topics_list, reques
         Convert ANSI text `data` to HTML
         """
         proc = Popen(
-            ["bash", ANSI2HTML, "--palette=solarized", "--bg=dark"],
+            ["bash", CONFIG['path.internal.ansi2html'], "--palette=solarized", "--bg=dark"],
             stdin=PIPE, stdout=PIPE, stderr=PIPE)
         data = data.encode('utf-8')
         stdout, stderr = proc.communicate(data)
