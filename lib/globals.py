@@ -73,6 +73,21 @@ CONFIG = {
     'adapters.mandatory': [
         "search",
         ],
+    'routing.table': [
+        ("^$", "search"),
+        ("^[^/]*/rosetta(/|$)", "rosetta"),
+        ("^:", "internal"),
+        ("/:list$", "internal"),
+        ("/$", "cheat.sheets dir"),
+        ("", "cheat.sheets"),
+        ("", "cheat"),
+        ("", "tldr"),
+        ("", "late.nz"),
+        ("", "fosdem"),
+        ("^[^/]*$", "unknown"),
+        ("", "learnxiny"),
+        ("^[a-z][a-z]-[a-z][a-z]$", "translation"),
+    ]
     }
 
 MAX_SEARCH_LEN = 20

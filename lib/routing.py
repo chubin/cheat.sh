@@ -30,24 +30,9 @@ class Router(object):
     `get_answer_dict()` return answer for the query.
     """
 
-    routing_table = [
-        ("^$", "search"),
-        ("^[^/]*/rosetta(/|$)", "rosetta"),
-        ("^:", "internal"),
-        ("/:list$", "internal"),
-        ("/$", "cheat.sheets dir"),
-        ("", "cheat.sheets"),
-        ("", "cheat"),
-        ("", "tldr"),
-        ("", "late.nz"),
-        ("", "fosdem"),
-        ("^[^/]*$", "unknown"),
-        ("", "learnxiny"),
-        ("^[a-z][a-z]-[a-z][a-z]$", "translation"),
-    ]
-
     def __init__(self):
 
+        self.routing_table = CONFIG['routing.table']
         self._cached_topics_list = []
         self._cached_topic_type = {}
 
