@@ -68,7 +68,7 @@ class LearnXYAdapter(object):
     Parent class of all languages adapters
     """
 
-    _learn_xy_path = PATH_LEARNXINY
+    _learn_xy_path = LearnXinY.local_repository_location()
     _replace_with = {}
     _filename = ''
     prefix = ''
