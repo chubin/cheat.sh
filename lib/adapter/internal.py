@@ -11,7 +11,6 @@ import collections
 
 from fuzzywuzzy import process, fuzz
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from config import CONFIG
 from adapter import Adapter
 from fmt.internal import colorize_internal
