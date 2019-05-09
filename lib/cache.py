@@ -36,7 +36,7 @@ def put(key, value):
     if _REDIS_PREFIX:
         key = _REDIS_PREFIX + key
 
-    if _REDIS:
+    if CONFIG["cache.type"] == "redis" and _REDIS:
         if isinstance(value, (dict, list)):
             value = json.dumps(value)
 
@@ -50,7 +50,7 @@ def get(key):
     if _REDIS_PREFIX:
         key = _REDIS_PREFIX + key
 
-    if _REDIS:
+    if CONFIG["cache.type"] == "redis" and _REDIS:
         value = _REDIS.get(key)
         try:
             value = json.loads(value)

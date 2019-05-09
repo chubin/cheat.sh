@@ -43,6 +43,7 @@ def main(args):
     standalone wrapper for cheat_wrapper()
     """
 
+    config.CONFIG["cache.type"] = "none"
     query, request_options = parse_cmdline(args)
     answer, _ = cheat_wrapper.cheat_wrapper(query, request_options=request_options)
     sys.stdout.write(answer.encode("utf-8"))
