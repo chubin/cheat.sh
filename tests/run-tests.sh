@@ -27,15 +27,35 @@ failed=0
     cat -n tests.txt | sed -n "$(echo "$*" | sed 's/ /p; /g;s/$/p/')"
   fi
 } > "$TMP3"
+
+skip_online=NO
+test_standalone=YES
+show_details=YES
+
 while read -r number test_line; do
-  test_line="${test_line// #.*//}"
-  if [[ $test_line = "cht.sh "* ]]; then
+  if [ "$skip_online" = YES ]; then
+    if [[ $test_line = *\[online\]* ]]; then
+      echo "$number is [online]; skipping"
+      continue
+    fi
+  fi
+
+  test_line=$(echo $test_line | sed 's@ *#.*@@')
+
+  if [ "$test_standalone" = YES ]; then
+    python ../lib/standalone.py "$test_line" > "$TMP" 2> /dev/null
+  elif [[ $test_line = "cht.sh "* ]]; then
     test_line="${test_line//cht.sh /}"
     eval "bash $CHTSH_SCRIPT $test_line" > "$TMP"
   else
     eval "curl -s $CHTSH_URL/$test_line" > "$TMP"
   fi
+
   if ! diff results/"$number" "$TMP" > "$TMP2"; then
+    if [ "$show_details" = YES ]; then
+      echo "$ CHEATSH_CACHE_TYPE=none python ../lib/standalone.py $test_line"
+      cat "$TMP2"
+    fi
     echo "FAILED: [$number] $test_line"
     ((failed++))
   fi

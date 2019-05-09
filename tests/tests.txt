@@ -6,10 +6,10 @@ btrfs~volume                # search on page
 :intro
 :help
 :cht.sh
-cht.sh python copy file
-python/copy+file
-python/copy+file?Q
-python/copy+file?QT
+cht.sh python copy file     # [online]
+python/copy+file            # [online]
+python/copy+file?Q          # [online]
+python/copy+file?QT         # [online]
 /
 //
 python/:learn
