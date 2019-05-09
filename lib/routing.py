@@ -155,6 +155,9 @@ class Router(object):
                 return answer
 
         answer = self._get_page_dict(topic, request_options=request_options)
+        if isinstance(answer, dict):
+            if "cache" in answer:
+                cache_needed = answer["cache"]
 
         if cache_needed and answer:
             cache.put(topic, answer)
