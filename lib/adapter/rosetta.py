@@ -3,7 +3,7 @@ Implementation of RosettaCode Adapter.
 
 Exports:
 
-    Rosetta(Adapter)
+    Rosetta(GitRepositoryAdapter)
 """
 
 # pylint: disable=relative-import
@@ -12,10 +12,10 @@ import os
 import glob
 import yaml
 
-from adapter import Adapter
+from git_adapter import GitRepositoryAdapter
 from cheat_sheets import CheatSheets
 
-class Rosetta(Adapter):
+class Rosetta(GitRepositoryAdapter):
 
     """
     Adapter for RosettaCode
@@ -24,17 +24,22 @@ class Rosetta(Adapter):
     _adapter_name = "rosetta"
     _output_format = "code"
     _local_repository_location = "RosettaCodeData"
+    _repository_url = "https://github.com/acmeism/RosettaCodeData"
 
     __section_name = "rosetta"
+
+    def __init__(self):
+        GitRepositoryAdapter.__init__(self)
+        self._rosetta_code_name = self._load_rosetta_code_names()
 
     @staticmethod
     def _load_rosetta_code_names():
         answer = {}
 
-        lang_files_location = CheatSheets.local_repository_location()
+        lang_files_location = CheatSheets.local_repository_location(cheat_sheets_location=True)
         for filename in glob.glob(os.path.join(lang_files_location, '*/_info.yaml')):
             text = open(filename, 'r').read()
-            data = yaml.load(text)
+            data = yaml.load(text, Loader=yaml.SafeLoader)
             if data is None:
                 continue
             lang = os.path.basename(os.path.dirname(filename))
@@ -140,6 +145,3 @@ class Rosetta(Adapter):
     def is_found(self, _):
         return True
 
-    def __init__(self):
-        Adapter.__init__(self)
-        self._rosetta_code_name = self._load_rosetta_code_names()
