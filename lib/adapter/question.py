@@ -4,11 +4,14 @@ Configuration parameters:
     path.internal.bin
 """
 
+# pylint: disable=relative-import,wrong-import-position,wrong-import-order
+
+from __future__ import print_function
+
 from gevent.monkey import patch_all
 from gevent.subprocess import Popen, PIPE
 patch_all()
 
-import sys
 import os
 import re
 
@@ -16,10 +19,20 @@ from polyglot.detect import Detector
 from polyglot.detect.base import UnknownLanguage
 
 from config import CONFIG
-from adapter import Adapter
+from upstream import UpstreamAdapter
 from languages_data import SO_NAME
 
-class Question(Adapter):
+class Question(UpstreamAdapter):
+
+    """
+    Answer to a programming language question, using Stackoverflow
+    as the main data source. Heavy lifting is done by an external
+    program `CONFIG["path.internal.bin.upstream"]`.
+
+    If the program is not found, fallback to the superclass `UpstreamAdapter`,
+    which queries the upstream server (by default https://cheat.sh/)
+    fot the answer
+    """
 
     _adapter_name = "question"
     _output_format = "text+code"
@@ -29,6 +42,11 @@ class Question(Adapter):
         """
         Find answer for the `topic` question.
         """
+
+        if not os.path.exists(CONFIG["path.internal.bin.upstream"]):
+            # if the upstream program is not found, use normal upstream adapter
+            self._output_format = "ansi"
+            return UpstreamAdapter._get_page(self, topic, request_options=request_options)
 
         # if there is a language name in the section name,
         # cut it off (de:python => python)
@@ -55,7 +73,8 @@ class Question(Adapter):
             query_text = re.sub('/[0-9]+$', '', query_text)
             detector = Detector(query_text)
             supposed_lang = detector.languages[0].code
-            if len(topic_words) > 2 or supposed_lang in ['az', 'ru', 'uk', 'de', 'fr', 'es', 'it', 'nl']:
+            if len(topic_words) > 2 \
+                or supposed_lang in ['az', 'ru', 'uk', 'de', 'fr', 'es', 'it', 'nl']:
                 lang = supposed_lang
             if supposed_lang.startswith('zh_') or supposed_lang == 'zh':
                 lang = 'zh'
@@ -72,7 +91,7 @@ class Question(Adapter):
         else:
             topic = [topic]
 
-        cmd = [os.path.join(CONFIG["path.internal.bin"], "bin/get-answer-for-question")] + topic
+        cmd = [CONFIG["path.internal.bin.upstream"]] + topic
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
         answer = proc.communicate()[0].decode('utf-8')
         return answer
