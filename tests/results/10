@@ -1,6 +1,6 @@
 [38;5;246m#  How do I copy a file in Python?[39m
 [38;5;246m#  [39m
-[38;5;246m#  shutil (http://docs.python.org/2/library/shutil.html) has many methods[39m
+[38;5;246m#  shutil (http://docs.python.org/3/library/shutil.html) has many methods[39m
 [38;5;246m#  you can use. One of which is:[39m
 
 [38;5;70;01mfrom[39;00m[38;5;252m [39m[38;5;68;04mshutil[39;00m[38;5;252m [39m[38;5;70;01mimport[39;00m[38;5;252m [39m[38;5;252mcopyfile[39m
