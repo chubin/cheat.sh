@@ -121,16 +121,28 @@ class Adapter(with_metaclass(AdapterMC, object)):
         """
         Return page dict for `topic`
         """
+
+        #
+        # if _get_page() returns a dict, use the dictionary
+        # for the answer. It is possible to specify some
+        # usefule properties as the part of the answer
+        # (e.g. "cache")
+        # answer by _get_page() always overrides all default properties
+        #
+        answer = self._get_page(topic, request_options=request_options)
+        if not isinstance(answer, dict):
+            answer = {"answer": answer}
+
         answer_dict = {
             'topic': topic,
             'topic_type': self._adapter_name,
-            'answer': self._get_page(topic, request_options=request_options),
             'format': self._get_output_format(topic),
             }
+        answer_dict.update(answer)
         return answer_dict
 
     @classmethod
-    def local_repository_location(cls):
+    def local_repository_location(cls, cheat_sheets_location=False):
         """
         Return local repository location.
         If name `self._repository_url` for the class is not specified, return None
@@ -139,6 +151,8 @@ class Adapter(with_metaclass(AdapterMC, object)):
         If for some reason the local repository location should be overriden
         (e.g. if several different branches of the same repository are used)
         if should set in `self._local_repository_location` of the adapter.
+        If `cheat_sheets_location` is specified, return path of the cheat sheets
+        directory instead of the repository directory.
         """
 
         dirname = None
@@ -171,6 +185,10 @@ class Adapter(with_metaclass(AdapterMC, object)):
             dirname = dirname.split('/')[-1]
 
         path = os.path.join(CONFIG['path.repositories'], dirname)
+
+        if cheat_sheets_location:
+            path = os.path.join(path, cls._cheatsheet_files_prefix)
+
         return path
 
     @classmethod
@@ -253,6 +271,7 @@ class Adapter(with_metaclass(AdapterMC, object)):
 
         local_repository_dir = cls.local_repository_location()
         state_filename = os.path.join(local_repository_dir, '.cached_revision')
+        state = None
         if os.path.exists(state_filename):
             state = open(state_filename, 'r').read()
         return state
