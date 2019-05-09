@@ -88,6 +88,7 @@ def _update_adapter(adptr):
 
     If `adptr` returns no update_command(), it is being ignored.
     """
+    os.chdir(adptr.local_repository_location())
 
     cmd = adptr.update_command()
     if not cmd:
@@ -117,12 +118,13 @@ def _update_adapter(adptr):
     if cmd:
         errorcode, output = _run_cmd(cmd)
         if errorcode:
-            _log("\nERROR:\n---\n" + output + "\n---\nCould not pages to be updated: %s" % adptr)
+            _log("\nERROR:\n---\n" + output + "\n---\nCould not get list of pages to be updated: %s" % adptr)
             return False
         updates = output.splitlines()
 
     entries = adptr.get_updates_list(updates)
     for entry in entries:
+        print "ivalidating ", entry
         cache.delete(entry)
 
     adptr.save_state(state)
@@ -173,8 +175,10 @@ def main(args):
         _show_usage()
         sys.exit(0)
 
-    if args[0] == 'fetch':
+    if args[0] == 'fetch-all':
         fetch_all()
+    elif args[0] == 'update':
+        update_by_name(sys.argv[1])
     elif args[0] == 'update-all':
         update_all()
     else:

@@ -145,6 +145,7 @@ class GitRepositoryAdapter(RepositoryAdapter):    #pylint: disable=abstract-meth
 
         local_repository_dir = cls.local_repository_location()
         state_filename = os.path.join(local_repository_dir, '.cached_revision')
+        state = None
         if os.path.exists(state_filename):
             state = open(state_filename, 'r').read()
         return state
