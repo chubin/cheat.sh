@@ -10,9 +10,9 @@ The adapter exposes one page ("latencies") and several its aliases
 
 import sys
 import os
-from adapter import Adapter
+from git_adapter import GitRepositoryAdapter
 
-class Latenz(Adapter):
+class Latenz(GitRepositoryAdapter):
 
     """
     chubin/late.nz Adapter
@@ -25,7 +25,7 @@ class Latenz(Adapter):
     def _get_page(self, topic, request_options=None):
         sys.path.append(os.path.join(self.local_repository_location(), 'bin'))
         import latencies
-        return latencies.render()
+        return latencies.render().decode("utf-8")
 
     def _get_list(self, prefix=None):
         return ['latencies']
