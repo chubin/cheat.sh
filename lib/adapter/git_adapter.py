@@ -47,7 +47,7 @@ class RepositoryAdapter(Adapter):
             answer = self._format_page(open(filename, 'r').read())
         else:
             # though it should not happen
-            answer = filename + " " + str(self.__class__)
+            answer = "%s:%s not found" % (str(self.__class__), topic)
 
         return answer.decode('utf-8')
 

@@ -16,6 +16,26 @@ def _remove_initial_underscore(filename):
         filename = filename[1:]
     return filename
 
+def _sanitize_dirnames(filename, restore=False):
+    """
+    Remove (or add) leading _ in the directories names in `filename`
+    The `restore` param means that the path name should be restored from the queryname,
+    i.e. conversion should be done in the opposite direction
+    """
+    parts = filename.split('/')
+    newparts = []
+    for part in parts[:-1]:
+        if restore:
+            newparts.append('_'+part)
+            continue
+        if part.startswith('_'):
+            newparts.append(part[1:])
+        else:
+            newparts.append(part)
+    newparts.append(parts[-1])
+
+    return "/".join(newparts)
+
 class CheatSheets(GitRepositoryAdapter):
 
     """
@@ -35,18 +55,36 @@ class CheatSheets(GitRepositoryAdapter):
 
         hidden_files = ["_info.yaml"]
         answer = []
+        prefix = os.path.join(
+            self.local_repository_location(),
+            self._cheatsheet_files_prefix)
         for mask in ['*', '*/*']:
             template = os.path.join(
-                self.local_repository_location(),
-                self._cheatsheet_files_prefix,
+                prefix,
                 mask)
 
             answer += [
-                os.path.basename(f_name)
+                _sanitize_dirnames(f_name[len(prefix):])
                 for f_name in glob.glob(template)
-                if not os.path.isdir(f_name) and f_name not in hidden_files]
+                if not os.path.isdir(f_name)
+                and os.path.basename(f_name) not in hidden_files]
 
         return sorted(answer)
+
+    def _get_page(self, topic, request_options=None):
+
+        filename = os.path.join(
+            self.local_repository_location(),
+            self._cheatsheet_files_prefix,
+            _sanitize_dirnames(topic, restore=True))
+
+        if os.path.exists(filename):
+            answer = self._format_page(open(filename, 'r').read())
+        else:
+            # though it should not happen
+            answer = "%s:%s not found" % (str(self.__class__), topic)
+
+        return answer.decode('utf-8')
 
 class CheatSheetsDir(CheatSheets):
 
