@@ -12,10 +12,16 @@ def parse_args(args):
     }
 
     query = ""
+    newargs = {}
     for key, val in args.items():
-        if val == "" or val == []:
+        if val == "" or val == [] or val == ['']:
             query += key
             continue
+        if val == 'True':
+            val = True
+        if val == 'False':
+            val = False
+        newargs[key] = val
 
     options_meaning = {
         "c": dict(add_comments=False, unindent_code=False),
@@ -28,11 +34,6 @@ def parse_args(args):
         if option in query:
             result.update(meaning)
 
-    for key, val in args.items():
-        if val == 'True':
-            val = True
-        if val == 'False':
-            val = False
-        result[key] = val
+    result.update(newargs)
 
     return result

@@ -4,8 +4,11 @@ Standalone wrapper for the cheat.sh server.
 
 import sys
 import textwrap
+import urlparse
 
+import config
 import cheat_wrapper
+import options
 
 def show_usage():
     """
@@ -30,11 +33,15 @@ def parse_cmdline(args):
         show_usage()
         sys.exit(0)
 
-    request_options = {}
-    query = args[0]
-    query = query.lstrip("/")
+    query_string = " ".join(args)
+    parsed = urlparse.urlparse("https://srv:0/%s" % query_string)
+    request_options = options.parse_args(
+        urlparse.parse_qs(parsed.query, keep_blank_values=True))
+
+    query = parsed.path.lstrip("/")
     if not query:
         query = ":firstpage"
+
     return query, request_options
 
 
