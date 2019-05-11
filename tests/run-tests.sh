@@ -48,7 +48,7 @@ while read -r number test_line; do
 
   if [ "$test_standalone" = YES ]; then
     test_line="${test_line//cht.sh /}"
-    python ../lib/standalone.py "$test_line" > "$TMP" 2> /dev/null
+    "${PYTHON}" ../lib/standalone.py "$test_line" > "$TMP" 2> /dev/null
   elif [[ $test_line = "cht.sh "* ]]; then
     test_line="${test_line//cht.sh /}"
     eval "bash $CHTSH_SCRIPT $test_line" > "$TMP"
@@ -69,4 +69,8 @@ done < "$TMP3"
 
 echo TESTS/OK/FAILED "$i/$((i-failed))/$failed"
 
-
+if [ "$failed" != 0 ]; then
+  exit 1
+else
+  exit 0
+fi
