@@ -144,4 +144,3 @@ class Rosetta(GitRepositoryAdapter):
 
     def is_found(self, _):
         return True
-
