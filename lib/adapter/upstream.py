@@ -23,7 +23,7 @@ def _are_you_offline():
             _________________
            | | ___________ |o|   Though it could be theoretically possible
            | | ___________ | |   to use cheat.sh fully offline,
-           | | ___________ | |   and for *programming languages questions* too,
+           | | ___________ | |   and for *the programming languages questions* too,
            | | ___________ | |   this very feature is not yet implemented.
            | |_____________| |
            |     _______     |   If you find it useful, please visit
