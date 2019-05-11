@@ -9,6 +9,7 @@ in the `_CONFIG` dictionary. Those parameters can be overriden
 by three means:
     * config file `etc/config.yaml` located in the work dir
     * config file `etc/config.yaml` located in the project dir
+      (if the work dir and the project dir are not the same)
     * environment variables prefixed with `CHEATSH_`
 
 Configuration placement priorities, from high to low:
@@ -17,9 +18,10 @@ Configuration placement priorities, from high to low:
     * configuration file in the project dir
     * default values specified in the `_CONFIG` dictionary
 
-We do not recommend you to use the config file located in the porject dir,
+If the work dir and the project dir are not the same, we do not
+recommend that you use the config file located in the project dir,
 except the cases when you use your own cheat.sh fork, and thus
-configuration is part of the project repository.
+configuration is a part of the project repository.
 In all other cases `WORKDIR/etc/config.yaml` should be preferred.
 Location of this config file can be overriden by the `CHEATSH_PATH_CONFIG`
 environment variable.
