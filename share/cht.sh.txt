@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC1117,SC2001
 #
 # [X] open section
 # [X] one shot mode
@@ -26,6 +27,24 @@
 __CHTSH_VERSION=5
 __CHTSH_DATETIME="2019-05-11 07:29:46 +0200"
 
+# cht.sh configuration loading
+#
+# configuration is stored in ~/.cht.sh/ (can be overridden by CHTSH_HOME)
+#
+CHTSH_HOME=${CHTSH:-"$HOME"/.cht.sh}
+[ -z "$CHTSH_CONF" ] && CHTSH_CONF=$CHTSH_HOME/cht.sh.conf
+# shellcheck disable=SC1090,SC2002
+[ -e "$CHTSH_CONF" ] && source "$CHTSH_CONF"
+[ -z "$CHTSH_URL" ] && CHTSH_URL=https://cht.sh
+
+# currently we support only two modes:
+# * lite = access the server using curl
+# * auto = try standalone usage first
+CHTSH_MODE="$(cat "$CHTSH_HOME"/mode 2> /dev/null)"
+[ "$CHTSH_MODE" != lite ] && CHTSH_MODE=auto
+CHEATSH_INSTALLATION="$(cat "$CHTSH_HOME/standalone" 2> /dev/null)"
+
+
 export LESSSECURE=1
 STEALTH_MAX_SELECTION_LENGTH=5
 
@@ -39,6 +58,237 @@ esac
 if echo "$KSH_VERSION" | grep -q ' 93' && ! local foo 2>/dev/null; then
   alias local=typeset
 fi
+
+fatal()
+{
+  echo "ERROR: $*" >&2
+  exit 1
+}
+
+_say_what_i_do()
+{
+  [ -n "$LOG" ] && echo "$(date '+[%Y-%m-%d %H:%M%S]') $*" >> "$LOG"
+
+  local this_prompt="\033[0;1;4;32m>>\033[0m"
+  printf "\n${this_prompt}%s\033[0m\n" " $* "
+}
+
+cheatsh_standalone_install()
+{
+  # the function installs cheat.sh with the upstream repositories
+  # in the standalone mode
+  local installdir; installdir="$1"
+  local default_installdir="$HOME/.cheat.sh"
+
+  if [ "$installdir" = help ]; then
+    cat <<EOF
+Install cheat.sh in the standalone mode.
+
+After the installation, cheat.sh can be used locally, without accessing
+the public cheat.sh service, or it can be used in the server mode,
+where the newly installed server could be accessed by external clients
+in the same fashion as the public cheat.sh server.
+
+During the installation, cheat.sh code as well as the cheat.sh upstream
+cheat sheets repositories will be fetched.
+
+It takes approximately 1G of the disk space.
+
+Default installation location:  ~/.cheat.sh/
+It can be overriden by a command line parameter to this script:
+
+    ${0##*/} --standalone-install DIR
+
+See cheat.sh/:standalone or https://github.com/chubin/cheat.sh/README.md
+for more information:
+
+    cht.sh :standalone
+    curl cheat.sh/:standalone
+
+After the installation is finished, the cht.sh shell client is switched
+to the auto mode, where it uses the local cheat.sh installation if possible.
+You can switch the mode with the --mode switch:
+
+    cht.sh --mode lite      # use https://cheat.sh/ only
+    cht.sh --mode auto      # use local installation
+
+For intallation and standalone usage, you need \`git\`, \`python\`,
+and \`virtualenv\` to be installed locally.
+EOF
+    return
+  fi
+
+  local _exit_code=0
+
+  local dependencies=(python git virtualenv)
+  for dep in "${dependencies[@]}"; do
+    command -v "$dep" >/dev/null || \
+    { echo "DEPENDENCY: \"$dep\" is needed to install cheat.sh in the standalone mode" >&2; _exit_code=1; }
+  done
+  [ "$_exit_code" -ne 0 ] && return "$_exit_code"
+
+  while true; do
+    echo -n "Where should cheat.sh be installed [$default_installdir]? "; read -r installdir
+    [ -n "$installdir" ] || installdir="$default_installdir"
+
+    if [ "$installdir" = y ] \
+        || [ "$installdir" = Y ] \
+        || [ "$(echo "$installdir" | tr "[:upper:]" "[:lower:]")" = yes ]
+    then
+      echo Please enter the directory name
+      echo If it was the directory name already, please prepend it with \"./\": "./$installdir"
+    else
+      break
+    fi
+  done
+
+  if [ -e "$installdir" ]; then
+    echo "ERROR: Installation directory [$installdir] exists already"
+    echo "Please remove it first before continuing"
+    return 1
+  fi
+
+  if ! mkdir -p "$installdir"; then
+    echo "ERROR: Could not create the installation directory \"$installdir\""
+    echo "ERROR: Please check the permissions and start the script again"
+    return 1
+  fi
+
+  local space_needed=700
+  local space_available; space_available=$(("$(df -k "$installdir" | awk '{print $4}' | tail -1)"/1024))
+
+  if [ "$space_available" -lt "$space_needed" ]; then
+    echo "ERROR: Installation directory has no enough space (needed: ${space_needed}M, available: ${space_available}M"
+    echo "ERROR: Please clean up and start the script again"
+    rmdir "$installdir"
+    return 1
+  fi
+
+  _say_what_i_do Cloning cheat.sh locally
+  local url=https://github.com/chubin/cheat.sh
+  rmdir "$installdir"
+  git clone "$url" "$installdir" || fatal Could not clone "$url" with git into "$installdir"
+  cd "$installdir" || fatal "Cannot cd into $installdir"
+  git checkout offline_usage
+
+  # after the repository cloned, we may have the log directory
+  # and we can write our installation log into it
+  mkdir -p "$installdir/log/"
+  LOG="$installdir/log/install.log"
+
+  # we use tee everywhere so we should set -o pipefail
+  set -o pipefail
+
+  _say_what_i_do Creating virtual environment
+  python2 "$(command -v virtualenv)" ve \
+      || fatal Could not create virtual environment with "python2 $(command -v virtualenv) ve"
+
+  _say_what_i_do Installing python requirements into the virtual environment
+  ve/bin/pip install -r requirements.txt > "$LOG" \
+      || {
+
+    echo "ERROR:"
+    echo "---"
+    tail -n 10 "$LOG"
+    echo "---"
+    echo "See $LOG for more"
+    fatal Could not install python dependecies into the virtual environment
+  }
+  echo "$(ve/bin/pip freeze | wc -l) dependencies were successfully installed"
+
+  _say_what_i_do Fetching the upstream cheat sheets repositories
+  ve/bin/python lib/fetch.py fetch-all | tee -a "$LOG"
+
+  _say_what_i_do Running self-tests
+  (
+    cd tests || exit
+
+    if CHEATSH_TEST_STANDALONE=YES \
+       CHEATSH_TEST_SKIP_ONLINE=NO \
+       CHEATSH_TEST_SHOW_DETAILS=NO \
+       PYTHON=../ve/bin/python bash run-tests.sh | tee -a "$LOG"
+    then
+      printf "\033[0;32m%s\033[0m\n" "SUCCESS"
+    else
+      printf "\033[0;31m%s\033[0m\n" "FAILED"
+      echo "Some tests were failed. Run the tests manually for further investigation:"
+      echo "  cd $PWD; bash tests/run-tests.sh)"
+    fi
+  )
+
+  mkdir -p "$CHTSH_HOME"
+  echo "$installdir" > "$CHTSH_HOME/standalone"
+  echo auto > "$CHTSH_HOME/mode"
+
+  _say_what_i_do Done
+
+  local v1; v1=$(printf "\033[0;1;32m")
+  local v2; v2=$(printf "\033[0m")
+
+  cat <<EOF | sed "s/{/$v1/; s/}/$v2/"
+
+{      _      }
+{     \\ \\   }     The installation is successfully finished.
+{      \\ \\  }
+{      / /    }   Now you can use cheat.sh in the standalone mode,
+{     /_/     }   or you can start your own cheat.sh server.
+
+
+Now the cht.sh shell client is switched to the auto mode, where it uses
+the local cheat.sh installation if possible.
+You can switch the mode with the --mode switch:
+
+    cht.sh --mode lite      # use https://cheat.sh/ only
+    cht.sh --mode auto      # use local installation
+
+You can add your own cheat sheets repository (config is in \`etc/config.yaml\`),
+or create new cheat sheets adapters (in \`lib/adapters\`).
+
+To update local copies of cheat sheets repositores on a regular basis,
+add the following line to your user crontab (crontab -e):
+
+    10 * * * * $installdir/ve/bin/python $installdir/lib/fetch.py update-all
+
+All cheat sheets will be automatically actualized each hour.
+
+If you are running a server reachable from the Internet, it can be instantly
+notified via a HTTP request about any cheat sheets changes. For that, please
+open an issue on the cheat.sh project repository [github.com/chubin/cheat.sh]
+with the ENTRY-POINT from the URL https://ENTRY-POINT/:actualize specified
+EOF
+}
+
+chtsh_mode()
+{
+  local mode="$1"
+
+  local text; text=$(
+    echo "  auto    use the standalone installation first"
+    echo "  lite    use the cheat sheets server directly"
+  )
+
+  if [ -z "$mode" ]; then
+    echo "current mode: $CHTSH_MODE ($(printf "%s" "$text" | grep "$CHTSH_MODE" | sed "s/$CHTSH_MODE//; s/^ *//; s/ \+/ /"))"
+    if [ -d "$CHEATSH_INSTALLATION" ]; then
+      echo "cheat.sh standalone installation: $CHEATSH_INSTALLATION"
+    else
+      echo 'cheat.sh standalone installation not found; falling back to the "lite" mode'
+    fi
+  elif [ "$mode" = auto ] || [ "$mode" = lite ]; then
+    if [ "$mode" = "$CHTSH_MODE" ]; then
+      echo "The configured mode was \"$CHTSH_MODE\"; nothing changed"
+    else
+      mkdir -p "$CHTSH_HOME"
+      echo "$mode" > "$CHTSH_HOME/mode"
+      echo "Configured mode: $mode"
+    fi
+  else
+    echo "Uknown mode: $mode"
+    echo Suported modes:
+    echo "  auto    use the standalone installation first"
+    echo "  lite    use the cheat sheets server directly"
+  fi
+}
 
 get_query_options()
 {
@@ -119,19 +369,21 @@ gen_random_str()
   fi
 )
 
-if [ -z "$CHTSH_CONF" ]; then
-  CHTSH_CONF="$HOME"/.cht.sh/cht.sh.conf
-fi
+if [ "$CHTSH_MODE" = auto ] && [ -d "$CHEATSH_INSTALLATION" ]; then
+  curl() {
+    # ignoring all options
+    # currently the standalone.py does not support them anyway
+    local opt
+    while getopts "b:s" opt; do
+      :
+    done
+    shift $((OPTIND - 1))
 
-if [ -e "$CHTSH_CONF" ]; then
-  # shellcheck disable=SC1090,SC2002
-  . "$CHTSH_CONF"
-fi
-
-[ -z "$CHTSH_URL" ] && CHTSH_URL=https://cht.sh
-
-# any better test not involving either OS matching or actual query?
-if [ "$(uname -s)" = OpenBSD ] && [ -x /usr/bin/ftp ]; then
+    local url; url="$1"; shift
+    "$CHEATSH_INSTALLATION/ve/bin/python" "$CHEATSH_INSTALLATION/lib/standalone.py" "${url#"$CHTSH_URL"}" "$@"
+  }
+elif [ "$(uname -s)" = OpenBSD ] && [ -x /usr/bin/ftp ]; then
+  # any better test not involving either OS matching or actual query?
   curl() {
     local opt args="-o -"
     while getopts "b:s" opt; do
@@ -154,24 +406,48 @@ else
   fi
 fi
 
-
 if [ "$1" = --read ]; then
   read -r a || a="exit"
-  # shellcheck disable=SC1117
   printf "%s\n" "$a"
   exit 0
 elif [ x"$1" = x--help ] || [ -z "$1" ]; then
+
+  n=${0##*/}
+  s=$(echo "$n" | sed "s/./ /"g)
+
   cat <<EOF
 Usage:
 
-    ${0##*/} --help           show this help
-    ${0##*/} --shell [LANG]   shell mode (open LANG if specified)
-    ${0##*/} QUERY            process QUERY and exit
+    $n [OPTIONS|QUERY]
+
+Options:
+
+    QUERY                   process QUERY and exit
+
+    --help                  show this help
+    --shell [LANG]          shell mode (open LANG if specified)
+
+    --standalone-install [DIR|help]
+                            install cheat.sh in the standalone mode
+                            (by default, into ~/.cheat.sh/)
+
+    --mode [auto|lite]      set (or display) mode of operation
+                            * auto - prefer the local installation
+                            * lite - use the cheat sheet server
+
 EOF
   exit 0
 elif [ x"$1" = x--shell ]; then
   shell_mode=yes
   shift
+elif [ x"$1" = x--standalone-install ]; then
+  shift
+  cheatsh_standalone_install "$@"
+  exit "$?"
+elif [ x"$1" = x--mode ]; then
+  shift
+  chtsh_mode "$@"
+  exit "$?"
 fi
 
 prompt="cht.sh"
@@ -198,11 +474,9 @@ else
     section="$new_section"
     # shellcheck disable=SC2001
     this_query="$(echo "$input" | sed 's@ *[^ ]* *@@')"
-    # shellcheck disable=SC1117
     this_prompt="\033[0;32mcht.sh/$section>\033[0m "
   else
     this_query="$input"
-    # shellcheck disable=SC1117
     this_prompt="\033[0;32mcht.sh>\033[0m "
   fi
   if [ -n "$this_query" ] && [ -z "$CHEATSH_RESTART" ]; then
@@ -221,7 +495,7 @@ lines=$(tput lines)
 
 if command -v less >/dev/null; then
   defpager="less -R"
-elif command -v more >/dev/null; then 
+elif command -v more >/dev/null; then
   defpager="more"
 else
   defpager="cat"
@@ -240,7 +514,6 @@ cmd_cd() {
       if [ "$valid" = no ]; then
         echo "Invalid section: $new_section"
         echo "Valid sections:"
-        # shellcheck disable=SC1117
         echo "$valid_sections" \
             | xargs printf "%-10s\n" \
             | tr ' ' .  \
