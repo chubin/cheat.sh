@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # [X] open section
 # [X] one shot mode
@@ -23,19 +23,20 @@
 # count words in text counter
 # group elements list
 
-__CHTSH_VERSION=4
-__CHTSH_DATETIME="2018-07-08 22:26:46 +0200"
+__CHTSH_VERSION=5
+__CHTSH_DATETIME="2019-05-11 07:29:46 +0200"
 
 export LESSSECURE=1
 STEALTH_MAX_SELECTION_LENGTH=5
 
-case `uname -s` in
+case "$(uname -s)" in
   Darwin) is_macos=yes ;;
   *) is_macos=no ;;
 esac
 
 # for KSH93
-if echo $KSH_VERSION | grep -q ' 93' && ! local foo 2>/dev/null; then
+# shellcheck disable=SC2034,SC2039,SC2168
+if echo "$KSH_VERSION" | grep -q ' 93' && ! local foo 2>/dev/null; then
   alias local=typeset
 fi
 
@@ -61,7 +62,7 @@ do_query()
     b_opts="-b \"\$HOME/.cht.sh/id\""
   fi
 
-  eval curl $b_opts -s $uri > "$TMP1"
+  eval curl "$b_opts" -s "$uri" > "$TMP1"
 
   if [ -z "$lines" ] || [ "$(wc -l "$TMP1" | awk '{print $1}')" -lt "$lines" ]; then
     cat "$TMP1"
@@ -96,23 +97,24 @@ gen_random_str()
 (
   len=$1
   if command -v openssl >/dev/null; then
-    openssl rand -base64 $(($len*3/4)) | awk -v ORS='' //
+    openssl rand -base64 $((len*3/4)) | awk -v ORS='' //
   else
     rdev=/dev/urandom
     for d in /dev/{srandom,random,arandom}; do
-      test -r $d && rdev=$d
+      test -r "$d" && rdev=$d
     done
     if command -v hexdump >/dev/null; then
-      hexdump -vn $(($len/2)) -e '1/1 "%02X" 1 ""' $rdev
+      hexdump -vn $((len/2)) -e '1/1 "%02X" 1 ""' "$rdev"
     elif command -v xxd >/dev/null; then
-      xxd -l $(($len/2)) -ps $dev | awk -v ORS='' //
+      xxd -l $((len/2)) -ps "$rdev" | awk -v ORS='' //
     else
-      cd /tmp
+      cd /tmp || { echo Cannot cd into /tmp >&2; exit 1; }
       s=
-      while [ $(echo "$s" | wc -c) -lt $len ]; do
+      # shellcheck disable=SC2000
+      while [ "$(echo "$s" | wc -c)" -lt "$len" ]; do
         s="$s$(mktemp -u XXXXXXXXXX)"
       done
-      printf %.${len}s "$s"
+      printf "%.${len}s" "$s"
     fi
   fi
 )
@@ -129,7 +131,7 @@ fi
 [ -z "$CHTSH_URL" ] && CHTSH_URL=https://cht.sh
 
 # any better test not involving either OS matching or actual query?
-if [ `uname -s` = OpenBSD ] && [ -x /usr/bin/ftp ]; then
+if [ "$(uname -s)" = OpenBSD ] && [ -x /usr/bin/ftp ]; then
   curl() {
     local opt args="-o -"
     while getopts "b:s" opt; do
@@ -139,22 +141,23 @@ if [ `uname -s` = OpenBSD ] && [ -x /usr/bin/ftp ]; then
         *) echo "internal error: unsupported cURL option '$opt'" >&2; exit 1;;
       esac
     done
-    shift $(($OPTIND - 1))
-    /usr/bin/ftp $args "$@"
+    shift $((OPTIND - 1))
+    /usr/bin/ftp "$args" "$@"
   }
 else
   command -v curl   >/dev/null || { echo 'DEPENDENCY: install "curl" to use cht.sh' >&2; exit 1; }
   _CURL=$(command -v curl)
   if [ x"$CHTSH_CURL_OPTIONS" != x ]; then
     curl() {
-      $_CURL ${CHTSH_CURL_OPTIONS} "$@"
+      $_CURL "${CHTSH_CURL_OPTIONS}" "$@"
     }
   fi
 fi
 
 
 if [ "$1" = --read ]; then
-  read -r a || a=exit
+  read -r a || a="exit"
+  # shellcheck disable=SC1117
   printf "%s\n" "$a"
   exit 0
 elif [ x"$1" = x--help ] || [ -z "$1" ]; then
@@ -193,10 +196,13 @@ else
 
   if [ "$valid" = yes ]; then
     section="$new_section"
+    # shellcheck disable=SC2001
     this_query="$(echo "$input" | sed 's@ *[^ ]* *@@')"
+    # shellcheck disable=SC1117
     this_prompt="\033[0;32mcht.sh/$section>\033[0m "
   else
     this_query="$input"
+    # shellcheck disable=SC1117
     this_prompt="\033[0;32mcht.sh>\033[0m "
   fi
   if [ -n "$this_query" ] && [ -z "$CHEATSH_RESTART" ]; then
@@ -216,9 +222,9 @@ lines=$(tput lines)
 if command -v less >/dev/null; then
   defpager="less -R"
 elif command -v more >/dev/null; then 
-  defpager=more
+  defpager="more"
 else
-  defpager=cat
+  defpager="cat"
 fi
 
 cmd_cd() {
@@ -234,7 +240,12 @@ cmd_cd() {
       if [ "$valid" = no ]; then
         echo "Invalid section: $new_section"
         echo "Valid sections:"
-        echo $valid_sections | xargs printf "%-10s\n" | tr ' ' .  | xargs -n 10 | sed 's/\./ /g; s/^/  /'
+        # shellcheck disable=SC1117
+        echo "$valid_sections" \
+            | xargs printf "%-10s\n" \
+            | tr ' ' .  \
+            | xargs -n 10 \
+            | sed 's/\./ /g; s/^/  /'
       else
         section="$new_section"
       fi
@@ -252,7 +263,7 @@ cmd_copy() {
     if [ "$is_macos" != yes ]; then
       xsel -bi < "$TMP1"
     else
-      cat "$TMP1" | pbcopy
+      pbcopy < "$TMP1"
     fi
     echo "copy: $(wc -l "$TMP1" | awk '{print $1}') lines copied to the selection"
   fi
@@ -268,7 +279,7 @@ cmd_ccopy() {
     if [ "$is_macos" != yes ]; then
       xsel -bi < "$TMP1"
     else
-      cat "$TMP1" | pbcopy
+      pbcopy < "$TMP1"
     fi
     echo "copy: $(wc -l "$TMP1" | awk '{print $1}') lines copied to the selection"
   fi
@@ -299,7 +310,7 @@ EOF
 }
 
 cmd_hush() {
-  mkdir -p $HOME/.cht.sh/ && touch $HOME/.cht.sh/.hushlogin && echo "Initial 'use help' message was disabled"
+  mkdir -p "$HOME/.cht.sh/" && touch "$HOME/.cht.sh/.hushlogin" && echo "Initial 'use help' message was disabled"
 }
 
 cmd_id() {
@@ -318,7 +329,7 @@ cmd_id() {
     fi
     return
   fi
-  if [ -n "$new_id" ] && [ reset != "$new_id" ] && [ $(/bin/echo -n "$new_id" | wc -c) -lt 16 ]; then
+  if [ -n "$new_id" ] && [ reset != "$new_id" ] && [ "$(/bin/echo -n "$new_id" | wc -c)" -lt 16 ]; then
     echo "ERROR: $new_id: Too short id. Minimal id length is 16. Use 'id reset' for a random id"
     return
   fi
@@ -327,7 +338,7 @@ cmd_id() {
     # if yes, just show it
     # if not, generate a new id
     if [ -e "$id_file" ]; then
-      echo $(awk '$6 == "id" {print $NF}' <"$id_file" | tail -n 1)
+      awk '$6 == "id" {print $NF}' <"$id_file" | tail -n 1
       return
     else
       new_id=reset
@@ -379,7 +390,7 @@ cmd_stealth() {
     if [ "$past" != "$current" ]; then
       past=$current
       current_text="$(echo $current | tr -c '[a-zA-Z0-9]' ' ')"
-      if [ $(echo $current_text | wc -w) -gt "$STEALTH_MAX_SELECTION_LENGTH" ]; then
+      if [ "$(echo "$current_text" | wc -w)" -gt "$STEALTH_MAX_SELECTION_LENGTH" ]; then
         echo "\033[0;31mstealth:\033[0m selection length is longer than $STEALTH_MAX_SELECTION_LENGTH words; ignoring"
         continue
       else
@@ -394,14 +405,14 @@ cmd_stealth() {
 }
 
 cmd_update() {
-  [ -w "$0" ] || { echo "The script is readonly; please update manually: curl -s "${CHTSH_URL}"/:bash | sudo tee $0"; return; }
+  [ -w "$0" ] || { echo "The script is readonly; please update manually: curl -s ${CHTSH_URL}/:cht.sh | sudo tee $0"; return; }
   TMP2=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
   curl -s "${CHTSH_URL}"/:cht.sh > "$TMP2"
   if ! cmp "$0" "$TMP2" > /dev/null 2>&1; then
     if grep -q ^__CHTSH_VERSION= "$TMP2"; then
       # section was vaildated by us already
-      args="--shell $section"
-      cp "$TMP2" "$0" && echo "Updated. Restarting..." && rm "$TMP2" && CHEATSH_RESTART=1 exec "$0" $args
+      args=(--shell "$section")
+      cp "$TMP2" "$0" && echo "Updated. Restarting..." && rm "$TMP2" && CHEATSH_RESTART=1 exec "$0" "${args[@]}"
     else
       echo "Something went wrong. Please update manually"
     fi
@@ -450,8 +461,8 @@ while true; do
     "")             continue;;   # skip empty input lines
     '?'|h|help)     cmd_name=help;;
     hush)           cmd_name=hush;;
-    cd)             cmd_name=cd;;
-    exit|quit)      cmd_name=exit;;
+    cd)             cmd_name="cd";;
+    exit|quit)      cmd_name="exit";;
     copy|yank|c|y)  cmd_name=copy;;
     ccopy|cc|C|Y)   cmd_name=ccopy;;
     id)             cmd_name=id;;
@@ -460,5 +471,5 @@ while true; do
     version)        cmd_name=version;;
     *)              cmd_name="query $cmd_name";;
   esac
-  cmd_$cmd_name $cmd_args 
+  "cmd_$cmd_name" $cmd_args 
 done
