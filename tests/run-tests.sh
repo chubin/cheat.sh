@@ -10,6 +10,12 @@
 # 2) configure CHTSH_URL
 # 3) run the script
 
+PYTHON="${PYTHON:-../ve/bin/python}"
+
+skip_online="${CHEATSH_TEST_SKIP_ONLINE:-NO}"
+test_standalone="${CHEATSH_TEST_STANDALONE:-YES}"
+show_details="${CHEATSH_TEST_SHOW_DETAILS:-YES}"
+
 TMP=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
 TMP2=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
 TMP3=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
@@ -28,9 +34,6 @@ failed=0
   fi
 } > "$TMP3"
 
-skip_online=NO
-test_standalone=YES
-show_details=YES
 
 while read -r number test_line; do
   if [ "$skip_online" = YES ]; then
@@ -40,9 +43,11 @@ while read -r number test_line; do
     fi
   fi
 
-  test_line=$(echo $test_line | sed 's@ *#.*@@')
+  #shellcheck disable=SC2001
+  test_line=$(echo "$test_line" | sed 's@ *#.*@@')
 
   if [ "$test_standalone" = YES ]; then
+    test_line="${test_line//cht.sh /}"
     python ../lib/standalone.py "$test_line" > "$TMP" 2> /dev/null
   elif [[ $test_line = "cht.sh "* ]]; then
     test_line="${test_line//cht.sh /}"
