@@ -121,9 +121,10 @@ _CONFIG = {
         ("", "learnxiny"),
     ],
     "routing.post": [
-        ("^[^/]*$", "unknown"),
+        ("^[^/ +]*$", "unknown"),
         ("^[a-z][a-z]-[a-z][a-z]$", "translation"),
         ],
+    "routing.default": "question",
     "upstream.url": "https://cheat.sh",
     "upstream.timeout": 5,
     "search.limit": 20,
