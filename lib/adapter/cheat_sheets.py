@@ -9,7 +9,7 @@ sheets covering programming languages are are located in subdirectories.
 import os
 import glob
 
-from git_adapter import GitRepositoryAdapter
+from .git_adapter import GitRepositoryAdapter
 
 def _remove_initial_underscore(filename):
     if filename.startswith('_'):
@@ -84,7 +84,7 @@ class CheatSheets(GitRepositoryAdapter):
             # though it should not happen
             answer = "%s:%s not found" % (str(self.__class__), topic)
 
-        return answer.decode('utf-8')
+        return answer
 
 class CheatSheetsDir(CheatSheets):
 

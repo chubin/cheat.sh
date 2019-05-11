@@ -5,7 +5,7 @@ Implementation of `GitRepositoryAdapter`, adapter that is used to handle git rep
 import glob
 import os
 
-from adapter import Adapter # pylint: disable=relative-import
+from .adapter import Adapter # pylint: disable=relative-import
 
 def _get_filenames(path):
     return [os.path.split(topic)[1] for topic in glob.glob(path)]
@@ -49,7 +49,7 @@ class RepositoryAdapter(Adapter):
             # though it should not happen
             answer = "%s:%s not found" % (str(self.__class__), topic)
 
-        return answer.decode('utf-8')
+        return answer
 
 
 class GitRepositoryAdapter(RepositoryAdapter):    #pylint: disable=abstract-method

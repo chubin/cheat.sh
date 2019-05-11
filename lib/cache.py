@@ -14,11 +14,11 @@ Configuration parameters:
 
 import os
 import json
-import redis
 from config import CONFIG
 
 _REDIS = None
 if CONFIG['cache.type'] == 'redis':
+    import redis
     _REDIS = redis.StrictRedis(
         host=CONFIG['cache.redis.host'],
         port=CONFIG['cache.redis.port'],

@@ -12,7 +12,7 @@ The pages are formatted with a markdown dialect
 import re
 import os
 
-from git_adapter import GitRepositoryAdapter
+from .git_adapter import GitRepositoryAdapter
 
 class Tldr(GitRepositoryAdapter):
 

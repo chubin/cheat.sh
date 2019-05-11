@@ -13,7 +13,7 @@ python/copy+file?QT         # [online]
 /
 //
 python/:learn
-latencies
+latencies                   # [python3]
 az                          # chubin/cheat.sheets
 python/rosetta/Substring    # rosetta
 python/rosetta/Substring?T  # rosetta
@@ -22,3 +22,4 @@ js/:learn                   # short names check
 javascript/:learn           # short names check
 emacs:go-mode/:list         # special editor names
 mkffs.ffatt                 # unknown
+latencies                   # [python2]

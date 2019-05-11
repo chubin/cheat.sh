@@ -380,7 +380,7 @@ if [ "$CHTSH_MODE" = auto ] && [ -d "$CHEATSH_INSTALLATION" ]; then
     shift $((OPTIND - 1))
 
     local url; url="$1"; shift
-    "$CHEATSH_INSTALLATION/ve/bin/python" "$CHEATSH_INSTALLATION/lib/standalone.py" "${url#"$CHTSH_URL"}" "$@"
+    PYTHONIOENCODING=UTF-8 "$CHEATSH_INSTALLATION/ve/bin/python" "$CHEATSH_INSTALLATION/lib/standalone.py" "${url#"$CHTSH_URL"}" "$@"
   }
 elif [ "$(uname -s)" = OpenBSD ] && [ -x /usr/bin/ftp ]; then
   # any better test not involving either OS matching or actual query?

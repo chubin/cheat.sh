@@ -24,7 +24,6 @@ from __future__ import print_function
 
 from gevent.monkey import patch_all
 from gevent.subprocess import Popen
-patch_all()
 
 import sys
 import os

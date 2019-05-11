@@ -13,7 +13,7 @@ import textwrap
 import requests
 
 from config import CONFIG
-from adapter import Adapter
+from .adapter import Adapter
 
 def _are_you_offline():
     return textwrap.dedent(

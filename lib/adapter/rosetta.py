@@ -12,8 +12,8 @@ import os
 import glob
 import yaml
 
-from git_adapter import GitRepositoryAdapter
-from cheat_sheets import CheatSheets
+from .git_adapter import GitRepositoryAdapter
+from .cheat_sheets import CheatSheets
 
 class Rosetta(GitRepositoryAdapter):
 

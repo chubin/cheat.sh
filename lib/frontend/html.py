@@ -7,7 +7,6 @@ Configuration parameters:
 
 from gevent.monkey import patch_all
 from gevent.subprocess import Popen, PIPE
-patch_all()
 
 # pylint: disable=wrong-import-position,wrong-import-order
 import sys

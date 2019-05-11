@@ -5,9 +5,8 @@
 
 from gevent.monkey import patch_all
 from gevent.subprocess import Popen, PIPE
-patch_all()
 
-from adapter import Adapter
+from .adapter import Adapter
 
 class CommandAdapter(Adapter):
     """

@@ -12,7 +12,7 @@ from __future__ import print_function
 import os
 import re
 from config import CONFIG
-from git_adapter import GitRepositoryAdapter
+from .git_adapter import GitRepositoryAdapter
 
 class LearnXinY(GitRepositoryAdapter):
 
@@ -37,7 +37,7 @@ class LearnXinY(GitRepositoryAdapter):
         lang, topic = topic.split('/', 1)
         if lang not in self.adapters:
             return ''
-        return self.adapters[lang].get_page(topic).decode("utf-8")
+        return self.adapters[lang].get_page(topic)
 
     def _get_list(self, prefix=None):
         """

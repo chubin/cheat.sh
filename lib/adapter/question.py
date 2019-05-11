@@ -10,7 +10,6 @@ from __future__ import print_function
 
 from gevent.monkey import patch_all
 from gevent.subprocess import Popen, PIPE
-patch_all()
 
 import os
 import re
@@ -19,8 +18,8 @@ from polyglot.detect import Detector
 from polyglot.detect.base import UnknownLanguage
 
 from config import CONFIG
-from upstream import UpstreamAdapter
 from languages_data import SO_NAME
+from .upstream import UpstreamAdapter
 
 class Question(UpstreamAdapter):
 

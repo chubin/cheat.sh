@@ -44,8 +44,9 @@ specified by an environment variable is not an integer, it is ignored.
 from __future__ import print_function
 import os
 
-import yaml
-from pygments.styles import get_all_styles
+# from pygments.styles import get_all_styles
+def get_all_styles():
+    return []
 
 _ENV_VAR_PREFIX = "CHEATSH"
 
@@ -221,6 +222,7 @@ def _get_nested(data, key):
     return None
 
 def _load_config_from_file(default_config, filename):
+    import yaml
 
     update = {}
     if not os.path.exists(filename):
@@ -244,8 +246,8 @@ def _load_config_from_file(default_config, filename):
 
 CONFIG = Config()
 CONFIG.update(_CONFIG)
-CONFIG.update(_load_config_from_file(_CONFIG, _CONF_FILE_MYDIR))
-CONFIG.update(_load_config_from_file(_CONFIG, _CONF_FILE_WORKDIR))
+# CONFIG.update(_load_config_from_file(_CONFIG, _CONF_FILE_MYDIR))
+# CONFIG.update(_load_config_from_file(_CONFIG, _CONF_FILE_WORKDIR))
 CONFIG.update(_load_config_from_environ(_CONFIG))
 
 if __name__ == "__main__":

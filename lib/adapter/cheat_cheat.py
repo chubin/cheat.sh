@@ -7,7 +7,7 @@ Each cheat sheet is a separate file without extension
 
 # pylint: disable=relative-import,abstract-method
 
-from git_adapter import GitRepositoryAdapter
+from .git_adapter import GitRepositoryAdapter
 
 class Cheat(GitRepositoryAdapter):
     """

@@ -12,7 +12,7 @@ import collections
 from fuzzywuzzy import process, fuzz
 
 from config import CONFIG
-from adapter import Adapter
+from .adapter import Adapter
 from fmt.internal import colorize_internal
 
 _INTERNAL_TOPICS = [
