@@ -1,7 +1,7 @@
 """
 Configuration parameters:
 
-    path.internal.bin
+    path.internal.bin.upstream
 """
 
 # pylint: disable=relative-import,wrong-import-position,wrong-import-order
