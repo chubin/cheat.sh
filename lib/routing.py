@@ -89,7 +89,6 @@ class Router(object):
         """
 
         def __get_topic_type(topic):
-
             for regexp, route in self.routing_table:
                 if re.search(regexp, topic):
                     if route in self._adapter:
@@ -97,18 +96,17 @@ class Router(object):
                             return route
                     else:
                         return route
-            return 'question'
+            return CONFIG["routing.default"]
 
         if topic not in self._cached_topic_type:
             self._cached_topic_type[topic] = __get_topic_type(topic)
         return self._cached_topic_type[topic]
 
-    def _get_page_dict(self, query, request_options=None):
+    def _get_page_dict(self, query, topic_type, request_options=None):
         """
         Return answer_dict for the `query`.
         """
 
-        topic_type = self.get_topic_type(query)
         return self._adapter[topic_type]\
                .get_page_dict(query, request_options=request_options)
 
@@ -140,7 +138,7 @@ class Router(object):
                     'format': 'text+code',
                     }
 
-            answer = self._get_page_dict(topic, request_options=request_options)
+            answer = self._get_page_dict(topic, topic_type, request_options=request_options)
             cache.put('q:' + topic, answer)
             return answer
 
@@ -154,7 +152,7 @@ class Router(object):
             if answer:
                 return answer
 
-        answer = self._get_page_dict(topic, request_options=request_options)
+        answer = self._get_page_dict(topic, topic_type, request_options=request_options)
         if isinstance(answer, dict):
             if "cache" in answer:
                 cache_needed = answer["cache"]
