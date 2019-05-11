@@ -11,6 +11,7 @@
 # 3) run the script
 
 PYTHON="${PYTHON:-../ve/bin/python}"
+"$PYTHON" --version 2>&1 | grep -q 'Python 2' && python_version=2 || python_version=3
 
 skip_online="${CHEATSH_TEST_SKIP_ONLINE:-NO}"
 test_standalone="${CHEATSH_TEST_STANDALONE:-YES}"
@@ -23,6 +24,8 @@ trap 'rm -rf $TMP $TMP2 $TMP3' EXIT
 
 export CHTSH_URL=http://cht.sh:50000
 CHTSH_SCRIPT=$(dirname "$(dirname "$(readlink -f "$0")")")/share/cht.sh.txt
+
+export PYTHONIOENCODING=UTF-8
 
 i=0
 failed=0
@@ -41,6 +44,14 @@ while read -r number test_line; do
       echo "$number is [online]; skipping"
       continue
     fi
+  fi
+
+  if [[ "$python_version" = 2 ]] && [[ $test_line = *\[python3\]* ]]; then
+    continue
+  fi
+
+  if [[ "$python_version" = 3 ]] && [[ $test_line = *\[python2\]* ]]; then
+    continue
   fi
 
   #shellcheck disable=SC2001
