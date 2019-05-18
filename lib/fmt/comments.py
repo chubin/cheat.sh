@@ -232,7 +232,6 @@ def _beautify(text, filetype, add_comments=False, remove_text=False):
     # We shift the code if and only if we either convert the text into comments
     # or remove the text completely. Otherwise the code has to remain aligned
     unindent_code = add_comments or remove_text
-    print(unindent_code)
 
     lines = [x.rstrip('\n') for x in text.splitlines()]
     lines = _cleanup_lines(lines)
