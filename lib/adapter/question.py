@@ -56,7 +56,6 @@ class Question(UpstreamAdapter):
             section_name = SO_NAME.get(section_name, section_name)
             topic = "%s/%s" % (section_name, topic)
 
-
         # some clients send queries with - instead of + so we have to rewrite them to
         topic = re.sub(r"(?<!-)-", ' ', topic)
 
@@ -91,7 +90,7 @@ class Question(UpstreamAdapter):
             topic = [topic]
 
         cmd = [CONFIG["path.internal.bin.upstream"]] + topic
-        proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
+        proc = Popen(cmd, stdin=open(os.devnull, "r"), stdout=PIPE, stderr=PIPE)
         answer = proc.communicate()[0].decode('utf-8')
         return answer
 

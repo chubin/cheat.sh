@@ -195,7 +195,7 @@ def _run_vim_script(script_lines, text_lines):
 
     cmd = ["script", "-q", "-c",
            "vim -S %s %s" % (script_vim.name, textfile.name)]
-    Popen(cmd, shell=False, stdout=FNULL, stderr=FNULL, env=my_env).communicate()
+    Popen(cmd, shell=False, stdin=FNULL, stdout=FNULL, stderr=FNULL, env=my_env).communicate()
 
     return open(textfile.name, "r").read()
 
