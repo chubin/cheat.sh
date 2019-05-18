@@ -44,9 +44,9 @@ specified by an environment variable is not an integer, it is ignored.
 from __future__ import print_function
 import os
 
-# from pygments.styles import get_all_styles
-def get_all_styles():
-    return []
+from pygments.styles import get_all_styles
+#def get_all_styles():
+#    return []
 
 _ENV_VAR_PREFIX = "CHEATSH"
 
@@ -228,7 +228,8 @@ def _load_config_from_file(default_config, filename):
     if not os.path.exists(filename):
         return update
 
-    newconfig = yaml.load(filename, Loader=yaml.SafeLoader)
+    with open(filename) as f:
+        newconfig = yaml.load(f.read(), Loader=yaml.SafeLoader)
     for key, val in default_config.items():
         newval = _get_nested(newconfig, key)
         if newval is None:
@@ -246,8 +247,9 @@ def _load_config_from_file(default_config, filename):
 
 CONFIG = Config()
 CONFIG.update(_CONFIG)
-# CONFIG.update(_load_config_from_file(_CONFIG, _CONF_FILE_MYDIR))
-# CONFIG.update(_load_config_from_file(_CONFIG, _CONF_FILE_WORKDIR))
+CONFIG.update(_load_config_from_file(_CONFIG, _CONF_FILE_MYDIR))
+if _CONF_FILE_WORKDIR != _CONF_FILE_MYDIR:
+    CONFIG.update(_load_config_from_file(_CONFIG, _CONF_FILE_WORKDIR))
 CONFIG.update(_load_config_from_environ(_CONFIG))
 
 if __name__ == "__main__":
