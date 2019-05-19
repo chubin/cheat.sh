@@ -212,7 +212,7 @@ EOF
     else
       printf "\033[0;31m%s\033[0m\n" "FAILED"
       echo "Some tests were failed. Run the tests manually for further investigation:"
-      echo "  cd $PWD; bash tests/run-tests.sh)"
+      echo "  cd $PWD; bash run-tests.sh)"
     fi
   )
 
