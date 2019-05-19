@@ -106,8 +106,6 @@ def _line_type(line):
         return CODE
     return TEXT
 
-
-
 def _classify_lines(lines):
     line_types = [_line_type(line) for line in lines]
 
@@ -151,7 +149,7 @@ def _unindent_code(line, shift=0):
         return ' ' + line
 
     if shift > 0 and line.startswith(' '*shift):
-            return line[shift:]
+        return line[shift:]
 
     return line
 
@@ -162,7 +160,7 @@ def _wrap_lines(lines_classes, unindent_code=False):
     """
 
     result = []
-    for line_type,line_content in lines_classes:
+    for line_type, line_content in lines_classes:
         if line_type == CODE:
 
             shift = 3 if unindent_code else -1
@@ -195,7 +193,10 @@ def _run_vim_script(script_lines, text_lines):
 
     cmd = ["script", "-q", "-c",
            "vim -S %s %s" % (script_vim.name, textfile.name)]
-    Popen(cmd, shell=False, stdin=FNULL, stdout=FNULL, stderr=FNULL, env=my_env).communicate()
+
+    Popen(cmd, shell=False,
+          stdin=open(os.devnull, 'r'),
+          stdout=FNULL, stderr=FNULL, env=my_env).communicate()
 
     return open(textfile.name, "r").read()
 
