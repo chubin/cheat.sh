@@ -1,7 +1,4 @@
 server:
     address: "0.0.0.0"
-    port:    8002
-    cache:   false      # true - results have to be cached in redis
-                        # false - results do not have to be cached locally
-                        # "path" results have to be cached in filesystem
-    redis:   false      # redis server hostname of false if no redis server used
+cache:
+    type:   none
