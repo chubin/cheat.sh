@@ -6,3 +6,5 @@ share/vim/.vim/
 share/vim/.viminfo
 typescript
 venv/
+bin/upstream
+upstream/
