@@ -47,6 +47,8 @@ class Question(UpstreamAdapter):
             self._output_format = "ansi"
             return UpstreamAdapter._get_page(self, topic, request_options=request_options)
 
+        topic = topic.replace('+', ' ')
+
         # if there is a language name in the section name,
         # cut it off (de:python => python)
         if '/' in topic:

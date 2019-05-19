@@ -26,6 +26,17 @@ def cheat_wrapper(query, request_options=None, output_format='ansi'):
     Additional request options specified in `request_options`.
     """
 
+    def _add_section_name(query):
+        # temporary solution before we don't find a fixed one
+        if ' ' not in query and '+' not in query:
+            return query
+        if '/' in query:
+            return query
+        if ' ' in query:
+            # for standalone queries only that may contain ' '
+            return "%s/%s" % tuple(query.split(' ', 1))
+        return "%s/%s" % tuple(query.split('+', 1))
+
     def _rewrite_aliases(word):
         if word == ':bash.completion':
             return ':bash_completion'
@@ -74,6 +85,7 @@ def cheat_wrapper(query, request_options=None, output_format='ansi'):
         return topic, keyword, search_options
 
     query = _sanitize_query(query)
+    query = _add_section_name(query)
     query = _rewrite_aliases(query)
     query = _rewrite_section_name(query)
 

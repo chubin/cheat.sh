@@ -1,4 +1,4 @@
 server:
     address: "0.0.0.0"
 cache:
-    type:   none
+    type:   redis
