@@ -424,8 +424,6 @@ She: Yes! Perfect! Exactly what I wanted to see!    |
 Of course, this is just for fun, and you should never cheat in your coding interviews,
 because you know what happens when you do.
 
-![when you lie in your interview](http://cheat.sh/files/when-you-lie-katze.png)
-
 ### Windows command line client
 
 You can access cheat.sh from Windows command line too.
@@ -446,7 +444,7 @@ scoop install cht
 
 ### Docker
 
-Currently the easiest way to get a self-hosted instance running is by using the docker-compose.yml file provided in the extra/docker folder.
+Currently, the easiest way to get a self-hosted instance running is by using the docker-compose.yml file provided in the extra/docker folder.
 This pulls down the latest image with baked in cheatsheets and starts the app and a Redis instance to back it, making the service available on port 8002 of the local host. This is currently an early implementation and should probably not be used for anything outside of internal/dev/personal use right now.
 
 ## Editors integration
