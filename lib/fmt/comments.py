@@ -261,6 +261,8 @@ def code_blocks(text, wrap_lines=False, unindent_code=False):
     Split `text` into blocks of text and code.
     Return list of tuples TYPE, TEXT
     """
+    text = text.encode('utf-8')
+
     lines = [x.rstrip('\n') for x in text.splitlines()]
     lines_classes = zip(_classify_lines(lines), lines)
 
@@ -294,7 +296,10 @@ def beautify(text, lang, options):
         # if mode is unknown, just don't transform the text at all
         return text
 
+    text = text.encode('utf-8')
     digest = "t:%s:%s:%s" % (hashlib.md5(text).hexdigest(), lang, mode)
+    # if lang == 'git':
+    #    cache.delete(digest)
     answer = cache.get(digest)
     if answer:
         return answer
