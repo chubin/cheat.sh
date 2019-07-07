@@ -31,6 +31,7 @@ LEXER = {
     "forth"     : pygments.lexers.ForthLexer,
     "fortran"   : pygments.lexers.FortranLexer,
     "fsharp"    : pygments.lexers.FSharpLexer,
+    "git"       : pygments.lexers.BashLexer,
     "go"        : pygments.lexers.GoLexer,
     "groovy"    : pygments.lexers.GroovyLexer,
     "haskell"   : pygments.lexers.HaskellLexer,
@@ -117,6 +118,8 @@ VIM_NAME = {
     'solidity'  :   'js',
     'mathematica':  'mma',
     'wolfram-mathematica': 'mma',
+
+    'git'       :   'sh',
 }
 
 SO_NAME = {

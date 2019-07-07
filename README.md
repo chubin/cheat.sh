@@ -698,7 +698,7 @@ Some languages has the one-liners-cheat sheet, `1line`:
 
 ![cheat.sh usage](http://cheat.sh/files/supported-languages-c++.png)
 
-At the moment, cheat.sh covers the 57 following programming languages (alphabetically sorted):
+At the moment, cheat.sh covers the 58 following programming languages (alphabetically sorted):
 
 |Prefix     |Language  |Basics|One-liners|Weirdness|StackOverflow|
 |-----------|----------|------|----------|---------|-------------|
@@ -738,6 +738,7 @@ At the moment, cheat.sh covers the 57 following programming languages (alphabeti
 |`lisp/`    |Lisp      |✓     |          |         |✓            |
 |`lua/`     |Lua       |✓     |          |         |✓            |
 |`matlab/`  |MATLAB    |✓     |          |         |✓            |
+|`nim/`     |Nim       |✓     |          |         |✓            |
 |`ocaml/`   |OCaml     |✓     |          |         |✓            |
 |`octave/`  |Octave    |✓     |          |         |✓            |
 |`perl/`    |Perl      |✓     |✓         |         |✓            |
@@ -759,6 +760,13 @@ At the moment, cheat.sh covers the 57 following programming languages (alphabeti
 |`objective-c/`|Objective-C|✓ |          |         |✓            |
 |`vb/`      |VisualBasic|✓    |          |         |✓            |
 |`vbnet/`   |VB.Net    |✓     |          |         |✓            |
+
+And several other topics, that are though related to programming,
+are not programming languages:
+
+|Prefix     |Topic     |Basics|StackOverflow|
+|-----------|----------|------|-------------|
+|`git/`     |Git       |✓     |✓            |
 
 ## Cheat sheets sources
 

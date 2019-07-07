@@ -298,8 +298,12 @@ def beautify(text, lang, options):
 
     text = text.encode('utf-8')
     digest = "t:%s:%s:%s" % (hashlib.md5(text).hexdigest(), lang, mode)
-    # if lang == 'git':
-    #    cache.delete(digest)
+
+    # temporary added line that removes invalid cache entries
+    # that used wrong commenting methods
+    if lang in ['git']:
+        cache.delete(digest)
+
     answer = cache.get(digest)
     if answer:
         return answer

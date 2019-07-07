@@ -852,10 +852,16 @@ class LearnVisualBasicAdapter(LearnXYAdapter):
     _filename = "visualbasic.html.markdown"
     _splitted = False
 
-class LearnVisualBasicAdapter(LearnXYAdapter):
+class LearnNimAdapter(LearnXYAdapter):
     "Learn Nim in Y Minutes"
     prefix = "nim"
     _filename = "nim.html.markdown"
+    _splitted = False
+
+class LearnGitAdapter(LearnXYAdapter):
+    "Learn Git in Y Minutes"
+    prefix = "git"
+    _filename = "git.html.markdown"
     _splitted = False
 
 _ADAPTERS = {cls.prefix: cls() for cls in vars()['LearnXYAdapter'].__subclasses__()}
