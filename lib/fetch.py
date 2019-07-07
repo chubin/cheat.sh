@@ -4,9 +4,14 @@ Repositories fetch and update
 Ths module makes real network and OS interaction,
 and the adapters only say how exctly this interaction
 should be done.
+
+Configuration parameters:
+
+    * path.log.fetch
 """
 
 import sys
+import logging
 import os
 import subprocess
 import textwrap
@@ -15,8 +20,16 @@ from globals import fatal
 import adapter
 import cache
 
-def _log(message):
-    sys.stdout.write(message)
+from config import CONFIG
+
+def _log(*message):
+    logging.info(*message)
+    if len(message) > 1:
+        message = message[0].rstrip("\n") % tuple(message[1:])
+    else:
+        message = message[0].rstrip("\n")
+
+    sys.stdout.write(message+"\n")
 
 def _run_cmd(cmd):
     shell = isinstance(cmd, str)
@@ -123,9 +136,15 @@ def _update_adapter(adptr):
         updates = output.splitlines()
 
     entries = adptr.get_updates_list(updates)
+    if entries:
+        _log("%s Entries to be updated: %s", adptr, len(entries))
+
     for entry in entries:
-        print "ivalidating ", entry
+        _log("+ ivalidating %s", entry)
         cache.delete(entry)
+
+    if entries:
+        _log("Done")
 
     adptr.save_state(state)
     return True
@@ -174,6 +193,11 @@ def main(args):
     if not args:
         _show_usage()
         sys.exit(0)
+
+    logging.basicConfig(
+        filename=CONFIG["path.log.fetch"],
+        level=logging.DEBUG,
+        format='%(asctime)s %(message)s')
 
     if args[0] == 'fetch-all':
         fetch_all()

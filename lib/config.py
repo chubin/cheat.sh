@@ -105,6 +105,7 @@ _CONFIG = {
     "path.internal.vim": os.path.join(_MYDIR, "share/vim"),
     "path.log.main": "log/main.log",
     "path.log.queries": "log/queries.log",
+    "path.log.fetch": "log/fetch.log",
     "path.repositories": "upstream",
     "path.spool": "spool",
     "path.workdir": _WORKDIR,
