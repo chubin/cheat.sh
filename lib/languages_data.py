@@ -75,6 +75,10 @@ LEXER = {
     "eiffel" :  pygments.lexers.EiffelLexer,
     "clean"  :  pygments.lexers.CleanLexer,
     "dylan" :   pygments.lexers.DylanLexer,
+
+# not languages
+    "django"    : pygments.lexers.PythonLexer,
+    "flask"     : pygments.lexers.PythonLexer,
 }
 
 # canonical names are on the right side
@@ -119,7 +123,10 @@ VIM_NAME = {
     'mathematica':  'mma',
     'wolfram-mathematica': 'mma',
 
+    # not languages
     'git'       :   'sh',
+    'django'    :   'python',
+    'flask'     :   'python',
 }
 
 SO_NAME = {
