@@ -19,7 +19,7 @@ def _answer_add_comments(answer, request_options=None):
             filetype = filetype[2:]
 
     answer['answer'] = fmt.comments.beautify(
-        answer['answer'].encode('utf-8'), filetype, request_options)
+        answer['answer'], filetype, request_options)
     answer['format'] = 'code'
     return answer
 
