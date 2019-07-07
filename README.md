@@ -766,6 +766,9 @@ are not programming languages:
 
 |Prefix     |Topic     |Basics|StackOverflow|
 |-----------|----------|------|-------------|
+|`cmake/`   |CMake     |✓     |✓            |
+|`django/`  |Django    |      |✓            |
+|`flask/`   |Flask     |      |✓            |
 |`git/`     |Git       |✓     |✓            |
 
 ## Cheat sheets sources

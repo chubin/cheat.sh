@@ -301,7 +301,7 @@ def beautify(text, lang, options):
 
     # temporary added line that removes invalid cache entries
     # that used wrong commenting methods
-    if lang in ["git", "django", "flask"]:
+    if lang in ["git", "django", "flask", "cmake"]:
         cache.delete(digest)
 
     answer = cache.get(digest)

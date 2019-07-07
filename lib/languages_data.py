@@ -77,6 +77,7 @@ LEXER = {
     "dylan" :   pygments.lexers.DylanLexer,
 
 # not languages
+    "cmake"     : pygments.lexers.CMakeLexer,
     "django"    : pygments.lexers.PythonLexer,
     "flask"     : pygments.lexers.PythonLexer,
 }
@@ -124,6 +125,7 @@ VIM_NAME = {
     'wolfram-mathematica': 'mma',
 
     # not languages
+    'cmake'     :   'sh',
     'git'       :   'sh',
     'django'    :   'python',
     'flask'     :   'python',

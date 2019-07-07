@@ -852,6 +852,12 @@ class LearnVisualBasicAdapter(LearnXYAdapter):
     _filename = "visualbasic.html.markdown"
     _splitted = False
 
+class LearnCMakeAdapter(LearnXYAdapter):
+    "Learn CMake in Y Minutes"
+    prefix = "cmake"
+    _filename = "cmake.html.markdown"
+    _splitted = False
+
 class LearnNimAdapter(LearnXYAdapter):
     "Learn Nim in Y Minutes"
     prefix = "nim"
