@@ -424,6 +424,8 @@ She: Yes! Perfect! Exactly what I wanted to see!    |
 Of course, this is just for fun, and you should never cheat in your coding interviews,
 because you know what happens when you do.
 
+![when you lie in your interview](http://cheat.sh/files/when-you-lie-katze.png)
+
 ### Windows command line client
 
 You can access cheat.sh from Windows command line too.
