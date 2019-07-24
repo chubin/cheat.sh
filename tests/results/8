@@ -24,8 +24,8 @@
 # count words in text counter
 # group elements list
 
-__CHTSH_VERSION=5
-__CHTSH_DATETIME="2019-05-11 07:29:46 +0200"
+__CHTSH_VERSION=6
+__CHTSH_DATETIME="2019-06-05 18:00:46 +0200"
 
 # cht.sh configuration loading
 #
@@ -725,7 +725,7 @@ while true; do
   fi
 
   input=$(
-    rlwrap -H "$HOME/.cht.sh/history" -pgreen -C cht.sh -S "$full_prompt" sh "$0" --read | sed 's/ *#.*//'
+    rlwrap -H "$HOME/.cht.sh/history" -pgreen -C cht.sh -S "$full_prompt" bash "$0" --read | sed 's/ *#.*//'
   )
 
   cmd_name=${input%% *}
@@ -742,7 +742,7 @@ while true; do
     stealth)        cmd_name=stealth;;
     update)         cmd_name=update;;
     version)        cmd_name=version;;
-    *)              cmd_name="query $cmd_name";;
+    *)              cmd_name="query"; cmd_args="$input";;
   esac
   "cmd_$cmd_name" $cmd_args 
 done
