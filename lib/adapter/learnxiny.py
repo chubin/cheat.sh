@@ -870,4 +870,10 @@ class LearnGitAdapter(LearnXYAdapter):
     _filename = "git.html.markdown"
     _splitted = False
 
+class LearnLatexAdapter(LearnXYAdapter):
+    "Learn Nim in Y Minutes"
+    prefix = "latex"
+    _filename = "latex.html.markdown"
+    _splitted = False
+
 _ADAPTERS = {cls.prefix: cls() for cls in vars()['LearnXYAdapter'].__subclasses__()}

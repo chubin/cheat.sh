@@ -39,6 +39,7 @@ LEXER = {
     "js"        : pygments.lexers.JavascriptLexer,
     "julia"     : pygments.lexers.JuliaLexer,
     "kotlin"    : pygments.lexers.KotlinLexer,
+    "latex"     : pygments.lexers.TexLexer,
     "lisp"      : pygments.lexers.CommonLispLexer,
     "lua"       : pygments.lexers.LuaLexer,
     "mathematica": pygments.lexers.MathematicaLexer,

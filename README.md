@@ -735,6 +735,7 @@ At the moment, cheat.sh covers the 58 following programming languages (alphabeti
 |`js/`      |JavaScript|✓     |✓         |✓        |✓            |
 |`julia/`   |Julia     |✓     |          |         |✓            |
 |`kotlin/`  |Kotlin    |✓     |          |         |✓            |
+|`latex/`   |LaTeX     |✓     |          |         |✓            |
 |`lisp/`    |Lisp      |✓     |          |         |✓            |
 |`lua/`     |Lua       |✓     |          |         |✓            |
 |`matlab/`  |MATLAB    |✓     |          |         |✓            |
