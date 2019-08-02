@@ -115,6 +115,7 @@ VIM_NAME = {
     'delphi'    :   'pascal',
     'dlang'     :   'd',
     'elisp'     :   'newlisp',
+    'latex'     :   'tex',
     'forth'     :   'fs',
     'nim'       :   'nimrod',
     'perl6'     :   'perl',
