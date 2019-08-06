@@ -788,10 +788,10 @@ all over the world
 |Cheat sheets           |Repository                                            | Users | Creation Date |
 |-----------------------|------------------------------------------------------|------------|---------------|
 |UNIX/Linux, programming|[cheat.sheets](https://github.com/chubin/cheat.sheets)| 38/223       | May 1, 2017   |
-|UNIX/Linux commands    |[tldr-pages/tldr](https://github.com/tldr-pages/tldr) | 759/23118  | Dec 8, 2013   |
-|UNIX/Linux commands    |[chrisallenlane/cheat](https://github.com/chrisallenlane/cheat)|131/5237|Jul 28, 2013|
-|Programming languages  |[adambard/learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs)|1227/6736|Jun 23, 2013|
-|Go                     |[a8m/go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)|31/4034|Feb 9, 2014|
+|UNIX/Linux commands    |[tldr-pages/tldr](https://github.com/tldr-pages/tldr) | 760/23133  | Dec 8, 2013   |
+|UNIX/Linux commands    |[chrisallenlane/cheat](https://github.com/chrisallenlane/cheat)|131/5240|Jul 28, 2013|
+|Programming languages  |[adambard/learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs)|1246/6748|Jun 23, 2013|
+|Go                     |[a8m/go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)|31/4039|Feb 9, 2014|
 |Perl                   |[pkrumnis/perl1line.txt](https://github.com/pkrumins/perl1line.txt)|5/190|Nov 4, 2011|
 |Programming languages  |[StackOverflow](https://stackoverflow.com)|9M |Sep 15, 2008|
 
