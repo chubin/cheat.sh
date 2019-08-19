@@ -225,7 +225,7 @@ cheat.shサービスには独自のコマンドラインクライアント（ ch
 	update  - self update (only if the scriptfile is writeable)
 	version - show current cht.sh version
 	/:help  - service help
-	QUERY   - space ceparated query staring (examples are below)
+	QUERY   - space separated query staring (examples are below)
 				  cht.sh> python zip list
 				  cht.sh/python> zip list
 				  cht.sh/go> /python zip list
