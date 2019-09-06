@@ -169,7 +169,6 @@ EOF
   rmdir "$installdir"
   git clone "$url" "$installdir" || fatal Could not clone "$url" with git into "$installdir"
   cd "$installdir" || fatal "Cannot cd into $installdir"
-  git checkout offline_usage
 
   # after the repository cloned, we may have the log directory
   # and we can write our installation log into it
