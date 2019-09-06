@@ -10,6 +10,8 @@ colored
 langdetect
 cffi
 polyglot
+PyICU
+pycld2
 colorama
 pyyaml
 python-Levenshtein
