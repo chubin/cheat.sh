@@ -10,6 +10,8 @@ Configuration parameters:
     * path.log.fetch
 """
 
+from __future__ import print_function
+
 import sys
 import logging
 import os
@@ -60,7 +62,7 @@ def fetch_all(skip_existing=True):
                 sys.stdout.write("\nERROR:\n---\n" + output)
                 fatal("---\nCould not fetch %s" % adptr)
             else:
-                print "Done"
+                print("Done")
 
     # Searching for location duplicates for different repositories
     known_location = {}
