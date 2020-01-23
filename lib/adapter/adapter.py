@@ -13,7 +13,7 @@ from config import CONFIG
 
 class AdapterMC(type):
     """
-    Adapater Metaclass.
+    Adapter Metaclass.
     Defines string representation of adapters
     """
     def __repr__(cls):
@@ -125,7 +125,7 @@ class Adapter(with_metaclass(AdapterMC, object)):
         #
         # if _get_page() returns a dict, use the dictionary
         # for the answer. It is possible to specify some
-        # usefule properties as the part of the answer
+        # useful properties as the part of the answer
         # (e.g. "cache")
         # answer by _get_page() always overrides all default properties
         #
@@ -148,7 +148,7 @@ class Adapter(with_metaclass(AdapterMC, object)):
         If name `self._repository_url` for the class is not specified, return None
         It is possible that several adapters has the same repository_url,
         in this case they should use the same local directory.
-        If for some reason the local repository location should be overriden
+        If for some reason the local repository location should be overridden
         (e.g. if several different branches of the same repository are used)
         if should set in `self._local_repository_location` of the adapter.
         If `cheat_sheets_location` is specified, return path of the cheat sheets

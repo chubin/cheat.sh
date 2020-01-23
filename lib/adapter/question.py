@@ -30,7 +30,7 @@ class Question(UpstreamAdapter):
 
     If the program is not found, fallback to the superclass `UpstreamAdapter`,
     which queries the upstream server (by default https://cheat.sh/)
-    fot the answer
+    for the answer
     """
 
     _adapter_name = "question"

@@ -12,14 +12,14 @@ def _get_filenames(path):
 
 class RepositoryAdapter(Adapter):
     """
-    Implements methos needed to handle standard
+    Implements methods needed to handle standard
     repository based adapters.
     """
 
     def _get_list(self, prefix=None):
         """
         List of files in the cheat sheets directory
-        with the extenstion removed
+        with the extension removed
         """
 
         answer = _get_filenames(
@@ -55,7 +55,7 @@ class RepositoryAdapter(Adapter):
 class GitRepositoryAdapter(RepositoryAdapter):    #pylint: disable=abstract-method
     """
     Implements all methods needed to handle cache handling
-    for git-repository-based adatpers
+    for git-repository-based adapters
     """
 
     @classmethod

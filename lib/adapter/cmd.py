@@ -34,7 +34,7 @@ class Fosdem(CommandAdapter):
 
     https://www.youtube.com/watch?v=PmiK0JCdh5A
 
-    `sudo` is used here beause the session was running under
+    `sudo` is used here because the session was running under
     a different user; to be able to use the command via sudo,
     the following `/etc/suders` entry was added:
 
