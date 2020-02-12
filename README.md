@@ -478,17 +478,17 @@ and press `<leader>KE`: explanation for the warning will be opened in a new buff
 
 Features supported by cheat.sh plugins for different editors:
 
-|Feature            |Emacs|Sublime|Vim|VSCode|IDEA|
-|-------------------|-----|-------|---|------|----|
-|Command queries    |✓    |✓      |✓  |✓     |✓   |
-|Queries from buffer|     |       |✓  |✓     |    |
-|Toggle comments    |     |       |✓  |✓     |✓   |
-|Prev/next answer   |     |       |✓  |✓     |✓   |
-|Multiple answers   |     |✓      |   |      |✓   |
-|Warnings as queries|     |       |✓  |      |    |
-|Queries history    |     |       |✓  |✓     |    |
-|Session id         |     |       |✓  |      |    |
-|Configurable server|✓    |       |✓  |✓     |    |
+|Feature            |Emacs|Sublime|Vim|VSCode|IDEA|QtCreator|
+|-------------------|-----|-------|---|------|----|---------|
+|Command queries    |✓    |✓      |✓  |✓     |✓   |✓        |
+|Queries from buffer|     |       |✓  |✓     |    |✓        |
+|Toggle comments    |     |       |✓  |✓     |✓   |✓        |
+|Prev/next answer   |     |       |✓  |✓     |✓   |         |
+|Multiple answers   |     |✓      |   |      |✓   |         |
+|Warnings as queries|     |       |✓  |      |    |         |
+|Queries history    |     |       |✓  |✓     |    |         |
+|Session id         |     |       |✓  |      |    |         |
+|Configurable server|✓    |       |✓  |✓     |    |✓        |
 
 ### Vim
 
@@ -592,6 +592,25 @@ Usage:
 [![idea-cheatsh-plugin](https://cheat.sh/files/idea-demo.gif)](https://github.com/szymonprz/idea-cheatsh-plugin)
 
 *(GIF courtesy: Szymon Przebierowski, @szymonprz)*
+
+### QtCreator
+
+* [cheatsh-qtcreator](https://github.com/pozemka/cheatsh-qtcreator)
+
+Current features:
+
+*    search word under cursor
+*    search selected
+*    query search
+*    disable comments
+*    paste answer (?TQ version)
+*    custom server URL
+*    custom search context (default is cpp)
+*    hotkeys and menu
+
+[![cheatsh-qtcreator](https://user-images.githubusercontent.com/1259724/73876361-ecce5d00-4867-11ea-9f75-c5b127a9739c.gif)](https://github.com/pozemka/cheatsh-qtcreator)
+
+*(GIF courtesy: Pozemka, @pozemka)*
 
 ## Special pages
 
