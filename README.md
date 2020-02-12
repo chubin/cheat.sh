@@ -295,7 +295,7 @@ Type `help` for other internal `cht.sh` commands.
 ```
 
 The `cht.sh` client has its configuration file which is located at `~/.cht.sh/cht.sh.conf`
-(location of the file can be overriden by the environment variable `CHTSH_CONF`).
+(location of the file can be overridden by the environment variable `CHTSH_CONF`).
 Use it to specify query options that you would use with each query.
 For example, to switch syntax highlighting off create the file with the following
 content:

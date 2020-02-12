@@ -1,7 +1,7 @@
 """
 Repositories fetch and update
 
-Ths module makes real network and OS interaction,
+This module makes real network and OS interaction,
 and the adapters only say how exctly this interaction
 should be done.
 

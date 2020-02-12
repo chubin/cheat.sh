@@ -92,7 +92,7 @@ Of course, you can start the shell without the context too:
     {1cht.sh> go http query}
     {1cht.sh> js iterate list}
 
-If you ue predominantly one language but sometime issuing queries about other,
+If you use predominantly one language but sometime issuing queries about other,
 you may prepend the query with {2/}:
 
     {1cht.sh/python>} {2zip lists}

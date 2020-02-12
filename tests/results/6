@@ -92,7 +92,7 @@ Of course, you can start the shell without the context too:
     [36mcht.sh> go http query[0m
     [36mcht.sh> js iterate list[0m
 
-If you ue predominantly one language but sometime issuing queries about other,
+If you use predominantly one language but sometime issuing queries about other,
 you may prepend the query with [32m/[0m:
 
     [36mcht.sh/python>[0m [32mzip lists[0m

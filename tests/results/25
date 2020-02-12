@@ -8,7 +8,7 @@ L1 cache reference: 1ns                                   [32m▗              
                              [34m▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖         [mSSD random read: 16us        [31m▗▖▗▖▗                        [m
 Branch mispredict: 3ns       [34m                             [m[32m▗▖                           [m                             
 [37m▗▖▗▖▗▖                       [m                                                          Read 1,000,000 bytes         
-                             Compress 1KB wth Snappy:     Read 1,000,000 bytes         sequentially from disk:      
+                             Compress 1KB with Snappy:     Read 1,000,000 bytes         sequentially from disk:      
 L2 cache reference: 4ns      2us                          sequentially from memory:    947us                        
 [37m▗▖▗▖▗▖▗▖                     [m[34m▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖         [m3us                          [31m▗                            [m
                              [34m▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖         [m[32m▗                            [m                             

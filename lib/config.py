@@ -5,7 +5,7 @@ All configurable parameters are stored in the global variable CONFIG,
 the only variable which is exported from the module.
 
 Default values of all configuration parameters are specified
-in the `_CONFIG` dictionary. Those parameters can be overriden
+in the `_CONFIG` dictionary. Those parameters can be overridden
 by three means:
     * config file `etc/config.yaml` located in the work dir
     * config file `etc/config.yaml` located in the project dir
@@ -23,7 +23,7 @@ recommend that you use the config file located in the project dir,
 except the cases when you use your own cheat.sh fork, and thus
 configuration is a part of the project repository.
 In all other cases `WORKDIR/etc/config.yaml` should be preferred.
-Location of this config file can be overriden by the `CHEATSH_PATH_CONFIG`
+Location of this config file can be overridden by the `CHEATSH_PATH_CONFIG`
 environment variable.
 
 Configuration parameters set by environment variables are mapped
@@ -35,7 +35,7 @@ in this way:
 For instance, an environment variable named `CHEATSH_SERVER_PORT`
 specifies the value for the `server.port` configuration parameter.
 
-Only paramters that imply scalar values (integer or string)
+Only parameters that imply scalar values (integer or string)
 can be set using environment variables, for the rest config files
 should be used. If a parameter implies an integer, and the value
 specified by an environment variable is not an integer, it is ignored.
@@ -139,7 +139,7 @@ _CONFIG = {
 class Config(dict):
     """
     configuration dictionary that handles relative
-    pathes properly (making them relative to path.workdir)
+    paths properly (making them relative to path.workdir)
     """
 
     def _absolute_path(self, val):

@@ -95,7 +95,7 @@ cheat sheets repositories will be fetched.
 It takes approximately 1G of the disk space.
 
 Default installation location:  ~/.cheat.sh/
-It can be overriden by a command line parameter to this script:
+It can be overridden by a command line parameter to this script:
 
     ${0##*/} --standalone-install DIR
 
@@ -191,7 +191,7 @@ EOF
     tail -n 10 "$LOG"
     echo "---"
     echo "See $LOG for more"
-    fatal Could not install python dependecies into the virtual environment
+    fatal Could not install python dependencies into the virtual environment
   }
   echo "$(ve/bin/pip freeze | wc -l) dependencies were successfully installed"
 
@@ -282,8 +282,8 @@ chtsh_mode()
       echo "Configured mode: $mode"
     fi
   else
-    echo "Uknown mode: $mode"
-    echo Suported modes:
+    echo "Unknown mode: $mode"
+    echo Supported modes:
     echo "  auto    use the standalone installation first"
     echo "  lite    use the cheat sheets server directly"
   fi
