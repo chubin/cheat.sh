@@ -90,7 +90,7 @@ class Tldr(GitRepositoryAdapter):
             # though it should not happen
             answer = ''
 
-        return answer.decode('utf-8')
+        return answer
 
     @classmethod
     def get_updates_list(cls, updated_files_list):
