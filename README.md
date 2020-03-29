@@ -53,6 +53,7 @@ Such a thing exists.
   * [Visual Studio Code](#visual-studio-code)
   * [Sublime](#sublime)
   * [IntelliJ IDEA](#intellij-idea)
+  * [QT Creator](#qtcreator)
 * [Special pages](#special-pages)
 * [Search](#search)
 * [Programming languages cheat sheets](#programming-languages-cheat-sheets)
