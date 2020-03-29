@@ -9,7 +9,7 @@ import sys
 import os
 import collections
 
-from fuzzywuzzy import process, fuzz
+from rapidfuzz import process, fuzz
 
 from config import CONFIG
 from .adapter import Adapter
@@ -120,7 +120,7 @@ class UnknownPages(InternalPages):
         else:
             topics_list = [x for x in topics_list if not x.startswith(':')]
 
-        possible_topics = process.extract(topic, topics_list, scorer=fuzz.ratio)[:3]
+        possible_topics = process.extract(topic, topics_list, limit=3, scorer=fuzz.ratio)
         possible_topics_text = "\n".join([("    * %s %s" % x) for x in possible_topics])
         return """
 Unknown topic.
