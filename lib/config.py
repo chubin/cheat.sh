@@ -84,6 +84,7 @@ _CONFIG = {
         "cheat.sheets",
         "cheat.sheets dir",
         "learnxiny",
+        "rfc",
         ],
     "adapters.mandatory": [
         "search",
@@ -112,6 +113,7 @@ _CONFIG = {
     "routing.pre": [
         ("^$", "search"),
         ("^[^/]*/rosetta(/|$)", "rosetta"),
+        ("^rfc/", "rfc"),
         ("^:", "internal"),
         ("/:list$", "internal"),
         ("/$", "cheat.sheets dir"),
