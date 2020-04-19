@@ -111,6 +111,4 @@ class AdapterRfc(CommandAdapter):
         return list("rfc/%s" % x for x in range(1, 8649))
 
     def is_found(self, topic):
-        if re.match("rfc/[0-9]+$", topic):
-            return True
-        return False
+        return True 
