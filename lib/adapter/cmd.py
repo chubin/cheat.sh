@@ -38,7 +38,7 @@ class CommandAdapter(Adapter):
         if cmd:
             try:
                 proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
-                answer = proc.communicate()[0].decode('utf-8')
+                answer = proc.communicate()[0].decode('utf-8', 'ignore')
             except OSError:
                 return "ERROR of the \"%s\" adapter: please create an issue" % self._adapter_name
             return answer
