@@ -112,3 +112,31 @@ class AdapterRfc(CommandAdapter):
 
     def is_found(self, topic):
         return True 
+
+class AdapterOeis(CommandAdapter):
+    """
+    Show OEIS by its number.
+    Exported as: "/oeis/NUMBER"
+    """
+
+    _adapter_name = "oeis"
+    _output_format = "text"
+    _cache_needed = True
+    _command = ["share/adapters/oeis.sh"]
+
+    def _get_command(self, topic, request_options=None):
+        cmd = self._command[:]
+        if not cmd[0].startswith("/"):
+            cmd[0] = _get_abspath(cmd[0])
+
+        # cut oeis/ off
+        if topic.startswith("oeis/"):
+            topic = topic[4:]
+
+        return cmd + [topic]
+
+    def _get_list(self, prefix=None):
+        return list("oeis/%s" % x for x in range(1, 8649))
+
+    def is_found(self, topic):
+        return True 
