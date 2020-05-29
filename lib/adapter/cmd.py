@@ -140,3 +140,28 @@ class AdapterOeis(CommandAdapter):
 
     def is_found(self, topic):
         return True 
+
+class AdapterChmod(CommandAdapter):
+    """
+    Show chmod numeric values and strings
+    Exported as: "/chmod/NUMBER"
+    """
+
+    _adapter_name = "chmod"
+    _output_format = "text"
+    _cache_needed = True
+    _command = ["share/adapters/chmod.sh"]
+
+    def _get_command(self, topic, request_options=None):
+        cmd = self._command[:]
+        if not cmd[0].startswith("/"):
+            cmd[0] = _get_abspath(cmd[0])
+
+        # cut chmod/ off
+        if topic.startswith("chmod/"):
+            topic = topic[4:]
+
+        return cmd + [topic]
+
+    def is_found(self, topic):
+        return True 
