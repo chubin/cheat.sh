@@ -86,6 +86,7 @@ _CONFIG = {
         "learnxiny",
         "rfc",
         "oeis",
+        "chmod",
         ],
     "adapters.mandatory": [
         "search",
@@ -116,6 +117,7 @@ _CONFIG = {
         ("^[^/]*/rosetta(/|$)", "rosetta"),
         ("^rfc/", "rfc"),
         ("^oeis/", "oeis"),
+        ("^chmod/", "chmod"),
         ("^:", "internal"),
         ("/:list$", "internal"),
         ("/$", "cheat.sheets dir"),
