@@ -154,12 +154,10 @@ class AdapterChmod(CommandAdapter):
 
     def _get_command(self, topic, request_options=None):
         cmd = self._command[:]
-        if not cmd[0].startswith("/"):
-            cmd[0] = _get_abspath(cmd[0])
 
         # cut chmod/ off
         if topic.startswith("chmod/"):
-            topic = topic[4:]
+            topic = topic[6:]
 
         return cmd + [topic]
 
