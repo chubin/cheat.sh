@@ -85,6 +85,7 @@ _CONFIG = {
         "cheat.sheets dir",
         "learnxiny",
         "rfc",
+        "oeis",
         ],
     "adapters.mandatory": [
         "search",
@@ -114,6 +115,7 @@ _CONFIG = {
         ("^$", "search"),
         ("^[^/]*/rosetta(/|$)", "rosetta"),
         ("^rfc/", "rfc"),
+        ("^oeis/", "oeis"),
         ("^:", "internal"),
         ("/:list$", "internal"),
         ("/$", "cheat.sheets dir"),
