@@ -32,7 +32,7 @@ chmod_calc(){
         [ ${num:1:1} -eq 1 ] && p_s+='w' || p_s+='-'
         if [[ $sticky == 'X' ]]
         then
-          [ ${num:2:1} -eq 1 ] && p_s+='s' || p_s+='S'
+          [ ${num:2:1} -eq 1 ] && p_s+='t' || p_s+='T'
         else
           [ ${num:2:1} -eq 1 ] && p_s+='x' || p_s+='-'
         fi
@@ -42,7 +42,7 @@ chmod_calc(){
       fi
     done
   # If permission string is given calc number
-  elif [[ ${#1} -le 9 && $(( ${#1} % 3 )) -eq 0 && $1 =~ ^[r,w,x,s,S,-]+$ ]]
+  elif [[ ${#1} -le 9 && $(( ${#1} % 3 )) -eq 0 && $1 =~ ^[r,t,T,w,x,-]+$ ]]
   then
     p_s=$1
     [[ ${p_s,,} =~ 's' ]] && p_n+="1" || p_n+="0"
@@ -56,9 +56,9 @@ chmod_calc(){
       [[ ${1:$i:1} == 'w' ]] && W+=('X') || W+=(' ')
       [[ ${1:$((i++)):1} == 'w' ]] && let num++
       num=$(( num << 1 ))
-      [[ 'xs' =~ ${1:$i:1} ]] && X+=('X') || X+=(' ')
-      [[ 'Ss' =~ ${1:$i:1} ]] && S+=('X') || S+=(' ')
-      [[ 'xs' =~ ${1:$((i++)):1} ]] && let num++
+      [[ 'xt' =~ ${1:$i:1} ]] && X+=('X') || X+=(' ')
+      [[ 'Tt' =~ ${1:$i:1} ]] && S+=('X') || S+=(' ')
+      [[ 'xt' =~ ${1:$((i++)):1} ]] && let num++
       p_n+="$num"
     done
   else
