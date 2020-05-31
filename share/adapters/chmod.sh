@@ -16,13 +16,13 @@ chmod_calc(){
   setgid=' '
   sticky=' '
   # If permission number is given calc string
-  if [[ $1 =~ ^-?[0-9]+$ ]] && [ ${#1} -ge 2 ] && [ ${#1} -le 4 ]
+  if [[ $1 =~ ^-?[0-9]+$ && ${#1} -ge 2 && ${#1} -le 4 ]]
   then
     p_n=$1
     for (( i=0; i<${#1}; i++ ))
     do
       num=$(echo "obase=2;${1:$i:1}" | bc | xargs printf '%03d')
-      if [ ${#1} -eq 4 ] && [ $i -eq 0 ]
+      if [[ ${#1} -eq 4 && $i -eq 0 ]]
       then
         [ ${num:0:1} -eq 1 ] && setuid='X' || setuid=' '
         [ ${num:1:1} -eq 1 ] && setgid='X' || setgid=' '
@@ -42,7 +42,7 @@ chmod_calc(){
       fi
     done
   # If permission string is given calc number
-  elif [ ${#1} -le 9 ] && [ $(( ${#1} % 3 )) -eq 0 ] && [[ $1 =~ ^[r,w,x,s,S,-]+$ ]]
+  elif [[ ${#1} -le 9 && $(( ${#1} % 3 )) -eq 0 && $1 =~ ^[r,w,x,s,S,-]+$ ]]
   then
     p_s=$1
     [[ ${p_s,,} =~ 's' ]] && p_n+="1" || p_n+="0"
