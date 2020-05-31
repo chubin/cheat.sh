@@ -131,12 +131,9 @@ class AdapterOeis(CommandAdapter):
 
         # cut oeis/ off
         if topic.startswith("oeis/"):
-            topic = topic[4:]
+            topic = topic[5:]
 
         return cmd + [topic]
-
-    def _get_list(self, prefix=None):
-        return list("oeis/%s" % x for x in range(1, 8649))
 
     def is_found(self, topic):
         return True 
