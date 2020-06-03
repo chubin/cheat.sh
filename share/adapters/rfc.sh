@@ -5,7 +5,16 @@
 # Search for an RFC
 # Contrib to chubin - cheat.sh
 RFC_get()
-{
+(
+  rfc_describe() {
+    sed -ne '/0001/,$p' ${RFC_INDEX} \
+      | tr '\n' '#' \
+      | sed 's/##/\n/g' \
+      | sed 's/#    //g' \
+      | grep -o '.*\. ' \
+      | sed -r 's/^(.*)(January|February|March|April|May|June|July|August|September|October|November|December) [[:digit:]]{4}(.*)$/\1/'
+  }
+
   mkdir -p /tmp/RFC_get
   local WEB_RESP="/tmp/RFC_get/rfc_get_web_resp_${RANDOM}.html"
   local RFC_INDEX="/tmp/RFC_get/rfc_index.html"
@@ -74,41 +83,21 @@ RFC_get()
   elif [[ "${1,,}" == ":list" ]]
   then
     # Format RFC_INDEX to show short description of each RFC
-    sed -ne '/0001/,$p' ${RFC_INDEX} \
-      | tr '\n' '#' \
-      | sed 's/##/\n/g' \
-      | sed 's/#    //g' \
-      | grep -o '.*\. ' \
-      | sed -r 's/^(.*)(January|February|March|April|May|June|July|August|September|October|November|December) [[:digit:]]{4}(.*)$/\1/' \
+    rfc_describe \
       | grep -v 'Not Issued' \
       | sed 's/ .*//; s/^0*//'
-    # printf "\nValid RFC numbers: [ ${MIN_RFC} - ${MAX_RFC} ]\n"
     return 0
   # Print list of available RFCs
   elif [[ "${1,,}" == ":describe" ]]
   then
     # Format RFC_INDEX to show short description of each RFC
-    sed -ne '/0001/,$p' ${RFC_INDEX} \
-      | tr '\n' '#' \
-      | sed 's/##/\n/g' \
-      | sed 's/#    //g' \
-      | grep -o '.*\. ' \
-      | sed -r 's/^(.*)(January|February|March|April|May|June|July|August|September|October|November|December) [[:digit:]]{4}(.*)$/\1/'
-    # printf "\nValid RFC numbers: [ ${MIN_RFC} - ${MAX_RFC} ]\n"
+    rfc_describe
     return 0
   # Format list of RFCs related to keyword:   RFC_N  RFC_Title
   else
     ARG="$*"
-    curl "https://www.rfc-editor.org/search/rfc_search_detail.php?title=${ARG}" 2>/dev/null \
-      | sed 's/href="/\n/g; s/.html/.html\n/g' \
-      | grep -A 1 --color=auto 'http.*.html' \
-      | sed '/boldtext/d; s/"target/<"target/g; s/<[^>]*>//g; /HTML,/d; s/HTML//; /--/d' \
-      | grep -v -B 1 html \
-      | rev \
-      | sed 's/lmth\.//; s/cfr.*//; /--/d' \
-      | rev \
-      | sed 's/[A-Z]\..*//; /mail-archive/,+1d; s/^[ \t]*//' \
-      | sed  's/&nbsp.*//g; s/<a//g; N ; s/\n/:\t/' \
+    rfc_describe \
+      | grep -i "$ARG" \
       > $WEB_RESP
   fi
   # Format nicely and print
@@ -122,6 +111,6 @@ RFC_get()
     cat -s ${WEB_RESP}
     return 0
   fi
-}
+)
 
 RFC_get "$1"
