@@ -130,9 +130,10 @@ class AdapterOeis(CommandAdapter):
             cmd[0] = _get_abspath(cmd[0])
 
         # cut oeis/ off
-        # Space delimiter for args to oeis.sh
+        # Replace all (non numeric and non '-')'s with Spaces to delimit args to oeis.sh
         if topic.startswith("oeis/"):
-            topic = topic[5:].replace('+',' ')
+          topic = topic[5:]
+          topic = re.sub('[^0-9-]', ' ', topic)
 
         return cmd + [topic]
 
