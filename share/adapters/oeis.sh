@@ -13,14 +13,17 @@ oeis() (
   local DOC=/tmp/oeis/doc.html
   local MAX_TERMS=10
   mkdir -p $TMP
-  # Get short description of a sequence
+  # -- get_desc --
+  # @return print description of OEIS sequence
   get_desc() {
     grep -A 1 '<td valign=top align=left>' $DOC \
       | sed '/<td valign=top align=left>/d; /--/d; s/^[ \t]*//; s/<[^>]*>//g;' \
       | sed 's/&nbsp;/ /g; s/\&amp;/\&/g; s/&gt;/>/g; s/&lt;/</g; s/&quot;/"/g'
     return $?
   }
-  # Print out the first MAX_TERMS terms of a sequence
+  # -- get_seq --
+  # @param  MAX_TERMS
+  # @return Print the first MAX_TERMS terms of a sequence
   get_seq() {
     local MAX_TERMS=${1}
     grep -o '<tt>.*, .*[0-9]</tt>' $DOC \
@@ -30,7 +33,9 @@ oeis() (
       | cut -d ',' -f 1-${MAX_TERMS}
     return $?
   }
-  # Sample code parser INPUT arg: is grep regex <FROM*TO>
+  # -- parse_code --
+  # @param  GREP_REGEX
+  # @return Code snippet that corresponds to GREP_REGEX
   parse_code() {
     local GREP_REGEX="${1}"
     cat $DOC \
@@ -41,27 +46,35 @@ oeis() (
       | sed 's/&nbsp;/ /g; s/\&amp;/\&/g; s/&gt;/>/g; s/&lt;/</g; s/&quot;/"/g'
     return $?
   }
-  # Search sequence by ID
+  # -- MAIN --
+  # Search sequence by ID (optional language arg)
+  # 	. oeis <SEQ_ID>
+  # 	. oeis <SEQ_ID> <LANGUAGE>
+  # 	. oeis <LANGUAGE> <SEQ_ID>
   if [ $# -lt 3 ]
   then
     # Arg-Parse ID, Generate URL
-    echo $1 | grep -q -e [a-z] -e [B-Z] && ID=$2 || ID=$1
-    echo $1 | grep -q -e [a-z] -e [B-Z] && LANG=$1 || LANG=$2
+    if echo ${1^^} | grep -q '[B-Z]'
+    then
+      ID=$2
+      LANGUAGE=$1
+    else
+      ID=$1
+      LANGUAGE=$2
+    fi
     [[ ${ID:0:1} == 'A' ]] && ID=${ID:1}
     ID=$(bc <<< "$ID")
     ID="A$(printf '%06d' ${ID})"
     URL+="/${ID}"
     curl $URL 2>/dev/null > $DOC
-    # Print ID
+    # Print ID, description, and sequence
     printf "ID: ${ID}\n"
-    # Print Description
     get_desc
     printf "\n"
-    # Print Sequence sample limited by $MAX_TERMS
     get_seq ${MAX_TERMS}
     printf "\n"
     # Print Code Sample
-    if [[ ${LANG^^} == 'MAPLE' ]] && grep -q 'MAPLE' $DOC
+    if [[ ${LANGUAGE^^} == 'MAPLE' ]] && grep -q 'MAPLE' $DOC
     then
       GREP_REGEX='MAPLE.*CROSSREFS'
       grep -q 'PROG' $DOC && GREP_REGEX='MAPLE.*PROG'
@@ -69,7 +82,7 @@ oeis() (
       parse_code "${GREP_REGEX}" \
         | sed 's/MAPLE/(MAPLE)/; /MATHEMATICA/d; /PROG/d; /CROSSREFS/d'
     fi
-    if [[ ${LANG^^} == 'MATHEMATICA' ]] && grep -q 'MATHEMATICA' $DOC
+    if [[ ${LANGUAGE^^} == 'MATHEMATICA' ]] && grep -q 'MATHEMATICA' $DOC
     then
       GREP_REGEX='MATHEMATICA.*CROSSREFS'
       grep -q 'PROG' $DOC && GREP_REGEX='MATHEMATICA.*PROG'
@@ -81,11 +94,11 @@ oeis() (
       | sed '/PROG/d; /CROSSREFS/d' > ${TMP}/prog
     # Print out code sample for specified language
     rm -f ${TMP}/code_snippet
-    awk -v tgt="${LANG^^}" -F'[()]' '/^\(/{f=(tgt==$2)} f' ${TMP}/prog > ${TMP}/code_snippet
-    L="${LANG:0:1}"
-    LANG="${LANG:1}"
-    LANG="${L^^}${LANG,,}"
-    [ $(wc -c < $TMP/code_snippet) -eq 0 ] && awk -v tgt="${LANG}" -F'[()]' '/^\(/{f=(tgt==$2)} f' ${TMP}/prog > ${TMP}/code_snippet
+    awk -v tgt="${LANGUAGE^^}" -F'[()]' '/^\(/{f=(tgt==$2)} f' ${TMP}/prog > ${TMP}/code_snippet
+    L="${LANGUAGE:0:1}"
+    LANGUAGE="${LANGUAGE:1}"
+    LANGUAGE="${L^^}${LANGUAGE,,}"
+    [ $(wc -c < $TMP/code_snippet) -eq 0 ] && awk -v tgt="${LANGUAGE}" -F'[()]' '/^\(/{f=(tgt==$2)} f' ${TMP}/prog > ${TMP}/code_snippet
     cat ${TMP}/code_snippet
   # Search unknown sequence
   else
