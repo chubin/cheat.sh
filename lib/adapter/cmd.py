@@ -138,7 +138,7 @@ class AdapterOeis(CommandAdapter):
         return cmd + [topic]
 
     def is_found(self, topic):
-        return True 
+        return True
 
 class AdapterChmod(CommandAdapter):
     """
@@ -158,7 +158,7 @@ class AdapterChmod(CommandAdapter):
         # remove all non (alphanumeric, '-') chars
         if topic.startswith("chmod/"):
             topic = topic[6:]
-            topic = re.sub('[^a-z^A-Z^0-9-]', '', topic)
+            topic = re.sub('[^a-zA-Z0-9-]', '', topic)
 
 
         return cmd + [topic]
