@@ -130,9 +130,10 @@ class AdapterOeis(CommandAdapter):
             cmd[0] = _get_abspath(cmd[0])
 
         # cut oeis/ off
-        # Space delimiter for args to oeis.sh
+        # Replace all non (numeric, '-') chars with Spaces to delimit args to oeis.sh
         if topic.startswith("oeis/"):
-            topic = topic[5:].replace('+',' ')
+            topic = topic[5:]
+            topic = re.sub('[^0-9-]', ' ', topic)
 
         return cmd + [topic]
 
@@ -154,10 +155,13 @@ class AdapterChmod(CommandAdapter):
         cmd = self._command[:]
 
         # cut chmod/ off
+        # remove all non (alphanumeric, '-') chars
         if topic.startswith("chmod/"):
             topic = topic[6:]
+            topic = re.sub('[^a-z^A-Z^0-9-]', '', topic)
+
 
         return cmd + [topic]
 
     def is_found(self, topic):
-        return True 
+        return True
