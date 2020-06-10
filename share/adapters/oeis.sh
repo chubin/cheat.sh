@@ -51,7 +51,8 @@ oeis() (
   # 	. oeis <SEQ_ID>
   # 	. oeis <SEQ_ID> <LANGUAGE>
   # 	. oeis <LANGUAGE> <SEQ_ID>
-  if [ $# -lt 3 ]
+  isNum='^[0-9]+$'
+  if [ $# -lt 3 ] && [[ ${1:1} =~ $isNum || ${2:1} =~ $isNum || ${1} =~ $isNum || ${2} =~ $isNum ]] && [[ ! ${1} =~ $isNum || ! ${2} =~ $isNum ]]
   then
     # Arg-Parse ID, Generate URL
     if echo ${1^^} | grep -q '[B-Z]'
@@ -103,7 +104,7 @@ oeis() (
   # Search unknown sequence
   else
     # Build URL
-    URL+="/search?q=signed%3A$(echo $@ | grep -v [a-z] | grep -v [A-Z] | tr ' ' ',')"
+    URL+="/search?q=signed%3A$(echo $@ | tr -sc '[:digit:]' ',')"
     curl $URL 2>/dev/null > $DOC
     # Sequence IDs
     grep -o '=id:.*&' $DOC \
