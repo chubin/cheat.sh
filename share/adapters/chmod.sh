@@ -72,12 +72,19 @@ chmod_calc(){
       [[ ${1:$i:1} == 'w' ]] && W+=('X') || W+=(' ')
       [[ ${1:$((i++)):1} == 'w' ]] && let num++
       num=$(( num << 1 ))
-      [[ 'stx' =~ ${1:$i:1} ]] && X+=('X') || X+=(' ')
-      [[ 'stx' =~ ${1:$((i++)):1} ]] && let num++
+      if [ $i -lt 6 ]
+      then
+        [[ "tT" =~ ${1:$i:1} ]] && return 1
+        [[ "sx" =~ ${1:$i:1} ]] && X+=('X') || X+=(' ')
+        [[ "sx" =~ ${1:$((i++)):1} ]] && let num++
+      else
+        [[ "sS" =~ ${1:$i:1} ]] && return 1
+        [[ "tx" =~ ${1:$i:1} ]] && X+=('X') || X+=(' ')
+        [[ "tx" =~ ${1:$((i++)):1} ]] && let num++
+      fi
       p_n+="$num"
     done
   else
-    printf "Invalid permissions string: $1"
     return 1
   fi
   # Print Final results table
@@ -95,3 +102,4 @@ Sticky bit [$sticky]\tExecute [${X[0]}]\tExecute [${X[1]}]\tExecute [${X[2]}]
 }
 
 chmod_calc $@
+[ $? -ne 0 ] && printf "Invalid permissions string: $@\n"
