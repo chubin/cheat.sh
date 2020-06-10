@@ -16,15 +16,15 @@ chmod_calc(){
   setuid=' '
   setgid=' '
   sticky=' '
-  # If permission number is given calc string
-  if [[ $1 =~ ^-?[0-9]+$ && ${#1} -ge 2 && ${#1} -le 4 ]]
+  # If permission number is given -> calc string
+  if [[ $1 =~ ^-?[0-9]+$ && ${#1} -ge 1 && ${#1} -le 4 ]]
   then
-    p_n=$1
-    for (( i=0; i<${#1}; i++ ))
+    p_n=$(printf "%04s\n" "$1" | tr ' ' '0')
+    for (( i=0; i<${#p_n}; i++ ))
     do
-      num=$(echo "obase=2;${1:$i:1}" | bc | xargs printf '%03d')
-      # If 4 digit input, process specials
-      if [[ ${#1} -eq 4 && $i -eq 0 ]]
+      num=$(echo "obase=2;${p_n:$i:1}" | bc | xargs printf '%03d')
+      # If 4 digit input -> process specials
+      if [[ ${#p_n} -eq 4 && $i -eq 0 ]]
       then
         [ ${num:0:1} -eq 1 ] && setuid='X' || setuid=' '
         [ ${num:1:1} -eq 1 ] && setgid='X' || setgid=' '
@@ -52,8 +52,8 @@ chmod_calc(){
         [ ${num:2:1} -eq 1 ] && X+=('X') || X+=(' ')
       fi
     done
-  # If permission string is given calc number
-  elif [[ ${#1} -le 9 && $(( ${#1} % 3 )) -eq 0 && $1 =~ ^[r,s,S,t,T,w,x,-]+$ ]]
+  # If permission string is given -> calc number
+  elif [[ ${#1} -eq 9 && $1 =~ ^[r,s,S,t,T,w,x,-]+$ ]]
   then
     p_s=$1
     num=0
@@ -63,24 +63,24 @@ chmod_calc(){
     [[ 'tT' =~ ${p_s:8:1} ]] && sticky='X' && num=$((num+1))
     [ ${num} -gt 0 ] && p_n+="$num"
     # Calculate rest of p_n number while populating arrays for table
-    for (( i=0; i<${#1}; i+=0 ))
+    for (( i=0; i<${#p_s}; i+=0 ))
     do
       num=0
-      [[ ${1:$i:1} == 'r' ]] && R+=('X') || R+=(' ')
-      [[ ${1:$((i++)):1} == 'r' ]] && let num++
+      [[ ${p_s:$i:1} == 'r' ]] && R+=('X') || R+=(' ')
+      [[ ${p_s:$((i++)):1} == 'r' ]] && let num++
       num=$(( num << 1 ))
-      [[ ${1:$i:1} == 'w' ]] && W+=('X') || W+=(' ')
-      [[ ${1:$((i++)):1} == 'w' ]] && let num++
+      [[ ${p_s:$i:1} == 'w' ]] && W+=('X') || W+=(' ')
+      [[ ${p_s:$((i++)):1} == 'w' ]] && let num++
       num=$(( num << 1 ))
       if [ $i -lt 6 ]
       then
-        [[ "tT" =~ ${1:$i:1} ]] && return 1
-        [[ "sx" =~ ${1:$i:1} ]] && X+=('X') || X+=(' ')
-        [[ "sx" =~ ${1:$((i++)):1} ]] && let num++
+        [[ "tT" =~ ${p_s:$i:1} ]] && return 1
+        [[ "sx" =~ ${p_s:$i:1} ]] && X+=('X') || X+=(' ')
+        [[ "sx" =~ ${p_s:$((i++)):1} ]] && let num++
       else
-        [[ "sS" =~ ${1:$i:1} ]] && return 1
-        [[ "tx" =~ ${1:$i:1} ]] && X+=('X') || X+=(' ')
-        [[ "tx" =~ ${1:$((i++)):1} ]] && let num++
+        [[ "sS" =~ ${p_s:$i:1} ]] && return 1
+        [[ "tx" =~ ${p_s:$i:1} ]] && X+=('X') || X+=(' ')
+        [[ "tx" =~ ${p_s:$((i++)):1} ]] && let num++
       fi
       p_n+="$num"
     done
