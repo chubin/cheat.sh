@@ -2,6 +2,8 @@
 
 # Contributed by Erez Binyamin (github.com/ErezBinyamin)
 
+GRC_STYLESHEET="${BASH_SOURCE[0]}"; GRC_STYLESHEET=${GRC_STYLESHEET%.sh}.grc
+
 # Translate between chmod string and number
 # Inspired by http://permissions-calculator.org/
 # Contrib to chubin - cheat.sh
@@ -89,7 +91,7 @@ Setuid     [$setuid]\tRead    [${R[0]}]\tRead    [${R[1]}]\tRead    [${R[2]}]
 Setgid     [$setgid]\tWrite   [${W[0]}]\tWrite   [${W[1]}]\tWrite   [${W[2]}]
 Sticky bit [$sticky]\tExecute [${X[0]}]\tExecute [${X[1]}]\tExecute [${X[2]}]
 
-"
+" | grcat "$GRC_STYLESHEET"
 }
 
 chmod_calc $@

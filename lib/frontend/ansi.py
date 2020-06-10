@@ -129,6 +129,8 @@ def _visualize(answers, request_options, search_mode=False):
                                 and not request_options.get('add_comments')
                                 and not request_options.get('remove_text')))
 
+    if request_options.get('no-terminal'):
+        result = remove_ansi(result)
 
     result = result.strip('\n') + "\n"
     return result, found
