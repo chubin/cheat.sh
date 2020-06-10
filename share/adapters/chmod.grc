@@ -1,0 +1,40 @@
+# with option -sI
+# e.g. grc curl -sI mysite.com
+# http
+regexp=^(HTTP).*
+colours=yellow
+======
+# server
+regexp=^(Server).*
+colours=cyan
+======
+# site
+regexp=^(Link).*
+colours=magenta
+======
+# colouring the output of script 'cheat chmod'
+# e.g. grc curl -s cheat.sh/chmod/755
+# linux string
+regexp=^(Linux.*Permissions).*(String:)\s+(.*)$
+colours=yellow,green,red
+======
+# linux number
+regexp=^(Linux.*Permissions).*(Number:)\s+(.*)$
+colours=yellow,green,red
+======
+# header
+regexp=^(Special)\s+(Owner)\s+(Group)\s+(Public)$
+colours=white
+======
+# setuid
+regexp=^(Setuid)\s+\[.*\].*(Read).*
+colours=green,bold cyan
+======
+# setgid
+regexp=^(Setgid)\s+\[.*\].*(Write).*
+colours=green,bold yellow
+======
+# sticky bit
+regexp=^(Sticky bit)\s+\[.*\].*(Execute).*
+colours=green,bold magenta
+======
