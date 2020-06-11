@@ -24,7 +24,7 @@ chmod_calc(){
     do
       num=$(echo "obase=2;${p_n:$i:1}" | bc | xargs printf '%03d')
       # If 4 digit input -> process specials
-      if [[ ${#p_n} -eq 4 && $i -eq 0 ]]
+      if [ $i -eq 0 ]
       then
         [ ${num:0:1} -eq 1 ] && setuid='X' || setuid=' '
         [ ${num:1:1} -eq 1 ] && setgid='X' || setgid=' '
