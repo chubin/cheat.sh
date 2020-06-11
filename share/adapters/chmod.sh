@@ -66,19 +66,21 @@ chmod_calc(){
     for (( i=0; i<${#p_s}; i+=0 ))
     do
       num=0
+      [[ "r-" =~ ${p_s:$i:1} ]] || return 1
       [[ ${p_s:$i:1} == 'r' ]] && R+=('X') || R+=(' ')
       [[ ${p_s:$((i++)):1} == 'r' ]] && let num++
       num=$(( num << 1 ))
+      [[ "w-" =~ ${p_s:$i:1} ]] || return 1
       [[ ${p_s:$i:1} == 'w' ]] && W+=('X') || W+=(' ')
       [[ ${p_s:$((i++)):1} == 'w' ]] && let num++
       num=$(( num << 1 ))
       if [ $i -lt 6 ]
       then
-        [[ "tT" =~ ${p_s:$i:1} ]] && return 1
+        [[ "sSx-" =~ ${p_s:$i:1} ]] || return 1
         [[ "sx" =~ ${p_s:$i:1} ]] && X+=('X') || X+=(' ')
         [[ "sx" =~ ${p_s:$((i++)):1} ]] && let num++
       else
-        [[ "sS" =~ ${p_s:$i:1} ]] && return 1
+        [[ "tTx-" =~ ${p_s:$i:1} ]] || return 1
         [[ "tx" =~ ${p_s:$i:1} ]] && X+=('X') || X+=(' ')
         [[ "tx" =~ ${p_s:$((i++)):1} ]] && let num++
       fi
