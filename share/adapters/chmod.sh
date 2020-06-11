@@ -20,6 +20,7 @@ chmod_calc(){
   if [[ $1 =~ ^-?[0-9]+$ && ${#1} -ge 1 && ${#1} -le 4 ]]
   then
     p_n=$(printf "%04s\n" "$1" | tr ' ' '0')
+    echo $p_n | grep -q '[8-9]' && return 1
     for (( i=0; i<${#p_n}; i++ ))
     do
       num=$(echo "obase=2;${p_n:$i:1}" | bc | xargs printf '%03d')
