@@ -89,10 +89,9 @@ def cheat_wrapper(query, request_options=None, output_format='ansi'):
     query = _rewrite_aliases(query)
     query = _rewrite_section_name(query)
 
-
     # at the moment, we just remove trailing slashes
     # so queries python/ and python are equal
-    query = _strip_hyperlink(query.rstrip('/'))
+    # query = _strip_hyperlink(query.rstrip('/'))
     topic, keyword, search_options = _parse_query(query)
 
     if keyword:
