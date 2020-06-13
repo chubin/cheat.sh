@@ -100,7 +100,11 @@ oeis() (
     LANGUAGE="${LANGUAGE:1}"
     LANGUAGE="${L^^}${LANGUAGE,,}"
     [ $(wc -c < $TMP/code_snippet) -eq 0 ] && awk -v tgt="${LANGUAGE}" -F'[()]' '/^\(/{f=(tgt==$2)} f' ${TMP}/prog > ${TMP}/code_snippet
-    cat ${TMP}/code_snippet
+    # Print code snippet with 4-space indent to enable colorization
+    printf "${LANGUAGE^^}\n"
+    cat ${TMP}/code_snippet \
+      | sed "s/(${LANGUAGE^^})/--\n/;" \
+      | sed 's/^/    /'
   # Search unknown sequence
   else
     # Build URL
