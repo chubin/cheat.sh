@@ -128,6 +128,8 @@ oeis() (
       printf "\n"
     done
   fi
+  # Print URL for user
+  printf "\nLink to source: ${URL}\n"
 )
 
 oeis $@
