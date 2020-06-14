@@ -129,7 +129,7 @@ oeis() (
   # Search unknown sequence
   else
     # Build URL
-    URL+="/search?q=signed%3A$(echo $@ | tr -sc '[:digit:]-' ',')"
+    URL+="/search?q=signed:$(echo $@ | tr -sc '[:digit:]-' ',')"
     curl $URL 2>/dev/null > $DOC
     # Sequence IDs
     grep -o '=id:.*&' $DOC \
