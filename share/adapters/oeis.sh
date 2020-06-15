@@ -75,36 +75,61 @@ oeis() (
     get_seq ${MAX_TERMS}
     printf "\n"
     # Print Code Sample
-    if [[ ${LANGUAGE^^} == 'MAPLE' ]] && grep -q 'MAPLE' $DOC
+    if [[ ${LANGUAGE^^} == ':LIST' ]]
     then
-      GREP_REGEX='MAPLE.*CROSSREFS'
-      grep -q 'PROG' $DOC && GREP_REGEX='MAPLE.*PROG'
-      grep -q 'MATHEMATICA' $DOC && GREP_REGEX='MAPLE.*MATHEMATICA'
-      parse_code "${GREP_REGEX}" \
-        | sed 's/MAPLE/(MAPLE)/; /MATHEMATICA/d; /PROG/d; /CROSSREFS/d'
+      rm -f ${TMP}/list
+      grep -q 'MAPLE' $DOC && printf "maple\n" >> $TMP/list
+      grep -q 'MATHEMATICA' $DOC && printf "mathematica\n" >> $TMP/list
+      parse_code "PROG.*CROSSREFS" \
+        | grep -o '^(.*)' \
+        | sed 's/ .*//g' \
+        | tr -d '()' \
+        | sort -u >> $TMP/list
+      [ $(wc -c < $TMP/list) -ne 0 ] && cat ${TMP}/list || printf "No code snippets available.\n"
+    else
+      if [[ ${LANGUAGE^^} == 'MAPLE' ]] && grep -q 'MAPLE' $DOC
+      then
+        GREP_REGEX='MAPLE.*CROSSREFS'
+        grep -q 'PROG' $DOC && GREP_REGEX='MAPLE.*PROG'
+        grep -q 'MATHEMATICA' $DOC && GREP_REGEX='MAPLE.*MATHEMATICA'
+        parse_code "${GREP_REGEX}" \
+          | sed 's/MAPLE/(MAPLE)/; /MATHEMATICA/d; /PROG/d; /CROSSREFS/d' \
+          > ${TMP}/code_snippet
+      elif [[ ${LANGUAGE^^} == 'MATHEMATICA' ]] && grep -q 'MATHEMATICA' $DOC
+      then
+        GREP_REGEX='MATHEMATICA.*CROSSREFS'
+        grep -q 'PROG' $DOC && GREP_REGEX='MATHEMATICA.*PROG'
+        parse_code "${GREP_REGEX}" \
+          | sed 's/MATHEMATICA/(MATHEMATICA)/; /PROG/d; /CROSSREFS/d' \
+          > ${TMP}/code_snippet
+      else
+        # PROG section contains more code samples (Non Mathematica or Maple)
+        parse_code "PROG.*CROSSREFS" \
+          | sed '/PROG/d; /CROSSREFS/d' \
+          > ${TMP}/prog
+        # Print out code sample for specified language
+        rm -f ${TMP}/code_snippet
+        awk -v tgt="${LANGUAGE^^}" -F'[()]' '/^\(/{f=(tgt==$2)} f' ${TMP}/prog > ${TMP}/code_snippet
+        L="${LANGUAGE:0:1}"
+        LANGUAGE="${LANGUAGE:1}"
+        LANGUAGE="${L^^}${LANGUAGE,,}"
+        [ $(wc -c < $TMP/code_snippet) -eq 0 ] && awk -v tgt="${LANGUAGE}" -F'[()]' '/^\(/{f=(tgt==$2)} f' ${TMP}/prog > ${TMP}/code_snippet
+      fi
+      # Print code snippet with 4-space indent to enable colorization
+      if [ $(wc -c < $TMP/code_snippet) -ne 0 ]
+      then
+        printf "${LANGUAGE}"
+        cat ${TMP}/code_snippet \
+          | sed "s/(${LANGUAGE^^})/\n/; s/(${LANGUAGE})/\n/;" \
+          | sed 's/^/    /'
+      else
+        printf "${LANGUAGE^^} unavailable. Use :list to view available languages.\n"
+      fi
     fi
-    if [[ ${LANGUAGE^^} == 'MATHEMATICA' ]] && grep -q 'MATHEMATICA' $DOC
-    then
-      GREP_REGEX='MATHEMATICA.*CROSSREFS'
-      grep -q 'PROG' $DOC && GREP_REGEX='MATHEMATICA.*PROG'
-      parse_code "${GREP_REGEX}" \
-        | sed 's/MATHEMATICA/(MATHEMATICA)/; /PROG/d; /CROSSREFS/d'
-    fi
-    # PROG section contains more code samples (Non Mathematica or Maple)
-    parse_code "PROG.*CROSSREFS" \
-      | sed '/PROG/d; /CROSSREFS/d' > ${TMP}/prog
-    # Print out code sample for specified language
-    rm -f ${TMP}/code_snippet
-    awk -v tgt="${LANGUAGE^^}" -F'[()]' '/^\(/{f=(tgt==$2)} f' ${TMP}/prog > ${TMP}/code_snippet
-    L="${LANGUAGE:0:1}"
-    LANGUAGE="${LANGUAGE:1}"
-    LANGUAGE="${L^^}${LANGUAGE,,}"
-    [ $(wc -c < $TMP/code_snippet) -eq 0 ] && awk -v tgt="${LANGUAGE}" -F'[()]' '/^\(/{f=(tgt==$2)} f' ${TMP}/prog > ${TMP}/code_snippet
-    cat ${TMP}/code_snippet
   # Search unknown sequence
   else
     # Build URL
-    URL+="/search?q=signed%3A$(echo $@ | tr -sc '[:digit:]-' ',')"
+    URL+="/search?q=signed:$(echo $@ | tr -sc '[:digit:]-' ',')"
     curl $URL 2>/dev/null > $DOC
     # Sequence IDs
     grep -o '=id:.*&' $DOC \
@@ -124,6 +149,8 @@ oeis() (
       printf "\n"
     done
   fi
+  # Print URL for user
+  printf "\nLink to source: ${URL}\n"
 )
 
 oeis $@
