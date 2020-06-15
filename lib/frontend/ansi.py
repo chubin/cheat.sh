@@ -58,12 +58,15 @@ def _limited_answer(answer):
 
 def _colorize_ansi_answer(topic, answer, color_style,       # pylint: disable=too-many-arguments
                           highlight_all=True, highlight_code=False,
-                          unindent_code=False):
+                          unindent_code=False, language=None):
 
     color_style = color_style or "native"
     lexer_class = languages_data.LEXER['bash']
     if '/' in topic:
-        section_name = topic.split('/', 1)[0].lower()
+        if language is None:
+            section_name = topic.split('/', 1)[0].lower()
+        else:
+            section_name = language
         section_name = languages_data.get_lexer_name(section_name)
         lexer_class = languages_data.LEXER.get(section_name, lexer_class)
         if section_name == 'php':
@@ -127,7 +130,8 @@ def _visualize(answers, request_options, search_mode=False):
                 highlight_all=highlight,
                 highlight_code=(topic_type == 'question'
                                 and not request_options.get('add_comments')
-                                and not request_options.get('remove_text')))
+                                and not request_options.get('remove_text')),
+                language=answer_dict.get("filetype"))
 
     if request_options.get('no-terminal'):
         result = remove_ansi(result)

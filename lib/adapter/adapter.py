@@ -117,6 +117,14 @@ class Adapter(with_metaclass(AdapterMC, object)):
             return 'text'
         return self._output_format
 
+    # pylint: disable=unused-argument
+    @staticmethod
+    def _get_filetype(topic):
+        """
+        Return language name (filetype) for `topic`
+        """
+        return None
+
     def get_page_dict(self, topic, request_options=None):
         """
         Return page dict for `topic`
@@ -139,6 +147,11 @@ class Adapter(with_metaclass(AdapterMC, object)):
             'format': self._get_output_format(topic),
             }
         answer_dict.update(answer)
+
+        # pylint: disable=assignment-from-none
+        filetype = self._get_filetype(topic)
+        if filetype:
+            answer_dict["filetype"] = filetype
         return answer_dict
 
     @classmethod

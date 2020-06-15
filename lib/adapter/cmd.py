@@ -111,7 +111,7 @@ class AdapterRfc(CommandAdapter):
         return list("rfc/%s" % x for x in range(1, 8649))
 
     def is_found(self, topic):
-        return True 
+        return True
 
 class AdapterOeis(CommandAdapter):
     """
@@ -123,6 +123,13 @@ class AdapterOeis(CommandAdapter):
     _output_format = "text+code"
     _cache_needed = True
     _command = ["share/adapters/oeis.sh"]
+
+    @staticmethod
+    def _get_filetype(topic):
+        if "/" in topic:
+            language = topic.split("/")[-1].lower()
+            return language
+        return "bash"
 
     def _get_command(self, topic, request_options=None):
         cmd = self._command[:]

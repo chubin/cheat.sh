@@ -12,15 +12,19 @@ def _answer_add_comments(answer, request_options=None):
         return answer
 
     topic = answer['topic']
-    filetype = 'bash'
-    if '/' in topic:
-        filetype = topic.split('/', 1)[0]
-        if filetype.startswith('q:'):
-            filetype = filetype[2:]
+    if "filetype" in answer:
+        filetype = answer["filetype"]
+    else:
+        filetype = 'bash'
+        if '/' in topic:
+            filetype = topic.split('/', 1)[0]
+            if filetype.startswith('q:'):
+                filetype = filetype[2:]
 
     answer['answer'] = fmt.comments.beautify(
         answer['answer'], filetype, request_options)
     answer['format'] = 'code'
+    answer['filetype'] = filetype
     return answer
 
 def _answer_filter_by_keyword(answer, keyword, options, request_options=None):
