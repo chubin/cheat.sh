@@ -120,7 +120,7 @@ class AdapterOeis(CommandAdapter):
     """
 
     _adapter_name = "oeis"
-    _output_format = "text"
+    _output_format = "text+code"
     _cache_needed = True
     _command = ["share/adapters/oeis.sh"]
 
