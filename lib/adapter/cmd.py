@@ -133,7 +133,13 @@ class AdapterOeis(CommandAdapter):
         # Replace all non (alphanumeric, '-', ':') chars with Spaces to delimit args to oeis.sh
         if topic.startswith("oeis/"):
             topic = topic[5:]
-            topic = re.sub('[^a-zA-Z0-9-:]+', ' ', topic)
+
+            suffix = ""
+            if topic.endswith("/:list"):
+                suffix = " :list"
+                topic = topic[:-6]
+
+            topic = re.sub('[^a-zA-Z0-9-:]+', ' ', topic) + suffix
 
         return cmd + [topic]
 
