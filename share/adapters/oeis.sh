@@ -86,7 +86,8 @@ oeis() (
         | tr -d '()' \
         | sort -u >> $TMP/list
       [ $(wc -c < $TMP/list) -ne 0 ] && cat ${TMP}/list || printf "No code snippets available.\n"
-    else
+    elif [ $# -gt 1 ]
+    then
       if [[ ${LANGUAGE^^} == 'MAPLE' ]] && grep -q 'MAPLE' $DOC
       then
         GREP_REGEX='MAPLE.*CROSSREFS'
