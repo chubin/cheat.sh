@@ -68,12 +68,6 @@ oeis() (
     ID="A$(printf '%06d' ${ID})"
     URL+="/${ID}"
     curl $URL 2>/dev/null > $DOC
-    # Print ID, description, and sequence
-    printf "ID: ${ID}\n"
-    get_desc
-    printf "\n"
-    get_seq ${MAX_TERMS}
-    printf "\n"
     # Print Code Sample
     if [[ ${LANGUAGE^^} == ':LIST' ]]
     then
@@ -86,7 +80,16 @@ oeis() (
         | tr -d '()' \
         | sort -u >> $TMP/list
       [ $(wc -c < $TMP/list) -ne 0 ] && cat ${TMP}/list || printf "No code snippets available.\n"
-    elif [ $# -gt 1 ]
+      cat $TMP/list
+      return 0
+    fi
+    # Print ID, description, and sequence
+    printf "ID: ${ID}\n"
+    get_desc
+    printf "\n"
+    get_seq ${MAX_TERMS}
+    printf "\n"
+    if [ $# -gt 1 ]
     then
       if [[ ${LANGUAGE^^} == 'MAPLE' ]] && grep -q 'MAPLE' $DOC
       then
