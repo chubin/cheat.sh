@@ -122,7 +122,7 @@ oeis() (
         printf "${LANGUAGE}"
         cat ${TMP}/code_snippet \
           | sed "s/(${LANGUAGE^^})/\n/; s/(${LANGUAGE})/\n/;" \
-          | sed 's/^/    /'
+          | sed 's/^/   /'
       else
         printf "${LANGUAGE^^} unavailable. Use :list to view available languages.\n"
       fi
