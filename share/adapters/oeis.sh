@@ -155,7 +155,7 @@ oeis() (
   fi
   grep 'results, too many to show. Please refine your search.' /tmp/oeis/doc.html | sed -e 's/<[^>]*>//g; s/^[ \t]*//'
   # Print URL for user
-  printf "\n[${URL}]\n"
+  printf "\n[${URL}]\n" | rev | sed 's/,//' | rev
 )
 
 oeis $@
