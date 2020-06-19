@@ -148,8 +148,7 @@ oeis() (
     for i in ${!ID[@]}
     do
       printf "${ID[$i]}: ${DESC[$i]}\n"
-      echo ${SEQ[$i]}
-      printf '\n'
+      printf "${SEQ[$i]}\n\n"
     done
   fi
   grep 'results, too many to show. Please refine your search.' /tmp/oeis/doc.html | sed -e 's/<[^>]*>//g; s/^[ \t]*//'
