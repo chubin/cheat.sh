@@ -72,23 +72,22 @@ oeis() (
     if [[ ${LANGUAGE^^} == ':LIST' ]]
     then
       rm -f ${TMP}/list
-      grep -q 'MAPLE' $DOC && printf "maple\n" >> $TMP/list
-      grep -q 'MATHEMATICA' $DOC && printf "mathematica\n" >> $TMP/list
-      parse_code "PROG.*CROSSREFS" \
+      grep -q 'MAPLE' $DOC && printf 'maple\n' >> $TMP/list
+      grep -q 'MATHEMATICA' $DOC && printf 'mathematica\n' >> $TMP/list
+      parse_code 'PROG.*CROSSREFS' \
         | grep -o '^(.*)' \
         | sed 's/ .*//g' \
         | tr -d '()' \
         | sort -u >> $TMP/list
-      [ $(wc -c < $TMP/list) -ne 0 ] && cat ${TMP}/list || printf "No code snippets available.\n"
-      cat $TMP/list
+      [ $(wc -c < $TMP/list) -ne 0 ] && cat ${TMP}/list || printf 'No code snippets available.\n'
       return 0
     fi
     # Print ID, description, and sequence
     printf "ID: ${ID}\n"
     get_desc
-    printf "\n"
+    printf '\n'
     get_seq ${MAX_TERMS}
-    printf "\n"
+    printf '\n'
     if [ $# -gt 1 ]
     then
       if [[ ${LANGUAGE^^} == 'MAPLE' ]] && grep -q 'MAPLE' $DOC
@@ -108,7 +107,7 @@ oeis() (
           > ${TMP}/code_snippet
       else
         # PROG section contains more code samples (Non Mathematica or Maple)
-        parse_code "PROG.*CROSSREFS" \
+        parse_code 'PROG.*CROSSREFS' \
           | sed '/PROG/d; /CROSSREFS/d' \
           > ${TMP}/prog
         # Print out code sample for specified language
@@ -150,7 +149,7 @@ oeis() (
     do
       printf "${ID[$i]}: ${DESC[$i]}\n"
       echo ${SEQ[$i]}
-      printf "\n"
+      printf '\n'
     done
   fi
   grep 'results, too many to show. Please refine your search.' /tmp/oeis/doc.html | sed -e 's/<[^>]*>//g; s/^[ \t]*//'
