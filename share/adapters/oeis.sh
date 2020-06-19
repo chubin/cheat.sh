@@ -112,11 +112,7 @@ oeis() (
           > ${TMP}/prog
         # Print out code sample for specified language
         rm -f ${TMP}/code_snippet
-        awk -v tgt="${LANGUAGE^^}" -F'[()]' '/^\(/{f=(tgt==$2)} f' ${TMP}/prog > ${TMP}/code_snippet
-        L="${LANGUAGE:0:1}"
-        LANGUAGE="${LANGUAGE:1}"
-        LANGUAGE="${L^^}${LANGUAGE,,}"
-        [ $(wc -c < $TMP/code_snippet) -eq 0 ] && awk -v tgt="${LANGUAGE}" -F'[()]' '/^\(/{f=(tgt==$2)} f' ${TMP}/prog > ${TMP}/code_snippet
+        awk -v tgt="${LANGUAGE^^}" -F'[()]' '/^\(/{f=(tgt==toupper($2))} f' ${TMP}/prog > ${TMP}/code_snippet
       fi
       # Print code snippet with 4-space indent to enable colorization
       if [ $(wc -c < $TMP/code_snippet) -ne 0 ]
