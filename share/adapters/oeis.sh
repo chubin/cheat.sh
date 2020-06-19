@@ -68,25 +68,27 @@ oeis() (
     ID="A$(printf '%06d' ${ID})"
     URL+="/${ID}"
     curl $URL 2>/dev/null > $DOC
-    # Print ID, description, and sequence
-    printf "ID: ${ID}\n"
-    get_desc
-    printf "\n"
-    get_seq ${MAX_TERMS}
-    printf "\n"
     # Print Code Sample
     if [[ ${LANGUAGE^^} == ':LIST' ]]
     then
       rm -f ${TMP}/list
-      grep -q 'MAPLE' $DOC && printf "maple\n" >> $TMP/list
-      grep -q 'MATHEMATICA' $DOC && printf "mathematica\n" >> $TMP/list
-      parse_code "PROG.*CROSSREFS" \
+      grep -q 'MAPLE' $DOC && printf 'maple\n' >> $TMP/list
+      grep -q 'MATHEMATICA' $DOC && printf 'mathematica\n' >> $TMP/list
+      parse_code 'PROG.*CROSSREFS' \
         | grep -o '^(.*)' \
         | sed 's/ .*//g' \
         | tr -d '()' \
         | sort -u >> $TMP/list
-      [ $(wc -c < $TMP/list) -ne 0 ] && cat ${TMP}/list || printf "No code snippets available.\n"
-    elif [ $# -gt 1 ]
+      [ $(wc -c < $TMP/list) -ne 0 ] && cat ${TMP}/list || printf 'No code snippets available.\n'
+      return 0
+    fi
+    # Print ID, description, and sequence
+    printf "ID: ${ID}\n"
+    get_desc
+    printf '\n'
+    get_seq ${MAX_TERMS}
+    printf '\n'
+    if [ $# -gt 1 ]
     then
       if [[ ${LANGUAGE^^} == 'MAPLE' ]] && grep -q 'MAPLE' $DOC
       then
@@ -105,16 +107,12 @@ oeis() (
           > ${TMP}/code_snippet
       else
         # PROG section contains more code samples (Non Mathematica or Maple)
-        parse_code "PROG.*CROSSREFS" \
+        parse_code 'PROG.*CROSSREFS' \
           | sed '/PROG/d; /CROSSREFS/d' \
           > ${TMP}/prog
         # Print out code sample for specified language
         rm -f ${TMP}/code_snippet
-        awk -v tgt="${LANGUAGE^^}" -F'[()]' '/^\(/{f=(tgt==$2)} f' ${TMP}/prog > ${TMP}/code_snippet
-        L="${LANGUAGE:0:1}"
-        LANGUAGE="${LANGUAGE:1}"
-        LANGUAGE="${L^^}${LANGUAGE,,}"
-        [ $(wc -c < $TMP/code_snippet) -eq 0 ] && awk -v tgt="${LANGUAGE}" -F'[()]' '/^\(/{f=(tgt==$2)} f' ${TMP}/prog > ${TMP}/code_snippet
+        awk -v tgt="${LANGUAGE^^}" -F'[()]' '/^\(/{f=(tgt==toupper($2))} f' ${TMP}/prog > ${TMP}/code_snippet
       fi
       # Print code snippet with 4-space indent to enable colorization
       if [ $(wc -c < $TMP/code_snippet) -ne 0 ]
@@ -122,7 +120,7 @@ oeis() (
         printf "${LANGUAGE}"
         cat ${TMP}/code_snippet \
           | sed "s/(${LANGUAGE^^})/\n/; s/(${LANGUAGE})/\n/;" \
-          | sed 's/^/    /'
+          | sed 's/^/   /'
       else
         printf "${LANGUAGE^^} unavailable. Use :list to view available languages.\n"
       fi
@@ -146,12 +144,12 @@ oeis() (
     for i in ${!ID[@]}
     do
       printf "${ID[$i]}: ${DESC[$i]}\n"
-      echo ${SEQ[$i]}
-      printf "\n"
+      printf "${SEQ[$i]}\n\n"
     done
   fi
+  grep 'results, too many to show. Please refine your search.' /tmp/oeis/doc.html | sed -e 's/<[^>]*>//g; s/^[ \t]*//'
   # Print URL for user
-  printf "\nLink to source: ${URL}\n"
+  printf "\n[${URL}]\n" | rev | sed 's/,//' | rev
 )
 
 oeis $@
