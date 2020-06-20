@@ -11,7 +11,7 @@ oeis() (
   local URL='https://oeis.org/search?q='
   local TMP=/tmp/oeis
   local DOC=/tmp/oeis/doc.html
-  local MAX_TERMS=10
+  local MAX_TERMS=15
   mkdir -p $TMP
   # -- MAIN --
   # Search sequence by ID (optional language arg)
@@ -35,7 +35,7 @@ oeis() (
     ID="A$(printf '%06d' ${ID})"
     URL+="id:${ID}&fmt=text"
     curl $URL 2>/dev/null > $DOC
-    # Print Code Sample
+    # :list available language code_snippets
     if [[ ${LANGUAGE^^} == ':LIST' ]]
     then
       rm -f ${TMP}/list
@@ -53,13 +53,16 @@ oeis() (
     grep '%N' $DOC | sed "s/^.*${ID} //"
     printf '\n'
     # Print Sequence (Three sections %S %T nd %U)
-    grep '%S' $DOC | sed "s/^.*${ID} //"
-    grep '%T' $DOC | sed "s/^.*${ID} //"
-    grep '%U' $DOC | sed "s/^.*${ID} //"
-    printf '\n'
-    # Generate code snippet (%p, %t, %o)
+    grep '%S' $DOC | sed "s/^.*${ID} //" | tr -d '\n' > $TMP/seq
+    grep '%T' $DOC | sed "s/^.*${ID} //" | tr -d '\n' >> $TMP/seq
+    grep '%U' $DOC | sed "s/^.*${ID} //" | tr -d '\n' >> $TMP/seq
+    cat $TMP/seq \
+      | cut -d ',' -f 1-${MAX_TERMS} \
+      | sed 's/$/ .../'
+    # Generate code snippet (%p, %t, %o) (maple, mathematica, prog sections)
     if [ $# -gt 1 ]
     then
+      printf "\n\n"
       rm -f $TMP/code_snippet
       # MAPLE section (%p)
       if [[ ${LANGUAGE^^} == 'MAPLE' ]] && grep -q '%p' $DOC
@@ -81,7 +84,9 @@ oeis() (
       # Print code snippet with 4-space indent to enable colorization
       if [[ -f $TMP/code_snippet && $(wc -c < $TMP/code_snippet) -ne 0 ]]
       then
-        cat ${TMP}/code_snippet | sed 's/^/   /'
+        cat ${TMP}/code_snippet \
+          | sed 's/_[A-Z].*[a-z]_.*[0-9] //' \
+          | sed 's/^/   /'
       else
         printf "${LANGUAGE^^} unavailable. Use :list to view available languages.\n"
       fi
@@ -95,26 +100,30 @@ oeis() (
     grep -o '"/A[0-9][0-9][0-9][0-9][0-9][0-9]">A[0-9][0-9][0-9][0-9][0-9][0-9]' $DOC \
       | sed 's/.*>//' \
       > $TMP/id
+    readarray -t ID < $TMP/id
     # Descriptions
     grep -A 1 '<td valign=top align=left>' $DOC \
       | sed '/--/d; s/<[^>]*>//g; /^\s*$/d; s/^[ \t]*//' \
       | sed 's/&nbsp;/ /g; s/\&amp;/\&/g; s/&gt;/>/g; s/&lt;/</g; s/&quot;/"/g' \
       > $TMP/desc
+    readarray -t DESC < $TMP/desc
     # Sequences
     grep 'style="color:black;font-size:120%' $DOC \
       | sed 's/<[^>]*>//g; s/^[ \t]*//' \
+      | cut -d ',' -f 1-${MAX_TERMS} \
+      | sed 's/$/ .../' \
       > $TMP/seq
-
-    readarray -t ID < $TMP/id
-    readarray -t DESC < $TMP/desc
     readarray -t SEQ < $TMP/seq
+    # Print all ID, DESC, SEQ
     for i in ${!ID[@]}
     do
       printf "${ID[$i]}: ${DESC[$i]}\n"
       printf "${SEQ[$i]}\n\n"
     done
   fi
-  grep 'results, too many to show. Please refine your search.' /tmp/oeis/doc.html | sed -e 's/<[^>]*>//g; s/^[ \t]*//'
+  # Error statements
+  grep 'results, too many to show. Please refine your search.' $DOC | sed -e 's/<[^>]*>//g; s/^[ \t]*//'
+  grep -o 'Sorry, but the terms do not match anything in the table.' $DOC
   # Print URL for user
   printf "\n[${URL}]\n" \
     | rev \
