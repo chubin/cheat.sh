@@ -73,8 +73,8 @@ oeis() (
       then
         # Print out code sample for specified language
         grep '%o' $DOC \
-          | sed "s/^.*${ID} //" \
-          | awk -v tgt="${LANGUAGE^^}" -F'[()]' '{act=$2} sub(/^\([^()]+\) */,""){f=(tgt==toupper(act))} f' ${TMP}/prog \
+          | sed "s/%o ${ID} //" \
+          | awk -v tgt="${LANGUAGE^^}" -F'[()]' '{act=$2} sub(/^\([^()]+\) */,""){f=(tgt==toupper(act))} f' \
           > ${TMP}/code_snippet
       fi
       # Print code snippet with 4-space indent to enable colorization
