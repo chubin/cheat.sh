@@ -60,6 +60,7 @@ oeis() (
     # Generate code snippet (%p, %t, %o)
     if [ $# -gt 1 ]
     then
+      rm -f $TMP/code_snippet
       # MAPLE section (%p)
       if [[ ${LANGUAGE^^} == 'MAPLE' ]] && grep -q '%p' $DOC
       then
