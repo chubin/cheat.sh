@@ -11,7 +11,8 @@ oeis() (
   local URL='https://oeis.org/search?q='
   local TMP=/tmp/oeis
   local DOC=/tmp/oeis/doc.html
-  local MAX_TERMS=15
+  local MAX_TERMS_LONG=30
+  local MAX_TERMS_SHORT=10
   mkdir -p $TMP
   # -- MAIN --
   # Search sequence by ID (optional language arg)
@@ -19,7 +20,10 @@ oeis() (
   # 	. oeis <SEQ_ID> <LANGUAGE>
   # 	. oeis <LANGUAGE> <SEQ_ID>
   isNum='^[0-9]+$'
-  if [ $# -lt 3 ] && [[ ${1:1} =~ $isNum || ${2:1} =~ $isNum || ${1} =~ $isNum || ${2} =~ $isNum ]] && ! echo $1 | grep -q '[0-9]' || ! echo $2 | grep -q '[0-9]'
+  # Search for specific sequence (and potentially language or :SECTION (list)
+  if [ $# -ge 1 ] \
+     && [[ $(echo $1 | tr -d 'aA') =~ $isNum || $(echo $2 | tr -d 'aA') =~ $isNum ]] \
+     && [[ ! $(echo $1 | tr -d 'aA') =~ $isNum || ! $(echo $2 | tr -d 'aA') =~ $isNum ]]
   then
     # Arg-Parse ID, Generate URL
     if echo ${1^^} | grep -q '[B-Z]'
@@ -43,8 +47,12 @@ oeis() (
       grep -q '%t' $DOC && echo 'mathematica' >> $TMP/list
       grep '%o' $DOC \
         | grep "${ID} (" \
-        | sed "s/^.*${ID} (//; s/).*//" >> $TMP/list
-      [[ -f $TMP/list && $(wc -c < $TMP/list) -ne 0 ]] && cat ${TMP}/list | sort -u || printf 'No code snippets available.\n'
+        | sed "s/^.*${ID} (//; s/).*//" \
+        | awk 'NF == 1' \
+        >> $TMP/list
+      [[ -f $TMP/list && $(wc -c < $TMP/list) -ne 0 ]] \
+        && cat ${TMP}/list | sort -u \
+        || printf 'No code snippets available.\n'
       return 0
     fi
     # Print ID
@@ -57,8 +65,8 @@ oeis() (
     grep '%T' $DOC | sed "s/^.*${ID} //" | tr -d '\n' >> $TMP/seq
     grep '%U' $DOC | sed "s/^.*${ID} //" | tr -d '\n' >> $TMP/seq
     cat $TMP/seq \
-      | cut -d ',' -f 1-${MAX_TERMS} \
-      | sed 's/$/ .../'
+      | cut -d ',' -f 1-${MAX_TERMS_LONG} \
+      | sed 's/,/, /g; s/$/ .../'
     # Generate code snippet (%p, %t, %o) (maple, mathematica, prog sections)
     if [ $# -gt 1 ]
     then
@@ -85,14 +93,14 @@ oeis() (
       if [[ -f $TMP/code_snippet && $(wc -c < $TMP/code_snippet) -ne 0 ]]
       then
         cat ${TMP}/code_snippet \
-          | sed 's/_[A-Z].*[a-z]_.*[0-9] //' \
           | sed 's/^/   /'
       else
         printf "${LANGUAGE^^} unavailable. Use :list to view available languages.\n"
       fi
     fi
   # Search unknown sequence
-  else
+  elif [ $# -gt 1 ] && ! echo $@ | grep -q -e [a-z] -e [A-Z]
+  then
     # Build URL
     URL+="signed:$(echo $@ | tr -sc '[:digit:]-' ',')&fmt=short"
     curl $URL 2>/dev/null > $DOC
@@ -110,8 +118,8 @@ oeis() (
     # Sequences
     grep 'style="color:black;font-size:120%' $DOC \
       | sed 's/<[^>]*>//g; s/^[ \t]*//' \
-      | cut -d ',' -f 1-${MAX_TERMS} \
-      | sed 's/$/ .../' \
+      | cut -d ',' -f 1-${MAX_TERMS_SHORT} \
+      | sed 's/,/, /g; s/$/ .../' \
       > $TMP/seq
     readarray -t SEQ < $TMP/seq
     # Print all ID, DESC, SEQ
@@ -120,6 +128,26 @@ oeis() (
       printf "${ID[$i]}: ${DESC[$i]}\n"
       printf "${SEQ[$i]}\n\n"
     done
+  else
+    printf "
+# oeis
+#
+# The On-Line Encyclopedia of Integer Sequences (OEIS),
+# also cited simply as Sloane's, is an online database of integer sequences.
+
+# Find all possible OEIS sequences for some sequence (1,1,1,1...)
+curl cheat.sh/oeis/1+1+1+1
+
+# Describe an OEIS sequence (A2)
+curl cheat.sh/oeis/A2
+
+# Implementation of the A2 OEIS sequence in Python
+curl cheat.sh/oeis/A2/python
+
+# List all available implementations of the A2 OEIS sequence
+curl cheat.sh/oeis/A2/:list
+"
+    return 1
   fi
   # Error statements
   grep 'results, too many to show. Please refine your search.' $DOC | sed -e 's/<[^>]*>//g; s/^[ \t]*//'
