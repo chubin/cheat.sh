@@ -17,8 +17,8 @@ oeis() (
   # -- MAIN --
   # Search sequence by ID (optional language arg)
   # 	. oeis <SEQ_ID>
-  # 	. oeis <SEQ_ID> <LANGUAGE>
-  # 	. oeis <LANGUAGE> <SEQ_ID>
+  # 	. oeis <SEQ_ID> <SECTION>
+  # 	. oeis <SECTION> <SEQ_ID>
   isNum='^[0-9]+$'
   # Search for specific sequence (and potentially language or :SECTION (list)
   if [ $# -ge 1 ] \
@@ -26,13 +26,13 @@ oeis() (
      && [[ ! $(echo $1 | tr -d 'aA') =~ $isNum || ! $(echo $2 | tr -d 'aA') =~ $isNum ]]
   then
     # Arg-Parse ID, Generate URL
-    if echo ${1^^} | grep -q '[B-Z]'
+    if [[ $(echo $1 | tr -d 'aA') =~ $isNum ]]
     then
-      ID=${2^^}
-      LANGUAGE=$1
-    else
       ID=${1^^}
-      LANGUAGE=$2
+      SECTION=$2
+    else
+      ID=${2^^}
+      SECTION=$1
     fi
     [[ ${ID:0:1} == 'A' ]] && ID=${ID:1}
     ID=$(bc <<< "$ID")
@@ -40,18 +40,18 @@ oeis() (
     URL+="id:${ID}&fmt=text"
     curl $URL 2>/dev/null > $DOC
     # :list available language code_snippets
-    if [[ ${LANGUAGE^^} == ':LIST' ]]
+    if [[ ${SECTION^^} == ':LIST' || ${SECTION^^} == ':PROG' ]]
     then
-      rm -f ${TMP}/list
-      grep -q '%p' $DOC && echo 'maple' >> $TMP/list
-      grep -q '%t' $DOC && echo 'mathematica' >> $TMP/list
+      rm -f ${TMP}/section
+      grep -q '%p' $DOC && echo 'maple' >> $TMP/section
+      grep -q '%t' $DOC && echo 'mathematica' >> $TMP/section
       grep '%o' $DOC \
         | grep "${ID} (" \
         | sed "s/^.*${ID} (//; s/).*//" \
         | awk 'NF == 1' \
-        >> $TMP/list
-      [[ -f $TMP/list && $(wc -c < $TMP/list) -ne 0 ]] \
-        && cat ${TMP}/list | sort -u \
+        >> $TMP/section
+      [[ -f $TMP/section && $(wc -c < $TMP/section) -ne 0 ]] \
+        && cat ${TMP}/section | sort -u \
         || printf 'No code snippets available.\n'
       return 0
     fi
@@ -73,20 +73,20 @@ oeis() (
       printf "\n\n"
       rm -f $TMP/code_snippet
       # MAPLE section (%p)
-      if [[ ${LANGUAGE^^} == 'MAPLE' ]] && grep -q '%p' $DOC
+      if [[ ${SECTION^^} == 'MAPLE' ]] && grep -q '%p' $DOC
       then
         grep '%p' $DOC | sed "s/^.*${ID} //" > $TMP/code_snippet
       # MATHEMATICA section (%t)
-      elif [[ ${LANGUAGE^^} == 'MATHEMATICA' ]] && grep -q '%t' $DOC
+      elif [[ ${SECTION^^} == 'MATHEMATICA' ]] && grep -q '%t' $DOC
       then
         grep '%t' $DOC | sed "s/^.*${ID} //" > $TMP/code_snippet
       # PROG section (%o)
-      elif grep -qi '%o' $DOC && grep -qi $LANGUAGE $DOC
+      elif grep -qi '%o' $DOC && grep -qi $SECTION $DOC
       then
         # Print out code sample for specified language
         grep '%o' $DOC \
           | sed "s/%o ${ID} //" \
-          | awk -v tgt="${LANGUAGE^^}" -F'[()]' '{act=$2} sub(/^\([^()]+\) */,""){f=(tgt==toupper(act))} f' \
+          | awk -v tgt="${SECTION^^}" -F'[()]' '{act=$2} sub(/^\([^()]+\) */,""){f=(tgt==toupper(act))} f' \
           > ${TMP}/code_snippet
       fi
       # Print code snippet with 4-space indent to enable colorization
@@ -95,7 +95,7 @@ oeis() (
         cat ${TMP}/code_snippet \
           | sed 's/^/   /'
       else
-        printf "${LANGUAGE^^} unavailable. Use :list to view available languages.\n"
+        printf "${SECTION^^} unavailable. Use :list to view available languages.\n"
       fi
     fi
   # Search unknown sequence
