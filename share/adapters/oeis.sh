@@ -8,148 +8,173 @@
 #	oeis <sequence ID> <language>
 #	oeis <val_a, val_b, val_c, ...>
 oeis() (
-  local URL='https://oeis.org'
+  local URL='https://oeis.org/search?q='
   local TMP=/tmp/oeis
   local DOC=/tmp/oeis/doc.html
-  local MAX_TERMS=10
+  local MAX_TERMS_LONG=30
+  local MAX_TERMS_SHORT=10
   mkdir -p $TMP
-  # -- get_desc --
-  # @return print description of OEIS sequence
-  get_desc() {
-    grep -A 1 '<td valign=top align=left>' $DOC \
-      | sed '/<td valign=top align=left>/d; /--/d; s/^[ \t]*//; s/<[^>]*>//g;' \
-      | sed 's/&nbsp;/ /g; s/\&amp;/\&/g; s/&gt;/>/g; s/&lt;/</g; s/&quot;/"/g'
-    return $?
-  }
-  # -- get_seq --
-  # @param  MAX_TERMS
-  # @return Print the first MAX_TERMS terms of a sequence
-  get_seq() {
-    local MAX_TERMS=${1}
-    grep -o '<tt>.*, .*[0-9]</tt>' $DOC \
-      | sed 's/<[^>]*>//g' \
-      | grep -v '[a-z]' \
-      | grep -v ':' \
-      | cut -d ',' -f 1-${MAX_TERMS}
-    return $?
-  }
-  # -- parse_code --
-  # @param  GREP_REGEX
-  # @return Code snippet that corresponds to GREP_REGEX
-  parse_code() {
-    local GREP_REGEX="${1}"
-    cat $DOC \
-      | tr '\n' '`' \
-      | grep -o "${GREP_REGEX}" \
-      | tr '`' '\n' \
-      | sed 's/^[ \t]*//; s/<[^>]*>//g; /^\s*$/d;' \
-      | sed 's/&nbsp;/ /g; s/\&amp;/\&/g; s/&gt;/>/g; s/&lt;/</g; s/&quot;/"/g'
-    return $?
-  }
+  rm -f ${TMP}/authors ${TMP}/bibliograpy ${TMP}/section $TMP/code_snippet
   # -- MAIN --
   # Search sequence by ID (optional language arg)
   # 	. oeis <SEQ_ID>
-  # 	. oeis <SEQ_ID> <LANGUAGE>
-  # 	. oeis <LANGUAGE> <SEQ_ID>
+  # 	. oeis <SEQ_ID> <SECTION>
+  # 	. oeis <SECTION> <SEQ_ID>
   isNum='^[0-9]+$'
-  if [ $# -lt 3 ] && [[ ${1:1} =~ $isNum || ${2:1} =~ $isNum || ${1} =~ $isNum || ${2} =~ $isNum ]] && ! echo $1 | grep -q '[0-9]' || ! echo $2 | grep -q '[0-9]'
+  # Search for specific sequence (and potentially language or :SECTION (list)
+  if [ $# -ge 1 ] \
+     && [[ $(echo $1 | tr -d 'aA') =~ $isNum || $(echo $2 | tr -d 'aA') =~ $isNum ]] \
+     && [[ ! $(echo $1 | tr -d 'aA') =~ $isNum || ! $(echo $2 | tr -d 'aA') =~ $isNum ]]
   then
     # Arg-Parse ID, Generate URL
-    if echo ${1^^} | grep -q '[B-Z]'
+    if [[ $(echo $1 | tr -d 'aA') =~ $isNum ]]
     then
-      ID=${2^^}
-      LANGUAGE=$1
-    else
       ID=${1^^}
-      LANGUAGE=$2
+      SECTION=$2
+    else
+      ID=${2^^}
+      SECTION=$1
     fi
     [[ ${ID:0:1} == 'A' ]] && ID=${ID:1}
     ID=$(bc <<< "$ID")
     ID="A$(printf '%06d' ${ID})"
-    URL+="/${ID}"
+    URL+="id:${ID}&fmt=text"
     curl $URL 2>/dev/null > $DOC
-    # Print Code Sample
-    if [[ ${LANGUAGE^^} == ':LIST' ]]
+    # :list available language code_snippets
+    if [[ ${SECTION^^} == ':LIST' || ${SECTION^^} == ':PROG' ]]
     then
-      rm -f ${TMP}/list
-      grep -q 'MAPLE' $DOC && printf 'maple\n' >> $TMP/list
-      grep -q 'MATHEMATICA' $DOC && printf 'mathematica\n' >> $TMP/list
-      parse_code 'PROG.*CROSSREFS' \
-        | grep -o '^(.*)' \
-        | sed 's/ .*//g' \
-        | tr -d '()' \
-        | sort -u >> $TMP/list
-      [ $(wc -c < $TMP/list) -ne 0 ] && cat ${TMP}/list || printf 'No code snippets available.\n'
+      grep -q '%p' $DOC && echo 'maple' >> $TMP/section
+      grep -q '%t' $DOC && echo 'mathematica' >> $TMP/section
+      grep '%o' $DOC \
+        | grep "${ID} (" \
+        | sed "s/^.*${ID} (//; s/).*//" \
+        | awk 'NF == 1' \
+        >> $TMP/section
+      [[ -f $TMP/section && $(wc -c < $TMP/section) -ne 0 ]] \
+        && cat ${TMP}/section | sort -u \
+        || printf 'No code snippets available.\n'
       return 0
     fi
-    # Print ID, description, and sequence
+    # Print ID
     printf "ID: ${ID}\n"
-    get_desc
+    # Print Description (%N)
+    grep '%N' $DOC | sed "s/^.*${ID} //"
     printf '\n'
-    get_seq ${MAX_TERMS}
-    printf '\n'
+    # Print Sequence (Three sections %S %T nd %U)
+    grep '%S' $DOC | sed "s/^.*${ID} //" | tr -d '\n' > $TMP/seq
+    grep '%T' $DOC | sed "s/^.*${ID} //" | tr -d '\n' >> $TMP/seq
+    grep '%U' $DOC | sed "s/^.*${ID} //" | tr -d '\n' >> $TMP/seq
+    cat $TMP/seq \
+      | cut -d ',' -f 1-${MAX_TERMS_LONG} \
+      | sed 's/,/, /g; s/$/ .../'
+    # Generate code snippet (%p, %t, %o) (maple, mathematica, prog sections)
     if [ $# -gt 1 ]
     then
-      if [[ ${LANGUAGE^^} == 'MAPLE' ]] && grep -q 'MAPLE' $DOC
+      printf "\n\n"
+      # MAPLE section (%p)
+      if [[ ${SECTION^^} == 'MAPLE' ]] && grep -q '%p' $DOC
       then
-        GREP_REGEX='MAPLE.*CROSSREFS'
-        grep -q 'PROG' $DOC && GREP_REGEX='MAPLE.*PROG'
-        grep -q 'MATHEMATICA' $DOC && GREP_REGEX='MAPLE.*MATHEMATICA'
-        parse_code "${GREP_REGEX}" \
-          | sed 's/MAPLE/(MAPLE)/; /MATHEMATICA/d; /PROG/d; /CROSSREFS/d' \
-          > ${TMP}/code_snippet
-      elif [[ ${LANGUAGE^^} == 'MATHEMATICA' ]] && grep -q 'MATHEMATICA' $DOC
+        grep '%p' $DOC | sed "s/^.*${ID} //" > $TMP/code_snippet
+      # MATHEMATICA section (%t)
+      elif [[ ${SECTION^^} == 'MATHEMATICA' ]] && grep -q '%t' $DOC
       then
-        GREP_REGEX='MATHEMATICA.*CROSSREFS'
-        grep -q 'PROG' $DOC && GREP_REGEX='MATHEMATICA.*PROG'
-        parse_code "${GREP_REGEX}" \
-          | sed 's/MATHEMATICA/(MATHEMATICA)/; /PROG/d; /CROSSREFS/d' \
-          > ${TMP}/code_snippet
-      else
-        # PROG section contains more code samples (Non Mathematica or Maple)
-        parse_code 'PROG.*CROSSREFS' \
-          | sed '/PROG/d; /CROSSREFS/d' \
-          > ${TMP}/prog
+        grep '%t' $DOC | sed "s/^.*${ID} //" > $TMP/code_snippet
+      # PROG section (%o)
+      elif grep -qi '%o' $DOC && grep -qi $SECTION $DOC
+      then
         # Print out code sample for specified language
-        rm -f ${TMP}/code_snippet
-        awk -v tgt="${LANGUAGE^^}" -F'[()]' '/^\(/{f=(tgt==toupper($2))} f' ${TMP}/prog > ${TMP}/code_snippet
+        grep '%o' $DOC \
+          | sed "s/%o ${ID} //" \
+          | awk -v tgt="${SECTION^^}" -F'[()]' '{act=$2} sub(/^\([^()]+\) */,""){f=(tgt==toupper(act))} f' \
+          > ${TMP}/code_snippet
       fi
       # Print code snippet with 4-space indent to enable colorization
-      if [ $(wc -c < $TMP/code_snippet) -ne 0 ]
+      if [[ -f $TMP/code_snippet && $(wc -c < $TMP/code_snippet) -ne 0 ]]
       then
-        printf "${LANGUAGE}"
+        # Get authors
         cat ${TMP}/code_snippet \
-          | sed "s/(${LANGUAGE^^})/\n/; s/(${LANGUAGE})/\n/;" \
+          | grep -o ' _[A-Z].* [A-Z].*_, [A-Z].*[0-9]' \
+          | sort -u \
+          > ${TMP}/authors
+        i=1
+        # Replace authors with numbers
+        while read author
+        do
+          author=$(<<<"$author" sed 's/[]\\\*\(\.[]/\\&/g')
+          sed -i "s|${author}|[${i}]|" ${TMP}/code_snippet
+          echo "[${i}] [${author}]" | tr -d '_' >> ${TMP}/bibliograpy
+          let i++
+        done <${TMP}/authors
+        # Print snippet
+        cat ${TMP}/code_snippet \
           | sed 's/^/   /'
       else
-        printf "${LANGUAGE^^} unavailable. Use :list to view available languages.\n"
+        printf "${SECTION^^} unavailable. Use :list to view available languages.\n"
       fi
     fi
   # Search unknown sequence
-  else
+  elif [ $# -gt 1 ] && ! echo $@ | grep -q -e [a-z] -e [A-Z]
+  then
     # Build URL
-    URL+="/search?q=signed:$(echo $@ | tr -sc '[:digit:]-' ',')"
+    URL+="signed:$(echo $@ | tr -sc '[:digit:]-' ',')&fmt=short"
     curl $URL 2>/dev/null > $DOC
     # Sequence IDs
-    grep -o '=id:.*&' $DOC \
-      | sed 's/=id://; s/&//' > $TMP/id
-    # Descriptions
-    get_desc > $TMP/desc
-    # Sequences
-    get_seq ${MAX_TERMS} > $TMP/seq
-    # Print data for all
+    grep -o '"/A[0-9][0-9][0-9][0-9][0-9][0-9]">A[0-9][0-9][0-9][0-9][0-9][0-9]' $DOC \
+      | sed 's/.*>//' \
+      > $TMP/id
     readarray -t ID < $TMP/id
+    # Descriptions
+    grep -A 1 '<td valign=top align=left>' $DOC \
+      | sed '/--/d; s/<[^>]*>//g; /^\s*$/d; s/^[ \t]*//' \
+      | sed 's/&nbsp;/ /g; s/\&amp;/\&/g; s/&gt;/>/g; s/&lt;/</g; s/&quot;/"/g' \
+      > $TMP/desc
     readarray -t DESC < $TMP/desc
+    # Sequences
+    grep 'style="color:black;font-size:120%' $DOC \
+      | sed 's/<[^>]*>//g; s/^[ \t]*//' \
+      | cut -d ',' -f 1-${MAX_TERMS_SHORT} \
+      | sed 's/,/, /g; s/$/ .../' \
+      > $TMP/seq
     readarray -t SEQ < $TMP/seq
+    # Print all ID, DESC, SEQ
     for i in ${!ID[@]}
     do
       printf "${ID[$i]}: ${DESC[$i]}\n"
       printf "${SEQ[$i]}\n\n"
     done
+  else
+    printf "
+# oeis
+#
+# The On-Line Encyclopedia of Integer Sequences (OEIS),
+# also cited simply as Sloane's, is an online database of integer sequences.
+
+# Find all possible OEIS sequences for some sequence (1,1,1,1...)
+curl cheat.sh/oeis/1+1+1+1
+
+# Describe an OEIS sequence (A2)
+curl cheat.sh/oeis/A2
+
+# Implementation of the A2 OEIS sequence in Python
+curl cheat.sh/oeis/A2/python
+
+# List all available implementations of the A2 OEIS sequence
+curl cheat.sh/oeis/A2/:list
+"
+    return 1
   fi
-  grep 'results, too many to show. Please refine your search.' /tmp/oeis/doc.html | sed -e 's/<[^>]*>//g; s/^[ \t]*//'
+  # Error statements
+  grep 'results, too many to show. Please refine your search.' $DOC | sed -e 's/<[^>]*>//g; s/^[ \t]*//'
+  grep -o 'Sorry, but the terms do not match anything in the table.' $DOC
+  # print bibliography
+  printf "\n\n"
+  [ -f ${TMP}/bibliograpy ] && cat ${TMP}/bibliograpy
   # Print URL for user
-  printf "\n[${URL}]\n" | rev | sed 's/,//' | rev
+  printf "[${URL}]\n" \
+    | rev \
+    | sed 's/,//' \
+    | rev \
+    | sed 's/&.*/]/'
 )
 
 oeis $@
