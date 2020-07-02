@@ -14,6 +14,7 @@ oeis() (
   local MAX_TERMS_LONG=30
   local MAX_TERMS_SHORT=10
   mkdir -p $TMP
+  rm -f ${TMP}/authors ${TMP}/bibliograpy ${TMP}/section $TMP/code_snippet
   # -- MAIN --
   # Search sequence by ID (optional language arg)
   # 	. oeis <SEQ_ID>
@@ -42,7 +43,6 @@ oeis() (
     # :list available language code_snippets
     if [[ ${SECTION^^} == ':LIST' || ${SECTION^^} == ':PROG' ]]
     then
-      rm -f ${TMP}/section
       grep -q '%p' $DOC && echo 'maple' >> $TMP/section
       grep -q '%t' $DOC && echo 'mathematica' >> $TMP/section
       grep '%o' $DOC \
@@ -71,7 +71,6 @@ oeis() (
     if [ $# -gt 1 ]
     then
       printf "\n\n"
-      rm -f $TMP/code_snippet
       # MAPLE section (%p)
       if [[ ${SECTION^^} == 'MAPLE' ]] && grep -q '%p' $DOC
       then
@@ -92,6 +91,21 @@ oeis() (
       # Print code snippet with 4-space indent to enable colorization
       if [[ -f $TMP/code_snippet && $(wc -c < $TMP/code_snippet) -ne 0 ]]
       then
+        # Get authors
+        cat ${TMP}/code_snippet \
+          | grep -o ' _[A-Z].* [A-Z].*_, [A-Z].*[0-9]' \
+          | sort -u \
+          > ${TMP}/authors
+        i=1
+        # Replace authors with numbers
+        while read author
+        do
+          author=$(<<<"$author" sed 's/[]\\\*\(\.[]/\\&/g')
+          sed -i "s|${author}|[${i}]|" ${TMP}/code_snippet
+          echo "[${i}] [${author}]" | tr -d '_' >> ${TMP}/bibliograpy
+          let i++
+        done <${TMP}/authors
+        # Print snippet
         cat ${TMP}/code_snippet \
           | sed 's/^/   /'
       else
@@ -152,8 +166,11 @@ curl cheat.sh/oeis/A2/:list
   # Error statements
   grep 'results, too many to show. Please refine your search.' $DOC | sed -e 's/<[^>]*>//g; s/^[ \t]*//'
   grep -o 'Sorry, but the terms do not match anything in the table.' $DOC
+  # print bibliography
+  printf "\n\n"
+  [ -f ${TMP}/bibliograpy ] && cat ${TMP}/bibliograpy
   # Print URL for user
-  printf "\n[${URL}]\n" \
+  printf "[${URL}]\n" \
     | rev \
     | sed 's/,//' \
     | rev \
