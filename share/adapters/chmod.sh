@@ -92,36 +92,50 @@ chmod_calc(){
     elif [[ $1 =~ ^[r,s,t,w,x]+$ ]]
     then
       p_s='---------'
+      p_n0=0
+      p_n1=0
+      p_n2=0
+      p_n3=0
       R=(' ' ' ' ' ')
       W=(' ' ' ' ' ')
       X=(' ' ' ' ' ')
       if [[ $1 =~ 'r' ]]
       then
         p_s=$(echo $p_s | sed 's/./r/1; s/./r/4; s/./r/7;')
+        let p_n1+=4
+        let p_n2+=4
+        let p_n3+=4
         R=('X' 'X' 'X')
       fi
       if [[ $1 =~ 'w' ]]
       then
         p_s=$(echo $p_s | sed 's/./w/2')
+        let p_n1+=2
         W=('X' ' ' ' ')
       fi
       if [[ $1 =~ 'x' ]]
       then
         p_s=$(echo $p_s | sed 's/./x/3; s/./x/6; s/./x/9;')
+        let p_n1+=1
+        let p_n2+=1
+        let p_n3+=1
         X=('X' 'X' 'X')
       fi
       if [[ $1 =~ 's' ]]
       then
         [[ ${p_s:2:1} == 'x' ]] && p_s=$(echo $p_s | sed 's/./s/3') || p_s=$(echo $p_s | sed 's/./S/3')
         [[ ${p_s:5:1} == 'x' ]] && p_s=$(echo $p_s | sed 's/./s/6') || p_s=$(echo $p_s | sed 's/./S/6')
+        let p_n0+=6
         setuid='X'
         setgid='X'
       fi
       if [[ $1 =~ 't' ]]
       then
+        let p_n0+=1
         [[ ${p_s:8:1} == 'x' ]] && p_s=$(echo $p_s | sed 's/./t/9') || p_s=$(echo $p_s | sed 's/./T/9')
         sticky='X'
       fi
+      p_n="${p_n0}${p_n1}${p_n2}${p_n3}"
     fi
   else
     return 1
