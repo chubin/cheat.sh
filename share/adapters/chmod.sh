@@ -54,39 +54,68 @@ chmod_calc(){
       fi
     done
   # If permission string is given -> calc number
-  elif [[ ${#1} -eq 9 && $1 =~ ^[r,s,S,t,T,w,x,-]+$ ]]
+  elif [[ $1 =~ ^[r,s,S,t,T,w,x,-]+$ ]]
   then
-    p_s=$1
-    num=0
-    # Process specials
-    [[ 'sS' =~ ${p_s:2:1} ]] && setuid='X' && num=$((num+4))
-    [[ 'sS' =~ ${p_s:5:1} ]] && setgid='X' && num=$((num+2))
-    [[ 'tT' =~ ${p_s:8:1} ]] && sticky='X' && num=$((num+1))
-    [ ${num} -gt 0 ] && p_n+="$num"
-    # Calculate rest of p_n number while populating arrays for table
-    for (( i=0; i<${#p_s}; i+=0 ))
-    do
+    if [[ ${#1} -eq 9 ]]
+    then
+      p_s=$1
       num=0
-      [[ "r-" =~ ${p_s:$i:1} ]] || return 1
-      [[ ${p_s:$i:1} == 'r' ]] && R+=('X') || R+=(' ')
-      [[ ${p_s:$((i++)):1} == 'r' ]] && let num++
-      num=$(( num << 1 ))
-      [[ "w-" =~ ${p_s:$i:1} ]] || return 1
-      [[ ${p_s:$i:1} == 'w' ]] && W+=('X') || W+=(' ')
-      [[ ${p_s:$((i++)):1} == 'w' ]] && let num++
-      num=$(( num << 1 ))
-      if [ $i -lt 6 ]
+      # Process specials
+      [[ 'sS' =~ ${p_s:2:1} ]] && setuid='X' && num=$((num+4))
+      [[ 'sS' =~ ${p_s:5:1} ]] && setgid='X' && num=$((num+2))
+      [[ 'tT' =~ ${p_s:8:1} ]] && sticky='X' && num=$((num+1))
+      [ ${num} -gt 0 ] && p_n+="$num"
+      # Calculate rest of p_n number while populating arrays for table
+      for (( i=0; i<${#p_s}; i+=0 ))
+      do
+        num=0
+        [[ "r-" =~ ${p_s:$i:1} ]] || return 1
+        [[ ${p_s:$i:1} == 'r' ]] && R+=('X') || R+=(' ')
+        [[ ${p_s:$((i++)):1} == 'r' ]] && let num++
+        num=$(( num << 1 ))
+        [[ "w-" =~ ${p_s:$i:1} ]] || return 1
+        [[ ${p_s:$i:1} == 'w' ]] && W+=('X') || W+=(' ')
+        [[ ${p_s:$((i++)):1} == 'w' ]] && let num++
+        num=$(( num << 1 ))
+        if [ $i -lt 6 ]
+        then
+          [[ "sSx-" =~ ${p_s:$i:1} ]] || return 1
+          [[ "sx" =~ ${p_s:$i:1} ]] && X+=('X') || X+=(' ')
+          [[ "sx" =~ ${p_s:$((i++)):1} ]] && let num++
+        else
+          [[ "tTx-" =~ ${p_s:$i:1} ]] || return 1
+          [[ "tx" =~ ${p_s:$i:1} ]] && X+=('X') || X+=(' ')
+          [[ "tx" =~ ${p_s:$((i++)):1} ]] && let num++
+        fi
+        p_n+="$num"
+      done
+    elif [[ $1 =~ ^[r,s,t,w,x]+$ ]]
+    then
+      R=(' ' ' ' ' ')
+      W=(' ' ' ' ' ')
+      X=(' ' ' ' ' ')
+      if [[ $1 =~ 'r' ]]
       then
-        [[ "sSx-" =~ ${p_s:$i:1} ]] || return 1
-        [[ "sx" =~ ${p_s:$i:1} ]] && X+=('X') || X+=(' ')
-        [[ "sx" =~ ${p_s:$((i++)):1} ]] && let num++
-      else
-        [[ "tTx-" =~ ${p_s:$i:1} ]] || return 1
-        [[ "tx" =~ ${p_s:$i:1} ]] && X+=('X') || X+=(' ')
-        [[ "tx" =~ ${p_s:$((i++)):1} ]] && let num++
+        R=('X' 'X' 'X')
       fi
-      p_n+="$num"
-    done
+      if [[ $1 =~ 'w' ]]
+      then
+        W=('X' ' ' ' ')
+      fi
+      if [[ $1 =~ 's' ]]
+      then
+        setuid='X'
+        setgid='X'
+      fi
+      if [[ $1 =~ 't' ]]
+      then
+        sticky='X'
+      fi
+      if [[ $1 =~ 'x' ]]
+      then
+        X=('X' 'X' 'X')
+      fi
+    fi
   else
     return 1
   fi
