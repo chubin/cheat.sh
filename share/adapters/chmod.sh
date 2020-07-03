@@ -56,6 +56,7 @@ chmod_calc(){
   # If permission string is given -> calc number
   elif [[ $1 =~ ^[r,s,S,t,T,w,x,-]+$ ]]
   then
+    # FULL STRING
     if [[ ${#1} -eq 9 ]]
     then
       p_s=$1
@@ -89,6 +90,7 @@ chmod_calc(){
         fi
         p_n+="$num"
       done
+    # PARTIAL STRING
     elif [[ $1 =~ ^[r,s,t,w,x]+$ ]]
     then
       p_s='---------'
@@ -136,6 +138,8 @@ chmod_calc(){
         sticky='X'
       fi
       p_n="${p_n0}${p_n1}${p_n2}${p_n3}"
+    else
+      return 1
     fi
   else
     return 1
