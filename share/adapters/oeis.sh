@@ -102,7 +102,13 @@ oeis() (
         do
           author=$(<<<"$author" sed 's/[]\\\*\(\.[]/\\&/g')
           sed -i "s|${author}|[${i}]|" ${TMP}/code_snippet
-          echo "[${i}] [${author}]" | tr -d '_' >> ${TMP}/bibliograpy
+          author_url='https://oeis.org/wiki/User:'"${author%%,*}"
+          echo "[${i}] [${author}] [${author_url}]" \
+            | tr -d '_' \
+            | rev \
+            | sed 's/ /_/' \
+            | rev \
+           >> ${TMP}/bibliograpy
           let i++
         done <${TMP}/authors
         # Print snippet
