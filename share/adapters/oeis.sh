@@ -92,8 +92,8 @@ oeis() (
       if [[ -f $TMP/code_snippet && $(wc -c < $TMP/code_snippet) -ne 0 ]]
       then
         # Get authors
-        cat ${TMP}/code_snippet \
-          | grep -o ' _[A-Z].* [A-Z].*_, [A-Z].*[0-9]' \
+        grep -o ' _[A-Z].* [A-Z].*_, [A-Z].*[0-9]' ${TMP}/code_snippet \
+          | sed 's/,.*//' \
           | sort -u \
           > ${TMP}/authors
         i=1
@@ -101,13 +101,10 @@ oeis() (
         while read author
         do
           author=$(<<<"$author" sed 's/[]\\\*\(\.[]/\\&/g')
-          sed -i "s|${author}|[${i}]|" ${TMP}/code_snippet
-          author_url='https://oeis.org/wiki/User:'"${author%%,*}"
+          sed -i "s|${author}.*[0-9]|[${i}]|" ${TMP}/code_snippet
+          author=$(echo $author | tr -d '_\\')
+          author_url='https://oeis.org/wiki/User:'"$(echo ${author} | tr ' ' '_')"
           echo "[${i}] [${author}] [${author_url}]" \
-            | tr -d '_' \
-            | rev \
-            | sed 's/ /_/' \
-            | rev \
            >> ${TMP}/bibliograpy
           let i++
         done <${TMP}/authors
