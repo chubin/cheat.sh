@@ -9,8 +9,8 @@
 #	oeis <val_a, val_b, val_c, ...>
 oeis() (
   local URL='https://oeis.org/search?q='
-  local TMP=/tmp/oeis
-  local DOC=/tmp/oeis/doc.html
+  local TMP=/tmp/oeis_${RANDOM}
+  local DOC=${TMP}/doc.html
   local MAX_TERMS_LONG=30
   local MAX_TERMS_SHORT=10
   mkdir -p $TMP
@@ -53,6 +53,7 @@ oeis() (
       [[ -f $TMP/section && $(wc -c < $TMP/section) -ne 0 ]] \
         && cat ${TMP}/section | sort -u \
         || printf 'No code snippets available.\n'
+      rm -rf $TMP
       return 0
     fi
     # Print ID
@@ -109,8 +110,7 @@ oeis() (
           let i++
         done <${TMP}/authors
         # Print snippet
-        cat ${TMP}/code_snippet \
-          | sed 's/^/   /'
+        sed 's/^/   /' ${TMP}/code_snippet
       else
         printf "${SECTION^^} unavailable. Use :list to view available languages.\n"
       fi
@@ -164,6 +164,7 @@ curl cheat.sh/oeis/A2/python
 # List all available implementations of the A2 OEIS sequence
 curl cheat.sh/oeis/A2/:list
 "
+    rm -rf $TMP
     return 1
   fi
   # Error statements
@@ -178,6 +179,8 @@ curl cheat.sh/oeis/A2/:list
     | sed 's/,//' \
     | rev \
     | sed 's/&.*/]/'
+  rm -rf $TMP
+  return 0
 )
 
 oeis $@
