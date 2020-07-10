@@ -9,7 +9,7 @@
 #	oeis <val_a, val_b, val_c, ...>
 oeis() (
   local URL='https://oeis.org/search?q='
-  local TMP=/tmp/oeis_${RANDOM}
+  local TMP=$(mktemp -d oeis.XXXXXXX)
   local DOC=${TMP}/doc.html
   local MAX_TERMS_LONG=30
   local MAX_TERMS_SHORT=10
