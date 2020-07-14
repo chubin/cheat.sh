@@ -9,8 +9,8 @@
 #	oeis <val_a, val_b, val_c, ...>
 oeis() (
   local URL='https://oeis.org/search?q='
-  local TMP=/tmp/oeis
-  local DOC=/tmp/oeis/doc.html
+  local TMP=$(mktemp -d oeis.XXXXXXX)
+  local DOC=${TMP}/doc.html
   local MAX_TERMS_LONG=30
   local MAX_TERMS_SHORT=10
   mkdir -p $TMP
@@ -53,6 +53,7 @@ oeis() (
       [[ -f $TMP/section && $(wc -c < $TMP/section) -ne 0 ]] \
         && cat ${TMP}/section | sort -u \
         || printf 'No code snippets available.\n'
+      rm -rf $TMP
       return 0
     fi
     # Print ID
@@ -92,8 +93,8 @@ oeis() (
       if [[ -f $TMP/code_snippet && $(wc -c < $TMP/code_snippet) -ne 0 ]]
       then
         # Get authors
-        cat ${TMP}/code_snippet \
-          | grep -o ' _[A-Z].* [A-Z].*_, [A-Z].*[0-9]' \
+        grep -o ' _[A-Z].* [A-Z].*_, [A-Z].*[0-9]' ${TMP}/code_snippet \
+          | sed 's/,.*//' \
           | sort -u \
           > ${TMP}/authors
         i=1
@@ -101,13 +102,15 @@ oeis() (
         while read author
         do
           author=$(<<<"$author" sed 's/[]\\\*\(\.[]/\\&/g')
-          sed -i "s|${author}|[${i}]|" ${TMP}/code_snippet
-          echo "[${i}] [${author}]" | tr -d '_' >> ${TMP}/bibliograpy
+          sed -i "s|${author}.*[0-9]|[${i}]|" ${TMP}/code_snippet
+          author=$(echo $author | tr -d '_\\')
+          author_url='https://oeis.org/wiki/User:'"$(echo ${author} | tr ' ' '_')"
+          echo "[${i}] [${author}] [${author_url}]" \
+           >> ${TMP}/bibliograpy
           let i++
         done <${TMP}/authors
         # Print snippet
-        cat ${TMP}/code_snippet \
-          | sed 's/^/   /'
+        sed 's/^/   /' ${TMP}/code_snippet
       else
         printf "${SECTION^^} unavailable. Use :list to view available languages.\n"
       fi
@@ -161,6 +164,7 @@ curl cheat.sh/oeis/A2/python
 # List all available implementations of the A2 OEIS sequence
 curl cheat.sh/oeis/A2/:list
 "
+    rm -rf $TMP
     return 1
   fi
   # Error statements
@@ -175,6 +179,8 @@ curl cheat.sh/oeis/A2/:list
     | sed 's/,//' \
     | rev \
     | sed 's/&.*/]/'
+  rm -rf $TMP
+  return 0
 )
 
 oeis $@
