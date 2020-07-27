@@ -9,7 +9,9 @@ RUN apk add --update --no-cache python2 py2-pip py2-gevent \
     && pip install -r requirements.txt \
     && apk del build-deps
 COPY . /app
-RUN apk add --update --no-cache curl git py2-virtualenv \
-    && ./share/cht.sh.txt --standalone-install
+# fetching cheat sheets
+RUN apk add --update --no-cache git \
+    && mkdir -p /root/.cheat.sh/log/ \
+    && python2 lib/fetch.py fetch-all
 ENTRYPOINT ["python2"]
 CMD ["bin/srv.py"]

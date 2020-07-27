@@ -56,7 +56,11 @@ def fetch_all(skip_existing=True):
 
             sys.stdout.write("Fetching %s..." % (adptr))
             sys.stdout.flush()
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            try:
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            except OSError:
+                print("\nERROR: %s" % cmd)
+                raise
             output = process.communicate()[0]
             if process.returncode != 0:
                 sys.stdout.write("\nERROR:\n---\n" + output)
