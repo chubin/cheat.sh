@@ -275,8 +275,9 @@ def answer(topic=None):
     return Response(result, mimetype='text/plain')
 
 if 'CHEATSH_PORT' in os.environ:
-    SRV = WSGIServer((CONFIG['server.bind'], int(os.environ.get('CHEATSH_PORT'))), app) # log=None)
-    SRV.serve_forever()
+    PORT = int(os.environ.get('CHEATSH_PORT'))
 else:
-    SRV = WSGIServer((CONFIG['server.bind'], CONFIG['server.port']), app) # log=None)
-    SRV.serve_forever()
+    PORT = CONFIG['server.port']
+SRV = WSGIServer((CONFIG['server.bind'], PORT), app) # log=None)
+print("Starting server on {}:{}".format(SRV.address[0], SRV.address[1]))
+SRV.serve_forever()
