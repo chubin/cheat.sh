@@ -274,6 +274,9 @@ def answer(topic=None):
         return result
     return Response(result, mimetype='text/plain')
 
+
+if '--debug' in sys.argv:
+    app.debug = True
 if 'CHEATSH_PORT' in os.environ:
     PORT = int(os.environ.get('CHEATSH_PORT'))
 else:
