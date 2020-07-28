@@ -14,11 +14,6 @@ RUN mkdir -p /root/.cheat.sh/log/ \
     && python3 lib/fetch.py fetch-all
 
 # installing server dependencies
-#RUN apk add --update --no-cache py3-cffi py2-pip py2-gevent \
-#    py2-flask py2-requests py2-pygments py2-redis \
-#    py2-cffi py2-icu bash vim gawk sed \
-#    && apk add --no-cache --virtual build-deps python3-dev build-base \
-#    && pip3 install -r requirements.txt \
-#    && apk del build-deps
+RUN apk add --update --no-cache py3-jinja2 py3-flask
 ENTRYPOINT ["python3"]
 CMD ["bin/srv.py"]
