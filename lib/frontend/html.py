@@ -75,9 +75,12 @@ def _render_html(query, result, editable, repository_button, topics_list, reques
         """
         Convert ANSI text `data` to HTML
         """
-        proc = Popen(
-            ["bash", CONFIG['path.internal.ansi2html'], "--palette=solarized", "--bg=dark"],
-            stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        cmd = ["bash", CONFIG['path.internal.ansi2html'], "--palette=solarized", "--bg=dark"]
+        try:
+            proc = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        except FileNotFoundError:
+            print("ERROR: %s" % cmd)
+            raise
         data = data.encode('utf-8')
         stdout, stderr = proc.communicate(data)
         if proc.returncode != 0:
