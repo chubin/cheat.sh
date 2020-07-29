@@ -16,7 +16,7 @@ cd "$(dirname "$0")" || exit
 # detect Python - if not set in env, try default virtualenv
 PYTHON="${PYTHON:-../ve/bin/python}"
 # if no virtalenv, try current python3 binary
-if ! command -v $PYTHON &> /dev/null; then
+if ! command -v "$PYTHON" &> /dev/null; then
   PYTHON=$(command -v python3)
 fi
 python_version="$($PYTHON -c 'import sys; print(sys.version_info[0])')"
@@ -48,6 +48,7 @@ failed=0
 
 
 while read -r number test_line; do
+  echo "Running $number: $test_line"
   if [ "$skip_online" = YES ]; then
     if [[ $test_line = *\[online\]* ]]; then
       echo "$number is [online]; skipping"
@@ -56,10 +57,12 @@ while read -r number test_line; do
   fi
 
   if [[ "$python_version" = 2 ]] && [[ $test_line = *\[python3\]* ]]; then
+    echo "$number is for Python 3; skipping"
     continue
   fi
 
   if [[ "$python_version" = 3 ]] && [[ $test_line = *\[python2\]* ]]; then
+    echo "$number is for Python 2; skipping"
     continue
   fi
 
