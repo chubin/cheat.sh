@@ -6,3 +6,4 @@ language:
 before_install:
   - docker-compose up -d
   - docker ps
+  - docker images
