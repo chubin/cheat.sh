@@ -19,9 +19,8 @@ PYTHON="${PYTHON:-../ve/bin/python}"
 if ! command -v $PYTHON &> /dev/null; then
   PYTHON=$(command -v python3)
 fi
-echo "Using PYTHON: $PYTHON"
-
-"$PYTHON" --version 2>&1 | grep -q 'Python 2' && python_version=2 || python_version=3
+python_version="$($PYTHON -c 'import sys; print(sys.version_info[0])')"
+echo "Using PYTHON $python_version: $PYTHON"
 
 skip_online="${CHEATSH_TEST_SKIP_ONLINE:-NO}"
 test_standalone="${CHEATSH_TEST_STANDALONE:-YES}"
