@@ -13,7 +13,14 @@
 # work from script's dir
 cd "$(dirname "$0")" || exit
 
+# detect Python - if not set in env, try default virtualenv
 PYTHON="${PYTHON:-../ve/bin/python}"
+# if no virtalenv, try current python3 binary
+if ! command -v $PYTHON &> /dev/null; then
+  PYTHON=$(command -v python3)
+fi
+echo "Using PYTHON: $PYTHON"
+
 "$PYTHON" --version 2>&1 | grep -q 'Python 2' && python_version=2 || python_version=3
 
 skip_online="${CHEATSH_TEST_SKIP_ONLINE:-NO}"
