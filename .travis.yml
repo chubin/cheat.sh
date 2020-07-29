@@ -11,4 +11,4 @@ before_install:
 script:
   - sleep 3
   - curl http://localhost:8002
-  - CHTSH_URL=http://localhost:8002 bash tests/run-tests.sh
+  - CHTSH_URL=http://localhost:8002 CHEATSH_TEST_STANDALONE=NO bash tests/run-tests.sh
