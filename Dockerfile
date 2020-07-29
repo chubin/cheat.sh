@@ -14,6 +14,6 @@ RUN mkdir -p /root/.cheat.sh/log/ \
     && python3 lib/fetch.py fetch-all
 
 # installing server dependencies
-RUN apk add --update --no-cache py3-jinja2 py3-flask
+RUN apk add --update --no-cache py3-jinja2 py3-flask bash
 ENTRYPOINT ["python3"]
 CMD ["bin/srv.py"]

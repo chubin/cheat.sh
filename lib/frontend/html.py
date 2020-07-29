@@ -84,7 +84,7 @@ def _render_html(query, result, editable, repository_button, topics_list, reques
         data = data.encode('utf-8')
         stdout, stderr = proc.communicate(data)
         if proc.returncode != 0:
-            error(stdout + stderr)
+            error((stdout + stderr).decode('utf-8'))
         return stdout.decode('utf-8')
 
 
