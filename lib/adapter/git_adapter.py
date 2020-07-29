@@ -79,7 +79,7 @@ class GitRepositoryAdapter(RepositoryAdapter):    #pylint: disable=abstract-meth
         if not local_repository_dir:
             return None
 
-        return ['git', 'clone', cls._repository_url, local_repository_dir]
+        return ['git', 'clone', '--depth=1', cls._repository_url, local_repository_dir]
 
     @classmethod
     def update_command(cls):

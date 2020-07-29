@@ -96,9 +96,9 @@ def log_query(ip_addr, found, topic, user_agent):
     """
     Log processed query and some internal data
     """
-    log_entry = "%s %s %s %s" % (ip_addr, found, topic, user_agent)
-    with open(CONFIG["path.log.queries"], 'a') as my_file:
-        my_file.write(log_entry.encode('utf-8')+"\n")
+    log_entry = "%s %s %s %s\n" % (ip_addr, found, topic, user_agent)
+    with open(CONFIG["path.log.queries"], 'ab') as my_file:
+        my_file.write(log_entry.encode('utf-8'))
 
 def get_request_ip(req):
     """
@@ -274,9 +274,13 @@ def answer(topic=None):
         return result
     return Response(result, mimetype='text/plain')
 
+
+if '--debug' in sys.argv:
+    app.debug = True
 if 'CHEATSH_PORT' in os.environ:
-    SRV = WSGIServer((CONFIG['server.bind'], int(os.environ.get('CHEATSH_PORT'))), app) # log=None)
-    SRV.serve_forever()
+    PORT = int(os.environ.get('CHEATSH_PORT'))
 else:
-    SRV = WSGIServer((CONFIG['server.bind'], CONFIG['server.port']), app) # log=None)
-    SRV.serve_forever()
+    PORT = CONFIG['server.port']
+SRV = WSGIServer((CONFIG['server.bind'], PORT), app) # log=None)
+print("Starting server on {}:{}".format(SRV.address[0], SRV.address[1]))
+SRV.serve_forever()
