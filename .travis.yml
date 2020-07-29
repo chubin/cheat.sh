@@ -9,4 +9,5 @@ before_install:
   - docker images
 
 script:
+  - curl http://localhost:8002
   - CHTSH_URL=http://localhost:8002 bash tests/run-tests.sh
