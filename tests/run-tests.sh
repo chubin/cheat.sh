@@ -48,7 +48,7 @@ failed=0
 
 
 while read -r number test_line; do
-  echo "Running $number: $test_line"
+  echo -e "\e[94mRunning $number: \e[96m$test_line\e[0m"
   if [ "$skip_online" = YES ]; then
     if [[ $test_line = *\[online\]* ]]; then
       echo "$number is [online]; skipping"
