@@ -7,3 +7,6 @@ before_install:
   - docker-compose up -d
   - docker ps
   - docker images
+
+script:
+  - CHTSH_URL=http://localhost:8002 bash tests/run-tests.sh
