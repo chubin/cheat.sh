@@ -10,6 +10,9 @@
 # 2) configure CHTSH_URL
 # 3) run the script
 
+# work from script's dir
+cd "$(dirname "$0")" || exit
+
 PYTHON="${PYTHON:-../ve/bin/python}"
 "$PYTHON" --version 2>&1 | grep -q 'Python 2' && python_version=2 || python_version=3
 
