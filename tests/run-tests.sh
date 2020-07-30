@@ -82,7 +82,7 @@ while read -r number test_line; do
     eval "curl -s $CHTSH_URL/$test_line" > "$TMP"
   fi
 
-  if ! diff results/"$number" "$TMP" > "$TMP2"; then
+  if ! diff -u3 results/"$number" "$TMP" > "$TMP2"; then
     if [ "$show_details" = YES ]; then
       cat "$TMP2"
     fi
