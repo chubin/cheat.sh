@@ -71,17 +71,19 @@ while read -r number test_line; do
 
   if [ "$test_standalone" = YES ]; then
     test_line="${test_line//cht.sh /}"
-    "${PYTHON}" ../lib/standalone.py "$test_line" > "$TMP" 2> /dev/null
+    [[ $show_details == YES ]] && echo "${PYTHON} ../lib/standalone.py $test_line"
+    "${PYTHON}" ../lib/standalone.py "$test_line" > "$TMP"
   elif [[ $test_line = "cht.sh "* ]]; then
     test_line="${test_line//cht.sh /}"
+    [[ $show_details == YES ]] && echo "bash $CHTSH_SCRIPT $test_line"
     eval "bash $CHTSH_SCRIPT $test_line" > "$TMP"
   else
+    [[ $show_details == YES ]] && echo "curl -s $CHTSH_URL/$test_line"
     eval "curl -s $CHTSH_URL/$test_line" > "$TMP"
   fi
 
   if ! diff results/"$number" "$TMP" > "$TMP2"; then
     if [ "$show_details" = YES ]; then
-      echo "$ CHEATSH_CACHE_TYPE=none python ../lib/standalone.py $test_line"
       cat "$TMP2"
     fi
     echo "FAILED: [$number] $test_line"
