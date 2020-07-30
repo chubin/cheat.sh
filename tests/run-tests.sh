@@ -25,13 +25,13 @@ echo "Using PYTHON $python_version: $PYTHON"
 skip_online="${CHEATSH_TEST_SKIP_ONLINE:-NO}"
 test_standalone="${CHEATSH_TEST_STANDALONE:-YES}"
 show_details="${CHEATSH_TEST_SHOW_DETAILS:-YES}"
+CHTSH_URL="${CHTSH_URL:-'http://localhost:8002'}"
 
 TMP=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
 TMP2=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
 TMP3=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
 trap 'rm -rf $TMP $TMP2 $TMP3' EXIT
 
-export CHTSH_URL=http://cht.sh:50000
 CHTSH_SCRIPT=$(dirname "$(dirname "$(readlink -f "$0")")")/share/cht.sh.txt
 
 export PYTHONIOENCODING=UTF-8
