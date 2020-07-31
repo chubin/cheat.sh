@@ -2,10 +2,10 @@
 
 # 1) start server:
 #   without caching:
-#       REDIS_HOST=None CHEATSH_PORT=50000 python bin/srv.py
+#       CHEATSH_REDIS_HOST=None CHEATSH_PORT=50000 python bin/srv.py
 #       (recommended)
 #   with caching:
-#       REDIS_PREFIX=TEST1 CHEATSH_PORT=50000 python bin/srv.py 
+#       CHEATSH_REDIS_PREFIX=TEST1 CHEATSH_PORT=50000 python bin/srv.py
 #       (for complex search queries + to test caching)
 # 2) configure CHTSH_URL
 # 3) run the script

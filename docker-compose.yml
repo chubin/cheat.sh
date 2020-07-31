@@ -6,6 +6,8 @@ services:
     container_name: chtsh
     depends_on:
       - redis
+    environment:
+      - CHEATSH_REDIS_HOST=redis
     ports:
       - "8002:8002"
   redis:
