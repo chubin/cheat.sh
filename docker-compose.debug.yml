@@ -1,0 +1,8 @@
+# Compose override to add --debug option to bin/srv.py
+# call to print tracebacks on errors to stdout.
+#
+# See https://docs.docker.com/compose/extends/
+
+services:
+  app:
+    command: "--debug"

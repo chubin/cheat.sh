@@ -5,11 +5,9 @@ language:
 
 before_install:
   - docker-compose build
-  #- docker-compose run -d --service-ports --name chtsh app --debug
-  - docker-compose up -d
-  - docker-compose ps
-  - docker ps
   - docker images
+  - docker-compose -f docker-compose.yml -f docker-compose.debug.yml up -d
+  - docker-compose ps
 
 script:
   - sleep 3
