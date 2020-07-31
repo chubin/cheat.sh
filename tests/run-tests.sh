@@ -87,7 +87,7 @@ while read -r number test_line; do
       cat "$TMP2"
     fi
     if grep -q "Internal Server Error" "$TMP2"; then
-      [[ $TRAVIS == true ]] && docker-compose logs --no-color
+      [[ $TRAVIS == true ]] && docker logs chtsh
     fi
     echo "FAILED: [$number] $test_line"
     ((failed++))
