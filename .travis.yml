@@ -14,4 +14,4 @@ script:
   - curl http://localhost:8002
   - docker-compose logs --no-color
   - docker logs chtsh
-  - CHTSH_URL=http://localhost:8002 CHEATSH_TEST_STANDALONE=NO bash tests/run-tests.sh
+  - REDIS_HOST=http://redis:6379 CHEATSH_TEST_STANDALONE=NO bash tests/run-tests.sh
