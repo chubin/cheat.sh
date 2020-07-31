@@ -1,8 +1,9 @@
 version: '2'
 services:
   app:
-    build:
-      context: .
+    build: .
+    image: cheat.sh
+    container_name: chtsh
     depends_on:
       - redis
     ports:

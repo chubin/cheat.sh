@@ -4,7 +4,8 @@ language:
   - generic
 
 before_install:
-  - docker-compose up -d
+  - docker-compose build
+  - docker-compose run -d app bin/srv.py --debug
   - docker ps
   - docker images
 
