@@ -12,4 +12,5 @@ before_install:
 script:
   - sleep 3
   - curl http://localhost:8002
+  - docker-compose logs app
   - CHTSH_URL=http://localhost:8002 CHEATSH_TEST_STANDALONE=NO bash tests/run-tests.sh
