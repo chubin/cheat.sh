@@ -5,7 +5,7 @@ language:
 
 before_install:
   - docker-compose build
-  - docker-compose run -d app bin/srv.py --debug
+  - docker-compose run -d --service-ports app bin/srv.py --debug
   - docker ps
   - docker images
 
