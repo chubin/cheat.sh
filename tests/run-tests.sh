@@ -2,7 +2,7 @@
 
 # 1) start server:
 #   without caching:
-#       CHEATSH_REDIS_HOST=None CHEATSH_PORT=50000 python bin/srv.py
+#       CHEATSH_CACHE_TYPE=none CHEATSH_PORT=50000 python bin/srv.py
 #       (recommended)
 #   with caching:
 #       CHEATSH_REDIS_PREFIX=TEST1 CHEATSH_PORT=50000 python bin/srv.py
