@@ -65,7 +65,9 @@ Bitmap-Bresenhams-line-algorithm
 Bitmap-Flood-fill
 Bitmap-Histogram
 Bitmap-Midpoint-circle-algorithm
+Bitmap-PPM-conversion-through-a-pipe
 Bitmap-Read-a-PPM-file
+Bitmap-Read-an-image-through-a-pipe
 Bitmap-Write-a-PPM-file
 Bitwise-IO
 Bitwise-operations
@@ -92,10 +94,12 @@ Casting-out-nines
 Catalan-numbers
 Catalan-numbers-Pascals-triangle
 Catamorphism
+Catmull-Clark-subdivision-surface
 Character-codes
 Chat-server
 Check-Machin-like-formulas
 Check-that-file-exists
+Checkpoint-synchronization
 Chinese-remainder-theorem
 Cholesky-decomposition
 Circles-of-given-radius-through-two-points
@@ -107,6 +111,7 @@ Color-of-a-screen-pixel
 Color-quantization
 Colour-bars-Display
 Colour-pinstripe-Display
+Colour-pinstripe-Printer
 Combinations
 Combinations-and-permutations
 Combinations-with-repetitions
@@ -141,6 +146,7 @@ Day-of-the-week
 Deal-cards-for-FreeCell
 Death-Star
 Deconvolution-1D
+Deconvolution-2D+
 Deepcopy
 Define-a-primitive-data-type
 Delegates
@@ -689,6 +695,7 @@ Variadic-function
 Vector-products
 Verify-distribution-uniformity-Chi-squared-test
 Verify-distribution-uniformity-Naive
+Video-display-modes
 Vigen-re-cipher
 Vigen-re-cipher-Cryptanalysis
 Visualize-a-tree
@@ -715,6 +722,7 @@ Y-combinator
 Yahoo--search-interface
 Yin-and-yang
 Zebra-puzzle
+Zeckendorf-arithmetic
 Zeckendorf-number-representation
 Zero-to-the-zero-power
 Zhang-Suen-thinning-algorithm
