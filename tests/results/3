@@ -1,17 +1,17 @@
-# Displays everything in the target directory
-ls path/to/the/target/directory
+# To display everything in <dir>, excluding hidden files:
+ls <dir>
 
-# Displays everything including hidden files
-ls -a
+# To display everything in <dir>, including hidden files:
+ls -a <dir>
 
-# Displays all files, along with the size (with unit suffixes) and timestamp
-ls -lh 
+# To display all files, along with the size (with unit suffixes) and timestamp
+ls -lh <dir>
 
-# Display files, sorted by size
-ls -S
+# To display files, sorted by size:
+ls -S <dir>
 
-# Display directories only
-ls -d */
+# To display directories only:
+ls -d */ <dir>
 
-# Display directories only, include hidden
-ls -d .*/ */
+# To display directories only, include hidden:
+ls -d .*/ */ <dir>
