@@ -1,4 +1,4 @@
-import re
+import search
 import fmt.comments
 
 def postprocess(answer, keyword, options, request_options=None):
@@ -49,42 +49,8 @@ def _filter_by_keyword(answer, keyword, options):
         answer.append(paragraph)
         return answer
 
-    def _paragraph_contains(paragraph, keyword, insensitive=False, word_boundaries=True):
-        """
-        Check if `paragraph` contains `keyword`.
-        Several keywords can be joined together using ~
-        For example: ~ssh~passphrase
-        """
-        answer = True
-
-        if '~' in keyword:
-            keywords = keyword.split('~')
-        else:
-            keywords = [keyword]
-
-        for kwrd in keywords:
-            regex = re.escape(kwrd)
-            if not word_boundaries:
-                regex = r"\b%s\b" % kwrd
-
-            if insensitive:
-                answer = answer and bool(re.search(regex, paragraph, re.IGNORECASE))
-            else:
-                answer = answer and bool(re.search(regex, paragraph))
-
-        return answer
-
-
-    if not keyword:
-        return answer
-
-    search_options = {
-        'insensitive': 'i' in options,
-        'word_boundaries': 'b' in options
-    }
-
     paragraphs = [p for p in _split_paragraphs(answer)
-                  if _paragraph_contains(p, keyword, **search_options)]
+                  if search.match(p, keyword, options=options)]
     if not paragraphs:
         return ""
 
