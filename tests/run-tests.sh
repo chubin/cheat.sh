@@ -16,6 +16,7 @@ PYTHON="${PYTHON:-../ve/bin/python}"
 skip_online="${CHEATSH_TEST_SKIP_ONLINE:-NO}"
 test_standalone="${CHEATSH_TEST_STANDALONE:-YES}"
 show_details="${CHEATSH_TEST_SHOW_DETAILS:-YES}"
+update_tests_results="${CHEATSH_UPDATE_TESTS_RESULTS:-NO}"
 
 TMP=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
 TMP2=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
@@ -68,17 +69,26 @@ while read -r number test_line; do
   fi
 
   if ! diff results/"$number" "$TMP" > "$TMP2"; then
-    if [ "$show_details" = YES ]; then
-      echo "$ CHEATSH_CACHE_TYPE=none python ../lib/standalone.py $test_line"
-      cat "$TMP2"
+    if [[ $CHEATSH_UPDATE_TESTS_RESULTS = NO ]]; then
+      if [ "$show_details" = YES ]; then
+        echo "$ CHEATSH_CACHE_TYPE=none python ../lib/standalone.py $test_line"
+        cat "$TMP2"
+      fi
+      echo "FAILED: [$number] $test_line"
+    else
+      cat "$TMP" > results/"$number"
+      echo "UPDATED: [$number] $test_line"
     fi
-    echo "FAILED: [$number] $test_line"
     ((failed++))
   fi
   ((i++))
 done < "$TMP3"
 
-echo TESTS/OK/FAILED "$i/$((i-failed))/$failed"
+if [[ $CHEATSH_UPDATE_TESTS_RESULTS = NO ]]; then
+  echo TESTS/OK/FAILED "$i/$((i-failed))/$failed"
+else
+  echo TESTS/OK/UPDATED "$i/$((i-failed))/$failed"
+fi
 
 if [ "$failed" != 0 ]; then
   exit 1
