@@ -2,28 +2,37 @@
 
 # 1) start server:
 #   without caching:
-#       REDIS_HOST=None CHEATSH_PORT=50000 python bin/srv.py
+#       CHEATSH_CACHE_TYPE=none CHEATSH_PORT=50000 python bin/srv.py
 #       (recommended)
 #   with caching:
-#       REDIS_PREFIX=TEST1 CHEATSH_PORT=50000 python bin/srv.py 
+#       CHEATSH_REDIS_PREFIX=TEST1 CHEATSH_PORT=50000 python bin/srv.py
 #       (for complex search queries + to test caching)
 # 2) configure CHTSH_URL
 # 3) run the script
 
+# work from script's dir
+cd "$(dirname "$0")" || exit
+
+# detect Python - if not set in env, try default virtualenv
 PYTHON="${PYTHON:-../ve/bin/python}"
-"$PYTHON" --version 2>&1 | grep -q 'Python 2' && python_version=2 || python_version=3
+# if no virtalenv, try current python3 binary
+if ! command -v "$PYTHON" &> /dev/null; then
+  PYTHON=$(command -v python3)
+fi
+python_version="$($PYTHON -c 'import sys; print(sys.version_info[0])')"
+echo "Using PYTHON $python_version: $PYTHON"
 
 skip_online="${CHEATSH_TEST_SKIP_ONLINE:-NO}"
 test_standalone="${CHEATSH_TEST_STANDALONE:-YES}"
 show_details="${CHEATSH_TEST_SHOW_DETAILS:-YES}"
 update_tests_results="${CHEATSH_UPDATE_TESTS_RESULTS:-NO}"
+CHTSH_URL="${CHTSH_URL:-http://localhost:8002}"
 
 TMP=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
 TMP2=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
 TMP3=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
 trap 'rm -rf $TMP $TMP2 $TMP3' EXIT
 
-export CHTSH_URL=http://cht.sh:50000
 CHTSH_SCRIPT=$(dirname "$(dirname "$(readlink -f "$0")")")/share/cht.sh.txt
 
 export PYTHONIOENCODING=UTF-8
@@ -40,6 +49,7 @@ failed=0
 
 
 while read -r number test_line; do
+  echo -e "\e[34mRunning $number: \e[36m$test_line\e[0m"
   if [ "$skip_online" = YES ]; then
     if [[ $test_line = *\[online\]* ]]; then
       echo "$number is [online]; skipping"
@@ -48,10 +58,12 @@ while read -r number test_line; do
   fi
 
   if [[ "$python_version" = 2 ]] && [[ $test_line = *\[python3\]* ]]; then
+    echo "$number is for Python 3; skipping"
     continue
   fi
 
   if [[ "$python_version" = 3 ]] && [[ $test_line = *\[python2\]* ]]; then
+    echo "$number is for Python 2; skipping"
     continue
   fi
 
@@ -60,19 +72,24 @@ while read -r number test_line; do
 
   if [ "$test_standalone" = YES ]; then
     test_line="${test_line//cht.sh /}"
-    "${PYTHON}" ../lib/standalone.py "$test_line" > "$TMP" 2> /dev/null
+    [[ $show_details == YES ]] && echo "${PYTHON} ../lib/standalone.py $test_line"
+    "${PYTHON}" ../lib/standalone.py "$test_line" > "$TMP"
   elif [[ $test_line = "cht.sh "* ]]; then
     test_line="${test_line//cht.sh /}"
+    [[ $show_details == YES ]] && echo "bash $CHTSH_SCRIPT $test_line"
     eval "bash $CHTSH_SCRIPT $test_line" > "$TMP"
   else
+    [[ $show_details == YES ]] && echo "curl -s $CHTSH_URL/$test_line"
     eval "curl -s $CHTSH_URL/$test_line" > "$TMP"
   fi
 
-  if ! diff results/"$number" "$TMP" > "$TMP2"; then
+  if ! diff -u3 --color=always results/"$number" "$TMP" > "$TMP2"; then
     if [[ $CHEATSH_UPDATE_TESTS_RESULTS = NO ]]; then
       if [ "$show_details" = YES ]; then
-        echo "$ CHEATSH_CACHE_TYPE=none python ../lib/standalone.py $test_line"
         cat "$TMP2"
+      fi
+      if grep -q "Internal Server Error" "$TMP2"; then
+        [[ $TRAVIS == true ]] && docker logs chtsh
       fi
       echo "FAILED: [$number] $test_line"
     else

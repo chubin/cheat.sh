@@ -19,7 +19,7 @@ from config import CONFIG
 _REDIS = None
 if CONFIG['cache.type'] == 'redis':
     import redis
-    _REDIS = redis.StrictRedis(
+    _REDIS = redis.Redis(
         host=CONFIG['cache.redis.host'],
         port=CONFIG['cache.redis.port'],
         db=CONFIG['cache.redis.db'])
