@@ -55,6 +55,9 @@ def match(paragraph, keyword, options=None, options_dict=None):
     For example: ~ssh~passphrase
     """
 
+    if keyword is None:
+        return True
+
     if '~' in keyword:
         keywords = keyword.split('~')
     else:
