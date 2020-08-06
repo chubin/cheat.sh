@@ -15,5 +15,5 @@ RUN mkdir -p /root/.cheat.sh/log/ \
 
 # installing server dependencies
 RUN apk add --update --no-cache py3-jinja2 py3-flask bash gawk
-ENTRYPOINT ["python3"]
-CMD ["bin/srv.py"]
+ENTRYPOINT ["python3", "-u", "bin/srv.py"]
+CMD [""]

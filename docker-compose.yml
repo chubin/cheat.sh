@@ -1,10 +1,13 @@
 version: '2'
 services:
   app:
-    build:
-      context: .
+    build: .
+    image: cheat.sh
+    container_name: chtsh
     depends_on:
       - redis
+    environment:
+      - CHEATSH_CACHE_REDIS_HOST=redis
     ports:
       - "8002:8002"
   redis:
