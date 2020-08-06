@@ -86,7 +86,6 @@ while read -r number test_line; do
   if ! diff -u3 --color=always results/"$number" "$TMP" > "$TMP2"; then
     if [[ $CHEATSH_UPDATE_TESTS_RESULTS = NO ]]; then
       if [ "$show_details" = YES ]; then
-        echo "$ CHEATSH_CACHE_TYPE=none python ../lib/standalone.py $test_line"
         cat "$TMP2"
       fi
       if grep -q "Internal Server Error" "$TMP2"; then
