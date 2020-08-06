@@ -19,6 +19,8 @@ Configuration parameters:
     search.limit
 """
 
+import re
+
 from config import CONFIG
 from routing import get_answer_dict, get_topics_list
 
@@ -30,13 +32,60 @@ def _limited_entry():
         'format': "code",
     }
 
+def _parse_options(options):
+    """Parse search options string into optiond_dict
+    """
+
+    if options is None:
+        return {}
+
+    search_options = {
+        'insensitive': 'i' in options,
+        'word_boundaries': 'b' in options,
+        'recursive': 'r' in options,
+    }
+    return search_options
+
+def match(paragraph, keyword, options=None, options_dict=None):
+    """Search for each keyword from `keywords` in `page`
+    and if all of them are found, return `True`.
+    Otherwise return `False`.
+
+    Several keywords can be joined together using ~
+    For example: ~ssh~passphrase
+    """
+
+    if '~' in keyword:
+        keywords = keyword.split('~')
+    else:
+        keywords = [keyword]
+
+    if options_dict is None:
+        options_dict = _parse_options(options)
+
+    for kwrd in keywords:
+        if not kwrd:
+            continue
+
+        regex = re.escape(kwrd)
+        if options_dict["word_boundaries"]:
+            regex = r"\b%s\b" % kwrd
+
+        if options_dict["insensitive"]:
+            if not re.search(regex, paragraph, re.IGNORECASE):
+                return False
+        else:
+            if not re.search(regex, paragraph):
+                return False
+    return True
+
 def find_answers_by_keyword(directory, keyword, options="", request_options=None):
     """
     Search in the whole tree of all cheatsheets or in its subtree `directory`
     by `keyword`
     """
 
-    recursive = 'r' in options
+    options_dict = _parse_options(options)
 
     answers_found = []
     for topic in get_topics_list(skip_internal=True, skip_dirs=True):
@@ -45,13 +94,13 @@ def find_answers_by_keyword(directory, keyword, options="", request_options=None
             continue
 
         subtopic = topic[len(directory):]
-        if not recursive and '/' in subtopic:
+        if not options_dict["recursive"] and '/' in subtopic:
             continue
 
-        answer = get_answer_dict(topic, request_options=request_options)
-
-        if answer and answer.get('answer') and keyword.lower() in answer.get('answer', '').lower():
-            answers_found.append(answer)
+        answer_dict = get_answer_dict(topic, request_options=request_options)
+        answer_text = answer_dict.get('answer', '')
+        if match(answer_text, keyword, options_dict=options_dict):
+            answers_found.append(answer_dict)
 
         if len(answers_found) > CONFIG['search.limit']:
             answers_found.append(

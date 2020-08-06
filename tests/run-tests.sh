@@ -25,6 +25,7 @@ echo "Using PYTHON $python_version: $PYTHON"
 skip_online="${CHEATSH_TEST_SKIP_ONLINE:-NO}"
 test_standalone="${CHEATSH_TEST_STANDALONE:-YES}"
 show_details="${CHEATSH_TEST_SHOW_DETAILS:-YES}"
+update_tests_results="${CHEATSH_UPDATE_TESTS_RESULTS:-NO}"
 CHTSH_URL="${CHTSH_URL:-http://localhost:8002}"
 
 TMP=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
@@ -83,19 +84,29 @@ while read -r number test_line; do
   fi
 
   if ! diff -u3 --color=always results/"$number" "$TMP" > "$TMP2"; then
-    if [ "$show_details" = YES ]; then
-      cat "$TMP2"
+    if [[ $CHEATSH_UPDATE_TESTS_RESULTS = NO ]]; then
+      if [ "$show_details" = YES ]; then
+        echo "$ CHEATSH_CACHE_TYPE=none python ../lib/standalone.py $test_line"
+        cat "$TMP2"
+      fi
+      if grep -q "Internal Server Error" "$TMP2"; then
+        [[ $TRAVIS == true ]] && docker logs chtsh
+      fi
+      echo "FAILED: [$number] $test_line"
+    else
+      cat "$TMP" > results/"$number"
+      echo "UPDATED: [$number] $test_line"
     fi
-    if grep -q "Internal Server Error" "$TMP2"; then
-      [[ $TRAVIS == true ]] && docker logs chtsh
-    fi
-    echo "FAILED: [$number] $test_line"
     ((failed++))
   fi
   ((i++))
 done < "$TMP3"
 
-echo TESTS/OK/FAILED "$i/$((i-failed))/$failed"
+if [[ $CHEATSH_UPDATE_TESTS_RESULTS = NO ]]; then
+  echo TESTS/OK/FAILED "$i/$((i-failed))/$failed"
+else
+  echo TESTS/OK/UPDATED "$i/$((i-failed))/$failed"
+fi
 
 if [ "$failed" != 0 ]; then
   exit 1

@@ -24,8 +24,8 @@
 # count words in text counter
 # group elements list
 
-__CHTSH_VERSION=6
-__CHTSH_DATETIME="2019-06-05 18:00:46 +0200"
+__CHTSH_VERSION=0.0.1
+__CHTSH_DATETIME="2020-08-05 09:30:30 +0200"
 
 # cht.sh configuration loading
 #
@@ -80,6 +80,8 @@ cheatsh_standalone_install()
   local installdir; installdir="$1"
   local default_installdir="$HOME/.cheat.sh"
 
+  [ -z "$installdir" ] && installdir=${default_installdir}
+
   if [ "$installdir" = help ]; then
     cat <<EOF
 Install cheat.sh in the standalone mode.
@@ -128,8 +130,9 @@ EOF
   [ "$_exit_code" -ne 0 ] && return "$_exit_code"
 
   while true; do
-    echo -n "Where should cheat.sh be installed [$default_installdir]? "; read -r installdir
-    [ -n "$installdir" ] || installdir="$default_installdir"
+    local _installdir
+    echo -n "Where should cheat.sh be installed [$installdir]? "; read -r _installdir
+    [ -n "$_installdir" ] && installdir=$_installdir
 
     if [ "$installdir" = y ] \
         || [ "$installdir" = Y ] \
@@ -172,8 +175,8 @@ EOF
 
   # after the repository cloned, we may have the log directory
   # and we can write our installation log into it
-  mkdir -p "$installdir/log/"
-  LOG="$installdir/log/install.log"
+  mkdir -p "log/"
+  LOG="$PWD/log/install.log"
 
   # we use tee everywhere so we should set -o pipefail
   set -o pipefail
@@ -184,7 +187,7 @@ EOF
   # set PYTHON2 to NO:
   # PYTHON2=NO
   #
-  PYTHON2=YES
+  PYTHON2=NO
   if [[ $PYTHON2 = YES ]]; then
     python="python2"
     pip="pip"
@@ -198,6 +201,8 @@ EOF
   _say_what_i_do Creating virtual environment
   "$python" "$(command -v virtualenv)" "${virtualenv_python3_option[@]}" ve \
       || fatal Could not create virtual environment with "python2 $(command -v virtualenv) ve"
+
+  export CHEATSH_PATH_WORKDIR=$PWD
 
   # rapidfuzz does not support Python 2,
   # so if we are using Python 2, install fuzzywuzzy instead
