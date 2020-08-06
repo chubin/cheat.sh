@@ -129,7 +129,7 @@ class UnknownPages(InternalPages):
             possible_topics = process.extract(topic, topics_list, scorer=fuzz.ratio)[:3]
         else:
             possible_topics = process.extract(topic, topics_list, limit=3, scorer=fuzz.ratio)
-        possible_topics_text = "\n".join([("    * %s %s" % x) for x in possible_topics])
+        possible_topics_text = "\n".join([("    * %s %s" % (x[0], int(x[1]))) for x in possible_topics])
         return """
 Unknown topic.
 Do you mean one of these topics maybe?
