@@ -84,7 +84,7 @@ while read -r number test_line; do
   fi
 
   if ! diff -u3 --color=always results/"$number" "$TMP" > "$TMP2"; then
-    if [[ $CHEATSH_UPDATE_TESTS_RESULTS = NO ]]; then
+    if [[ $update_tests_results = NO ]]; then
       if [ "$show_details" = YES ]; then
         cat "$TMP2"
       fi
