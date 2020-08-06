@@ -101,7 +101,7 @@ while read -r number test_line; do
   ((i++))
 done < "$TMP3"
 
-if [[ $CHEATSH_UPDATE_TESTS_RESULTS = NO ]]; then
+if [[ $update_tests_results = NO ]]; then
   echo TESTS/OK/FAILED "$i/$((i-failed))/$failed"
 else
   echo TESTS/OK/UPDATED "$i/$((i-failed))/$failed"
