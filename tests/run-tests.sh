@@ -10,6 +10,8 @@
 # 2) configure CHTSH_URL
 # 3) run the script
 
+CHTSH_SCRIPT=$(dirname "$(dirname "$(realpath "$(readlink -f "$0")")")")/share/cht.sh.txt
+
 # work from script's dir
 cd "$(dirname "$0")" || exit
 
@@ -33,7 +35,7 @@ TMP2=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
 TMP3=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
 trap 'rm -rf $TMP $TMP2 $TMP3' EXIT
 
-CHTSH_SCRIPT=$(dirname "$(dirname "$(readlink -f "$0")")")/share/cht.sh.txt
+echo "Using cht.sh client at $CHTSH_SCRIPT"
 
 export PYTHONIOENCODING=UTF-8
 
