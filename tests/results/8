@@ -29,7 +29,7 @@ __CHTSH_DATETIME="2020-08-05 09:30:30 +0200"
 
 # cht.sh configuration loading
 #
-# configuration is stored in ~/.cht.sh/ (can be overridden by CHTSH_HOME)
+# configuration is stored in ~/.cht.sh/ (can be overridden with CHTSH env var.)
 #
 CHTSH_HOME=${CHTSH:-"$HOME"/.cht.sh}
 [ -z "$CHTSH_CONF" ] && CHTSH_CONF=$CHTSH_HOME/cht.sh.conf
@@ -336,8 +336,8 @@ do_query()
   local b_opts=
   local uri="${CHTSH_URL}/\"\$(get_query_options $query)\""
 
-  if [ -e "$HOME/.cht.sh/id" ]; then
-    b_opts="-b \"\$HOME/.cht.sh/id\""
+  if [ -e "$CHTSH_HOME/id" ]; then
+    b_opts="-b \"\$CHTSH_HOME/id\""
   fi
 
   eval curl "$b_opts" -s "$uri" > "$TMP1"
@@ -518,7 +518,7 @@ if [ "$is_macos" != yes ]; then
 fi
 command -v rlwrap >/dev/null || { echo 'DEPENDENCY: install "rlwrap" to use cht.sh in the shell mode' >&2; exit 1; }
 
-mkdir -p "$HOME/.cht.sh/"
+mkdir -p "$CHTSH_HOME/"
 lines=$(tput lines)
 
 if command -v less >/dev/null; then
@@ -611,11 +611,11 @@ EOF
 }
 
 cmd_hush() {
-  mkdir -p "$HOME/.cht.sh/" && touch "$HOME/.cht.sh/.hushlogin" && echo "Initial 'use help' message was disabled"
+  mkdir -p "$CHTSH_HOME/" && touch "$CHTSH_HOME/.hushlogin" && echo "Initial 'use help' message was disabled"
 }
 
 cmd_id() {
-  id_file="$HOME/.cht.sh/id"
+  id_file="$CHTSH_HOME/id"
 
   if [ id = "$input" ]; then
     new_id=""
@@ -741,7 +741,7 @@ TMP1=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
 trap 'rm -f $TMP1 $TMP2' EXIT
 trap 'true' INT
 
-if ! [ -e "$HOME/.cht.sh/.hushlogin" ] && [ -z "$this_query" ]; then
+if ! [ -e "$CHTSH_HOME/.hushlogin" ] && [ -z "$this_query" ]; then
   echo "type 'help' for the cht.sh shell help"
 fi
 
@@ -753,7 +753,7 @@ while true; do
   fi
 
   input=$(
-    rlwrap -H "$HOME/.cht.sh/history" -pgreen -C cht.sh -S "$full_prompt" bash "$0" --read | sed 's/ *#.*//'
+    rlwrap -H "$CHTSH_HOME/history" -pgreen -C cht.sh -S "$full_prompt" bash "$0" --read | sed 's/ *#.*//'
   )
 
   cmd_name=${input%% *}
@@ -772,5 +772,5 @@ while true; do
     version)        cmd_name=version;;
     *)              cmd_name="query"; cmd_args="$input";;
   esac
-  "cmd_$cmd_name" $cmd_args 
+  "cmd_$cmd_name" $cmd_args
 done
