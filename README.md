@@ -838,7 +838,7 @@ of the repository, which belongs the current cheat sheet.
 
 You can edit the cheat sheet directly in your browser (you need a github account for it).
 There is an edit button in the top right corner. If you click on it, an editor will be open.
-There you will change the cheat sheet (under the hood: the upstrem repository is forked, your changes are
+There you will change the cheat sheet (under the hood: the upstream repository is forked, your changes are
 committed in the forked repository, a pull request to the upstream repository owner is sent).
 
 ![cheat.sh cheat sheets repositories](http://cheat.sh/files/edit-cheat-sheet.png)
