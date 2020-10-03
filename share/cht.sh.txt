@@ -402,6 +402,7 @@ if [ "$CHTSH_MODE" = auto ] && [ -d "$CHEATSH_INSTALLATION" ]; then
     # ignoring all options
     # currently the standalone.py does not support them anyway
     local opt
+    OPTIND=1
     while getopts "b:s" opt; do
       :
     done
@@ -414,6 +415,7 @@ elif [ "$(uname -s)" = OpenBSD ] && [ -x /usr/bin/ftp ]; then
   # any better test not involving either OS matching or actual query?
   curl() {
     local opt args="-o -"
+    OPTIND=1
     while getopts "b:s" opt; do
       case $opt in
         b) args="$args -c $OPTARG";;
