@@ -58,9 +58,17 @@ esac
 if ! local foo 2>/dev/null; then
   if typeset foo 2>/dev/null; then
     alias local=typeset
+  elif declare foo 2>/dev/null; then
+    alias local=declare
   else
     alias local=eval		# XXX avoid "local foo", use "local foo=" instead
   fi
+fi
+unset foo
+
+# for zsh
+if [ -n "$ZSH_NAME" ]; then
+  set -o shwordsplit
 fi
 
 fatal()
