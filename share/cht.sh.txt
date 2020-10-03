@@ -422,14 +422,14 @@ elif [ "$(uname -s)" = OpenBSD ] && [ -x /usr/bin/ftp ]; then
       esac
     done
     shift $((OPTIND - 1))
-    /usr/bin/ftp "$args" "$@"
+    /usr/bin/ftp $args "$@"
   }
 else
   command -v curl   >/dev/null || { echo 'DEPENDENCY: install "curl" to use cht.sh' >&2; exit 1; }
   _CURL=$(command -v curl)
   if [ x"$CHTSH_CURL_OPTIONS" != x ]; then
     curl() {
-      $_CURL "${CHTSH_CURL_OPTIONS}" "$@"
+      $_CURL ${CHTSH_CURL_OPTIONS} "$@"
     }
   fi
 fi
