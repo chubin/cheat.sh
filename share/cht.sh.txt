@@ -340,7 +340,7 @@ do_query()
     b_opts="-b \"\$HOME/.cht.sh/id\""
   fi
 
-  eval curl "$b_opts" -s "$uri" > "$TMP1"
+  eval curl $b_opts -s "$uri" > "$TMP1"
 
   if [ -z "$lines" ] || [ "$(wc -l "$TMP1" | awk '{print $1}')" -lt "$lines" ]; then
     cat "$TMP1"
