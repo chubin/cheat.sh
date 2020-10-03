@@ -211,7 +211,7 @@ EOF
   fi
 
   _say_what_i_do Creating virtual environment
-  virtualenv "${virtualenv_python3_options}" ve \
+  $(command -v virtualenv) "${virtualenv_python3_options}" ve \
       || fatal "Could not create virtual environment with 'virtualenv ve'"
 
   export CHEATSH_PATH_WORKDIR=$PWD
