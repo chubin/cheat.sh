@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # shellcheck disable=SC1117,SC2001
 #
 # [X] open section
@@ -122,8 +122,8 @@ EOF
 
   local _exit_code=0
 
-  local dependencies=(python git virtualenv)
-  for dep in "${dependencies[@]}"; do
+  local dependencies="python git virtualenv"
+  for dep in $dependencies; do
     command -v "$dep" >/dev/null || \
     { echo "DEPENDENCY: \"$dep\" is needed to install cheat.sh in the standalone mode" >&2; _exit_code=1; }
   done
@@ -191,15 +191,15 @@ EOF
   if [[ $PYTHON2 = YES ]]; then
     python="python2"
     pip="pip"
-    virtualenv_python3_option=()
+    virtualenv_python3_options=
   else
     python="python3"
     pip="pip3"
-    virtualenv_python3_option=(-p python3)
+    virtualenv_python3_options="-p python3"
   fi
 
   _say_what_i_do Creating virtual environment
-  "$python" "$(command -v virtualenv)" "${virtualenv_python3_option[@]}" ve \
+  "$python" "$(command -v virtualenv)" $virtualenv_python3_options ve \
       || fatal Could not create virtual environment with "python2 $(command -v virtualenv) ve"
 
   export CHEATSH_PATH_WORKDIR=$PWD
@@ -712,8 +712,7 @@ cmd_update() {
   if ! cmp "$0" "$TMP2" > /dev/null 2>&1; then
     if grep -q ^__CHTSH_VERSION= "$TMP2"; then
       # section was vaildated by us already
-      args=(--shell "$section")
-      cp "$TMP2" "$0" && echo "Updated. Restarting..." && rm "$TMP2" && CHEATSH_RESTART=1 exec "$0" "${args[@]}"
+      cp "$TMP2" "$0" && echo "Updated. Restarting..." && rm "$TMP2" && CHEATSH_RESTART=1 exec "$0" --shell "$section"
     else
       echo "Something went wrong. Please update manually"
     fi
