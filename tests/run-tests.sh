@@ -109,8 +109,4 @@ else
   echo TESTS/OK/UPDATED "$i/$((i-failed))/$failed"
 fi
 
-if [ "$failed" != 0 ]; then
-  exit 1
-else
-  exit 0
-fi
+test $failed -eq 0
