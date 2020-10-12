@@ -85,7 +85,7 @@ while read -r number test_line; do
     eval "curl -s $CHTSH_URL/$test_line" > "$TMP"
   fi
 
-  if ! diff -u3 --color=always results/"$number" "$TMP" > "$TMP2"; then
+  if ! diff -u3 results/"$number" "$TMP" > "$TMP2"; then
     if [[ $update_tests_results = NO ]]; then
       if [ "$show_details" = YES ]; then
         cat "$TMP2"
@@ -109,8 +109,4 @@ else
   echo TESTS/OK/UPDATED "$i/$((i-failed))/$failed"
 fi
 
-if [ "$failed" != 0 ]; then
-  exit 1
-else
-  exit 0
-fi
+test $failed -eq 0
