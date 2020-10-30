@@ -30,7 +30,7 @@ Such a thing exists.
 * Ultrafast, returns answers within 100 ms, as a rule.
 * Has a convenient command line client, `cht.sh`, that is very advantageous and helpful, though not mandatory.
 * Can be used directly from code editors, without opening a browser and not switching your mental context.
-* Supports a special stealth mode where it can be used fully invisibly without ever touching a key and and making sounds.
+* Supports a special stealth mode where it can be used fully invisibly without ever touching a key and making sounds.
 
 <p align="center">
   <img src='https://cheat.sh/files/demo-curl.gif'/>
