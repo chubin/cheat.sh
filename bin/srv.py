@@ -275,12 +275,18 @@ def answer(topic=None):
     return Response(result, mimetype='text/plain')
 
 
-if '--debug' in sys.argv:
-    app.debug = True
-if 'CHEATSH_PORT' in os.environ:
-    PORT = int(os.environ.get('CHEATSH_PORT'))
-else:
-    PORT = CONFIG['server.port']
-SRV = WSGIServer((CONFIG['server.bind'], PORT), app) # log=None)
-print("Starting server on {}:{}".format(SRV.address[0], SRV.address[1]))
-SRV.serve_forever()
+if __name__ == '__main__':
+    # Serving cheat.sh with `gevent`
+    if '--debug' in sys.argv:
+        # Not all debug mode features are available under `gevent`
+        # https://github.com/pallets/flask/issues/3825
+        app.debug = True
+
+    if 'CHEATSH_PORT' in os.environ:
+        PORT = int(os.environ.get('CHEATSH_PORT'))
+    else:
+        PORT = CONFIG['server.port']
+
+    SRV = WSGIServer((CONFIG['server.bind'], PORT), app) # log=None)
+    print("Starting gevent server on {}:{}".format(SRV.address[0], SRV.address[1]))
+    SRV.serve_forever()
