@@ -1,4 +1,4 @@
-dist: bionic
+dist: focal
 
 language:
   - generic
@@ -10,7 +10,7 @@ before_install:
   - docker-compose ps
 
 script:
-  - curl --retry 3 --retry-all http://localhost:8002
+  - curl --retry 3 --retry-all-errors http://localhost:8002
   - docker-compose logs --no-color
   - docker logs chtsh
   - CHEATSH_TEST_STANDALONE=NO bash tests/run-tests.sh
