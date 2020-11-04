@@ -10,8 +10,7 @@ before_install:
   - docker-compose ps
 
 script:
-  - sleep 3
-  - curl http://localhost:8002
+  - curl --connect-timeout 10 http://localhost:8002
   - docker-compose logs --no-color
   - docker logs chtsh
   - CHEATSH_TEST_STANDALONE=NO bash tests/run-tests.sh
