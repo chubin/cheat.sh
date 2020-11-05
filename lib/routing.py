@@ -131,7 +131,7 @@ class Router(object):
         topic_list = [x[len(topic):]
                     for x in self.get_topics_list()
                     if x.startswith(topic + "/")]
-        if ":list" in topic_list: topic_list.remove(":list")
+        if "/:list" in topic_list: topic_list.remove("/:list")
         random_topic = topic + random.choice(topic_list)
         return random_topic
 
