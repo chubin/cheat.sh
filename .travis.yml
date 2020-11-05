@@ -1,4 +1,4 @@
-dist: bionic
+dist: focal
 
 language:
   - generic
@@ -10,8 +10,7 @@ before_install:
   - docker-compose ps
 
 script:
-  - sleep 3
-  - curl http://localhost:8002
+  - wget --timeout 3 --tries=5 --spider localhost:8002 2>&1 | grep -i http
   - docker-compose logs --no-color
   - docker logs chtsh
   - CHEATSH_TEST_STANDALONE=NO bash tests/run-tests.sh
