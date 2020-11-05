@@ -9,7 +9,7 @@ Exports:
 from __future__ import print_function
 
 import re
-
+import random
 import cache
 import adapter.cheat_sheets
 import adapter.cmd
@@ -106,10 +106,36 @@ class Router(object):
         """
         Return answer_dict for the `query`.
         """
-
         return self._adapter[topic_type]\
                .get_page_dict(query, request_options=request_options)
 
+    
+    def is_random_request(self,topic):
+        print("Entrato in is_random_request con {}".format(topic))
+        if topic.endswith('/:random') or topic.lstrip('/') == ':random':
+            #We strip the :random part and see if the query is valid by running a get_topics_list()
+            topic = topic[:-8]
+            topic_list = [x[len(topic):]
+                        for x in self.get_topics_list()
+                        if x.startswith(topic + "/")]
+            if topic_list:                
+                #This is a correct formatted query like /cpp/:random
+                print("La richiesta random è giusta")
+                print("Questa è la topic_list della richiesta :random  = {}".format(topic_list))
+                return True
+        return False
+
+    def select_random_topic(self,topic):
+        print("Entrato in select_random_topic con {}".format(topic))
+        topic = topic[:-8]
+        topic_list = [x[len(topic):]
+                    for x in self.get_topics_list()
+                    if x.startswith(topic + "/")]
+        if ":list" in topic_list: topic_list.remove(":list")
+        random_topic = topic + random.choice(topic_list)
+        return random_topic
+
+    
     def get_answer_dict(self, topic, request_options=None):
         """
         Find cheat sheet for the topic.
@@ -120,6 +146,8 @@ class Router(object):
         Returns:
             answer_dict:      the answer dictionary
         """
+        if self.is_random_request(topic):
+           topic = self.select_random_topic(topic)
 
         topic_type = self.get_topic_type(topic)
 
