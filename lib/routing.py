@@ -119,6 +119,9 @@ class Router(object):
             #Here we remove the special cases
             if ":list" in topic_list: topic_list.remove(":list")
             if "rosetta/" in topic_list: topic_list.remove("rosetta/")
+            #Here we still check that topic_list in not empty
+            if not topic_list:
+                return prefix
             random_topic = random.choice(topic_list)
             return prefix + random_topic
         
