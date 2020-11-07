@@ -112,9 +112,9 @@ class Router(object):
 
     def handle_if_random_request(self,topic):
         """
-        Return topic type for `topic` or "unknown" if topic can't be determined.
+        Check if the `query` if a :random one, if yes we check its correctness and then randomly select a topic, based on the provided prefix.
+
         """
-        
         def __select_random_topic(prefix,topic_list):
             #Here we remove the special cases
             if ":list" in topic_list: topic_list.remove(":list")
