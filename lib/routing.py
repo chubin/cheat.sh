@@ -114,40 +114,31 @@ class Router(object):
         """
         Return topic type for `topic` or "unknown" if topic can't be determined.
         """
-
-        def __select_random_topic(stripped_topic,topic_list):
-            #Here we remove the special pages if present
+        
+        def __select_random_topic(prefix,topic_list):
+            #Here we remove the special cases
             if ":list" in topic_list: topic_list.remove(":list")
             if "rosetta/" in topic_list: topic_list.remove("rosetta/")
             random_topic = random.choice(topic_list)
-            print("Il random_topic è {}".format(stripped_topic + random_topic))
-            return stripped_topic + random_topic
+            return prefix + random_topic
         
-        print("Entrato in handle_if_random_request con {}".format(topic))
         if topic.endswith('/:random') or topic.lstrip('/') == ':random':
             #We strip the :random part and see if the query is valid by running a get_topics_list()
-
-            # Here we take the cheat.sh/x/ part
-            stripped_topic = topic[:-7]
-            
-            topic_list = [x[len(stripped_topic):]
+            prefix = topic[:-7]
+            topic_list = [x[len(prefix):]
                          for x in self.get_topics_list()
-                         if x.startswith(stripped_topic)]
-
+                         if x.startswith(prefix)]
             if '' in topic_list: topic_list.remove('')
             if topic_list:                
-                #This is a correct formatted query like /cpp/:random
-                print("La richiesta random è giusta")
-                print("Questa è la topic_list della richiesta :random  = {}".format(topic_list))
-                random_topic = __select_random_topic(stripped_topic,topic_list)
+                # This is a correct formatted random query like /cpp/:random, the topic_list is not empty.
+                random_topic = __select_random_topic(prefix,topic_list)
                 return random_topic
             else:
-                #This is wrongly random formatted
-                # It is not a valid random request, we just strip the /:random 
+                # This is a wrongly formatted random query like /xyxyxy/:random, the topic_list not empty
+                # we just strip the /:random and let the already implemented logic handle it.
                 wrongly_formatted_random = topic[:-8]
-                print("La richiesta random è sbagliata")
-                print("Eseguo lo stripping  = {}".format(wrongly_formatted_random))
                 return wrongly_formatted_random
+
         #Here if not a random requst, we just forward the topic
         return topic
 
