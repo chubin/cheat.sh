@@ -124,17 +124,18 @@ class Router(object):
         
         if topic.endswith('/:random') or topic.lstrip('/') == ':random':
             #We strip the :random part and see if the query is valid by running a get_topics_list()
+            if topic.lstrip('/') == ':random' : topic = topic.lstrip('/')
             prefix = topic[:-7]
             topic_list = [x[len(prefix):]
                          for x in self.get_topics_list()
                          if x.startswith(prefix)]
             if '' in topic_list: topic_list.remove('')
             if topic_list:                
-                # This is a correct formatted random query like /cpp/:random, the topic_list is not empty.
+                # This is a correct formatted random query like /cpp/:random as the topic_list is not empty.
                 random_topic = __select_random_topic(prefix,topic_list)
                 return random_topic
             else:
-                # This is a wrongly formatted random query like /xyxyxy/:random, the topic_list not empty
+                # This is a wrongly formatted random query like /xyxyxy/:random as the topic_list is empty
                 # we just strip the /:random and let the already implemented logic handle it.
                 wrongly_formatted_random = topic[:-8]
                 return wrongly_formatted_random
