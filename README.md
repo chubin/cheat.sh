@@ -20,7 +20,7 @@ Such a thing exists.
 [![Build Status](https://travis-ci.org/chubin/cheat.sh.svg?branch=master)](https://travis-ci.org/chubin/cheat.sh)
 
 ## Features
-
+notnot
 **cheat.sh**
 
 * Has a simple curl/browser interface.
@@ -658,6 +658,7 @@ Other pages:
     :post               how to post new cheat sheet
     :styles             list of color styles
     :styles-demo        show color styles usage examples
+    :random             fetches a random page (can be used in a subsection too: /go/:random)
 ```
 
 ## Search
