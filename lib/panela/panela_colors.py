@@ -4,7 +4,6 @@ import os
 import sys
 import colored
 import itertools
-from globals import MYDIR
 
 """
 
@@ -13,13 +12,12 @@ that will be used for all chubin's console services.
 There are several features that not yet implemented (see ___doc___ in Panela)
 
 TODO:
-    * html output
     * png output
 
 """
 
 from wcwidth import wcswidth
-from colors import find_nearest_color, HEX_TO_ANSI, rgb_from_str
+from .colors import find_nearest_color, HEX_TO_ANSI, rgb_from_str
 import pyte
 
 # http://stackoverflow.com/questions/19782975/convert-rgb-color-to-the-nearest-color-in-palette-web-safe-color
@@ -566,6 +564,14 @@ class Template(object):
         self.code = []
         self.panela = None
 
+        self.width = 0
+        self.height = 0
+
+        # [x, y, char, color, bg_color], ...
+        # colors are in #000000 format or None
+        # char is None for the end of line
+        self.data = []
+
         self._colors = {
             'A': '#00cc00',
             'B': '#00cc00',
@@ -608,21 +614,71 @@ class Template(object):
                 elif self._mode == 'code':
                     self.mask.append(line)
 
+        self.width = max([len(line) for line in self.page])
+        self.height = len(self.page)
+
+    def parse(self):
+        lines = self.page
+        self.data = []
+
+        for y, line in enumerate(lines):
+            x = 0
+            for x, char in enumerate(line):
+                color = None
+                bg_color = None
+                if y < len(self.mask):
+                    if x < len(self.mask[y]):
+                        m = self.mask[y][x]
+                        color = self._colors.get(m)
+                        bg_color = self._bg_colors.get(m)
+
+                self.data.append([x, y, char, color, bg_color])
+            # end of line
+            self.data.append([x, y, None, None, None])
+
+    def render_html(self, colorize=True, writer=sys.stdout):
+
+        prev_style = (None, None)
+
+        for x, y, char, color, bg_color in self.data:
+            style = (color, bg_color)
+            if char == None:  # end of line
+                if colorize:
+                    if prev_style != (None, None):
+                        writer.write("</span>")
+                    prev_style = (None, None)
+                writer.write("\n")
+            else:
+                if colorize:
+                    if style != prev_style:
+                        if prev_style != (None, None):
+                            writer.write("</span>")
+                        if style != (None, None):
+                            fore = style[0] if style[0] else 'unset'
+                            back = style[1] if style[1] else 'unset'
+                            writer.write("<span style=\"" +
+                                    "color: %s; " % fore +
+                                    "background-color: %s\">" % back)
+                        prev_style = style
+
+                if char == '<':
+                    writer.write("&lt;")
+                elif char == '>':
+                    writer.write("&gt;")
+                elif char == '&':
+                    writer.write("&amp;")
+                else:
+                    writer.write(char)
+
+
     def apply_mask(self):
 
-        lines = self.page
-        x_size = max([len(x) for x in lines])
-        y_size = len(lines)
-
-        self.panela = Panela(x=x_size, y=y_size)
+        self.panela = Panela(x=self.width, y=self.height)
         self.panela.read_ansi("".join("%s\n" % x for x in self.page))
 
-        for i, line in enumerate(self.mask):
-            for j, char in enumerate(line):
-                if char in self._colors or char in self._bg_colors:
-                    color = self._colors.get(char)
-                    bg_color = self._bg_colors.get(char)
-                    self.panela.put_point(j, i, color=color, background=bg_color)
+        for x, y, _, color, bg_color in self.data:
+            if color or bg_color:
+                self.panela.put_point(x, y, color=color, background=bg_color)
 
     def show(self):
 
@@ -634,9 +690,12 @@ class Template(object):
 def main():
     "Only for experiments"
 
+    from globals import MYDIR
+
     pagepath = os.path.join(MYDIR, "share/firstpage-v2.pnl")
     template = Template()
     template.read(pagepath)
+    template.parse()
     template.apply_mask()
     sys.stdout.write(template.show())
 
