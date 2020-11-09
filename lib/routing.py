@@ -109,33 +109,42 @@ class Router(object):
         return self._adapter[topic_type]\
                .get_page_dict(query, request_options=request_options)
 
-
-    def handle_if_random_request(self,topic):
+    def handle_if_random_request(self, topic):
         """
         Check if the `query` if a :random one, if yes we check its correctness and then randomly select a topic, based on the provided prefix.
 
         """
-        def __select_random_topic(prefix,topic_list):
+
+        def __select_random_topic(prefix, topic_list):
             #Here we remove the special cases
-            if ":list" in topic_list: topic_list.remove(":list")
-            if "rosetta/" in topic_list: topic_list.remove("rosetta/")
-            #Here we still check that topic_list in not empty
-            if not topic_list:
+            if "rosetta/" in topic_list:
+                topic_list.remove("rosetta/")
+
+            cleaned_topic_list = [ x for x in topic_list if ':' not in x]
+
+            #Here we still check that cleaned_topic_list in not empty
+            if not cleaned_topic_list:
                 return prefix
-            random_topic = random.choice(topic_list)
+                
+            random_topic = random.choice(cleaned_topic_list)
             return prefix + random_topic
         
         if topic.endswith('/:random') or topic.lstrip('/') == ':random':
             #We strip the :random part and see if the query is valid by running a get_topics_list()
-            if topic.lstrip('/') == ':random' : topic = topic.lstrip('/')
+            if topic.lstrip('/') == ':random' :
+                 topic = topic.lstrip('/')
             prefix = topic[:-7]
+            
             topic_list = [x[len(prefix):]
                          for x in self.get_topics_list()
                          if x.startswith(prefix)]
-            if '' in topic_list: topic_list.remove('')
+
+            if '' in topic_list: 
+                topic_list.remove('')
+
             if topic_list:                
                 # This is a correct formatted random query like /cpp/:random as the topic_list is not empty.
-                random_topic = __select_random_topic(prefix,topic_list)
+                random_topic = __select_random_topic(prefix, topic_list)
                 return random_topic
             else:
                 # This is a wrongly formatted random query like /xyxyxy/:random as the topic_list is empty
@@ -145,8 +154,6 @@ class Router(object):
 
         #Here if not a random requst, we just forward the topic
         return topic
-
-
     
     def get_answer_dict(self, topic, request_options=None):
         """

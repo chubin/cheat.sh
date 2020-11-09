@@ -20,7 +20,7 @@ Such a thing exists.
 [![Build Status](https://travis-ci.org/chubin/cheat.sh.svg?branch=master)](https://travis-ci.org/chubin/cheat.sh)
 
 ## Features
-notnot
+
 **cheat.sh**
 
 * Has a simple curl/browser interface.
