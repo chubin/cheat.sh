@@ -117,10 +117,7 @@ class Router(object):
 
         def __select_random_topic(prefix, topic_list):
             #Here we remove the special cases
-            if "rosetta/" in topic_list:
-                topic_list.remove("rosetta/")
-
-            cleaned_topic_list = [ x for x in topic_list if ':' not in x]
+            cleaned_topic_list = [ x for x in topic_list if '/' not in x and ':' not in x]
 
             #Here we still check that cleaned_topic_list in not empty
             if not cleaned_topic_list:
