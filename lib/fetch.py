@@ -200,6 +200,10 @@ def main(args):
         _show_usage()
         sys.exit(0)
 
+    logdir = os.path.dirname(CONFIG["path.log.fetch"])
+    if not os.path.exists(logdir):
+        os.makedirs()
+
     logging.basicConfig(
         filename=CONFIG["path.log.fetch"],
         level=logging.DEBUG,
