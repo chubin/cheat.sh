@@ -202,7 +202,7 @@ def main(args):
 
     logdir = os.path.dirname(CONFIG["path.log.fetch"])
     if not os.path.exists(logdir):
-        os.makedirs()
+        os.makedirs(logdir)
 
     logging.basicConfig(
         filename=CONFIG["path.log.fetch"],
