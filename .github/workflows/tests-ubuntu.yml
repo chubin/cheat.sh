@@ -14,8 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install dependencies
-      run: pip3 install -r requirements.txt
+      run: pip install -r requirements.txt
     - name: fetch upstream cheat sheets
-      run: python3 lib/fetch.py fetch-all
+      run: python lib/fetch.py fetch-all
     - name: run tests
       run: bash tests/run-tests.sh
