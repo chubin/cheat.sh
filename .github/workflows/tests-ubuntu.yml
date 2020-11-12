@@ -5,6 +5,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  schedule:
+    - cron:  '0 9 * * 4'
 
 jobs:
   build:
@@ -14,6 +16,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install dependencies
-      run: pip3 install -r requirements.txt
+      run: pip install -r requirements.txt
+    - name: fetch upstream cheat sheets
+      run: python lib/fetch.py fetch-all
     - name: run tests
       run: bash tests/run-tests.sh
