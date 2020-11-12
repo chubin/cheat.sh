@@ -28,17 +28,19 @@
 [38;5;67m10.0[39m[38;5;252m [39m[38;5;252m/[39m[38;5;252m [39m[38;5;67m3[39m[38;5;252m  [39m[38;5;246;03m# => 3.3333333333333335[39;00m
 
 [38;5;246;03m# Modulo operation[39;00m
-[38;5;67m7[39m[38;5;252m [39m[38;5;252m%[39m[38;5;252m [39m[38;5;67m3[39m[38;5;252m  [39m[38;5;246;03m# => 1[39;00m
+[38;5;67m7[39m[38;5;252m [39m[38;5;252m%[39m[38;5;252m [39m[38;5;67m3[39m[38;5;252m   [39m[38;5;246;03m# => 1[39;00m
+[38;5;246;03m# i % j have the same sign as j, unlike C[39;00m
+[38;5;252m-[39m[38;5;67m7[39m[38;5;252m [39m[38;5;252m%[39m[38;5;252m [39m[38;5;67m3[39m[38;5;252m  [39m[38;5;246;03m# => 2[39;00m
 
 [38;5;246;03m# Exponentiation (x**y, x to the yth power)[39;00m
 [38;5;67m2[39m[38;5;252m*[39m[38;5;252m*[39m[38;5;67m3[39m[38;5;252m  [39m[38;5;246;03m# => 8[39;00m
 
 [38;5;246;03m# Enforce precedence with parentheses[39;00m
-[38;5;67m1[39m[38;5;252m [39m[38;5;252m+[39m[38;5;252m [39m[38;5;67m3[39m[38;5;252m [39m[38;5;252m*[39m[38;5;252m [39m[38;5;67m2[39m[38;5;252m  [39m[38;5;246;03m# => 7[39;00m
+[38;5;67m1[39m[38;5;252m [39m[38;5;252m+[39m[38;5;252m [39m[38;5;67m3[39m[38;5;252m [39m[38;5;252m*[39m[38;5;252m [39m[38;5;67m2[39m[38;5;252m    [39m[38;5;246;03m# => 7[39;00m
 [38;5;252m([39m[38;5;67m1[39m[38;5;252m [39m[38;5;252m+[39m[38;5;252m [39m[38;5;67m3[39m[38;5;252m)[39m[38;5;252m [39m[38;5;252m*[39m[38;5;252m [39m[38;5;67m2[39m[38;5;252m  [39m[38;5;246;03m# => 8[39;00m
 
 [38;5;246;03m# Boolean values are primitives (Note: the capitalization)[39;00m
-[38;5;70;01mTrue[39;00m[38;5;252m  [39m[38;5;246;03m# => True[39;00m
+[38;5;70;01mTrue[39;00m[38;5;252m   [39m[38;5;246;03m# => True[39;00m
 [38;5;70;01mFalse[39;00m[38;5;252m  [39m[38;5;246;03m# => False[39;00m
 
 [38;5;246;03m# negate with not[39;00m
@@ -104,7 +106,7 @@
 [38;5;214m"[39m[38;5;214mThis is a string.[39m[38;5;214m"[39m
 [38;5;214m'[39m[38;5;214mThis is also a string.[39m[38;5;214m'[39m
 
-[38;5;246;03m# Strings can be added too! But try not to do this.[39;00m
+[38;5;246;03m# Strings can be added too[39;00m
 [38;5;214m"[39m[38;5;214mHello [39m[38;5;214m"[39m[38;5;252m [39m[38;5;252m+[39m[38;5;252m [39m[38;5;214m"[39m[38;5;214mworld![39m[38;5;214m"[39m[38;5;252m  [39m[38;5;246;03m# => "Hello world!"[39;00m
 [38;5;246;03m# String literals (but not variables) can be concatenated without using '+'[39;00m
 [38;5;214m"[39m[38;5;214mHello [39m[38;5;214m"[39m[38;5;252m [39m[38;5;214m"[39m[38;5;214mworld![39m[38;5;214m"[39m[38;5;252m    [39m[38;5;246;03m# => "Hello world!"[39;00m
@@ -118,9 +120,8 @@
 [38;5;246;03m# You can also format using f-strings or formatted string literals (in Python 3.6+)[39;00m
 [38;5;252mname[39m[38;5;252m [39m[38;5;252m=[39m[38;5;252m [39m[38;5;214m"[39m[38;5;214mReiko[39m[38;5;214m"[39m
 [38;5;214mf[39m[38;5;214m"[39m[38;5;214mShe said her name is [39m[38;5;214m{[39m[38;5;252mname[39m[38;5;214m}[39m[38;5;214m.[39m[38;5;214m"[39m[38;5;252m [39m[38;5;246;03m# => "She said her name is Reiko"[39;00m
-[38;5;246;03m# You can basically put any Python statement inside the braces and it will be output in the string.[39;00m
+[38;5;246;03m# You can basically put any Python expression inside the braces and it will be output in the string.[39;00m
 [38;5;214mf[39m[38;5;214m"[39m[38;5;214m{[39m[38;5;252mname[39m[38;5;214m}[39m[38;5;214m is [39m[38;5;214m{[39m[38;5;31mlen[39m[38;5;252m([39m[38;5;252mname[39m[38;5;252m)[39m[38;5;214m}[39m[38;5;214m characters long.[39m[38;5;214m"[39m[38;5;252m [39m[38;5;246;03m# => "Reiko is 5 characters long."[39;00m
-
 
 [38;5;246;03m# None is an object[39;00m
 [38;5;70;01mNone[39;00m[38;5;252m  [39m[38;5;246;03m# => None[39;00m
@@ -151,7 +152,6 @@
 
 [38;5;246;03m# Simple way to get input data from console[39;00m
 [38;5;252minput_string_var[39m[38;5;252m [39m[38;5;252m=[39m[38;5;252m [39m[38;5;31minput[39m[38;5;252m([39m[38;5;214m"[39m[38;5;214mEnter some data: [39m[38;5;214m"[39m[38;5;252m)[39m[38;5;252m [39m[38;5;246;03m# Returns the data as a string[39;00m
-[38;5;246;03m# Note: In earlier versions of Python, input() method was named as raw_input()[39;00m
 
 [38;5;246;03m# There are no declarations, only assignments.[39;00m
 [38;5;246;03m# Convention is to use lower_case_with_underscores[39;00m
@@ -484,7 +484,7 @@
 
 [38;5;70;01mwith[39;00m[38;5;252m [39m[38;5;31mopen[39m[38;5;252m([39m[38;5;214m'[39m[38;5;214mmyfile2.txt[39m[38;5;214m'[39m[38;5;252m,[39m[38;5;252m [39m[38;5;214m"[39m[38;5;214mr+[39m[38;5;214m"[39m[38;5;252m)[39m[38;5;252m [39m[38;5;70;01mas[39;00m[38;5;252m [39m[38;5;252mfile[39m[38;5;252m:[39m
 [38;5;252m    [39m[38;5;252mcontents[39m[38;5;252m [39m[38;5;252m=[39m[38;5;252m [39m[38;5;252mjson[39m[38;5;252m.[39m[38;5;252mload[39m[38;5;252m([39m[38;5;252mfile[39m[38;5;252m)[39m[38;5;252m       [39m[38;5;246;03m# reads a json object from a file[39;00m
-[38;5;31mprint[39m[38;5;252m([39m[38;5;252mcontents[39m[38;5;252m)[39m[38;5;252m     [39m
+[38;5;31mprint[39m[38;5;252m([39m[38;5;252mcontents[39m[38;5;252m)[39m
 [38;5;246;03m# print: {"aa": 12, "bb": 21}[39;00m
 
 
@@ -751,9 +751,8 @@
 [38;5;252m    [39m[38;5;246;03m# Call the static method[39;00m
 [38;5;252m    [39m[38;5;31mprint[39m[38;5;252m([39m[38;5;252mHuman[39m[38;5;252m.[39m[38;5;252mgrunt[39m[38;5;252m([39m[38;5;252m)[39m[38;5;252m)[39m[38;5;252m            [39m[38;5;246;03m# => "*grunt*"[39;00m
 
-[38;5;252m    [39m[38;5;246;03m# Cannot call static method with instance of object[39;00m
-[38;5;252m    [39m[38;5;246;03m# because i.grunt() will automatically put "self" (the object i) as an argument[39;00m
-[38;5;252m    [39m[38;5;31mprint[39m[38;5;252m([39m[38;5;252mi[39m[38;5;252m.[39m[38;5;252mgrunt[39m[38;5;252m([39m[38;5;252m)[39m[38;5;252m)[39m[38;5;252m                [39m[38;5;246;03m# => TypeError: grunt() takes 0 positional arguments but 1 was given[39;00m
+[38;5;252m    [39m[38;5;246;03m# Static methods can be called by instances too[39;00m
+[38;5;252m    [39m[38;5;31mprint[39m[38;5;252m([39m[38;5;252mi[39m[38;5;252m.[39m[38;5;252mgrunt[39m[38;5;252m([39m[38;5;252m)[39m[38;5;252m)[39m[38;5;252m                [39m[38;5;246;03m# => "*grunt*"[39;00m
 
 [38;5;252m    [39m[38;5;246;03m# Update the property for this instance[39;00m
 [38;5;252m    [39m[38;5;252mi[39m[38;5;252m.[39m[38;5;252mage[39m[38;5;252m [39m[38;5;252m=[39m[38;5;252m [39m[38;5;67m42[39m
@@ -898,7 +897,7 @@
 
 [38;5;252m    [39m[38;5;70;01mdef[39;00m[38;5;252m [39m[38;5;68m__init__[39m[38;5;252m([39m[38;5;31mself[39m[38;5;252m,[39m[38;5;252m [39m[38;5;252m*[39m[38;5;252margs[39m[38;5;252m,[39m[38;5;252m [39m[38;5;252m*[39m[38;5;252m*[39m[38;5;252mkwargs[39m[38;5;252m)[39m[38;5;252m:[39m
 [38;5;252m        [39m[38;5;246;03m# Typically to inherit attributes you have to call super:[39;00m
-[38;5;252m        [39m[38;5;246;03m# super(Batman, self).__init__(*args, **kwargs)      [39;00m
+[38;5;252m        [39m[38;5;246;03m# super(Batman, self).__init__(*args, **kwargs)[39;00m
 [38;5;252m        [39m[38;5;246;03m# However we are dealing with multiple inheritance here, and super()[39;00m
 [38;5;252m        [39m[38;5;246;03m# only works with the next base class in the MRO list.[39;00m
 [38;5;252m        [39m[38;5;246;03m# So instead we explicitly call __init__ for all ancestors.[39;00m
