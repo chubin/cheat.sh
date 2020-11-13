@@ -90,9 +90,6 @@ while read -r number test_line; do
       if [ "$show_details" = YES ]; then
         cat "$TMP2"
       fi
-      if grep -q "Internal Server Error" "$TMP2"; then
-        [[ $TRAVIS == true ]] && docker logs chtsh
-      fi
       echo "FAILED: [$number] $test_line"
     else
       cat "$TMP" > results/"$number"
