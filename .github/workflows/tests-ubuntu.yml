@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install dependencies
-      run: pip install --upgrade -r requirements.txt ; pip freeze
+      run: pip install --upgrade -r requirements.txt
     - name: fetch upstream cheat sheets
       run: python lib/fetch.py fetch-all
     - name: run tests
