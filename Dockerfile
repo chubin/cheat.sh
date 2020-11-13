@@ -6,11 +6,12 @@ RUN apk add --update --no-cache git py3-six py3-pygments py3-yaml py3-gevent \
 ## building missing python packages
 RUN apk add --no-cache --virtual build-deps py3-pip g++ python3-dev \
     && pip3 install --no-cache-dir rapidfuzz colored polyglot pycld2 \
+    && pip3 install --no-cache-dir --update -r requirements.txt \
     && apk del build-deps
 ## copying
 WORKDIR /app
 COPY . /app
-RUN mkdir -p /root/.cheat.sh/log/ && pip3 install --no-cache-dir --update -r requirements.txt \
+RUN mkdir -p /root/.cheat.sh/log/ \
     && python3 lib/fetch.py fetch-all
 
 # installing server dependencies
