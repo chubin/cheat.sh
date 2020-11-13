@@ -47,7 +47,7 @@ class UpstreamAdapter(Adapter):
     """
 
     _adapter_name = "upstream"
-    _output_format = "ansi"
+    _output_format = "text+code"
     _cache_needed = True
 
     def _get_page(self, topic, request_options=None):
@@ -55,7 +55,7 @@ class UpstreamAdapter(Adapter):
         options_string = "&".join(["%s=%s" % (x, y) for (x, y) in request_options.items()])
         url = CONFIG["upstream.url"].rstrip('/') \
                 + '/' + topic.lstrip('/') \
-                + "?" + options_string
+                + "?cT" # + options_string
         try:
             response = requests.get(url, timeout=CONFIG["upstream.timeout"])
             answer = response.text

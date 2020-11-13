@@ -44,7 +44,7 @@ class Question(UpstreamAdapter):
 
         if not os.path.exists(CONFIG["path.internal.bin.upstream"]):
             # if the upstream program is not found, use normal upstream adapter
-            self._output_format = "ansi"
+            # self._output_format = "ansi"
             return UpstreamAdapter._get_page(self, topic, request_options=request_options)
 
         topic = topic.replace('+', ' ')
