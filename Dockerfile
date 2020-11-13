@@ -10,7 +10,7 @@ RUN apk add --no-cache --virtual build-deps py3-pip g++ python3-dev \
 ## copying
 WORKDIR /app
 COPY . /app
-RUN mkdir -p /root/.cheat.sh/log/ \
+RUN mkdir -p /root/.cheat.sh/log/ && pip3 install --no-cache-dir --update -r requirements.txt \
     && python3 lib/fetch.py fetch-all
 
 # installing server dependencies
