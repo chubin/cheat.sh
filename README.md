@@ -658,6 +658,7 @@ Other pages:
     :post               how to post new cheat sheet
     :styles             list of color styles
     :styles-demo        show color styles usage examples
+    :random             fetches a random page (can be used in a subsection too: /go/:random)
 ```
 
 ## Search

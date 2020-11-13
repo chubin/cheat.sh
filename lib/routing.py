@@ -9,7 +9,7 @@ Exports:
 from __future__ import print_function
 
 import re
-
+import random
 import cache
 import adapter.cheat_sheets
 import adapter.cmd
@@ -106,10 +106,52 @@ class Router(object):
         """
         Return answer_dict for the `query`.
         """
-
         return self._adapter[topic_type]\
                .get_page_dict(query, request_options=request_options)
 
+    def handle_if_random_request(self, topic):
+        """
+        Check if the `query` if a :random one, if yes we check its correctness and then randomly select a topic, based on the provided prefix.
+
+        """
+
+        def __select_random_topic(prefix, topic_list):
+            #Here we remove the special cases
+            cleaned_topic_list = [ x for x in topic_list if '/' not in x and ':' not in x]
+
+            #Here we still check that cleaned_topic_list in not empty
+            if not cleaned_topic_list:
+                return prefix
+                
+            random_topic = random.choice(cleaned_topic_list)
+            return prefix + random_topic
+        
+        if topic.endswith('/:random') or topic.lstrip('/') == ':random':
+            #We strip the :random part and see if the query is valid by running a get_topics_list()
+            if topic.lstrip('/') == ':random' :
+                 topic = topic.lstrip('/')
+            prefix = topic[:-7]
+            
+            topic_list = [x[len(prefix):]
+                         for x in self.get_topics_list()
+                         if x.startswith(prefix)]
+
+            if '' in topic_list: 
+                topic_list.remove('')
+
+            if topic_list:                
+                # This is a correct formatted random query like /cpp/:random as the topic_list is not empty.
+                random_topic = __select_random_topic(prefix, topic_list)
+                return random_topic
+            else:
+                # This is a wrongly formatted random query like /xyxyxy/:random as the topic_list is empty
+                # we just strip the /:random and let the already implemented logic handle it.
+                wrongly_formatted_random = topic[:-8]
+                return wrongly_formatted_random
+
+        #Here if not a random requst, we just forward the topic
+        return topic
+    
     def get_answer_dict(self, topic, request_options=None):
         """
         Find cheat sheet for the topic.
@@ -120,7 +162,8 @@ class Router(object):
         Returns:
             answer_dict:      the answer dictionary
         """
-
+        
+        topic = self.handle_if_random_request(topic)
         topic_type = self.get_topic_type(topic)
 
         # 'question' queries are pretty expensive, that's why they should be handled
