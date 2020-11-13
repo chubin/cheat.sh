@@ -23,5 +23,16 @@ jobs:
   docker:
     runs-on: ubuntu-20.04
     steps:
-      - run: docker-compose build
+    - uses: actions/checkout@v2
+    - run: docker-compose build
+    - run:   - docker images
+    - run: |
+        docker-compose -f docker-compose.yml up -d
+        # docker-compose -f docker-compose.yml -f docker-compose.debug.yml up -d
+        docker-compose ps
+        # wait until the web server is up
+        wget --timeout 3 --tries=5 --spider localhost:8002 2>&1 | grep -i http
+        docker-compose logs --no-color
+    - run: CHEATSH_TEST_STANDALONE=NO bash tests/run-tests.sh
+
     
