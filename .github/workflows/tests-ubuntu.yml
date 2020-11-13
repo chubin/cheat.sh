@@ -25,7 +25,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: docker-compose build
-    - run:   - docker images
+    - run: docker images
     - run: |
         docker-compose -f docker-compose.yml up -d
         # docker-compose -f docker-compose.yml -f docker-compose.debug.yml up -d
