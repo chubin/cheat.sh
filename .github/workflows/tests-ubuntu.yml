@@ -10,9 +10,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-20.04
-
     steps:
     - uses: actions/checkout@v2
     - name: install dependencies
@@ -21,3 +19,9 @@ jobs:
       run: python lib/fetch.py fetch-all
     - name: run tests
       run: bash tests/run-tests.sh
+
+  docker:
+    runs-on: ubuntu-20.04
+    steps:
+      - run: docker-compose build
+    
