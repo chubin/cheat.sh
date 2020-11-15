@@ -9,8 +9,7 @@ redis
 colored
 langdetect
 cffi
-polyglot
-PyICU
+git+https://github.com/aboSamoor/polyglot.git@9b93b2e
 colorama
 pyyaml
 python-Levenshtein
