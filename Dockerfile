@@ -1,10 +1,10 @@
-FROM ubuntu:20.04
+FROM python:3.9-slim
 
 ### copying app sources
 WORKDIR /app
 COPY . /app
 
-RUN pip install --upgrade -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 ## fetching cheat sheets
 RUN python3 lib/fetch.py fetch-all
