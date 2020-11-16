@@ -182,7 +182,8 @@ class Router(object):
                     }
 
             answer = self._get_page_dict(topic, topic_type, request_options=request_options)
-            cache.put('q:' + topic, answer)
+            if answer.get("cache", True):
+                cache.put('q:' + topic, answer)
             return answer
 
         # Try to find cacheable queries in the cache.

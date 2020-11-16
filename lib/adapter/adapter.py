@@ -145,6 +145,7 @@ class Adapter(with_metaclass(AdapterMC, object)):
             'topic': topic,
             'topic_type': self._adapter_name,
             'format': self._get_output_format(topic),
+            'cache': self._cache_needed,
             }
         answer_dict.update(answer)
 

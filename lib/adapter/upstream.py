@@ -58,7 +58,7 @@ class UpstreamAdapter(Adapter):
                 + "?" + options_string
         try:
             response = requests.get(url, timeout=CONFIG["upstream.timeout"])
-            answer = response.text
+            answer = {"cache": False, "answer": response.text}
         except requests.exceptions.ConnectionError:
             answer = {"cache": False, "answer":_are_you_offline()}
         return answer
