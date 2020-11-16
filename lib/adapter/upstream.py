@@ -48,7 +48,7 @@ class UpstreamAdapter(Adapter):
 
     _adapter_name = "upstream"
     _output_format = "ansi"
-    _cache_needed = True
+    _cache_needed = False
 
     def _get_page(self, topic, request_options=None):
 
