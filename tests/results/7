@@ -31,6 +31,7 @@ Special pages:
     :bash_completion    bash function for tab completion
     :styles             list of color styles
     :styles-demo        show color styles usage examples
+    :random             fetches a random cheat sheet
 
 Shell client:
 
@@ -75,6 +76,7 @@ each programming language topic has the following subptopics:
     hello               hello world + how to start the program
     :learn              big cheat sheet for learning language from scratch
     :list               list of topics        
+    :random             fetches a random cheat sheet belonging to the topic
 
 Support programming languages:
 
