@@ -5,22 +5,19 @@ Configuration parameters:
     path.internal.ansi2html
 """
 
-from gevent.monkey import patch_all
-from gevent.subprocess import Popen, PIPE
-
-# pylint: disable=wrong-import-position,wrong-import-order
 import sys
 import os
 import re
+from subprocess import Popen, PIPE
 
 MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 sys.path.append("%s/lib/" % MYDIR)
 
+# pylint: disable=wrong-import-position
 from config import CONFIG
 from globals import error
 from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_FOOTER
 import frontend.ansi
-# pylint: disable=wrong-import-position,wrong-import-order
 
 # temporary having it here, but actually we have the same data
 # in the adapter module

@@ -18,12 +18,7 @@ Exported functions:
 Configuration parameters:
 """
 
-# pylint: disable=wrong-import-position,wrong-import-order
-
 from __future__ import print_function
-
-from gevent.monkey import patch_all
-from gevent.subprocess import Popen
 
 import sys
 import os
@@ -31,6 +26,7 @@ import textwrap
 import hashlib
 import re
 from itertools import groupby, chain
+from subprocess import Popen
 from tempfile import NamedTemporaryFile
 
 from config import CONFIG
