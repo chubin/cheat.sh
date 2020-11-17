@@ -37,12 +37,34 @@ from options import parse_args
 
 from stateful_queries import save_query, last_query
 
+
 if not os.path.exists(os.path.dirname(CONFIG["path.log.main"])):
     os.makedirs(os.path.dirname(CONFIG["path.log.main"]))
 logging.basicConfig(
     filename=CONFIG["path.log.main"],
     level=logging.DEBUG,
     format='%(asctime)s %(message)s')
+# Fix Flask "exception and request logging" to `stderr`.
+#
+# When Flask's werkzeug detects that logging is already set, it
+# doesn't add its own logger that prints exceptions.
+stderr_handler = logging.StreamHandler()
+logging.getLogger().addHandler(stderr_handler)
+#
+# Alter log format to disting log lines from everything else
+stderr_handler.setFormatter(logging.Formatter('%(filename)s:%(lineno)s: %(message)s'))
+#
+# Sometimes werkzeug starts logging before an app is imported
+# (https://github.com/pallets/werkzeug/issues/1969)
+# resulting in duplicating lines. In that case we need root
+# stderr handler to skip lines from werkzeug.
+class SkipFlaskLogger(object):
+    def filter(self, record):
+        if record.name != 'werkzeug':
+            return True
+if logging.getLogger('werkzeug').handlers:
+    stderr_handler.addFilter(SkipFlaskLogger())
+
 
 app = Flask(__name__) # pylint: disable=invalid-name
 app.jinja_loader = jinja2.ChoiceLoader([
