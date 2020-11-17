@@ -1,15 +1,14 @@
 """
 """
 
-# pylint: disable=relative-import,wrong-import-position,unused-argument,abstract-method
-
-from gevent.monkey import patch_all
-from gevent.subprocess import Popen, PIPE
-
-from .adapter import Adapter
+# pylint: disable=unused-argument,abstract-method
 
 import os.path
 import re
+from subprocess import Popen, PIPE
+
+from .adapter import Adapter
+
 
 def _get_abspath(path):
     """Find absolute path of the specified `path`
