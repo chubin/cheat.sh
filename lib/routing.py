@@ -222,6 +222,7 @@ class Router(object):
                     answer = None
                 if answer:
                     answers.append(answer)
+                    continue
 
             answer = self._get_page_dict(topic, topic_type, request_options=request_options)
             if isinstance(answer, dict):
