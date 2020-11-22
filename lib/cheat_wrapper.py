@@ -11,7 +11,7 @@ Exports:
 import re
 import json
 
-from routing import get_answer_dict, get_topics_list
+from routing import get_answers, get_topics_list
 from search import find_answers_by_keyword
 from languages_data import LANGUAGE_ALIAS, rewrite_editor_section_name
 import postprocessing
@@ -98,7 +98,7 @@ def cheat_wrapper(query, request_options=None, output_format='ansi'):
         answers = find_answers_by_keyword(
             topic, keyword, options=search_options, request_options=request_options)
     else:
-        answers = [get_answer_dict(topic, request_options=request_options)]
+        answers = get_answers(topic, request_options=request_options)
 
     answers = [
         postprocessing.postprocess(
