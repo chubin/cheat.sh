@@ -1,3 +1,4 @@
+[48;5;8m[24m cheat.sheets:az [24m[0m
 [38;5;246;03m# Microsoft Azure CLI 2.0[39;00m
 [38;5;246;03m# Command-line tools for Azure[39;00m
 
@@ -88,3 +89,26 @@
 
 [38;5;246;03m# detach disk[39;00m
 [38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mdisk[39m[38;5;252m [39m[38;5;252mdetach[39m[38;5;252m [39m[38;5;252m--vm-name[39m[38;5;252m [39m[38;5;252mvm1[39m[38;5;252m [39m[38;5;252m-g[39m[38;5;252m [39m[38;5;252mRESOURCE_GROUP[39m[38;5;252m [39m[38;5;252m--name[39m[38;5;252m [39m[38;5;252mDISK1_ID[39m
+
+[48;5;8m[24m tldr:az [24m[0m
+[38;5;246;03m# az[39;00m
+[38;5;246;03m# The official CLI tool for Microsoft Azure.[39;00m
+[38;5;246;03m# More information: <https://docs.microsoft.com/cli/azure>.[39;00m
+
+[38;5;246;03m# Log in to Azure:[39;00m
+[38;5;252maz[39m[38;5;252m [39m[38;5;252mlogin[39m
+
+[38;5;246;03m# Manage azure subscription information:[39;00m
+[38;5;252maz[39m[38;5;252m [39m[38;5;252maccount[39m
+
+[38;5;246;03m# List all Azure Managed Disks:[39;00m
+[38;5;252maz[39m[38;5;252m [39m[38;5;252mdisk[39m[38;5;252m [39m[38;5;252mlist[39m
+
+[38;5;246;03m# List all Azure virtual machines:[39;00m
+[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mlist[39m
+
+[38;5;246;03m# Manage Azure Kubernetes Services:[39;00m
+[38;5;252maz[39m[38;5;252m [39m[38;5;252maks[39m
+
+[38;5;246;03m# Manage Azure Network resources:[39;00m
+[38;5;252maz[39m[38;5;252m [39m[38;5;252mnetwork[39m
