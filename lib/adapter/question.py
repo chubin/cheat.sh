@@ -4,15 +4,13 @@ Configuration parameters:
     path.internal.bin.upstream
 """
 
-# pylint: disable=relative-import,wrong-import-position,wrong-import-order
+# pylint: disable=relative-import
 
 from __future__ import print_function
 
-from gevent.monkey import patch_all
-from gevent.subprocess import Popen, PIPE
-
 import os
 import re
+from subprocess import Popen, PIPE
 
 from polyglot.detect import Detector
 from polyglot.detect.base import UnknownLanguage
