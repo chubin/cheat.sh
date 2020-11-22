@@ -22,7 +22,7 @@ Configuration parameters:
 import re
 
 from config import CONFIG
-from routing import get_answer_dict, get_topics_list
+from routing import get_answers, get_topics_list
 
 def _limited_entry():
     return {
@@ -100,10 +100,11 @@ def find_answers_by_keyword(directory, keyword, options="", request_options=None
         if not options_dict["recursive"] and '/' in subtopic:
             continue
 
-        answer_dict = get_answer_dict(topic, request_options=request_options)
-        answer_text = answer_dict.get('answer', '')
-        if match(answer_text, keyword, options_dict=options_dict):
-            answers_found.append(answer_dict)
+        answer_dicts = get_answers(topic, request_options=request_options)
+        for answer_dict in answer_dicts:
+            answer_text = answer_dict.get('answer', '')
+            if match(answer_text, keyword, options_dict=options_dict):
+                answers_found.append(answer_dict)
 
         if len(answers_found) > CONFIG['search.limit']:
             answers_found.append(
