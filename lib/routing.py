@@ -120,7 +120,7 @@ class Router(object):
 
     def handle_if_random_request(self, topic):
         """
-        Check if the `query` if a :random one,
+        Check if the `query` is a :random one,
         if yes we check its correctness and then randomly select a topic,
         based on the provided prefix.
 
