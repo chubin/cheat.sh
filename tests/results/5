@@ -1,4 +1,4 @@
-[48;5;8m[24m btrfs [24m[0m
+[48;5;8m[24m cheat.sheets:btrfs [24m[0m
 [38;5;246;03m# create the subvolume /mnt/sv1 in the /mnt volume[39;00m
 [38;5;252mbtrfs[39m[38;5;252m [39m[38;5;252msubvolume[39m[38;5;252m [39m[38;5;252mcreate[39m[38;5;252m [39m[38;5;252m/mnt/sv1[39m
 
@@ -13,3 +13,16 @@
 
 [38;5;246;03m# taking snapshot of a subvolume[39;00m
 [38;5;252mbtrfs[39m[38;5;252m [39m[38;5;252msubvolume[39m[38;5;252m [39m[38;5;252msnapshot[39m[38;5;252m [39m[38;5;252m/mnt/sv1[39m[38;5;252m [39m[38;5;252m/mnt/sv1_snapshot[39m
+
+[48;5;8m[24m tldr:btrfs [24m[0m
+[38;5;246;03m# Create subvolume:[39;00m
+[38;5;252msudo[39m[38;5;252m [39m[38;5;252mbtrfs[39m[38;5;252m [39m[38;5;252msubvolume[39m[38;5;252m [39m[38;5;252mcreate[39m[38;5;252m [39m[38;5;252mpath/to/subvolume[39m
+
+[38;5;246;03m# List subvolumes:[39;00m
+[38;5;252msudo[39m[38;5;252m [39m[38;5;252mbtrfs[39m[38;5;252m [39m[38;5;252msubvolume[39m[38;5;252m [39m[38;5;252mlist[39m[38;5;252m [39m[38;5;252mpath/to/mount_point[39m
+
+[38;5;246;03m# Enable quota:[39;00m
+[38;5;252msudo[39m[38;5;252m [39m[38;5;252mbtrfs[39m[38;5;252m [39m[38;5;252mquota[39m[38;5;252m [39m[38;5;31menable[39m[38;5;252m [39m[38;5;252mpath/to/subvolume[39m
+
+[38;5;246;03m# Show quota:[39;00m
+[38;5;252msudo[39m[38;5;252m [39m[38;5;252mbtrfs[39m[38;5;252m [39m[38;5;252mqgroup[39m[38;5;252m [39m[38;5;252mshow[39m[38;5;252m [39m[38;5;252mpath/to/subvolume[39m

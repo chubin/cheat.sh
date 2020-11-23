@@ -101,6 +101,10 @@ def _visualize(answers, request_options, search_mode=False):
     if color_style not in CONFIG['frontend.styles']:
         color_style = ''
 
+    # if there is more than one answer,
+    # show the source of the answer
+    multiple_answers = len(answers) > 1
+
     found = True
     result = ""
     for answer_dict in answers:
@@ -109,14 +113,16 @@ def _visualize(answers, request_options, search_mode=False):
         answer = answer_dict['answer']
         found = found and not topic_type == 'unknown'
 
-        if search_mode and topic != 'LIMITED':
+        if multiple_answers and topic != 'LIMITED':
+            section_name = f"{topic_type}:{topic}"
+
             if not highlight:
-                result += "\n[%s]\n" % topic
+                result += f"#[{section_name}]\n"
             else:
-                result += "\n%s%s %s %s%s\n" % (
-                    colored.bg('dark_gray'), colored.attr("res_underlined"),
-                    topic,
-                    colored.attr("res_underlined"), colored.attr('reset'))
+                result += "".join([
+                    "\n", colored.bg('dark_gray'), colored.attr("res_underlined"),
+                    f" {section_name} ",
+                    colored.attr("res_underlined"), colored.attr('reset'), "\n"])
 
         if answer_dict['format'] in ['ansi', 'text']:
             result += answer

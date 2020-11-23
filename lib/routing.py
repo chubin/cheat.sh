@@ -4,12 +4,13 @@ Queries routing and caching.
 Exports:
 
     get_topics_list()
-    get_answer_dict()
+    get_answers()
 """
-from __future__ import print_function
 
-import re
 import random
+import re
+from typing import Any, Dict, List
+
 import cache
 import adapter.cheat_sheets
 import adapter.cmd
@@ -83,20 +84,28 @@ class Router(object):
         self._cached_topics_list = answer
         return answer
 
-    def get_topic_type(self, topic):
+    def get_topic_type(self, topic: str) -> List[str]:
         """
-        Return topic type for `topic` or "unknown" if topic can't be determined.
+        Return list of topic types for `topic`
+        or ["unknown"] if topic can't be determined.
         """
 
-        def __get_topic_type(topic):
+        def __get_topic_type(topic: str) -> List[str]:
+            result = []
             for regexp, route in self.routing_table:
                 if re.search(regexp, topic):
                     if route in self._adapter:
                         if self._adapter[route].is_found(topic):
-                            return route
+                            result.append(route)
                     else:
-                        return route
-            return CONFIG["routing.default"]
+                        result.append(route)
+            if not result:
+                return [CONFIG["routing.default"]]
+
+            # cut the default route off, if there are more than one route found
+            if len(result) > 1:
+                return result[:-1]
+            return result
 
         if topic not in self._cached_topic_type:
             self._cached_topic_type[topic] = __get_topic_type(topic)
@@ -111,7 +120,9 @@ class Router(object):
 
     def handle_if_random_request(self, topic):
         """
-        Check if the `query` if a :random one, if yes we check its correctness and then randomly select a topic, based on the provided prefix.
+        Check if the `query` is a :random one,
+        if yes we check its correctness and then randomly select a topic,
+        based on the provided prefix.
 
         """
 
@@ -152,60 +163,80 @@ class Router(object):
         #Here if not a random requst, we just forward the topic
         return topic
     
-    def get_answer_dict(self, topic, request_options=None):
+    def get_answers(self, topic: str, request_options:Dict[str, str] = None) -> List[Dict[str, Any]]:
         """
-        Find cheat sheet for the topic.
+        Find cheat sheets for the topic.
 
         Args:
             `topic` (str):    the name of the topic of the cheat sheet
 
         Returns:
-            answer_dict:      the answer dictionary
+            [answer_dict]:    list of answers (dictionaries)
         """
         
+        # if topic specified as <topic_type>:<topic>,
+        # cut <topic_type> off
+        topic_type = ""
+        if re.match("[^/]+:", topic):
+            topic_type, topic = topic.split(":", 1)
+
         topic = self.handle_if_random_request(topic)
-        topic_type = self.get_topic_type(topic)
+        topic_types = self.get_topic_type(topic)
+
+        # if topic_type is specified explicitly,
+        # show pages only of that type
+        if topic_type and topic_type in topic_types:
+            topic_types = [topic_type]
 
         # 'question' queries are pretty expensive, that's why they should be handled
         # in a special way:
         # we do not drop the old style cache entries and try to reuse them if possible
-        if topic_type == 'question':
+        if topic_types == ['question']:
             answer = cache.get('q:' + topic)
             if answer:
                 if isinstance(answer, dict):
-                    return answer
-                return {
+                    return [answer]
+                return [{
                     'topic': topic,
                     'topic_type': 'question',
                     'answer': answer,
                     'format': 'text+code',
-                    }
+                    }]
 
-            answer = self._get_page_dict(topic, topic_type, request_options=request_options)
+            answer = self._get_page_dict(topic, topic_types[0], request_options=request_options)
             if answer.get("cache", True):
                 cache.put('q:' + topic, answer)
-            return answer
+            return [answer]
 
         # Try to find cacheable queries in the cache.
         # If answer was not found in the cache, resolve it in a normal way and save in the cache
-        cache_needed = self._adapter[topic_type].is_cache_needed()
-        if cache_needed:
-            answer = cache.get(topic)
-            if not isinstance(answer, dict):
-                answer = None
-            if answer:
-                return answer
+        answers = []
+        for topic_type in topic_types:
 
-        answer = self._get_page_dict(topic, topic_type, request_options=request_options)
-        if isinstance(answer, dict):
-            if "cache" in answer:
-                cache_needed = answer["cache"]
+            cache_entry_name = f"{topic_type}:{topic}"
+            cache_needed = self._adapter[topic_type].is_cache_needed()
 
-        if cache_needed and answer:
-            cache.put(topic, answer)
-        return answer
+            if cache_needed:
+                answer = cache.get(cache_entry_name)
+                if not isinstance(answer, dict):
+                    answer = None
+                if answer:
+                    answers.append(answer)
+                    continue
+
+            answer = self._get_page_dict(topic, topic_type, request_options=request_options)
+            if isinstance(answer, dict):
+                if "cache" in answer:
+                    cache_needed = answer["cache"]
+
+            if cache_needed and answer:
+                cache.put(cache_entry_name, answer)
+
+            answers.append(answer)
+
+        return answers
 
 # pylint: disable=invalid-name
 _ROUTER = Router()
 get_topics_list = _ROUTER.get_topics_list
-get_answer_dict = _ROUTER.get_answer_dict
+get_answers = _ROUTER.get_answers
