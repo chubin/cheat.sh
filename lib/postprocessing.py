@@ -40,6 +40,8 @@ def _filter_by_keyword(answer, keyword, options):
     def _split_paragraphs(text):
         answer = []
         paragraph = ""
+        if isinstance(text, bytes):
+            text = text.decode("utf-8")
         for line in text.splitlines():
             if line == "":
                 answer.append(paragraph)

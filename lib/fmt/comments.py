@@ -230,7 +230,7 @@ def _beautify(text, filetype, add_comments=False, remove_text=False):
     # or remove the text completely. Otherwise the code has to remain aligned
     unindent_code = add_comments or remove_text
 
-    lines = [x.rstrip('\n') for x in text.splitlines()]
+    lines = [x.decode("utf-8").rstrip('\n') for x in text.splitlines()]
     lines = _cleanup_lines(lines)
     lines_classes = zip(_classify_lines(lines), lines)
     lines_classes = _wrap_lines(lines_classes, unindent_code=unindent_code)
@@ -292,7 +292,8 @@ def beautify(text, lang, options):
         # if mode is unknown, just don't transform the text at all
         return text
 
-    text = text.encode('utf-8')
+    if isinstance(text, str):
+        text = text.encode('utf-8')
     digest = "t:%s:%s:%s" % (hashlib.md5(text).hexdigest(), lang, mode)
 
     # temporary added line that removes invalid cache entries
