@@ -103,6 +103,7 @@ fi
 printf '%s' "<html>
 <head>
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>
+<link rel=\"search\" type=\"application/opensearchdescription+xml\" href=\"/files/opensearch.xml\" title=\"cheat.sh\" />
 <link rel=\"stylesheet\" type=\"text/css\" href=\"/files/style.css\" />
 <link rel=\"stylesheet\" type=\"text/css\" href=\"/files/fonts/stylesheet.css\" />
 <style type=\"text/css\">
