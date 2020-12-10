@@ -104,7 +104,6 @@ printf '%s' "<html>
 <head>
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>
 <link rel=\"stylesheet\" type=\"text/css\" href=\"/files/style.css\" />
-<link rel=\"stylesheet\" type=\"text/css\" href=\"/files/fonts/stylesheet.css\" />
 <style type=\"text/css\">
 .ef0,.f0 { color: #$P0; } .eb0,.b0 { background-color: #$P0; }
 .ef1,.f1 { color: #$P1; } .eb1,.b1 { background-color: #$P1; }
