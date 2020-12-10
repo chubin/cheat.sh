@@ -88,7 +88,7 @@ while read -r number test_line; do
   if ! diff -u3 results/"$number" "$TMP" > "$TMP2"; then
     if [[ $update_tests_results = NO ]]; then
       if [ "$show_details" = YES ]; then
-        cat "$TMP2"
+        cat -t "$TMP2"
       fi
       echo "FAILED: [$number] $test_line"
     else
