@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+<ShortName>cheat.sh</ShortName>
+<Description>The only cheat sheet you need. Unified access to the best community driven documentation repositories of the world.</Description>
+<Url type="text/html" template="https://cheat.sh/{searchTerms}" />
+<Url type="application/opensearchdescription+xml" rel="self" template="https://cheat.sh/files/opensearch.xml" />
+<Tags>cheatsheet curl terminal command-line cli examples documentation help tldr</Tags>
+<Language>en-US</Language>
+<moz:SearchForm>https://cheat.sh</moz:SearchForm>
+</OpenSearchDescription>
