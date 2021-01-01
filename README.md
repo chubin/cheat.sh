@@ -22,10 +22,10 @@ Such a thing exists.
 
 **cheat.sh**
 
-* Has a simple curl/browser interface.
+* Has a simple curl/browser/editor interface.
 * Covers 56 programming languages, several DBMSes, and more than 1000 most important UNIX/Linux commands.
 * Provides access to the best community driven cheat sheets repositories in the world, on par with StackOverflow.
-* Available everywhere, no installation needed.
+* Available everywhere, no installation needed, but can be installed for offline usage.
 * Ultrafast, returns answers within 100 ms, as a rule.
 * Has a convenient command line client, `cht.sh`, that is very advantageous and helpful, though not mandatory.
 * Can be used directly from code editors, without opening a browser and not switching your mental context.
@@ -865,3 +865,15 @@ If you want to add a cheat sheet repository to cheat.sh, please open an issue:
 * [Add a new repository](https://github.com/chubin/cheat.sh/issues/new)
 
 Please specify the name of the repository, and give its short description.
+
+
+## Installation and standalone usage
+
+You don't need to install anything, to start using *cheat.sh*.
+
+There are two cases, when you want to install *cheat.sh* locally:
+
+1. You plan to use it off-line, without Internet access;
+2. You want to use your own cheat sheets (additionally, or as a replacement).
+
+Installation process in described in details here: [cheat.sh standalone installation](doc/standalone.md)
