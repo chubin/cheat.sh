@@ -73,13 +73,22 @@ app.jinja_loader = jinja2.ChoiceLoader([
 
 LIMITS = Limits()
 
-def is_html_needed(user_agent):
+PLAIN_TEXT_AGENTS = [
+    "curl",
+    "httpie",
+    "lwp-request",
+    "wget",
+    "python-requests",
+    "openbsd ftp",
+    "powershell",
+    "fetch",
+]
+
+def _is_html_needed(user_agent):
     """
     Basing on `user_agent`, return whether it needs HTML or ANSI
     """
-    plaintext_clients = [
-        'curl', 'wget', 'fetch', 'httpie', 'lwp-request', 'openbsd ftp', 'python-requests']
-    return all([x not in user_agent for x in plaintext_clients])
+    return all([x not in user_agent for x in PLAIN_TEXT_AGENTS])
 
 def is_result_a_script(query):
     return query in [':cht.sh']
@@ -233,7 +242,7 @@ def answer(topic=None):
     """
 
     user_agent = request.headers.get('User-Agent', '').lower()
-    html_needed = is_html_needed(user_agent)
+    html_needed = _is_html_needed(user_agent)
     options = parse_args(request.args)
 
     if topic in ['apple-touch-icon-precomposed.png', 'apple-touch-icon.png', 'apple-touch-icon-120x120-precomposed.png'] \
@@ -276,7 +285,7 @@ def answer(topic=None):
         if not_allowed:
             return "429 %s\n" % not_allowed, 429
 
-    html_is_needed = is_html_needed(user_agent) and not is_result_a_script(topic)
+    html_is_needed = _is_html_needed(user_agent) and not is_result_a_script(topic)
     if html_is_needed:
         output_format='html'
     else:
