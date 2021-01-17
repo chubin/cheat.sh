@@ -62,6 +62,7 @@ LEXER = {
     "solidity"  : pygments.lexers.JavascriptLexer,
     "scala"     : pygments.lexers.ScalaLexer,
     "scheme":   pygments.lexers.SchemeLexer,
+    "psql"   :   pygments.lexers.SqlLexer,
     "sql"   :   pygments.lexers.SqlLexer,
     "swift"     : pygments.lexers.SwiftLexer,
     "tcl"       : pygments.lexers.TclLexer,
@@ -125,6 +126,7 @@ VIM_NAME = {
     'solidity'  :   'js',
     'mathematica':  'mma',
     'wolfram-mathematica': 'mma',
+    'psql'      :   'sql',
 
     # not languages
     'cmake'     :   'sh',
