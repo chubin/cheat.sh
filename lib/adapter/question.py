@@ -19,6 +19,25 @@ from config import CONFIG
 from languages_data import SO_NAME
 from .upstream import UpstreamAdapter
 
+NOT_FOUND_MESSAGE = """404 NOT FOUND
+
+Unknown cheat sheet. Please try to reformulate your query.
+Query format:
+
+    /LANG/QUESTION
+
+Examples:
+
+    /python/read+json
+    /golang/run+external+program
+    /js/regex+search
+
+See /:help for more info.
+
+If the problem persists, file a GitHub issue at
+github.com/chubin/cheat.sh or ping @igor_chubin
+"""
+
 class Question(UpstreamAdapter):
 
     """
@@ -92,6 +111,10 @@ class Question(UpstreamAdapter):
         cmd = [CONFIG["path.internal.bin.upstream"]] + topic
         proc = Popen(cmd, stdin=open(os.devnull, "r"), stdout=PIPE, stderr=PIPE)
         answer = proc.communicate()[0].decode('utf-8')
+
+        if not answer:
+            return NOT_FOUND_MESSAGE
+
         return answer
 
     def get_list(self, prefix=None):
