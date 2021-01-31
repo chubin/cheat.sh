@@ -6,7 +6,9 @@ from the project tree.
 
 """
 
-import pygments.lexers
+from typing import Dict
+
+import pygments.lexers                                  # type: ignore
 
 LEXER = {
     "assembly"  : pygments.lexers.NasmLexer,
@@ -85,7 +87,7 @@ LEXER = {
 }
 
 # canonical names are on the right side
-LANGUAGE_ALIAS = {
+LANGUAGE_ALIAS: Dict[str, str]  = {
     'asm'       :   'assembly',
     'assembler' :   'assembly',
     'c++'       :   'cpp',
@@ -108,7 +110,7 @@ LANGUAGE_ALIAS = {
     'm'         :   'octave',
 }
 
-VIM_NAME = {
+VIM_NAME: Dict[str, str]  = {
     'assembly'  :   'asm',
     'bash'      :   'sh',
     'coffeescript': 'coffee',
@@ -135,7 +137,7 @@ VIM_NAME = {
     'flask'     :   'python',
 }
 
-SO_NAME = {
+SO_NAME: Dict[str, str]  = {
     'coffee'    :   'coffeescript',
     'js'        :   'javascript',
     'python3'   :   'python-3.x',
@@ -149,10 +151,10 @@ SO_NAME = {
 # into canonical cheat.sh names
 #
 
-ATOM_FT_NAME = {
+ATOM_FT_NAME: Dict[str, str] = {
 }
 
-EMACS_FT_NAME = {
+EMACS_FT_NAME: Dict[str, str]  = {
     "asm-mode"             : "asm",
     "awk-mode"             : "awk",
     "sh-mode"              : "bash",
@@ -217,16 +219,16 @@ EMACS_FT_NAME = {
     # vim
 }
 
-SUBLIME_FT_NAME = {
+SUBLIME_FT_NAME: Dict[str, str]  = {
 }
 
-VIM_FT_NAME = {
+VIM_FT_NAME: Dict[str, str]  = {
     'asm':          'assembler',
     'javascript':   'js',
     'octave':       'matlab',
 }
 
-VSCODE_FT_NAME = {
+VSCODE_FT_NAME: Dict[str, str]  = {
 }
 
 def rewrite_editor_section_name(section_name):

@@ -8,8 +8,8 @@ Uses external pygments formatters for highlighting (passed as an argument).
 """
 
 import re
-import ansiwrap
-import colored
+import ansiwrap     # type: ignore
+import colored      # type: ignore
 
 def format_text(text, config=None, highlighter=None):
     """

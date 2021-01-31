@@ -26,9 +26,9 @@ import os
 import sys
 import re
 
-import colored
-from pygments import highlight as pygments_highlight
-from pygments.formatters import Terminal256Formatter        # pylint: disable=no-name-in-module
+import colored                                              # type: ignore
+from pygments import highlight as pygments_highlight        # type: ignore
+from pygments.formatters import Terminal256Formatter        # type: ignore # pylint: disable=no-name-in-module
                                                             # pylint: disable=wrong-import-position
 sys.path.append(os.path.abspath(os.path.join(__file__, '..')))
 from config import CONFIG

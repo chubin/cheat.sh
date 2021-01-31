@@ -44,7 +44,7 @@ specified by an environment variable is not an integer, it is ignored.
 from __future__ import print_function
 import os
 
-from pygments.styles import get_all_styles
+from pygments.styles import get_all_styles          # type: ignore
 #def get_all_styles():
 #    return []
 
