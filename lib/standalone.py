@@ -6,10 +6,7 @@ from __future__ import print_function
 
 import sys
 import textwrap
-try:
-    import urlparse
-except ModuleNotFoundError:
-    import urllib.parse as urlparse
+import urllib.parse as urlparse
 
 import config
 config.CONFIG["cache.type"] = "none"

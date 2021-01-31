@@ -14,13 +14,6 @@ Configuration parameters:
     path.log.queries
 """
 
-from __future__ import print_function
-
-import sys
-if sys.version_info[0] < 3:
-    reload(sys)
-    sys.setdefaultencoding('utf8')
-
 import sys
 import logging
 import os
