@@ -24,12 +24,14 @@ if sys.version_info[0] < 3:
 import sys
 import logging
 import os
+
 import requests
 import jinja2
 from flask import Flask, request, send_from_directory, redirect, Response
 
 sys.path.append(os.path.abspath(os.path.join(__file__, "..", "..", "lib")))
 from config import CONFIG
+from devkeys import Devkeys
 from limits import Limits
 from cheat_wrapper import cheat_wrapper
 from post import process_post_request
@@ -278,6 +280,11 @@ def answer(topic=None):
     lang = get_answer_language(request)
     if lang:
         options['lang'] = lang
+
+    options["authorized"] = ""
+    if ("X-Cheatsh-Key" in request.headers and
+          Devkeys.check(request.headers.get("X-Cheatsh-Key"))):
+        options["authorized"] = Devkeys.check(request.headers.get("X-Cheatsh-Key"))
 
     ip_address = get_request_ip(request)
     if '+' in topic:

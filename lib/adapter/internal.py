@@ -21,6 +21,7 @@ from .adapter import Adapter
 from fmt.internal import colorize_internal
 
 _INTERNAL_TOPICS = [
+    ":authorized",
     ":cht.sh",
     ":bash_completion",
     ":emacs",
@@ -88,7 +89,12 @@ class InternalPages(Adapter):
             return self._get_list_answer(topic)
 
         answer = ""
-        if topic == ':styles':
+        if topic == ":authorized":
+            if request_options.get("authorized"):
+                answer = "AUTHORIZED (%s)\n" % (request_options.get("authorized"))
+            else:
+                answer = "NOT AUTHORIZED\n"
+        elif topic == ':styles':
             answer = "\n".join(CONFIG["frontend.styles"]) + "\n"
         elif topic == ":stat":
             answer = self._get_stat()+"\n"

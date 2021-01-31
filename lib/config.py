@@ -101,6 +101,7 @@ _CONFIG = {
     "path.internal.ansi2html": os.path.join(_MYDIR, "share/ansi2html.sh"),
     "path.internal.bin": os.path.join(_MYDIR, "bin"),
     "path.internal.bin.upstream": os.path.join(_MYDIR, "bin", "upstream"),
+    "path.internal.keysfile": os.path.join(_MYDIR, "etc/devkeys.txt"),
     "path.internal.malformed": os.path.join(_MYDIR, "share/static/malformed-response.html"),
     "path.internal.pages": os.path.join(_MYDIR, "share"),
     "path.internal.static": os.path.join(_MYDIR, "share/static"),
