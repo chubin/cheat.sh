@@ -9,10 +9,13 @@ redis
 colored
 langdetect
 cffi
-polyglot
-PyICU
-pycld2
 colorama
 pyyaml
 python-Levenshtein
 pylint
+
+#Disable language detection feature
+#
+#polyglot
+#PyICU
+#pycld2
