@@ -15,7 +15,7 @@ What features should it have?
 * **Tutoring** — It should help you to learn the subject.
 * **Inconspicuous** — It should be possible to use it completely unnoticed.
 
-Such a thing exists.
+Such a thing exists! It's easy to [install](#installation) and there's even [auto-complete](#tab-completion).
 
 
 ## Features
