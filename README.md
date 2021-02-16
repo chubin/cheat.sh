@@ -187,6 +187,8 @@ Try your own queries. Follow these rules:
 
 Read more about the programming languages queries below.
 
+----
+
 ## Command line client, cht.sh
 
 The cheat.sh service has its own command line client (`cht.sh`) that
@@ -342,6 +344,8 @@ To activate tab completion support for `cht.sh`, add the `:zsh` script to the *f
     $ # Open a new shell to load the plugin
 ```
 
+----
+
 ### Stealth mode
 
 Being used fully unnoticed is one of the most important property of any cheat sheet.
@@ -441,6 +445,8 @@ You can also use [`scoop`](https://github.com/lukesampson/scoop) command-line in
 ```batch
 scoop install cht
 ```
+
+----
 
 ## Self-Hosting
 
