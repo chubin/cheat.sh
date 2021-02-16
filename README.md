@@ -205,9 +205,10 @@ has several useful features compared to querying the service directly with `curl
 To install the client:
 
 ```
-    mkdir -p ~/bin/
-    curl https://cht.sh/:cht.sh > ~/bin/cht.sh
-    chmod +x ~/bin/cht.sh
+    PATH_DIR="$HOME/bin"  # or another directory on your $PATH
+    mkdir -p "$PATH_DIR"
+    curl https://cht.sh/:cht.sh > "$PATH_DIR/cht.sh"
+    chmod +x "$PATH_DIR/cht.sh"
 ```
 
 or to install it globally (for all users):
