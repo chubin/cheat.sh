@@ -822,13 +822,16 @@ all over the world
 
 |Cheat sheets           |Repository                                            | Users | Creation Date |
 |-----------------------|------------------------------------------------------|------------|---------------|
-|UNIX/Linux, programming|[cheat.sheets](https://github.com/chubin/cheat.sheets)| 38/223       | May 1, 2017   |
-|UNIX/Linux commands    |[tldr-pages/tldr](https://github.com/tldr-pages/tldr) | 760/23158  | Dec 8, 2013   |
-|UNIX/Linux commands    |[chrisallenlane/cheat](https://github.com/chrisallenlane/cheat)|131/5240|Jul 28, 2013|
-|Programming languages  |[adambard/learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs)|1246/6748|Jun 23, 2013|
-|Go                     |[a8m/go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)|31/4039|Feb 9, 2014|
-|Perl                   |[pkrumnis/perl1line.txt](https://github.com/pkrumins/perl1line.txt)|5/190|Nov 4, 2011|
-|Programming languages  |[StackOverflow](https://stackoverflow.com)|9M |Sep 15, 2008|
+|UNIX/Linux, programming|[cheat.sheets](https://github.com/chubin/cheat.sheets)|![](https://img.shields.io/github/contributors-anon/chubin/cheat.sheets) ![](https://img.shields.io/github/stars/chubin/cheat.sheets)|May 1, 2017|
+|UNIX/Linux commands    |[tldr-pages/tldr](https://github.com/tldr-pages/tldr) |![](https://img.shields.io/github/contributors-anon/tldr-pages/tldr) ![](https://img.shields.io/github/stars/tldr-pages/tldr)|Dec 8, 2013|
+|UNIX/Linux commands    |[chrisallenlane/cheat](https://github.com/chrisallenlane/cheat)|![](https://img.shields.io/github/contributors-anon/chrisallenlane/cheat) ![](https://img.shields.io/github/stars/chrisallenlane/cheat)|Jul 28, 2013|
+|Programming languages  |[adambard/learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs)|![](https://img.shields.io/github/contributors-anon/adambard/learnxinyminutes-docs) ![](https://img.shields.io/github/stars/adambard/learnxinyminutes-docs)|Jun 23, 2013|
+|Go                     |[a8m/go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)|![](https://img.shields.io/github/contributors-anon/a8m/go-lang-cheat-sheet) ![](https://img.shields.io/github/stars/a8m/go-lang-cheat-sheet)|Feb 9, 2014|
+|Perl                   |[pkrumnis/perl1line.txt](https://github.com/pkrumins/perl1line.txt)|![](https://img.shields.io/github/contributors-anon/pkrumins/perl1line.txt) ![](https://img.shields.io/github/stars/pkrumins/perl1line.txt)|Nov 4, 2011|
+|Programming languages  |[StackOverflow](https://stackoverflow.com)|[14M](https://stackexchange.com/leagues/1/alltime/stackoverflow)|Sep 15, 2008|
+
+[cheat.sheets users]: https://img.shields.io/github/contributors-anon/chubin/cheat.sheets
+[cheat.sheets stars]: https://img.shields.io/github/stars/chubin/cheat.sheets
 
 Pie diagram reflecting cheat sheets sources distribution (by number of cheat sheets on cheat.sh originating from a repository):
 
