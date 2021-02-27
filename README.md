@@ -15,7 +15,7 @@ What features should it have?
 * **Tutoring** — It should help you to learn the subject.
 * **Inconspicuous** — It should be possible to use it completely unnoticed.
 
-Such a thing exists.
+Such a thing exists! It's easy to [install](#installation) and there's even [auto-complete](#tab-completion).
 
 
 ## Features
@@ -187,6 +187,8 @@ Try your own queries. Follow these rules:
 
 Read more about the programming languages queries below.
 
+----
+
 ## Command line client, cht.sh
 
 The cheat.sh service has its own command line client (`cht.sh`) that
@@ -203,9 +205,10 @@ has several useful features compared to querying the service directly with `curl
 To install the client:
 
 ```
-    mkdir -p ~/bin/
-    curl https://cht.sh/:cht.sh > ~/bin/cht.sh
-    chmod +x ~/bin/cht.sh
+    PATH_DIR="$HOME/bin"  # or another directory on your $PATH
+    mkdir -p "$PATH_DIR"
+    curl https://cht.sh/:cht.sh > "$PATH_DIR/cht.sh"
+    chmod +x "$PATH_DIR/cht.sh"
 ```
 
 or to install it globally (for all users):
@@ -342,6 +345,8 @@ To activate tab completion support for `cht.sh`, add the `:zsh` script to the *f
     $ # Open a new shell to load the plugin
 ```
 
+----
+
 ### Stealth mode
 
 Being used fully unnoticed is one of the most important property of any cheat sheet.
@@ -441,6 +446,8 @@ You can also use [`scoop`](https://github.com/lukesampson/scoop) command-line in
 ```batch
 scoop install cht
 ```
+
+----
 
 ## Self-Hosting
 
