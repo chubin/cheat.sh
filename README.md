@@ -830,9 +830,6 @@ all over the world
 |Perl                   |[pkrumnis/perl1line.txt](https://github.com/pkrumins/perl1line.txt)|![](https://img.shields.io/github/contributors-anon/pkrumins/perl1line.txt) ![](https://img.shields.io/github/stars/pkrumins/perl1line.txt)|Nov 4, 2011|
 |Programming languages  |[StackOverflow](https://stackoverflow.com)|[14M](https://stackexchange.com/leagues/1/alltime/stackoverflow)|Sep 15, 2008|
 
-[cheat.sheets users]: https://img.shields.io/github/contributors-anon/chubin/cheat.sheets
-[cheat.sheets stars]: https://img.shields.io/github/stars/chubin/cheat.sheets
-
 Pie diagram reflecting cheat sheets sources distribution (by number of cheat sheets on cheat.sh originating from a repository):
 
 ![cheat.sh cheat sheets repositories](http://cheat.sh/files/stat-2017-06-05.png)
