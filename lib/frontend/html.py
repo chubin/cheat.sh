@@ -96,7 +96,7 @@ def _render_html(query, result, editable, repository_button, topics_list, reques
     curl_line = "<span class='pre'>$ curl cheat.sh/</span>"
     if query == ':firstpage':
         query = ""
-    form_html = ('<form action="/" method="GET"/>'
+    form_html = ('<form action="/" method="GET">'
                  '%s%s'
                  '<input'
                  ' type="text" value="%s" name="topic"'
