@@ -536,7 +536,7 @@ In this example, several Vim plugins are used:
 * [scrooloose/syntastic](https://github.com/vim-syntastic/syntastic) — Syntax checking plugin
 * [cheat.sh-vim](https://github.com/dbeniamine/cheat.sh-vim) — Vim support
 
-Syntastic shows warnings and errors (found by code analysis tools: `jshint`, `merlin`, `pylint`, `shellcheckt` etc.),
+Syntastic shows warnings and errors (found by code analysis tools: `jshint`, `merlin`, `pylint`, `shellcheck` etc.),
 and `cheat.sh-vim` shows you explanations for the errors and warnings
 and answers on programming languages queries written in the editor.
 
