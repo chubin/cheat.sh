@@ -204,18 +204,18 @@ has several useful features compared to querying the service directly with `curl
 
 To install the client:
 
-```
-    PATH_DIR="$HOME/bin"  # or another directory on your $PATH
-    mkdir -p "$PATH_DIR"
-    curl https://cht.sh/:cht.sh > "$PATH_DIR/cht.sh"
-    chmod +x "$PATH_DIR/cht.sh"
+```bash
+PATH_DIR="$HOME/bin"  # or another directory on your $PATH
+mkdir -p "$PATH_DIR"
+curl https://cht.sh/:cht.sh > "$PATH_DIR/cht.sh"
+chmod +x "$PATH_DIR/cht.sh"
 ```
 
 or to install it globally (for all users):
 
-```
-    curl https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh
-    chmod +x /usr/local/bin/cht.sh
+```bash
+curl https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh
+chmod +x /usr/local/bin/cht.sh
 ```
 
 Note: The package "rlwrap" is a required dependency to run in shell mode. Install this using `sudo apt install rlwrap`
@@ -303,13 +303,13 @@ Use it to specify query options that you would use with each query.
 For example, to switch syntax highlighting off create the file with the following
 content:
 
-```
+```bash
 CHTSH_QUERY_OPTIONS="T"
 ```
 
 Or if you want to use a special syntax highlighting theme:
 
-```
+```bash
 CHTSH_QUERY_OPTIONS="style=native"
 ```
 
@@ -317,7 +317,7 @@ CHTSH_QUERY_OPTIONS="style=native"
 
 Other cht.sh configuration parameters:
 
-```
+```bash
 CHTSH_CURL_OPTIONS="-A curl"        # curl options used for cht.sh queries
 CHTSH_URL=https://cht.sh            # URL of the cheat.sh server
 ```
@@ -329,20 +329,20 @@ CHTSH_URL=https://cht.sh            # URL of the cheat.sh server
 
 To activate tab completion support for `cht.sh`, add the `:bash_completion` script to your `~/.bashrc`:
 
-```
-    $ curl https://cheat.sh/:bash_completion > ~/.bash.d/cht.sh
-    $ . ~/.bash.d/cht.sh
-    $ # and add . ~/.bash.d/cht.sh to ~/.bashrc
+```bash
+    curl https://cheat.sh/:bash_completion > ~/.bash.d/cht.sh
+    . ~/.bash.d/cht.sh
+    # and add . ~/.bash.d/cht.sh to ~/.bashrc
 ```
 
 #### ZSH Tab completion
 
 To activate tab completion support for `cht.sh`, add the `:zsh` script to the *fpath* in your `~/.zshrc`:
 
-```
-    $ curl https://cheat.sh/:zsh > ~/.zsh.d/_cht
-    $ echo 'fpath=(~/.zsh.d/ $fpath)' >> ~/.zshrc
-    $ # Open a new shell to load the plugin
+```zsh
+    curl https://cheat.sh/:zsh > ~/.zsh.d/_cht
+    echo 'fpath=(~/.zsh.d/ $fpath)' >> ~/.zshrc
+    # Open a new shell to load the plugin
 ```
 
 ----
@@ -536,7 +536,7 @@ In this example, several Vim plugins are used:
 * [scrooloose/syntastic](https://github.com/vim-syntastic/syntastic) — Syntax checking plugin
 * [cheat.sh-vim](https://github.com/dbeniamine/cheat.sh-vim) — Vim support
 
-Syntastic shows warnings and errors (found by code analysis tools: `jshint`, `merlin`, `pylint`, `shellcheckt etc.),
+Syntastic shows warnings and errors (found by code analysis tools: `jshint`, `merlin`, `pylint`, `shellcheckt` etc.),
 and `cheat.sh-vim` shows you explanations for the errors and warnings
 and answers on programming languages queries written in the editor.
 
