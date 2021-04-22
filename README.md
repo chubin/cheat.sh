@@ -1,36 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [Features](#features)
-- [Contents](#contents)
-- [Usage](#usage)
-- [Command line client, cht.sh](#command-line-client-chtsh)
-  - [Installation](#installation)
-  - [Client usage](#client-usage)
-  - [Tab completion](#tab-completion)
-    - [Bash Tab completion](#bash-tab-completion)
-    - [ZSH Tab completion](#zsh-tab-completion)
-  - [Stealth mode](#stealth-mode)
-  - [Windows command line client](#windows-command-line-client)
-- [Self-Hosting](#self-hosting)
-  - [Docker](#docker)
-- [Editors integration](#editors-integration)
-  - [Vim](#vim)
-  - [Emacs](#emacs)
-  - [Visual Studio Code](#visual-studio-code)
-  - [Sublime](#sublime)
-  - [IntelliJ IDEA](#intellij-idea)
-- [Special pages](#special-pages)
-- [Search](#search)
-- [Programming languages cheat sheets](#programming-languages-cheat-sheets)
-- [Cheat sheets sources](#cheat-sheets-sources)
-- [How to contribute](#how-to-contribute)
-  - [How to edit a cheat sheet](#how-to-edit-a-cheat-sheet)
-  - [How to add a cheat sheet](#how-to-add-a-cheat-sheet)
-  - [How to add a cheat sheet repository](#how-to-add-a-cheat-sheet-repository)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 ![cheat.sh logo](http://cheat.sh/files/big-logo-v2-fixed.png)
@@ -77,7 +44,10 @@ Such a thing exists! It's easy to [install](#installation) and there's even [aut
   * [Installation](#installation)
   * [Client usage](#client-usage)
   * [Tab-completion](#tab-completion)
+    - [Bash Tab completion](#bash-tab-completion)
+    - [ZSH Tab completion](#zsh-tab-completion)
   * [Stealth mode](#stealth-mode)
+  * [Windows command line client](#windows-command-line-client)
 * [Self-Hosting](#self-hosting)
   * [Docker](#docker)
 * [Editors integration](#editors-integration)
