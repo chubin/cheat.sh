@@ -514,7 +514,11 @@ else
 fi
 
 if [ "$is_macos" != yes ]; then
-  command -v xsel >/dev/null ||   echo 'DEPENDENCY: please install "xsel" for "copy"' >&2
+  if [ "$XDG_SESSION_TYPE" = wayland ]; then
+    command -v wl-copy >/dev/null || echo 'DEPENDENCY: please install "wl-copy" for "copy"' >&2
+  else
+    command -v xsel >/dev/null ||   echo 'DEPENDENCY: please install "xsel" for "copy"' >&2
+  fi
 fi
 command -v rlwrap >/dev/null || { echo 'DEPENDENCY: install "rlwrap" to use cht.sh in the shell mode' >&2; exit 1; }
 
@@ -562,7 +566,11 @@ cmd_copy() {
   else
     curl -s "${CHTSH_URL}"/"$(get_query_options "$query"?T)" > "$TMP1"
     if [ "$is_macos" != yes ]; then
-      xsel -bi < "$TMP1"
+      if [ "$XDG_SESSION_TYPE" = wayland ]; then
+        wl-copy < "$TMP1"
+      else
+        xsel -bi < "$TMP1"
+      fi
     else
       pbcopy < "$TMP1"
     fi
@@ -578,7 +586,11 @@ cmd_ccopy() {
   else
     curl -s "${CHTSH_URL}"/"$(get_query_options "$query"?TQ)" > "$TMP1"
     if [ "$is_macos" != yes ]; then
-      xsel -bi < "$TMP1"
+      if [ "$XDG_SESSION_TYPE" = wayland ]; then
+        wl-copy < "$TMP1"
+      else
+        xsel -bi < "$TMP1"
+      fi
     else
       pbcopy < "$TMP1"
     fi
