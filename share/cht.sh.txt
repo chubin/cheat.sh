@@ -686,7 +686,11 @@ cmd_stealth() {
   if [ "$is_macos" = yes ]; then
     past=$(pbpaste)
   else
-    past=$(xsel -o)
+    if [ "$XDG_SESSION_TYPE" = wayland ]; then
+      past=$(xl-paste -p)
+    else
+      past=$(xsel -o)
+    fi
   fi
   printf "\033[0;31mstealth:\033[0m you are in the stealth mode; select any text in any window for a query\n"
   printf "\033[0;31mstealth:\033[0m selections longer than $STEALTH_MAX_SELECTION_LENGTH words are ignored\n"
@@ -698,7 +702,11 @@ cmd_stealth() {
     if [ "$is_macos" = yes ]; then
       current=$(pbpaste)
     else
-      current=$(xsel -o)
+      if [ "$XDG_SESSION_TYPE" = wayland ]; then
+        current=$(wl-paste -p)
+      else
+        current=$(xsel -o)
+      fi
     fi
     if [ "$past" != "$current" ]; then
       past=$current
