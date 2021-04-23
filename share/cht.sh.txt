@@ -701,7 +701,7 @@ cmd_stealth() {
     past=$(pbpaste)
   else
     if [ "$XDG_SESSION_TYPE" = wayland ]; then
-      past=$(xl-paste -p)
+      past=$(wl-paste -p)
     else
       past=$(xsel -o)
     fi
