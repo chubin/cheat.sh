@@ -134,7 +134,7 @@ class GitRepositoryAdapter(RepositoryAdapter):    #pylint: disable=abstract-meth
         """
         local_repository_dir = cls.local_repository_location()
         state_filename = os.path.join(local_repository_dir, '.cached_revision')
-        open(state_filename, 'w').write(state)
+        open(state_filename, 'wb').write(state)
 
     @classmethod
     def get_state(cls):

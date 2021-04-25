@@ -136,6 +136,7 @@ def _update_adapter(adptr):
     updates = []
     if cmd:
         errorcode, output = _run_cmd(cmd)
+        output = output.decode("utf-8")
         if errorcode:
             _log("\nERROR:\n---\n" + output + "\n---\nCould not get list of pages to be updated: %s" % adptr)
             return False
