@@ -188,6 +188,15 @@ class Router(object):
         if topic_type and topic_type in topic_types:
             topic_types = [topic_type]
 
+
+        # Process action-queries directly, without caching and postprocessing
+        if request_options.get("action"):
+            answers = []
+            for topic_type in topic_types:
+                answers.append(
+                    self._get_page_dict(topic, topic_type, request_options=request_options))
+            return answers
+
         # 'question' queries are pretty expensive, that's why they should be handled
         # in a special way:
         # we do not drop the old style cache entries and try to reuse them if possible

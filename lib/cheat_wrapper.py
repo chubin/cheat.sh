@@ -94,6 +94,21 @@ def cheat_wrapper(query, request_options=None, output_format='ansi'):
     # query = _strip_hyperlink(query.rstrip('/'))
     topic, keyword, search_options = _parse_query(query)
 
+    # Process special case when 'action' is specified.
+    # In this case the response must be returned as is,
+    # without any changes and postprocessing
+    #
+    # 'action' is specified for suggestion queries, link queries etc.
+    if request_options.get("action"):
+        answers = get_answers(topic, request_options=request_options)
+        if answers:
+            answer = answers[0]
+            if isinstance(answer, dict):
+                answer = answer.get("answer", "")
+            return answer, True
+        else:
+            return "", False
+
     if keyword:
         answers = find_answers_by_keyword(
             topic, keyword, options=search_options, request_options=request_options)
@@ -116,5 +131,5 @@ def cheat_wrapper(query, request_options=None, output_format='ansi'):
         answer_data['topics_list'] = get_topics_list()
         return frontend.html.visualize(answer_data, request_options)
     elif output_format == 'json':
-        return json.dumps(answer_data, indent=4)
+        return json.dumps(answer_data, indent=4), True
     return frontend.ansi.visualize(answer_data, request_options)

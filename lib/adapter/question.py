@@ -39,7 +39,7 @@ If the problem persists, file a GitHub issue at
 github.com/chubin/cheat.sh or ping @igor_chubin
 """
 
-NOT_AUTHORIZED_MESSAGE = """403 UNAUTHORIZED"
+NOT_AUTHORIZED_MESSAGE = """403 UNAUTHORIZED"""
 
 class Question(UpstreamAdapter):
 
@@ -113,13 +113,14 @@ class Question(UpstreamAdapter):
         else:
             topic = [topic]
 
-        if request_option.get("action") == "suggest":
-            if request_option.get("authorized"):
+        if request_options.get("action") == "suggest":
+            if request_options.get("authorized"):
                 topic = ["--action", "suggest"] + topic
             else:
                 return NOT_AUTHORIZED_MESSAGE
 
         cmd = [CONFIG["path.internal.bin.upstream"]] + topic
+        print(cmd)
         proc = Popen(cmd, stdin=open(os.devnull, "r"), stdout=PIPE, stderr=PIPE)
         answer = proc.communicate()[0].decode('utf-8')
 
