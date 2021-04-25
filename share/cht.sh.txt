@@ -24,8 +24,8 @@
 # count words in text counter
 # group elements list
 
-__CHTSH_VERSION=0.0.3
-__CHTSH_DATETIME="2021-04-25 09:30:30 +0200"
+__CHTSH_VERSION=0.0.4
+__CHTSH_DATETIME="2021-04-25 12:30:30 +0200"
 
 # cht.sh configuration loading
 #
@@ -211,8 +211,8 @@ EOF
   fi
 
   _say_what_i_do Creating virtual environment
-  "$python" "$(command -v virtualenv)" $virtualenv_python3_options ve \
-      || fatal Could not create virtual environment with "python2 $(command -v virtualenv) ve"
+  virtualenv "${virtualenv_python3_options}" ve \
+      || fatal "Could not create virtual environment with 'virtualenv ve'"
 
   export CHEATSH_PATH_WORKDIR=$PWD
 
