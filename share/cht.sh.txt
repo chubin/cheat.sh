@@ -24,8 +24,8 @@
 # count words in text counter
 # group elements list
 
-__CHTSH_VERSION=0.0.2
-__CHTSH_DATETIME="2021-04-23 09:30:30 +0200"
+__CHTSH_VERSION=0.0.3
+__CHTSH_DATETIME="2021-04-25 09:30:30 +0200"
 
 # cht.sh configuration loading
 #
