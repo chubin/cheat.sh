@@ -42,6 +42,17 @@ directory.
 
 ![cheat.sh standalone installation](https://user-images.githubusercontent.com/3875145/57986904-ef3f1b80-7a7a-11e9-9531-ef37ec74b03a.png)
 
+If you don't plan to use Redis for caching,
+switch the caching off in the config file:
+
+```
+    $ vim ~/.cheat.sh/etc/config.yaml
+    cache:
+      type:   none
+```
+
+or with the environment variable `CHEATSH_CACHE_TYPE=none`.
+
 ## Update cheat sheets
 
 Cheat sheets are fetched and installed to `~/.cheat.sh/upstream`.
