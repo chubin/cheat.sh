@@ -1,4 +1,5 @@
 
+
 ![cheat.sh logo](http://cheat.sh/files/big-logo-v2-fixed.png)
 
 Unified access to the best community driven cheat sheets repositories of the world.
@@ -15,7 +16,7 @@ What features should it have?
 * **Tutoring** — It should help you to learn the subject.
 * **Inconspicuous** — It should be possible to use it completely unnoticed.
 
-Such a thing exists.
+Such a thing exists! It's easy to [install](#installation) and there's even [auto-complete](#tab-completion).
 
 
 ## Features
@@ -43,7 +44,10 @@ Such a thing exists.
   * [Installation](#installation)
   * [Client usage](#client-usage)
   * [Tab-completion](#tab-completion)
+    - [Bash Tab completion](#bash-tab-completion)
+    - [ZSH Tab completion](#zsh-tab-completion)
   * [Stealth mode](#stealth-mode)
+  * [Windows command line client](#windows-command-line-client)
 * [Self-Hosting](#self-hosting)
   * [Docker](#docker)
 * [Editors integration](#editors-integration)
@@ -187,6 +191,8 @@ Try your own queries. Follow these rules:
 
 Read more about the programming languages queries below.
 
+----
+
 ## Command line client, cht.sh
 
 The cheat.sh service has its own command line client (`cht.sh`) that
@@ -202,17 +208,18 @@ has several useful features compared to querying the service directly with `curl
 
 To install the client:
 
-```
-    mkdir -p ~/bin/
-    curl https://cht.sh/:cht.sh > ~/bin/cht.sh
-    chmod +x ~/bin/cht.sh
+```bash
+PATH_DIR="$HOME/bin"  # or another directory on your $PATH
+mkdir -p "$PATH_DIR"
+curl https://cht.sh/:cht.sh > "$PATH_DIR/cht.sh"
+chmod +x "$PATH_DIR/cht.sh"
 ```
 
 or to install it globally (for all users):
 
-```
-    curl https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh
-    chmod +x /usr/local/bin/cht.sh
+```bash
+curl https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh
+chmod +x /usr/local/bin/cht.sh
 ```
 
 Note: The package "rlwrap" is a required dependency to run in shell mode. Install this using `sudo apt install rlwrap`
@@ -300,13 +307,13 @@ Use it to specify query options that you would use with each query.
 For example, to switch syntax highlighting off create the file with the following
 content:
 
-```
+```bash
 CHTSH_QUERY_OPTIONS="T"
 ```
 
 Or if you want to use a special syntax highlighting theme:
 
-```
+```bash
 CHTSH_QUERY_OPTIONS="style=native"
 ```
 
@@ -314,7 +321,7 @@ CHTSH_QUERY_OPTIONS="style=native"
 
 Other cht.sh configuration parameters:
 
-```
+```bash
 CHTSH_CURL_OPTIONS="-A curl"        # curl options used for cht.sh queries
 CHTSH_URL=https://cht.sh            # URL of the cheat.sh server
 ```
@@ -326,21 +333,23 @@ CHTSH_URL=https://cht.sh            # URL of the cheat.sh server
 
 To activate tab completion support for `cht.sh`, add the `:bash_completion` script to your `~/.bashrc`:
 
-```
-    $ curl https://cheat.sh/:bash_completion > ~/.bash.d/cht.sh
-    $ . ~/.bash.d/cht.sh
-    $ # and add . ~/.bash.d/cht.sh to ~/.bashrc
+```bash
+    curl https://cheat.sh/:bash_completion > ~/.bash.d/cht.sh
+    . ~/.bash.d/cht.sh
+    # and add . ~/.bash.d/cht.sh to ~/.bashrc
 ```
 
 #### ZSH Tab completion
 
 To activate tab completion support for `cht.sh`, add the `:zsh` script to the *fpath* in your `~/.zshrc`:
 
+```zsh
+    curl https://cheat.sh/:zsh > ~/.zsh.d/_cht
+    echo 'fpath=(~/.zsh.d/ $fpath)' >> ~/.zshrc
+    # Open a new shell to load the plugin
 ```
-    $ curl https://cheat.sh/:zsh > ~/.zsh.d/_cht
-    $ echo 'fpath=(~/.zsh.d/ $fpath)' >> ~/.zshrc
-    $ # Open a new shell to load the plugin
-```
+
+----
 
 ### Stealth mode
 
@@ -442,6 +451,8 @@ You can also use [`scoop`](https://github.com/lukesampson/scoop) command-line in
 scoop install cht
 ```
 
+----
+
 ## Self-Hosting
 
 ### Docker
@@ -529,7 +540,7 @@ In this example, several Vim plugins are used:
 * [scrooloose/syntastic](https://github.com/vim-syntastic/syntastic) — Syntax checking plugin
 * [cheat.sh-vim](https://github.com/dbeniamine/cheat.sh-vim) — Vim support
 
-Syntastic shows warnings and errors (found by code analysis tools: `jshint`, `merlin`, `pylint`, `shellcheckt etc.),
+Syntastic shows warnings and errors (found by code analysis tools: `jshint`, `merlin`, `pylint`, `shellcheck` etc.),
 and `cheat.sh-vim` shows you explanations for the errors and warnings
 and answers on programming languages queries written in the editor.
 
@@ -813,15 +824,17 @@ and information sources, maintained by thousands of users, developers and author
 all over the world
 (in the *Users* column number of contributors/number of stars is shown):
 
-|Cheat sheets           |Repository                                            | Users | Creation Date |
-|-----------------------|------------------------------------------------------|------------|---------------|
-|UNIX/Linux, programming|[cheat.sheets](https://github.com/chubin/cheat.sheets)| 38/223       | May 1, 2017   |
-|UNIX/Linux commands    |[tldr-pages/tldr](https://github.com/tldr-pages/tldr) | 760/23158  | Dec 8, 2013   |
-|UNIX/Linux commands    |[chrisallenlane/cheat](https://github.com/chrisallenlane/cheat)|131/5240|Jul 28, 2013|
-|Programming languages  |[adambard/learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs)|1246/6748|Jun 23, 2013|
-|Go                     |[a8m/go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)|31/4039|Feb 9, 2014|
-|Perl                   |[pkrumnis/perl1line.txt](https://github.com/pkrumins/perl1line.txt)|5/190|Nov 4, 2011|
-|Programming languages  |[StackOverflow](https://stackoverflow.com)|9M |Sep 15, 2008|
+|Cheat sheets           |Repository                                                                          |C/U*                                                                                                                  |Stars                                                                                                   |Creation Date|
+|-----------------------|------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|-------------|
+|UNIX/Linux, programming|[cheat.sheets](https://github.com/chubin/cheat.sheets)                              |![](https://img.shields.io/github/contributors-anon/chubin/cheat.sheets?label=%F0%9F%91%A5&labelColor=white)           |![](https://img.shields.io/github/stars/chubin/cheat.sheets?label=%E2%AD%90&labelColor=white)           |May 1, 2017  |
+|UNIX/Linux commands    |[tldr-pages/tldr](https://github.com/tldr-pages/tldr)                               |![](https://img.shields.io/github/contributors-anon/tldr-pages/tldr?label=%F0%9F%91%A5&labelColor=white)                           |![](https://img.shields.io/github/stars/tldr-pages/tldr?label=%E2%AD%90&labelColor=white)               |Dec 8, 2013  |
+|UNIX/Linux commands    |[chrisallenlane/cheat](https://github.com/chrisallenlane/cheat)                     |![](https://img.shields.io/github/contributors-anon/chrisallenlane/cheat?label=%F0%9F%91%A5&labelColor=white)          |![](https://img.shields.io/github/stars/chrisallenlane/cheat?label=%E2%AD%90&labelColor=white)          |Jul 28, 2013 |
+|Programming languages  |[adambard/learnxinyminutes-docs](https://github.com/adambard/learnxinyminutes-docs) |![](https://img.shields.io/github/contributors-anon/adambard/learnxinyminutes-docs?label=%F0%9F%91%A5&labelColor=white)|![](https://img.shields.io/github/stars/adambard/learnxinyminutes-docs?label=%E2%AD%90&labelColor=white)|Jun 23, 2013 |
+|Go                     |[a8m/go-lang-cheat-sheet](https://github.com/a8m/go-lang-cheat-sheet)               |![](https://img.shields.io/github/contributors-anon/a8m/go-lang-cheat-sheet?label=%F0%9F%91%A5&labelColor=white)       |![](https://img.shields.io/github/stars/a8m/go-lang-cheat-sheet?label=%E2%AD%90&labelColor=white)       |Feb 9, 2014  |
+|Perl                   |[pkrumnis/perl1line.txt](https://github.com/pkrumins/perl1line.txt)                 |![](https://img.shields.io/github/contributors-anon/pkrumins/perl1line.txt?label=%F0%9F%91%A5&labelColor=white)        |![](https://img.shields.io/github/stars/pkrumins/perl1line.txt?label=%E2%AD%90&labelColor=white)        |Nov 4, 2011  |
+|Programming languages  |[StackOverflow](https://stackoverflow.com)                                          |[14M](https://stackexchange.com/leagues/1/alltime/stackoverflow)                                                       |N/A                                                                                                     |Sep 15, 2008 |
+
+<sup>(*) C/U — contributors for GitHub repositories, Users for Stackoverflow</sup>
 
 Pie diagram reflecting cheat sheets sources distribution (by number of cheat sheets on cheat.sh originating from a repository):
 

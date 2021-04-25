@@ -24,8 +24,8 @@
 # count words in text counter
 # group elements list
 
-__CHTSH_VERSION=0.0.1
-__CHTSH_DATETIME="2020-08-05 09:30:30 +0200"
+__CHTSH_VERSION=0.0.4
+__CHTSH_DATETIME="2021-04-25 12:30:30 +0200"
 
 # cht.sh configuration loading
 #
@@ -199,8 +199,8 @@ EOF
   fi
 
   _say_what_i_do Creating virtual environment
-  "$python" "$(command -v virtualenv)" "${virtualenv_python3_option[@]}" ve \
-      || fatal Could not create virtual environment with "python2 $(command -v virtualenv) ve"
+  virtualenv "${virtualenv_python3_option[@]}" ve \
+      || fatal "Could not create virtual environment with 'virtualenv ve'"
 
   export CHEATSH_PATH_WORKDIR=$PWD
 
@@ -514,7 +514,11 @@ else
 fi
 
 if [ "$is_macos" != yes ]; then
-  command -v xsel >/dev/null ||   echo 'DEPENDENCY: please install "xsel" for "copy"' >&2
+  if [ "$XDG_SESSION_TYPE" = wayland ]; then
+    command -v wl-copy >/dev/null || echo 'DEPENDENCY: please install "wl-copy" for "copy"' >&2
+  else
+    command -v xsel >/dev/null ||   echo 'DEPENDENCY: please install "xsel" for "copy"' >&2
+  fi
 fi
 command -v rlwrap >/dev/null || { echo 'DEPENDENCY: install "rlwrap" to use cht.sh in the shell mode' >&2; exit 1; }
 
@@ -562,7 +566,11 @@ cmd_copy() {
   else
     curl -s "${CHTSH_URL}"/"$(get_query_options "$query"?T)" > "$TMP1"
     if [ "$is_macos" != yes ]; then
-      xsel -bi < "$TMP1"
+      if [ "$XDG_SESSION_TYPE" = wayland ]; then
+        wl-copy < "$TMP1"
+      else
+        xsel -bi < "$TMP1"
+      fi
     else
       pbcopy < "$TMP1"
     fi
@@ -578,7 +586,11 @@ cmd_ccopy() {
   else
     curl -s "${CHTSH_URL}"/"$(get_query_options "$query"?TQ)" > "$TMP1"
     if [ "$is_macos" != yes ]; then
-      xsel -bi < "$TMP1"
+      if [ "$XDG_SESSION_TYPE" = wayland ]; then
+        wl-copy < "$TMP1"
+      else
+        xsel -bi < "$TMP1"
+      fi
     else
       pbcopy < "$TMP1"
     fi
@@ -674,7 +686,11 @@ cmd_stealth() {
   if [ "$is_macos" = yes ]; then
     past=$(pbpaste)
   else
-    past=$(xsel -o)
+    if [ "$XDG_SESSION_TYPE" = wayland ]; then
+      past=$(wl-paste -p)
+    else
+      past=$(xsel -o)
+    fi
   fi
   printf "\033[0;31mstealth:\033[0m you are in the stealth mode; select any text in any window for a query\n"
   printf "\033[0;31mstealth:\033[0m selections longer than $STEALTH_MAX_SELECTION_LENGTH words are ignored\n"
@@ -686,13 +702,17 @@ cmd_stealth() {
     if [ "$is_macos" = yes ]; then
       current=$(pbpaste)
     else
-      current=$(xsel -o)
+      if [ "$XDG_SESSION_TYPE" = wayland ]; then
+        current=$(wl-paste -p)
+      else
+        current=$(xsel -o)
+      fi
     fi
     if [ "$past" != "$current" ]; then
       past=$current
       current_text="$(echo $current | tr -c '[a-zA-Z0-9]' ' ')"
       if [ "$(echo "$current_text" | wc -w)" -gt "$STEALTH_MAX_SELECTION_LENGTH" ]; then
-        echo "\033[0;31mstealth:\033[0m selection length is longer than $STEALTH_MAX_SELECTION_LENGTH words; ignoring"
+        printf "\033[0;31mstealth:\033[0m selection length is longer than $STEALTH_MAX_SELECTION_LENGTH words; ignoring\n"
         continue
       else
         printf "\n\033[0;31mstealth: \033[7m $current_text\033[0m\n"
