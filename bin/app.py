@@ -77,6 +77,7 @@ PLAIN_TEXT_AGENTS = [
     "openbsd ftp",
     "powershell",
     "fetch",
+    "aiohttp",
 ]
 
 def _is_html_needed(user_agent):
