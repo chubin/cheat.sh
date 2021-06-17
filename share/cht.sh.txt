@@ -479,7 +479,7 @@ elif [ x"$1" = x--mode ]; then
 fi
 
 mkdir -p "$CHTSH_HOME/"
-lines=$(tput lines)
+lines=''; [ -t 1 ] && lines=$(tput lines)
 
 if command -v less >/dev/null; then
   defpager="less -R"
