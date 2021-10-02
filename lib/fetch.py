@@ -63,7 +63,7 @@ def fetch_all(skip_existing=True):
                 raise
             output = process.communicate()[0]
             if process.returncode != 0:
-                sys.stdout.write("\nERROR:\n---\n" + output)
+                sys.stdout.write("\nERROR:\n---\n" + str(output))
                 fatal("---\nCould not fetch %s" % adptr)
             else:
                 print("Done")
