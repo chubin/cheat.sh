@@ -19,6 +19,17 @@ import postprocessing
 import frontend.html
 import frontend.ansi
 
+def _add_section_name(query):
+    # temporary solution before we don't find a fixed one
+    if ' ' not in query and '+' not in query:
+        return query
+    if '/' in query:
+        return query
+    if ' ' in query:
+        # for standalone queries only that may contain ' '
+        return "%s/%s" % tuple(query.split(' ', 1))
+    return "%s/%s" % tuple(query.split('+', 1))
+
 def cheat_wrapper(query, request_options=None, output_format='ansi'):
     """
     Function that delivers cheat sheet for `query`.
@@ -26,16 +37,6 @@ def cheat_wrapper(query, request_options=None, output_format='ansi'):
     Additional request options specified in `request_options`.
     """
 
-    def _add_section_name(query):
-        # temporary solution before we don't find a fixed one
-        if ' ' not in query and '+' not in query:
-            return query
-        if '/' in query:
-            return query
-        if ' ' in query:
-            # for standalone queries only that may contain ' '
-            return "%s/%s" % tuple(query.split(' ', 1))
-        return "%s/%s" % tuple(query.split('+', 1))
 
     def _rewrite_aliases(word):
         if word == ':bash.completion':
