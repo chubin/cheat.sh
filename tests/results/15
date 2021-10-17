@@ -460,7 +460,7 @@
 [38;5;252m    [39m[38;5;70;01mpass[39;00m[38;5;252m                 [39m[38;5;246;03m# Multiple exceptions can be handled together, if required.[39;00m
 [38;5;70;01melse[39;00m[38;5;252m:[39m[38;5;252m                    [39m[38;5;246;03m# Optional clause to the try/except block. Must follow all except blocks[39;00m
 [38;5;252m    [39m[38;5;31mprint[39m[38;5;252m([39m[38;5;214m"[39m[38;5;214mAll good![39m[38;5;214m"[39m[38;5;252m)[39m[38;5;252m   [39m[38;5;246;03m# Runs only if the code in try raises no exceptions[39;00m
-[38;5;70;01mfinally[39;00m[38;5;252m:[39m[38;5;252m                 [39m[38;5;246;03m#  Execute under all circumstances[39;00m
+[38;5;70;01mfinally[39;00m[38;5;252m:[39m[38;5;252m                 [39m[38;5;246;03m# Execute under all circumstances[39;00m
 [38;5;252m    [39m[38;5;31mprint[39m[38;5;252m([39m[38;5;214m"[39m[38;5;214mWe can clean up resources here[39m[38;5;214m"[39m[38;5;252m)[39m
 
 [38;5;246;03m# Instead of try/finally to cleanup resources you can use a with statement[39;00m
@@ -713,7 +713,7 @@
 [38;5;252m        [39m[38;5;70;01mreturn[39;00m[38;5;252m [39m[38;5;214m"[39m[38;5;214m*grunt*[39m[38;5;214m"[39m
 
 [38;5;252m    [39m[38;5;246;03m# A property is just like a getter.[39;00m
-[38;5;252m    [39m[38;5;246;03m# It turns the method age() into an read-only attribute of the same name.[39;00m
+[38;5;252m    [39m[38;5;246;03m# It turns the method age() into a read-only attribute of the same name.[39;00m
 [38;5;252m    [39m[38;5;246;03m# There's no need to write trivial getters and setters in Python, though.[39;00m
 [38;5;252m    [39m[38;5;214m@property[39m
 [38;5;252m    [39m[38;5;70;01mdef[39;00m[38;5;252m [39m[38;5;68mage[39m[38;5;252m([39m[38;5;31mself[39m[38;5;252m)[39m[38;5;252m:[39m
