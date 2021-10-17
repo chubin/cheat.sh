@@ -2,15 +2,15 @@
 
 1ns                          Main memory reference:       Send 2,000 bytes             Read 1,000,000 bytes         
 [37m▗▖                           [m100ns                        over commodity network:      sequentially from SSD:       
-                             [34m▗▖                           [m44ns                         48.981us                     
+                             [34m▗▖                           [m31ns                         38.876us                     
 L1 cache reference: 1ns                                   [32m▗                            [m[31m▗                            [m
 [37m▗▖                           [m1.0us                                                                                  
-                             [34m▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖         [mSSD random read: 16.0us      Disk seek: 2.499999ms        
+                             [34m▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖         [mSSD random read: 16.0us      Disk seek: 2.332582ms        
 Branch mispredict: 3ns       [34m                             [m[32m▗▖▗                          [m[31m▗▖▗▖                         [m
 [37m▗▖▗▖▗▖                       [m                                                                                       
                              Compress 1KB wth Snappy:     Read 1,000,000 bytes         Read 1,000,000 bytes         
 L2 cache reference: 4ns      2.0us                        sequentially from memory:    sequentially from disk:      
-[37m▗▖▗▖▗▖▗▖                     [m[34m▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖         [m2.967us                      824.692us                    
+[37m▗▖▗▖▗▖▗▖                     [m[34m▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖         [m2.355us                      717.936us                    
                              [34m▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖         [m[32m▗                            [m[31m▗                            [m
 Mutex lock/unlock: 16ns      [34m                             [m                                                          
 [37m▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖▗▖         [m                             Round trip                   Packet roundtrip             
