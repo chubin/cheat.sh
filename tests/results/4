@@ -9,13 +9,13 @@
 [38;5;246;03m# data to be redundant and metadata to be non-redundant:[39;00m
 [38;5;252mmkfs.btrfs[39m[38;5;252m [39m[38;5;252m-m[39m[38;5;252m [39m[38;5;252mraid0[39m[38;5;252m [39m[38;5;252m-d[39m[38;5;252m [39m[38;5;252mraid1[39m[38;5;252m [39m[38;5;252m/dev/sdb[39m[38;5;252m [39m[38;5;252m/dev/sdc[39m[38;5;252m [39m[38;5;252m/dev/sdd[39m
 
-[38;5;246;03m# both data and metadata to be redundan[39;00m
+[38;5;246;03m# both data and metadata to be redundant[39;00m
 [38;5;252mmkfs.btrfs[39m[38;5;252m [39m[38;5;252m-d[39m[38;5;252m [39m[38;5;252mraid1[39m[38;5;252m [39m[38;5;252m/dev/sdb[39m[38;5;252m [39m[38;5;252m/dev/sdc[39m[38;5;252m [39m[38;5;252m/dev/sdd[39m
 
 [38;5;246;03m# To get a list of all btrfs file systems[39;00m
 [38;5;252mbtrfs[39m[38;5;252m [39m[38;5;252mfilesystem[39m[38;5;252m [39m[38;5;252mshow[39m
 
-[38;5;246;03m# detailed df for a fileesystem (mounted in /mnt)[39;00m
+[38;5;246;03m# detailed df for a filesystem (mounted in /mnt)[39;00m
 [38;5;252mbtrfs[39m[38;5;252m [39m[38;5;252mfilesystem[39m[38;5;252m [39m[38;5;252mdf[39m[38;5;252m [39m[38;5;252m/mnt[39m
 
 [38;5;246;03m# resize btrfs online (-2g decreases, +2g increases)[39;00m
@@ -57,6 +57,8 @@
 [48;5;8m[24m tldr:btrfs [24m[0m
 [38;5;246;03m# btrfs[39;00m
 [38;5;246;03m# A filesystem based on the copy-on-write (COW) principle for Linux.[39;00m
+[38;5;246;03m# Some subcommands such as `btrfs device` have their own usage documentation.[39;00m
+[38;5;246;03m# More information: <https://btrfs.wiki.kernel.org/index.php/Manpage/btrfs>.[39;00m
 
 [38;5;246;03m# Create subvolume:[39;00m
 [38;5;252msudo[39m[38;5;252m [39m[38;5;252mbtrfs[39m[38;5;252m [39m[38;5;252msubvolume[39m[38;5;252m [39m[38;5;252mcreate[39m[38;5;252m [39m[38;5;252mpath/to/subvolume[39m
