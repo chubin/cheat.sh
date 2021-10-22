@@ -17,8 +17,10 @@ jobs:
       run: pip install --upgrade -r requirements.txt
     - name: fetch upstream cheat sheets
       run: python lib/fetch.py fetch-all
-    - name: run tests
+    - name: run bash tests
       run: bash tests/run-tests.sh
+    - name: run pytest
+      run: pytest lib/
 
   docker:
     runs-on: ubuntu-20.04
