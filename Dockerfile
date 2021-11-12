@@ -1,4 +1,4 @@
-FROM alpine:3.12
+FROM alpine:3.14
 # fetching cheat sheets
 ## installing dependencies
 RUN apk add --update --no-cache git py3-six py3-pygments py3-yaml py3-gevent \
