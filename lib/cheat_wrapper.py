@@ -27,24 +27,9 @@ def _add_section_name(query):
         return query
     if ' ' in query:
         return re.sub(r' +', '/', query, count=1)
-    elif '+' in query:
-        delim = "+"
-
-    index = 0
-    length = len(query)
-    while index != length:
-
-        index = query.index(delim, index) + 1
-
-        try:
-            comparison = query.index(delim, index)
-        except ValueError:
-            comparison = -1
-
-        if (index != comparison and index != length):
-            return "%s/%s" % (query[:index-1], query[index:])
-
-    return query
+    if '+' in query:
+        # replace only single + to avoid catching g++ and friends
+        return re.sub(r'([^\+])\+([^\+])', r'\1/\2',  query, count=1)
 
 def cheat_wrapper(query, request_options=None, output_format='ansi'):
     """
