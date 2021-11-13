@@ -13,11 +13,18 @@ btrfs~volume
 python/copy+file
 python/rosetta/:list
 emacs:go-mode/:list
+g++g++
 """
 
 split = """
 python copy file
 python/copy file
+
+python  file
+python/file
+
+python+file
+python/file
 
 g++ -O1
 g++/-O1
