@@ -26,9 +26,25 @@ def _add_section_name(query):
     if '/' in query:
         return query
     if ' ' in query:
-        # for standalone queries only that may contain ' '
-        return "%s/%s" % tuple(query.split(' ', 1))
-    return "%s/%s" % tuple(query.split('+', 1))
+        delim = " "
+    elif '+' in query:
+        delim = "+"
+
+    index = 0
+    length = len(query)
+    while index != length:
+
+        index = query.index(delim, index) + 1
+
+        try:
+            comparison = query.index(delim, index)
+        except ValueError:
+            comparison = -1
+
+        if (index != comparison and index != length):
+            return "%s/%s" % (query[:index-1], query[index:])
+
+    return query
 
 def cheat_wrapper(query, request_options=None, output_format='ansi'):
     """

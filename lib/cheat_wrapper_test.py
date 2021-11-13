@@ -3,6 +3,10 @@ from cheat_wrapper import _add_section_name
 unchanged = """
 python/:list
 ls
++
+g++
+g/+
+clang++
 btrfs~volume
 :intro
 :cht.sh
@@ -14,6 +18,9 @@ emacs:go-mode/:list
 split = """
 python copy file
 python/copy file
+
+g++ -O1
+g++/-O1
 """
 
 def test_header_split():
