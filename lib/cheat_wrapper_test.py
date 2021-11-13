@@ -19,6 +19,9 @@ split = """
 python copy file
 python/copy file
 
+python  file
+python/file
+
 g++ -O1
 g++/-O1
 """

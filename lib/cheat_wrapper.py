@@ -26,7 +26,7 @@ def _add_section_name(query):
     if '/' in query:
         return query
     if ' ' in query:
-        delim = " "
+        return re.sub(r' +', '/', query, count=1)
     elif '+' in query:
         delim = "+"
 
@@ -52,7 +52,6 @@ def cheat_wrapper(query, request_options=None, output_format='ansi'):
     If `html` is True, the answer is formatted as HTML.
     Additional request options specified in `request_options`.
     """
-
 
     def _rewrite_aliases(word):
         if word == ':bash.completion':
