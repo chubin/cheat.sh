@@ -91,6 +91,7 @@ def fetch_all(skip_existing=True):
         if os.path.exists(location):
             if skip_existing:
                 existing_locations.append(location)
+                print("Already exists %s" % (location))
             else:
                 fatal("%s already exists" % location)
 
