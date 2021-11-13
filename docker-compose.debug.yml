@@ -13,9 +13,7 @@ services:
     environment:
       FLASK_ENV: development
       #FLASK_RUN_RELOAD: False
-      FLASK_APP: "bin/srv.py"
+      FLASK_APP: "bin/app.py"
       FLASK_RUN_HOST: 0.0.0.0
       FLASK_RUN_PORT: 8002
     entrypoint: ["/usr/bin/flask", "run"]
-    volumes:
-      - .:/app:Z

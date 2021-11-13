@@ -10,6 +10,8 @@ services:
       - CHEATSH_CACHE_REDIS_HOST=redis
     ports:
       - "8002:8002"
+    volumes:
+      - .:/app:Z
   redis:
     image: redis:4-alpine
     volumes:
