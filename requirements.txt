@@ -6,7 +6,7 @@ pygments
 dateutils
 fuzzywuzzy
 redis
-colored
+colored<1.4.3
 langdetect
 cffi
 polyglot
