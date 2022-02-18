@@ -27,6 +27,7 @@ import os
 import requests
 import jinja2
 from flask import Flask, request, send_from_directory, redirect, Response
+from flask_cors import CORS
 
 sys.path.append(os.path.abspath(os.path.join(__file__, "..", "..", "lib")))
 from config import CONFIG
@@ -67,6 +68,7 @@ if logging.getLogger('werkzeug').handlers:
 
 
 app = Flask(__name__) # pylint: disable=invalid-name
+CORS(app)
 app.jinja_loader = jinja2.ChoiceLoader([
     app.jinja_loader,
     jinja2.FileSystemLoader(CONFIG["path.internal.templates"])])
