@@ -10,7 +10,7 @@ COPY . /app
 RUN apk add --no-cache --virtual build-deps py3-pip g++ python3-dev libffi-dev \
     && pip3 install --no-cache-dir --upgrade pygments \
     && pip3 install --no-cache-dir -r requirements.txt \
-    && pip3 install flask-cors \\
+    && pip3 install flask-cors \
     && apk del build-deps
 # fetching dependencies
 RUN mkdir -p /root/.cheat.sh/log/ \
