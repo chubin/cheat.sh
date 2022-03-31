@@ -1,6 +1,7 @@
 # Publish latest site on every PR merge
 # 1. Containerize app and publish image on Container Registry
 
+name: push new ECR image
 on:
   # Makes the action manually triggerable
   workflow_dispatch:
@@ -37,6 +38,6 @@ jobs:
           ECR_REPOSITORY: cheat-sh 
           IMAGE_TAG: ${{ steps.get_version.outputs.VERSION }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -f docker/Dockerfile .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -f Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
