@@ -1,7 +1,8 @@
 # Publish latest site on every PR merge
 # 1. Containerize app and publish image on Container Registry
+# 2. Use the latest image and deploy to ECS
 
-name: push new ECR image
+name: Push new image and deploy to ECS container
 on:
   # Makes the action manually triggerable
   workflow_dispatch:
@@ -41,3 +42,20 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -f Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task.json
+          container-name: cheat-sh
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        id: ecs-deploy
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: cheat-sh-service
+          cluster: cheat-sh
+          wait-for-service-stability: true
