@@ -43,7 +43,7 @@ class RepositoryAdapter(Adapter):
             self._cheatsheet_files_prefix,
             topic)
 
-        if os.path.exists(filename):
+        if os.path.exists(filename) and not os.path.isdir(filename):
             answer = self._format_page(open(filename, 'r').read())
         else:
             # though it should not happen
