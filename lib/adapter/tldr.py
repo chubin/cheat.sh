@@ -73,15 +73,16 @@ class Tldr(GitRepositoryAdapter):
         and as soon as anything is found, format and return it.
         """
 
-        search_order = ['common', 'linux', 'osx', 'sunos', 'windows']
+        search_order = ['common', 'linux', 'osx', 'sunos', 'windows', "android"]
         local_rep = self.local_repository_location()
         ext = self._cheatsheet_files_extension
 
         filename = None
         for subdir in search_order:
-            filename = os.path.join(
+            _filename = os.path.join(
                 local_rep, 'pages', subdir, "%s%s" % (topic, ext))
-            if os.path.exists(filename):
+            if os.path.exists(_filename):
+                filename = _filename
                 break
 
         if filename:
