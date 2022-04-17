@@ -115,7 +115,7 @@ def _update_adapter(adptr):
 
     errorcode, output = _run_cmd(cmd)
     if errorcode:
-        _log("\nERROR:\n---\n" + output + "\n---\nCould not update %s" % adptr)
+        _log("\nERROR:\n---%s\n" % output.decode("utf-8") + "\n---\nCould not update %s" % adptr)
         return False
 
     # Getting current repository state
