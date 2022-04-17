@@ -124,7 +124,7 @@ class GitRepositoryAdapter(RepositoryAdapter):    #pylint: disable=abstract-meth
             raise RuntimeError(
                 "Do not known how to handle this repository: %s" % cls._repository_url)
 
-        return ['git', 'rev-parse', '--short', 'HEAD']
+        return ['git', 'rev-parse', '--short', 'HEAD', "--"]
 
     @classmethod
     def save_state(cls, state):
@@ -157,6 +157,6 @@ class GitRepositoryAdapter(RepositoryAdapter):    #pylint: disable=abstract-meth
         The list is used to invalidate the cache.
         """
         current_state = cls.get_state()
-        if current_state is None:
-            return ['git', 'ls-tree', '--full-tree', '-r', '--name-only', 'HEAD']
-        return ['git', 'diff', '--name-only', current_state, 'HEAD']
+        if not current_state:
+            return ['git', 'ls-tree', '--full-tree', '-r', '--name-only', 'HEAD', "--"]
+        return ['git', 'diff', '--name-only', current_state, 'HEAD', "--"]
