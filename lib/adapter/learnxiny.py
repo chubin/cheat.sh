@@ -192,7 +192,10 @@ class LearnXYAdapter(object):
             return "\n".join(self.get_list()) + "\n"
 
         if name == ":learn":
-            return "\n".join(self._whole_cheatsheet) + "\n"
+            if self._whole_cheatsheet:
+                return "\n".join(self._whole_cheatsheet) + "\n"
+            else:
+                return ""
 
         if partial:
             possible_names = []
