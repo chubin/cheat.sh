@@ -98,3 +98,16 @@ cheat.sh needs to access the Internet itself, because it does not have
 the necessary data locally. We are working on that how to overcome
 this limitation, but for the moment it still exists.
 
+## Mac OS X Notes
+
+### Installing Redis
+
+To install Redis on Mac OS X (using `brew`):
+
+```
+$ brew install redis
+$ ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents
+$ launchctl load ~/Library/LaunchAgents/homebrew.mxcl.redis.plist
+$ redis-cli ping
+PONG
+```
