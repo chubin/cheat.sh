@@ -58,8 +58,8 @@ def fetch_all(skip_existing=True):
             sys.stdout.flush()
             try:
                 process = subprocess.Popen(
-                        cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                        universal_newlines=True)
+                    cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                    universal_newlines=True)
             except OSError:
                 print("\nERROR: %s" % cmd)
                 raise
@@ -149,9 +149,11 @@ def _update_adapter(adptr):
     if entries:
         _log("%s Entries to be updated: %s", adptr, len(entries))
 
+    name = adptr.name()
     for entry in entries:
-        _log("+ ivalidating %s", entry)
-        cache.delete(entry)
+        cache_name = name + ":" + entry
+        _log("+ invalidating %s", cache_name)
+        cache.delete(cache_name)
 
     if entries:
         _log("Done")
