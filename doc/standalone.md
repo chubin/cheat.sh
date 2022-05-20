@@ -12,8 +12,9 @@ There are two cases, when you want to install *cheat.sh* server locally:
 
 To use cheat.sh offline, you need to:
 
-1. Install local script,
-2. Fetch its data sources.
+1. Download cht.sh script,
+2. Run standalone install command,
+3. Fetch data sources.
 
 If you already have the cht.sh cli client locally,
 you can use it for the standalone installation.
