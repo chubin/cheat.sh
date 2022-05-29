@@ -1,6 +1,7 @@
 # add it to your ~/.config/fish/config.fish
 
 # retrieve command cheat sheets from cheat.sh
+# Online Version:
 # fish version by @tobiasreischmann
 
 function cheat.sh
@@ -10,3 +11,5 @@ end
 # register completions (on-the-fly, non-cached, because the actual command won't be cached anyway
 complete -c cheat.sh -xa '(curl -s cheat.sh/:list)'
 
+# Local/Standalone version:
+complete -c cht.sh -xa '$(cht.sh :list)'
