@@ -83,6 +83,7 @@ PLAIN_TEXT_AGENTS = [
     "powershell",
     "fetch",
     "aiohttp",
+    "xh",
 ]
 
 def _is_html_needed(user_agent):
