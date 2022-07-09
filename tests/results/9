@@ -1,6 +1,6 @@
-#  How do I copy a file in python?
+#  How do I copy a file in Python?
 #  
-#  shutil (http://docs.python.org/2/library/shutil.html) has many methods
+#  shutil (http://docs.python.org/3/library/shutil.html) has many methods
 #  you can use. One of which is:
 
 from shutil import copyfile

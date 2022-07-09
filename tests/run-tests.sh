@@ -75,8 +75,8 @@ while read -r number test_line; do
 
   if [ "$test_standalone" = YES ]; then
     test_line="${test_line//cht.sh /}"
-    [[ $show_details == YES ]] && echo "${PYTHON} ../lib/standalone.py $test_line \?$CHTSH_QUERY_OPTIONS"
-    "${PYTHON}" ../lib/standalone.py "$test_line \?$CHTSH_QUERY_OPTIONS" > "$TMP"
+    [[ $show_details == YES ]] && echo "${PYTHON} ../lib/standalone.py $test_line?$CHTSH_QUERY_OPTIONS"
+    "${PYTHON}" ../lib/standalone.py "$test_line?$CHTSH_QUERY_OPTIONS" > "$TMP"
   elif [[ $test_line = "cht.sh "* ]]; then
     test_line="${test_line//cht.sh /}"
     [[ $show_details == YES ]] && echo "bash $CHTSH_SCRIPT $test_line \?$CHTSH_QUERY_OPTIONS"
