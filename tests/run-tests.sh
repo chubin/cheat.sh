@@ -10,6 +10,11 @@
 # 2) configure CHTSH_URL
 # 3) run the script
 
+type realpath >& /dev/null ||
+realpath() {
+    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
+
 CHTSH_SCRIPT=$(dirname "$(dirname "$(realpath "$(readlink -f "$0")")")")/share/cht.sh.txt
 
 # work from script's dir
