@@ -6,8 +6,9 @@ For the configuration related things see `config.py`
 
 from __future__ import print_function
 
-import sys
 import logging
+import sys
+
 
 def fatal(text):
     """

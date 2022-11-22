@@ -1,5 +1,6 @@
-import search
 import fmt.comments
+import search
+
 
 def postprocess(answer, keyword, options, request_options=None):
     answer = _answer_add_comments(answer, request_options=request_options)

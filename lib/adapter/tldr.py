@@ -9,10 +9,11 @@ The pages are formatted with a markdown dialect
 
 # pylint: disable=relative-import,abstract-method
 
-import re
 import os
+import re
 
 from .git_adapter import GitRepositoryAdapter
+
 
 class Tldr(GitRepositoryAdapter):
 

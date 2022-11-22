@@ -11,7 +11,6 @@ import random
 import re
 from typing import Any, Dict, List
 
-import cache
 import adapter.cheat_sheets
 import adapter.cmd
 import adapter.internal
@@ -19,9 +18,11 @@ import adapter.latenz
 import adapter.learnxiny
 import adapter.question
 import adapter.rosetta
+import cache
 from config import CONFIG
 
-class Router(object):
+
+class Router():
 
     """
     Implementation of query routing. Routing is based on `routing_table`
@@ -133,24 +134,24 @@ class Router(object):
             #Here we still check that cleaned_topic_list in not empty
             if not cleaned_topic_list:
                 return prefix
-                
+
             random_topic = random.choice(cleaned_topic_list)
             return prefix + random_topic
-        
+
         if topic.endswith('/:random') or topic.lstrip('/') == ':random':
             #We strip the :random part and see if the query is valid by running a get_topics_list()
             if topic.lstrip('/') == ':random' :
-                 topic = topic.lstrip('/')
+                topic = topic.lstrip('/')
             prefix = topic[:-7]
-            
+
             topic_list = [x[len(prefix):]
                          for x in self.get_topics_list()
                          if x.startswith(prefix)]
 
-            if '' in topic_list: 
+            if '' in topic_list:
                 topic_list.remove('')
 
-            if topic_list:                
+            if topic_list:
                 # This is a correct formatted random query like /cpp/:random as the topic_list is not empty.
                 random_topic = __select_random_topic(prefix, topic_list)
                 return random_topic
@@ -162,7 +163,7 @@ class Router(object):
 
         #Here if not a random requst, we just forward the topic
         return topic
-    
+
     def get_answers(self, topic: str, request_options:Dict[str, str] = None) -> List[Dict[str, Any]]:
         """
         Find cheat sheets for the topic.
@@ -173,7 +174,7 @@ class Router(object):
         Returns:
             [answer_dict]:    list of answers (dictionaries)
         """
-        
+
         # if topic specified as <topic_type>:<topic>,
         # cut <topic_type> off
         topic_type = ""

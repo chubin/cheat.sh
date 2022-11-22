@@ -8,16 +8,16 @@ Exports:
     cheat_wrapper()
 """
 
-import re
 import json
+import re
 
+import frontend.ansi
+import frontend.html
+import postprocessing
+from languages_data import LANGUAGE_ALIAS, rewrite_editor_section_name
 from routing import get_answers, get_topics_list
 from search import find_answers_by_keyword
-from languages_data import LANGUAGE_ALIAS, rewrite_editor_section_name
-import postprocessing
 
-import frontend.html
-import frontend.ansi
 
 def _add_section_name(query):
     # temporary solution before we don't find a fixed one

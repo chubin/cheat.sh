@@ -8,8 +8,10 @@ Configuration parameters:
 
 import abc
 import os
-from six import with_metaclass
+
 from config import CONFIG
+from six import with_metaclass
+
 
 class AdapterMC(type):
     """
@@ -21,7 +23,7 @@ class AdapterMC(type):
             return getattr(cls, '_class_repr')()
         return super(AdapterMC, cls).__repr__()
 
-class Adapter(with_metaclass(AdapterMC, object)):
+class Adapter(with_metaclass(AdapterMC)):
     """
     An abstract class, defines methods:
 
