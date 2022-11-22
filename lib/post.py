@@ -7,10 +7,12 @@ Configuration parameters:
     path.spool
 """
 
-import string
 import os
 import random
+import string
+
 from config import CONFIG
+
 
 def _save_cheatsheet(topic_name, cheatsheet):
     """

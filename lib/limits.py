@@ -17,6 +17,7 @@ Usage:
 """
 
 import time
+
 from globals import log
 
 _WHITELIST = ['5.9.243.177']
@@ -28,7 +29,7 @@ def _time_caps(minutes, hours, days):
         'day':   days,
         }
 
-class Limits(object):
+class Limits():
     """
     Queries limitation (by IP).
 

@@ -12,17 +12,17 @@ Configuration parameters:
 
 from __future__ import print_function
 
-import sys
 import logging
 import os
 import subprocess
+import sys
 import textwrap
 
-from globals import fatal
 import adapter
 import cache
-
 from config import CONFIG
+from globals import fatal
+
 
 def _log(*message):
     logging.info(*message)

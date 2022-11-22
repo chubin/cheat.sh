@@ -5,19 +5,19 @@ Configuration parameters:
     path.internal.ansi2html
 """
 
-import sys
 import os
 import re
-from subprocess import Popen, PIPE
+import sys
+from subprocess import PIPE, Popen
 
 MYDIR = os.path.abspath(os.path.join(__file__, '..', '..'))
 sys.path.append("%s/lib/" % MYDIR)
 
+import frontend.ansi
+from buttons import GITHUB_BUTTON, GITHUB_BUTTON_FOOTER, TWITTER_BUTTON
 # pylint: disable=wrong-import-position
 from config import CONFIG
 from globals import error
-from buttons import TWITTER_BUTTON, GITHUB_BUTTON, GITHUB_BUTTON_FOOTER
-import frontend.ansi
 
 # temporary having it here, but actually we have the same data
 # in the adapter module

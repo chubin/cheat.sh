@@ -6,10 +6,11 @@ sheets covering programming languages are are located in subdirectories.
 
 # pylint: disable=relative-import
 
-import os
 import glob
+import os
 
 from .git_adapter import GitRepositoryAdapter
+
 
 def _remove_initial_underscore(filename):
     if filename.startswith('_'):
