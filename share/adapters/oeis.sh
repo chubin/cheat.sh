@@ -61,7 +61,7 @@ oeis() (
     # Print Description (%N)
     grep '%N' $DOC | sed "s/^.*${ID} //"
     printf '\n'
-    # Print Sequence (Three sections %S %T nd %U)
+    # Print Sequence (Three sections %S %T and %U)
     grep '%S' $DOC | sed "s/^.*${ID} //" | tr -d '\n' > $TMP/seq
     grep '%T' $DOC | sed "s/^.*${ID} //" | tr -d '\n' >> $TMP/seq
     grep '%U' $DOC | sed "s/^.*${ID} //" | tr -d '\n' >> $TMP/seq

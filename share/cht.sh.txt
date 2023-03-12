@@ -114,7 +114,7 @@ You can switch the mode with the --mode switch:
     cht.sh --mode lite      # use https://cheat.sh/ only
     cht.sh --mode auto      # use local installation
 
-For intallation and standalone usage, you need \`git\`, \`python\`,
+For installation and standalone usage, you need \`git\`, \`python\`,
 and \`virtualenv\` to be installed locally.
 EOF
     return
@@ -731,7 +731,7 @@ cmd_update() {
   curl -s "${CHTSH_URL}"/:cht.sh > "$TMP2"
   if ! cmp "$0" "$TMP2" > /dev/null 2>&1; then
     if grep -q ^__CHTSH_VERSION= "$TMP2"; then
-      # section was vaildated by us already
+      # section was validated by us already
       args=(--shell "$section")
       cp "$TMP2" "$0" && echo "Updated. Restarting..." && rm "$TMP2" && CHEATSH_RESTART=1 exec "$0" "${args[@]}"
     else

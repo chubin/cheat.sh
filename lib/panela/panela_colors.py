@@ -306,7 +306,7 @@ class Panela:
 
     def put_line(self, x1, y1, x2, y2, char=None, color=None, background=None):
         """
-        Draw line (x1, y1) - (x2, y2) fith foreground color <color>, background color <background>
+        Draw line (x1, y1) - (x2, y2) fill foreground color <color>, background color <background>
         and character <char>, if specified.
         """
 
@@ -394,7 +394,7 @@ class Panela:
     def paint(self, x1, y1, x2, y2, c1, c2=None, bg1=None, bg2=None, angle=None, angle_bg=None):
         """
         Paint rectangle (x1,y1) (x2,y2) with foreground color c1 and background bg1 if specified.
-        If spefied colors c2/bg2, rectangle is painted with linear gradient (inclined under angle).
+        If specified colors c2/bg2, rectangle is painted with linear gradient (inclined under angle).
         """
 
         def calculate_color(i, j):
