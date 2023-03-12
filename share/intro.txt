@@ -36,8 +36,8 @@ search term will be displayed:
 
     {1curl cht.sh/tar}{2~extract}
 
-If the name of the cheat sheet is omitted, and only the serch query is specified,
-all cheat sheets in the namespace are scanned, and the found occurrencies
+If the name of the cheat sheet is omitted, and only the search query is specified,
+all cheat sheets in the namespace are scanned, and the found occurrences
 are displayed:
 
     {1curl cht.sh/}{2~extract}
@@ -147,7 +147,7 @@ Text in the answers is syntactically formatted as comment in the correspondent
 programming language
 
 When using cht.sh, you can copy the result of the last query into the selection
-buffer (you may also call it "clibpoard") using {2C} (or {2c}, with text):
+buffer (you may also call it "clipboard") using {2C} (or {2c}, with text):
 
     {1cht.sh/python> reverse list}
     {4...}
