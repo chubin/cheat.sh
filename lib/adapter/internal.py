@@ -11,10 +11,8 @@ import collections
 
 try:
     from rapidfuzz import process, fuzz
-    _USING_FUZZYWUZZY=False
 except ImportError:
     from fuzzywuzzy import process, fuzz
-    _USING_FUZZYWUZZY=True
 
 from config import CONFIG
 from .adapter import Adapter
@@ -125,10 +123,7 @@ class UnknownPages(InternalPages):
         else:
             topics_list = [x for x in topics_list if not x.startswith(':')]
 
-        if _USING_FUZZYWUZZY:
-            possible_topics = process.extract(topic, topics_list, scorer=fuzz.ratio)[:3]
-        else:
-            possible_topics = process.extract(topic, topics_list, limit=3, scorer=fuzz.ratio)
+        possible_topics = process.extract(topic, topics_list, limit=3, scorer=fuzz.ratio)
         possible_topics_text = "\n".join([("    * %s %s" % (x[0], int(x[1]))) for x in possible_topics])
         return """
 Unknown topic.
