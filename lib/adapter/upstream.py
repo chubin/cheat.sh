@@ -27,7 +27,7 @@ def _are_you_offline():
            | | ___________ | |   this very feature is not yet implemented.
            | |_____________| |
            |     _______     |   If you find it useful, please visit
-           |    |       |   ||   https://github.com/chubin/issues/140
+           |    |       |   ||   https://github.com/chubin/cheat.sh/issues/14
            | DD |       |   V|   and drop a couple of lines to encourage
            |____|_______|____|   the authors to develop it as soon as possible
 
