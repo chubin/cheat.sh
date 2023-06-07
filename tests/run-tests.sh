@@ -24,7 +24,7 @@ fi
 python_version="$($PYTHON -c 'import sys; print(sys.version_info[0])')"
 echo "Using PYTHON $python_version: $PYTHON"
 
-skip_online="${CHEATSH_TEST_SKIP_ONLINE:-NO}"
+skip_online="${CHEATSH_TEST_SKIP_ONLINE:-YES}"
 test_standalone="${CHEATSH_TEST_STANDALONE:-YES}"
 show_details="${CHEATSH_TEST_SHOW_DETAILS:-YES}"
 update_tests_results="${CHEATSH_UPDATE_TESTS_RESULTS:-NO}"

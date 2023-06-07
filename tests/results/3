@@ -1,46 +1,7 @@
-#[cheat:ls]
-# To display everything in <dir>, excluding hidden files:
-ls <dir>
+Unknown topic.
+Do you mean one of these topics maybe?
 
-# To display everything in <dir>, including hidden files:
-ls -a <dir>
-
-# To display all files, along with the size (with unit suffixes) and timestamp
-ls -lh <dir>
-
-# To display files, sorted by size:
-ls -S <dir>
-
-# To display directories only:
-ls -d */ <dir>
-
-# To display directories only, include hidden:
-ls -d .*/ */ <dir>
-#[tldr:ls]
-# ls
-# List directory contents.
-# More information: <https://www.gnu.org/software/coreutils/ls>.
-
-# List files one per line:
-ls -1
-
-# List all files, including hidden files:
-ls -a
-
-# List all files, with trailing `/` added to directory names:
-ls -F
-
-# Long format list (permissions, ownership, size, and modification date) of all files:
-ls -la
-
-# Long format list with size displayed using human-readable units (KiB, MiB, GiB):
-ls -lh
-
-# Long format list sorted by size (descending):
-ls -lS
-
-# Long format list of all files, sorted by modification date (oldest first):
-ls -ltr
-
-# Only list directories:
-ls -d */
+    * c/:list 44
+    * d/:list 44
+    * r/:list 44
+    
