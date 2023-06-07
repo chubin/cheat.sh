@@ -1,1 +1,60 @@
+[48;5;8m[24m cheat.sheets:btrfs [24m[0m
+[38;5;248;03m# create the subvolume /mnt/sv1 in the /mnt volume[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mcreate[39m[38;5;241m [39m[38;5;252m/mnt/sv1[39m
 
+[38;5;248;03m# list subvolumes[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mlist[39m[38;5;241m [39m[38;5;252m/mnt[39m
+
+[38;5;248;03m# mount subvolume without mounting the main filesystem[39;00m
+[38;5;252mmount[39m[38;5;241m [39m[38;5;252m-o[39m[38;5;241m [39m[38;5;87msubvol[39m[38;5;252m=[39m[38;5;252msv1[39m[38;5;241m [39m[38;5;252m/dev/sdb[39m[38;5;241m [39m[38;5;252m/mnt[39m
+
+[38;5;248;03m# delete subvolume[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mdelete[39m[38;5;241m [39m[38;5;252m/mnt/sv1[39m
+
+[38;5;248;03m# taking snapshot of a subvolume[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252msnapshot[39m[38;5;241m [39m[38;5;252m/mnt/sv1[39m[38;5;241m [39m[38;5;252m/mnt/sv1_snapshot[39m
+
+[48;5;8m[24m tldr:btrfs [24m[0m
+[38;5;248;03m# Create subvolume:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mcreate[39m[38;5;241m [39m[38;5;252mpath/to/subvolume[39m
+
+[38;5;248;03m# List subvolumes:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mlist[39m[38;5;241m [39m[38;5;252mpath/to/mount_point[39m
+
+[38;5;248;03m# Enable quota:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252mquota[39m[38;5;241m [39m[38;5;38menable[39m[38;5;241m [39m[38;5;252mpath/to/subvolume[39m
+
+[38;5;248;03m# Show quota:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252mqgroup[39m[38;5;241m [39m[38;5;252mshow[39m[38;5;241m [39m[38;5;252mpath/to/subvolume[39m
+
+[48;5;8m[24m tldr:btrfs-filesystem [24m[0m
+[38;5;248;03m# Defragment a directory recursively (does not cross subvolume boundaries):[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252mfilesystem[39m[38;5;241m [39m[38;5;252mdefragment[39m[38;5;241m [39m[38;5;252m-v[39m[38;5;241m [39m[38;5;252m-r[39m[38;5;241m [39m[38;5;252mpath/to/directory[39m
+
+[48;5;8m[24m tldr:btrfs-property [24m[0m
+[38;5;248;03m# btrfs property[39;00m
+[38;5;248;03m# Get, set, or list properties for a given btrfs filesystem object (files, directories, subvolumes, filesystems, or devices).[39;00m
+[38;5;248;03m# More information: <https://btrfs.readthedocs.io/en/latest/btrfs-property.html>.[39;00m
+
+[48;5;8m[24m tldr:btrfs-subvolume [24m[0m
+[38;5;248;03m# btrfs subvolume[39;00m
+[38;5;248;03m# Manage btrfs subvolumes and snapshots.[39;00m
+[38;5;248;03m# More information: <https://btrfs.readthedocs.io/en/latest/btrfs-subvolume.html>.[39;00m
+
+[38;5;248;03m# Create a new empty subvolume:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mcreate[39m[38;5;241m [39m[38;5;252mpath/to/new_subvolume[39m
+
+[38;5;248;03m# List all subvolumes and snapshots in the specified filesystem:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mlist[39m[38;5;241m [39m[38;5;252mpath/to/btrfs_filesystem[39m
+
+[38;5;248;03m# Delete a subvolume:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mdelete[39m[38;5;241m [39m[38;5;252mpath/to/subvolume[39m
+
+[38;5;248;03m# Create a read-only snapshot of an existing subvolume:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252msnapshot[39m[38;5;241m [39m[38;5;252m-r[39m[38;5;241m [39m[38;5;252mpath/to/source_subvolume[39m[38;5;241m [39m[38;5;252mpath/to/target[39m
+
+[38;5;248;03m# Create a read-write snapshot of an existing subvolume:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252msnapshot[39m[38;5;241m [39m[38;5;252mpath/to/source_subvolume[39m[38;5;241m [39m[38;5;252mpath/to/target[39m
+
+[38;5;248;03m# Show detailed information about a subvolume:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mshow[39m[38;5;241m [39m[38;5;252mpath/to/subvolume[39m

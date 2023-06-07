@@ -1,7 +1,76 @@
-Unknown topic.
-Do you mean one of these topics maybe?
+[48;5;8m[24m cheat.sheets:btrfs [24m[0m
+[38;5;248;03m# Create a btrfs file system on /dev/sdb, /dev/sdc, and /dev/sdd[39;00m
+[38;5;252mmkfs.btrfs[39m[38;5;241m [39m[38;5;252m/dev/sdb[39m[38;5;241m [39m[38;5;252m/dev/sdc[39m[38;5;241m [39m[38;5;252m/dev/sdd[39m
 
-    * bf/:list 46
-    * rfc/1 40
-    * rfc/2 40
-    
+[38;5;248;03m# btrfs with just one hard drive, metadata not redundant[39;00m
+[38;5;248;03m# (this is dangerous: if your metadata is lost, your data is lost as well)[39;00m
+[38;5;252mmkfs.btrfs[39m[38;5;241m [39m[38;5;252m-m[39m[38;5;241m [39m[38;5;252msingle[39m[38;5;241m [39m[38;5;252m/dev/sdb[39m
+
+[38;5;248;03m# data to be redundant and metadata to be non-redundant:[39;00m
+[38;5;252mmkfs.btrfs[39m[38;5;241m [39m[38;5;252m-m[39m[38;5;241m [39m[38;5;252mraid0[39m[38;5;241m [39m[38;5;252m-d[39m[38;5;241m [39m[38;5;252mraid1[39m[38;5;241m [39m[38;5;252m/dev/sdb[39m[38;5;241m [39m[38;5;252m/dev/sdc[39m[38;5;241m [39m[38;5;252m/dev/sdd[39m
+
+[38;5;248;03m# both data and metadata to be redundant[39;00m
+[38;5;252mmkfs.btrfs[39m[38;5;241m [39m[38;5;252m-d[39m[38;5;241m [39m[38;5;252mraid1[39m[38;5;241m [39m[38;5;252m/dev/sdb[39m[38;5;241m [39m[38;5;252m/dev/sdc[39m[38;5;241m [39m[38;5;252m/dev/sdd[39m
+
+[38;5;248;03m# To get a list of all btrfs file systems[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252mfilesystem[39m[38;5;241m [39m[38;5;252mshow[39m
+
+[38;5;248;03m# detailed df for a filesystem (mounted in /mnt)[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252mfilesystem[39m[38;5;241m [39m[38;5;252mdf[39m[38;5;241m [39m[38;5;252m/mnt[39m
+
+[38;5;248;03m# resize btrfs online (-2g decreases, +2g increases)[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252mfilesystem[39m[38;5;241m [39m[38;5;252mresize[39m[38;5;241m [39m[38;5;252m-2g[39m[38;5;241m [39m[38;5;252m/mnt[39m
+
+[38;5;248;03m# use maximum space[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252mfilesystem[39m[38;5;241m [39m[38;5;252mresize[39m[38;5;241m [39m[38;5;252mmax[39m[38;5;241m [39m[38;5;252m/mnt[39m
+
+[38;5;248;03m# add new device to a filesystem[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252mdevice[39m[38;5;241m [39m[38;5;252madd[39m[38;5;241m [39m[38;5;252m/dev/sdf[39m[38;5;241m [39m[38;5;252m/mnt[39m
+
+[38;5;248;03m# remove devices from a filesystem[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252mdevice[39m[38;5;241m [39m[38;5;252mdelete[39m[38;5;241m [39m[38;5;252mmissing[39m[38;5;241m [39m[38;5;252m/mnt[39m
+
+[38;5;248;03m# create the subvolume /mnt/sv1 in the /mnt volume[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mcreate[39m[38;5;241m [39m[38;5;252m/mnt/sv1[39m
+
+[38;5;248;03m# list subvolumes[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mlist[39m[38;5;241m [39m[38;5;252m/mnt[39m
+
+[38;5;248;03m# mount subvolume without mounting the main filesystem[39;00m
+[38;5;252mmount[39m[38;5;241m [39m[38;5;252m-o[39m[38;5;241m [39m[38;5;87msubvol[39m[38;5;252m=[39m[38;5;252msv1[39m[38;5;241m [39m[38;5;252m/dev/sdb[39m[38;5;241m [39m[38;5;252m/mnt[39m
+
+[38;5;248;03m# delete subvolume[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mdelete[39m[38;5;241m [39m[38;5;252m/mnt/sv1[39m
+
+[38;5;248;03m# taking snapshot of a subvolume[39;00m
+[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252msnapshot[39m[38;5;241m [39m[38;5;252m/mnt/sv1[39m[38;5;241m [39m[38;5;252m/mnt/sv1_snapshot[39m
+
+[38;5;248;03m# taking snapshot of a file (copy file by reference)[39;00m
+[38;5;252mcp[39m[38;5;241m [39m[38;5;252m--reflink[39m[38;5;241m [39m[38;5;252m/mnt/sv1/test1[39m[38;5;241m [39m[38;5;252m/mnt/sv1/test3[39m
+
+[38;5;248;03m# convert ext3/ext4 to btrfs[39;00m
+[38;5;252mbtrfs-convert[39m[38;5;241m [39m[38;5;252m/dev/sdb1[39m
+
+[38;5;248;03m# convert btrfs to ext3/ext4[39;00m
+[38;5;252mbtrfs-convert[39m[38;5;241m [39m[38;5;252m-r[39m[38;5;241m [39m[38;5;252m/dev/sdb1[39m
+
+[48;5;8m[24m tldr:btrfs [24m[0m
+[38;5;248;03m# btrfs[39;00m
+[38;5;248;03m# A filesystem based on the copy-on-write (COW) principle for Linux.[39;00m
+[38;5;248;03m# Some subcommands such as `btrfs device` have their own usage documentation.[39;00m
+[38;5;248;03m# More information: <https://btrfs.readthedocs.io/en/latest/btrfs.html>.[39;00m
+
+[38;5;248;03m# Create subvolume:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mcreate[39m[38;5;241m [39m[38;5;252mpath/to/subvolume[39m
+
+[38;5;248;03m# List subvolumes:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252msubvolume[39m[38;5;241m [39m[38;5;252mlist[39m[38;5;241m [39m[38;5;252mpath/to/mount_point[39m
+
+[38;5;248;03m# Show space usage information:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252mfilesystem[39m[38;5;241m [39m[38;5;252mdf[39m[38;5;241m [39m[38;5;252mpath/to/mount_point[39m
+
+[38;5;248;03m# Enable quota:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252mquota[39m[38;5;241m [39m[38;5;38menable[39m[38;5;241m [39m[38;5;252mpath/to/subvolume[39m
+
+[38;5;248;03m# Show quota:[39;00m
+[38;5;252msudo[39m[38;5;241m [39m[38;5;252mbtrfs[39m[38;5;241m [39m[38;5;252mqgroup[39m[38;5;241m [39m[38;5;252mshow[39m[38;5;241m [39m[38;5;252mpath/to/subvolume[39m
