@@ -2,9 +2,9 @@ name: Ubuntu Tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, tests-fix ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, tests-fix ]
   schedule:
     - cron:  '0 9 * * 4'
 
