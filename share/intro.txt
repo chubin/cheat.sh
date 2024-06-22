@@ -70,8 +70,8 @@ To install the client in {2~/bin}:
     {1curl} {2https://cht.sh/:cht.sh} {1> ~/bin/cht.sh}
     {1chmod +x ~/bin/cht.sh}
 
-Queries look the same, but instead of separate words in the query with {1+}
-like when using curl, you can use {1spaces} which looks more natural:
+Queries look the same, but you can use {1spaces} to separate words in addition to {1+}
+used with curl.
 
     {1cht.sh} {2python zip lists}
 
