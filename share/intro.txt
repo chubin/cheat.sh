@@ -47,9 +47,9 @@ are displayed:
 
 cheat.sh queries as well as search queries have many options.
 They can be specified as a part of the query string in the URL, after {2?}.
-Short single letter options can be written all jointly or together.
-Long options are separated with {2&}. For example, to switch 
-syntax highlighting off the {2T} switch is used:
+Short single letter options can be joined together. Long options are
+separated with {2&}. For example, to switch syntax highlighting off
+the {2T} switch is used:
 
     {1curl cht.sh/tar}{2?T}
 
