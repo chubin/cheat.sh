@@ -12,7 +12,7 @@ They are equivalent:
     {1curl https://}{2cht.sh}{1/tar}
     {1curl https://}{2cheat.sh}{1/tar}
 
-The preferred access protocol is HTTPS, and you should use it always when possible.
+The preferred access protocol is HTTPS, and you should always use it when possible.
 
 Cheat sheets in the root namespaces cover UNIX/Linux commands.
 
@@ -24,7 +24,7 @@ All cheat sheets in a subsection can be listed using a special query {2:list} :
 
     {1curl cht.sh/go/}{2:list}
 
-There are several other special queries. All of them are starting with a {2colon}.
+There are several other special queries. All of them start with a {2colon}.
 See {2/:help} for the full list of the special queries.
 
 
@@ -36,8 +36,8 @@ search term will be displayed:
 
     {1curl cht.sh/tar}{2~extract}
 
-If the name of the cheat sheet is omitted, and only the serch query is specified,
-all cheat sheets in the namespace are scanned, and the found occurrencies
+If the name of the cheat sheet is omitted, and only the search query is specified,
+all cheat sheets in the namespace are scanned, and the found occurrences
 are displayed:
 
     {1curl cht.sh/}{2~extract}
@@ -47,14 +47,14 @@ are displayed:
 
 cheat.sh queries as well as search queries have many options.
 They can be specified as a part of the query string in the URL, after {2?}.
-Short single letter options could be written all jointly together,
-and long options are separated with {2&}. For example, to switch 
-syntax highlighting off the {2T} switch is used:
+Short single letter options can be joined together. Long options are
+separated with {2&}. For example, to switch syntax highlighting off
+the {2T} switch is used:
 
     {1curl cht.sh/tar}{2?T}
 
-Full list of all available cheat.sh options as well as description of all modes
-of operation can be found in {2/:help},
+A full list of all available cheat.sh options as well as description of all modes
+of operation can be found in {2/:help}.
 
     {1curl cht.sh}{2/:help}
 
@@ -62,24 +62,24 @@ of operation can be found in {2/:help},
 ## cht.sh client
 
 Though it's perfectly possible to access cheat.sh using {1curl} (or any other
-HTTP client) alone, there is a special client, that has several advantages
-comparing to plain curling: {2cht.sh}.
+HTTP client) alone, there is a special client that has several advantages
+over plain curling: {2cht.sh}.
 
 To install the client in {2~/bin}:
 
     {1curl} {2https://cht.sh/:cht.sh} {1> ~/bin/cht.sh}
     {1chmod +x ~/bin/cht.sh}
 
-Queries look the same, but you can separate words in the query with {1spaces},
-instead of {1+} as when using curl, what looks more natural:
+Queries look the same, but you can use {1spaces} to separate words in addition to {1+}
+used with curl.
 
     {1cht.sh} {2python zip lists}
 
 
 ## cht.sh shell
 
-If you always issuing queries about the same programming language, it's can be
-more convenient to run the client in the shell mode and specify the queries
+If you're always issuing queries about the same programming language, it can be
+more convenient to run the client in the shell mode and specify the query's
 context:
 
     {1$} {2cht.sh --shell python}
@@ -92,7 +92,7 @@ Of course, you can start the shell without the context too:
     {1cht.sh> go http query}
     {1cht.sh> js iterate list}
 
-If you use predominantly one language but sometime issuing queries about other,
+If you use one language predominantly, but sometimes issue queries about others,
 you may prepend the query with {2/}:
 
     {1cht.sh/python>} {2zip lists}
@@ -102,11 +102,11 @@ you may prepend the query with {2/}:
 
 ## :learn
 
-If you are just start learning a new programming language, and you have no
-distinct queries for the moment, cheat.sh can be a good starting point too. As
-you know, it exports cheat sheets from the best cheat sheet repositories, and
-one of them is {1Learn X in Y}, a repository of concise documentation devoted
-to learning programming languages from scratch (and not only them).
+If you are just starting to learn a new programming language and you have no
+distinct queries for the moment, cheat.sh can be a good starting point. As
+you know, it exports cheat sheets from the best cheat sheet repositories, 
+like {1Learn X in Y}, a repository of concise documentation devoted
+(but not limited) to learning programming languages from scratch.
 
 If you want start learning a new programming language, do (use less -R because
 the output could be quite big): 
@@ -122,8 +122,8 @@ Or simply {2:learn} with cht.sh (you don't need {2less -R} here, because
 ## Programming languages questions
 
 One of the most important features of cheat.sh is that you can ask it any
-questions about programming languages and instantly get answers on them. You
-can use both direct HTTP queries or the cht.sh client for that:
+questions about programming languages and instantly get answers. You
+can use either direct HTTP queries or the cht.sh client:
 
     {1curl cht.sh/}{2python/reverse+list}
     
@@ -138,16 +138,16 @@ programming language name as the first word in the query:
     {4cht.sh>} {2python reverse list}
 
 But if you are using only one programming language and all queries are about
-it, it's better to change the current context and 
+it, it's better to change the current context.
 
 
 ## Comments
 
-Text in the answers is syntactically formatted as comment in the correspondent
+Text in the answers is syntactically formatted as a comment in the corresponding
 programming language
 
 When using cht.sh, you can copy the result of the last query into the selection
-buffer (you may also call it "clibpoard") using {2C} (or {2c}, with text):
+buffer (you may also call it "clipboard") using {2C} (or {2c}, with text):
 
     {1cht.sh/python> reverse list}
     {4...}
@@ -161,7 +161,7 @@ One of the advantages of the {1cht.sh} client comparing to plain curl is that yo
 can use TAB completion when writing its queries in {1bash}
 (other supported shells: {1zsh} and {1fish}).
 
-Install the TAB completion script for that. Assuming you use bash, you have to do:
+To install the TAB completion script, assuming you use bash, you have to do:
 
     {1mkdir -p ~/.bash.d/}
     {1curl} {2https://cht.sh/:bash_completion} {1> ~/.bash.d/cht.sh}
@@ -172,7 +172,7 @@ Install the TAB completion script for that. Assuming you use bash, you have to d
 ## Editor
 
 You can access cheat.sh directly from editors: {1Vim} and {1Emacs}.
-It's a very important feature! You should absolutely like it.
+It's a very important feature! You will absolutely like it.
 
 {1Imagine:}
 instead of switching to your browser, googling, browsing Stack Overflow
@@ -180,7 +180,7 @@ and eventually copying the code snippets you need and later pasting them into
 the editor, you can achieve the same instantly and without leaving
 the editor at all!
 
-Here is how it looks like:
+Here is how it works:
 
 1. In Vim, if you have a question while editing a program, you can just type
 your question {1directly in the buffer} and press {2<leader>KK}. You will get
@@ -194,7 +194,7 @@ answer without the comments, {2<leader>KC} replays the last query
 toggling them.
 
 You have to install cheat.sh {1Vim/Emacs plugins} for the editor support.
-See {2/:vim} or {2/:emacs} with the detailed installation instructions.
+See {2/:vim} or {2/:emacs} for detailed installation instructions.
 
 
 ## Feature requests, feedback and contribution
