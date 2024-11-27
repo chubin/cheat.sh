@@ -12,9 +12,6 @@ import os
 import re
 from subprocess import Popen, PIPE
 
-from polyglot.detect import Detector
-from polyglot.detect.base import UnknownLanguage
-
 from config import CONFIG
 from languages_data import SO_NAME
 from .upstream import UpstreamAdapter
@@ -81,32 +78,7 @@ class Question(UpstreamAdapter):
         topic_words = topic.split()
 
         topic = " ".join(topic_words)
-
-        lang = 'en'
-        try:
-            query_text = topic # " ".join(topic)
-            query_text = re.sub('^[^/]*/+', '', query_text.rstrip('/'))
-            query_text = re.sub('/[0-9]+$', '', query_text)
-            query_text = re.sub('/[0-9]+$', '', query_text)
-            detector = Detector(query_text)
-            supposed_lang = detector.languages[0].code
-            if len(topic_words) > 2 \
-                or supposed_lang in ['az', 'ru', 'uk', 'de', 'fr', 'es', 'it', 'nl']:
-                lang = supposed_lang
-            if supposed_lang.startswith('zh_') or supposed_lang == 'zh':
-                lang = 'zh'
-            elif supposed_lang.startswith('pt_'):
-                lang = 'pt'
-            if supposed_lang in ['ja', 'ko']:
-                lang = supposed_lang
-
-        except UnknownLanguage:
-            print("Unknown language (%s)" % query_text)
-
-        if lang != 'en':
-            topic = ['--human-language', lang, topic]
-        else:
-            topic = [topic]
+        topic = [topic]
 
         cmd = [CONFIG["path.internal.bin.upstream"]] + topic
         proc = Popen(cmd, stdin=open(os.devnull, "r"), stdout=PIPE, stderr=PIPE)
