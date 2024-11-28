@@ -360,7 +360,7 @@ let g:syntastic_shell_checkers = ['shellcheck']
     scrooloose / syntastic – 構文チェックプラグイン
     cheat.sh-vim – Vimのサポート
 
-Syntasticは警告とエラー（code analysysツールで見つかった： jshint 、 jshint 、 pylint 、 shellcheckt etc.), and cheat.sh-vim`を表示すると、エディタに書き込まれたプログラミング言語のクエリに関するエラーと警告と回答の説明が表示されます。
+Syntasticは警告とエラー（code analysisツールで見つかった： jshint 、 jshint 、 pylint 、 shellcheckt etc.), and cheat.sh-vim`を表示すると、エディタに書き込まれたプログラミング言語のクエリに関するエラーと警告と回答の説明が表示されます。
 
 cheat.sh Vimプラグインの最も重要な機能が表示されているデモをご覧ください（5分）：
 
