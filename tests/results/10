@@ -1,16 +1,23 @@
-[38;5;246;03m#  How do I copy a file in Python?[39;00m
+[38;5;246;03m#  [`shutil`][1] has many methods you can use. One of which is:[39;00m
 [38;5;246;03m#  [39;00m
-[38;5;246;03m#  shutil (http://docs.python.org/3/library/shutil.html) has many methods[39;00m
-[38;5;246;03m#  you can use. One of which is:[39;00m
-
-[38;5;70;01mfrom[39;00m[38;5;252m [39m[38;5;68;04mshutil[39;00m[38;5;252m [39m[38;5;70;01mimport[39;00m[38;5;252m [39m[38;5;252mcopyfile[39m
-
-[38;5;252mcopyfile[39m[38;5;252m([39m[38;5;252msrc[39m[38;5;252m,[39m[38;5;252m [39m[38;5;252mdst[39m[38;5;252m)[39m
-
-[38;5;246;03m#  Copy the contents of the file named src to a file named dst. The[39;00m
-[38;5;246;03m#  destination location must be writable; otherwise, an IOError exception[39;00m
-[38;5;246;03m#  will be raised. If dst already exists, it will be replaced. Special[39;00m
-[38;5;246;03m#  files such as character or block devices and pipes cannot be copied[39;00m
-[38;5;246;03m#  with this function. src and dst are path names given as strings.[39;00m
+[38;5;246;03m#  ```[39;00m
+[38;5;246;03m#  from shutil import copyfile[39;00m
+[38;5;246;03m#  copyfile(src, dst)[39;00m
+[38;5;246;03m#  ```[39;00m
+[38;5;246;03m#  [39;00m
+[38;5;252m [39m[38;5;246;03m#  - Copy the contents of the file named **src** to a file named[39;00m
+[38;5;246;03m#  **dst**.[39;00m
+[38;5;252m [39m[38;5;246;03m#  - The destination location must be writable; otherwise, an[39;00m
+[38;5;246;03m#  **IOError** exception will be raised.[39;00m
+[38;5;252m [39m[38;5;246;03m#  - If **dst** already exists, it will be replaced.[39;00m
+[38;5;252m [39m[38;5;246;03m#  - Special files such as character or block devices and pipes cannot[39;00m
+[38;5;246;03m#  be copied with this function.[39;00m
+[38;5;252m [39m[38;5;246;03m#  - With **copy**, **src** and **dst** are path names given as[39;00m
+[38;5;246;03m#  __strings__.[39;00m
+[38;5;246;03m#  [39;00m
+[38;5;246;03m#  If you use `os.path` operations, use `copy` rather than `copyfile`.[39;00m
+[38;5;246;03m#  `copyfile` will only accept strings.[39;00m
+[38;5;246;03m#  [39;00m
+[38;5;252m  [39m[38;5;246;03m#  [1]: http://docs.python.org/3/library/shutil.html[39;00m
 [38;5;246;03m#  [39;00m
 [38;5;246;03m#  [Swati] [so/q/123198] [cc by-sa 3.0][39;00m
