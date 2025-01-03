@@ -1,6 +1,5 @@
-class Adapter(object):
+class Adapter():
     pass
 
 class cheatAdapter(Adapter):
     pass
-

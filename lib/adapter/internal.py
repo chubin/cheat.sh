@@ -5,20 +5,21 @@ Configuration parameters:
     path.internal.pages
 """
 
-import sys
-import os
 import collections
+import os
+import sys
 
 try:
-    from rapidfuzz import process, fuzz
+    from rapidfuzz import fuzz, process
     _USING_FUZZYWUZZY=False
 except ImportError:
-    from fuzzywuzzy import process, fuzz
+    from fuzzywuzzy import fuzz, process
     _USING_FUZZYWUZZY=True
 
 from config import CONFIG
-from .adapter import Adapter
 from fmt.internal import colorize_internal
+
+from .adapter import Adapter
 
 _INTERNAL_TOPICS = [
     ":cht.sh",

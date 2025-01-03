@@ -8,9 +8,11 @@ The adapter exposes one page ("latencies") and several its aliases
 
 # pylint: disable=relative-import
 
-import sys
 import os
+import sys
+
 from .git_adapter import GitRepositoryAdapter
+
 
 class Latenz(GitRepositoryAdapter):
 

@@ -24,6 +24,7 @@ import re
 from config import CONFIG
 from routing import get_answers, get_topics_list
 
+
 def _limited_entry():
     return {
         'topic_type': 'LIMITED',

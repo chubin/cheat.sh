@@ -5,13 +5,13 @@
 
 from gevent.monkey import patch_all
 from gevent.pywsgi import WSGIServer
+
 patch_all()
 
 import os
 import sys
 
-from app import app, CONFIG
-
+from app import CONFIG, app
 
 if '--debug' in sys.argv:
     # Not all debug mode features are available under `gevent`

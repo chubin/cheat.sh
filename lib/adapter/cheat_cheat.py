@@ -9,6 +9,7 @@ Each cheat sheet is a separate file without extension
 
 from .git_adapter import GitRepositoryAdapter
 
+
 class Cheat(GitRepositoryAdapter):
     """
     cheat/cheat adapter

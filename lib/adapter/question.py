@@ -10,13 +10,13 @@ from __future__ import print_function
 
 import os
 import re
-from subprocess import Popen, PIPE
-
-from polyglot.detect import Detector
-from polyglot.detect.base import UnknownLanguage
+from subprocess import PIPE, Popen
 
 from config import CONFIG
 from languages_data import SO_NAME
+from polyglot.detect import Detector
+from polyglot.detect.base import UnknownLanguage
+
 from .upstream import UpstreamAdapter
 
 NOT_FOUND_MESSAGE = """404 NOT FOUND

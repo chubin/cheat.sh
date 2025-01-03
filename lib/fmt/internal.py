@@ -5,8 +5,8 @@ Will be merged with panela later.
 
 import re
 
-from colorama import Fore, Back, Style
 import colored
+from colorama import Back, Fore, Style
 
 PALETTES = {
     0: {

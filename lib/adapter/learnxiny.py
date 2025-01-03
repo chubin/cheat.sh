@@ -9,10 +9,14 @@ Configuration parameters:
 # pylint: disable=relative-import
 
 from __future__ import print_function
+
 import os
 import re
+
 from config import CONFIG
+
 from .git_adapter import GitRepositoryAdapter
+
 
 class LearnXinY(GitRepositoryAdapter):
 
@@ -62,7 +66,7 @@ class LearnXinY(GitRepositoryAdapter):
 
         return self.adapters[lang].is_valid(topic)
 
-class LearnXYAdapter(object):
+class LearnXYAdapter():
 
     """
     Parent class of all languages adapters

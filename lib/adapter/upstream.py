@@ -10,10 +10,12 @@ Configuration parameters:
 # pylint: disable=relative-import
 
 import textwrap
-import requests
 
+import requests
 from config import CONFIG
+
 from .adapter import Adapter
+
 
 def _are_you_offline():
     return textwrap.dedent(

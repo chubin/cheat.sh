@@ -20,18 +20,18 @@ Configuration parameters:
 
 from __future__ import print_function
 
-import sys
-import os
-import textwrap
 import hashlib
+import os
 import re
-from itertools import groupby, chain
+import sys
+import textwrap
+from itertools import chain, groupby
 from subprocess import Popen
 from tempfile import NamedTemporaryFile
 
+import cache
 from config import CONFIG
 from languages_data import VIM_NAME
-import cache
 
 FNULL = open(os.devnull, 'w')
 TEXT = 0

@@ -8,12 +8,14 @@ Exports:
 
 # pylint: disable=relative-import
 
-import os
 import glob
+import os
+
 import yaml
 
-from .git_adapter import GitRepositoryAdapter
 from .cheat_sheets import CheatSheets
+from .git_adapter import GitRepositoryAdapter
+
 
 class Rosetta(GitRepositoryAdapter):
 

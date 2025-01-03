@@ -17,26 +17,26 @@ Configuration parameters:
 from __future__ import print_function
 
 import sys
+
 if sys.version_info[0] < 3:
     reload(sys)
     sys.setdefaultencoding('utf8')
 
-import sys
 import logging
 import os
-import requests
+import sys
+
 import jinja2
-from flask import Flask, request, send_from_directory, redirect, Response
+import requests
+from flask import Flask, Response, redirect, request, send_from_directory
 
 sys.path.append(os.path.abspath(os.path.join(__file__, "..", "..", "lib")))
+from cheat_wrapper import cheat_wrapper
 from config import CONFIG
 from limits import Limits
-from cheat_wrapper import cheat_wrapper
-from post import process_post_request
 from options import parse_args
-
-from stateful_queries import save_query, last_query
-
+from post import process_post_request
+from stateful_queries import last_query, save_query
 
 if not os.path.exists(os.path.dirname(CONFIG["path.log.main"])):
     os.makedirs(os.path.dirname(CONFIG["path.log.main"]))
@@ -58,7 +58,7 @@ stderr_handler.setFormatter(logging.Formatter('%(filename)s:%(lineno)s: %(messag
 # (https://github.com/pallets/werkzeug/issues/1969)
 # resulting in duplicating lines. In that case we need root
 # stderr handler to skip lines from werkzeug.
-class SkipFlaskLogger(object):
+class SkipFlaskLogger():
     def filter(self, record):
         if record.name != 'werkzeug':
             return True
