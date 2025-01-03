@@ -559,7 +559,7 @@ cmd_cd() {
 }
 
 cmd_copy() {
-  if [ -z "$DISPLAY" ]; then
+  if [ -z "$DISPLAY" ] && [ "$is_macos" != yes ]; then
     echo copy: supported only in the Desktop version
   elif [ -z "$input" ]; then
     echo copy: Make at least one query first.
@@ -579,7 +579,7 @@ cmd_copy() {
 }
 
 cmd_ccopy() {
-  if [ -z "$DISPLAY" ]; then
+  if [ -z "$DISPLAY" ] && [ "$is_macos" != yes ]; then
     echo copy: supported only in the Desktop version
   elif [ -z "$input" ]; then
     echo copy: Make at least one query first.
