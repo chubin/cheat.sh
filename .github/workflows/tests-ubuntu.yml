@@ -10,9 +10,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+    - run: ./share/adapters/rfc.sh
     - name: install dependencies
       run: pip install --upgrade -r requirements.txt
     - name: fetch upstream cheat sheets
