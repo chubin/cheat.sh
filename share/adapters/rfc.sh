@@ -12,15 +12,13 @@ RFC_get()
       | sed 's/##/\n/g' \
       | sed 's/#    //g' \
       | grep -o '.*\. ' \
-      | $SED_E 's/^(.*)(January|February|March|April|May|June|July|August|September|October|November|December) [[:digit:]]{4}(.*)$/\1/'
+      | sed -E 's/^(.*)(January|February|March|April|May|June|July|August|September|October|November|December) [[:digit:]]{4}(.*)$/\1/'
   }
 
   UNAME=$(uname -s)
   if [ "$UNAME" = "Darwin" ]; then
-    SED_E="sed -E"
     SED_I="sed -i ''"
   else
-    SED_E="sed -r"
     SED_I="sed -i"
   fi
 
