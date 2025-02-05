@@ -1,9 +1,10 @@
 # vim: encoding=utf-8
 
+import itertools
 import os
 import sys
+
 import colored
-import itertools
 from globals import MYDIR
 
 """
@@ -18,9 +19,9 @@ TODO:
 
 """
 
-from wcwidth import wcswidth
-from colors import find_nearest_color, HEX_TO_ANSI, rgb_from_str
 import pyte
+from colors import HEX_TO_ANSI, find_nearest_color, rgb_from_str
+from wcwidth import wcswidth
 
 # http://stackoverflow.com/questions/19782975/convert-rgb-color-to-the-nearest-color-in-palette-web-safe-color
 
@@ -35,7 +36,7 @@ def color_mapping(clr):
         return None
     return clr
 
-class Point(object):
+class Point():
     """
     One point (character) on a terminal
     """
@@ -452,9 +453,9 @@ class Panela:
         """
 
         frame_chars = {
-            'ascii':    u'++++-|',
-            'single':   u'┌┐└┘─│',
-            'double':   u'┌┐└┘─│',
+            'ascii':    '++++-|',
+            'single':   '┌┐└┘─│',
+            'double':   '┌┐└┘─│',
         }
         if frame in frame_chars:
             chars = frame_chars[frame]
@@ -493,16 +494,16 @@ class Panela:
         self.put_point(x0, y0 - radius, char=char, color=color, background=background)
         self.put_point(x0 + k(radius), y0, char=char, color=color, background=background)
         self.put_point(x0 - k(radius), y0, char=char, color=color, background=background)
-     
+
         char = "x"
         while x < y:
-            if f >= 0: 
+            if f >= 0:
                 y -= 1
                 ddf_y += 2
                 f += ddf_y
             x += 1
             ddf_x += 2
-            f += ddf_x    
+            f += ddf_x
             self.put_point(x0 + k(x), y0 + y, char=char, color=color, background=background)
             self.put_point(x0 - k(x), y0 + y, char=char, color=color, background=background)
             self.put_point(x0 + k(x), y0 - y, char=char, color=color, background=background)
@@ -558,7 +559,7 @@ class Panela:
 
 ########################################################################################################
 
-class Template(object):
+class Template():
     def __init__(self):
         self._mode = 'page'
         self.page = []

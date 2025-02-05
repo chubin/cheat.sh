@@ -2,14 +2,14 @@
 
 from __future__ import print_function
 
-from datetime import datetime
 import os
-from os import path
 import re
 import shutil
 import subprocess
-from subprocess import Popen
 import sys
+from datetime import datetime
+from os import path
+from subprocess import Popen
 
 SHARE_DIR = path.join(path.dirname(__file__), "../share/")
 

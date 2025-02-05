@@ -23,19 +23,21 @@ Configuration parameters:
 """
 
 import os
-import sys
 import re
+import sys
 
 import colored
 from pygments import highlight as pygments_highlight
-from pygments.formatters import Terminal256Formatter        # pylint: disable=no-name-in-module
+from pygments.formatters import \
+    Terminal256Formatter  # pylint: disable=no-name-in-module
+
                                                             # pylint: disable=wrong-import-position
 sys.path.append(os.path.abspath(os.path.join(__file__, '..')))
-from config import CONFIG
-import languages_data                                       # pylint: enable=wrong-import-position
-
-import fmt.internal
 import fmt.comments
+import fmt.internal
+import languages_data  # pylint: enable=wrong-import-position
+from config import CONFIG
+
 
 def visualize(answer_data, request_options):
     """

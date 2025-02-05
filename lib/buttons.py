@@ -17,4 +17,3 @@ GITHUB_BUTTON_FOOTER = """
 <!-- Place this tag right after the last button or just before your close body tag. -->
 <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
 """
-

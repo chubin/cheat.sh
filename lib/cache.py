@@ -12,8 +12,9 @@ Configuration parameters:
     cache.redis.port
 """
 
-import os
 import json
+import os
+
 from config import CONFIG
 
 _REDIS = None

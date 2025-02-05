@@ -5,7 +5,7 @@
 
 import os.path
 import re
-from subprocess import Popen, PIPE
+from subprocess import PIPE, Popen
 
 from .adapter import Adapter
 
