@@ -1,16 +1,16 @@
-[38;5;246;03m#  How do I copy a file in Python?[39;00m
-[38;5;246;03m#  [39;00m
-[38;5;246;03m#  shutil (http://docs.python.org/3/library/shutil.html) has many methods[39;00m
-[38;5;246;03m#  you can use. One of which is:[39;00m
+#  How do I copy a file in Python?
+#  
+#  shutil (http://docs.python.org/3/library/shutil.html) has many methods
+#  you can use. One of which is:
 
-[38;5;70;01mfrom[39;00m[38;5;252m [39m[38;5;68;04mshutil[39;00m[38;5;252m [39m[38;5;70;01mimport[39;00m[38;5;252m [39m[38;5;252mcopyfile[39m
+from shutil import copyfile
 
-[38;5;252mcopyfile[39m[38;5;252m([39m[38;5;252msrc[39m[38;5;252m,[39m[38;5;252m [39m[38;5;252mdst[39m[38;5;252m)[39m
+copyfile(src, dst)
 
-[38;5;246;03m#  Copy the contents of the file named src to a file named dst. The[39;00m
-[38;5;246;03m#  destination location must be writable; otherwise, an IOError exception[39;00m
-[38;5;246;03m#  will be raised. If dst already exists, it will be replaced. Special[39;00m
-[38;5;246;03m#  files such as character or block devices and pipes cannot be copied[39;00m
-[38;5;246;03m#  with this function. src and dst are path names given as strings.[39;00m
-[38;5;246;03m#  [39;00m
-[38;5;246;03m#  [Swati] [so/q/123198] [cc by-sa 3.0][39;00m
+#  Copy the contents of the file named src to a file named dst. The
+#  destination location must be writable; otherwise, an IOError exception
+#  will be raised. If dst already exists, it will be replaced. Special
+#  files such as character or block devices and pipes cannot be copied
+#  with this function. src and dst are path names given as strings.
+#  
+#  [Swati] [so/q/123198] [cc by-sa 3.0]
