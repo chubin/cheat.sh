@@ -89,6 +89,7 @@ PLAIN_TEXT_AGENTS = [
     "powershell",
     "fetch",
     "aiohttp",
+    "xh",
 ]
 
 
