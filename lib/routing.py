@@ -162,7 +162,7 @@ class Router(object):
                 wrongly_formatted_random = topic[:-8]
                 return wrongly_formatted_random
 
-        # Here if not a random requst, we just forward the topic
+        # Here if not a random request, we just forward the topic
         return topic
 
     def get_answers(
