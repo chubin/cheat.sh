@@ -11,10 +11,12 @@ import glob
 
 from .git_adapter import GitRepositoryAdapter
 
+
 def _remove_initial_underscore(filename):
-    if filename.startswith('_'):
+    if filename.startswith("_"):
         filename = filename[1:]
     return filename
+
 
 def _sanitize_dirnames(filename, restore=False):
     """
@@ -22,13 +24,13 @@ def _sanitize_dirnames(filename, restore=False):
     The `restore` param means that the path name should be restored from the queryname,
     i.e. conversion should be done in the opposite direction
     """
-    parts = filename.split('/')
+    parts = filename.split("/")
     newparts = []
     for part in parts[:-1]:
         if restore:
-            newparts.append('_'+part)
+            newparts.append("_" + part)
             continue
-        if part.startswith('_'):
+        if part.startswith("_"):
             newparts.append(part[1:])
         else:
             newparts.append(part)
@@ -36,8 +38,8 @@ def _sanitize_dirnames(filename, restore=False):
 
     return "/".join(newparts)
 
-class CheatSheets(GitRepositoryAdapter):
 
+class CheatSheets(GitRepositoryAdapter):
     """
     Adapter for the cheat.sheets cheat sheets.
     """
@@ -56,18 +58,17 @@ class CheatSheets(GitRepositoryAdapter):
         hidden_files = ["_info.yaml"]
         answer = []
         prefix = os.path.join(
-            self.local_repository_location(),
-            self._cheatsheet_files_prefix)
-        for mask in ['*', '*/*']:
-            template = os.path.join(
-                prefix,
-                mask)
+            self.local_repository_location(), self._cheatsheet_files_prefix
+        )
+        for mask in ["*", "*/*"]:
+            template = os.path.join(prefix, mask)
 
             answer += [
-                _sanitize_dirnames(f_name[len(prefix):])
+                _sanitize_dirnames(f_name[len(prefix) :])
                 for f_name in glob.glob(template)
                 if not os.path.isdir(f_name)
-                and os.path.basename(f_name) not in hidden_files]
+                and os.path.basename(f_name) not in hidden_files
+            ]
 
         return sorted(answer)
 
@@ -76,18 +77,19 @@ class CheatSheets(GitRepositoryAdapter):
         filename = os.path.join(
             self.local_repository_location(),
             self._cheatsheet_files_prefix,
-            _sanitize_dirnames(topic, restore=True))
+            _sanitize_dirnames(topic, restore=True),
+        )
 
         if os.path.exists(filename):
-            answer = self._format_page(open(filename, 'r').read())
+            answer = self._format_page(open(filename, "r").read())
         else:
             # though it should not happen
             answer = "%s:%s not found" % (str(self.__class__), topic)
 
         return answer
 
-class CheatSheetsDir(CheatSheets):
 
+class CheatSheetsDir(CheatSheets):
     """
     Adapter for the cheat sheets directories.
     Provides pages named according to subdirectories:
@@ -103,14 +105,16 @@ class CheatSheetsDir(CheatSheets):
     def _get_list(self, prefix=None):
 
         template = os.path.join(
-            self.local_repository_location(),
-            self._cheatsheet_files_prefix,
-            '*')
+            self.local_repository_location(), self._cheatsheet_files_prefix, "*"
+        )
 
-        answer = sorted([
-            _remove_initial_underscore(os.path.basename(f_name)) + "/"
-            for f_name in glob.glob(template)
-            if os.path.isdir(f_name)])
+        answer = sorted(
+            [
+                _remove_initial_underscore(os.path.basename(f_name)) + "/"
+                for f_name in glob.glob(template)
+                if os.path.isdir(f_name)
+            ]
+        )
 
         return answer
 
@@ -122,12 +126,12 @@ class CheatSheetsDir(CheatSheets):
         template = os.path.join(
             self.local_repository_location(),
             self._cheatsheet_files_prefix,
-            topic.rstrip('/'),
-            '*')
+            topic.rstrip("/"),
+            "*",
+        )
 
-        answer = sorted([
-            os.path.basename(f_name) for f_name in glob.glob(template)])
+        answer = sorted([os.path.basename(f_name) for f_name in glob.glob(template)])
         return "\n".join(answer) + "\n"
 
     def is_found(self, topic):
-        return CheatSheets.is_found(self, topic.rstrip('/'))
+        return CheatSheets.is_found(self, topic.rstrip("/"))

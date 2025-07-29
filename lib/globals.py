@@ -9,6 +9,7 @@ from __future__ import print_function
 import sys
 import logging
 
+
 def fatal(text):
     """
     Fatal error function.
@@ -18,6 +19,7 @@ def fatal(text):
     sys.stderr.write("ERROR: %s\n" % text)
     sys.exit(1)
 
+
 def error(text):
     """
     Log error `text` and produce a RuntimeError exception
@@ -26,6 +28,7 @@ def error(text):
         print(text)
     logging.error("ERROR %s", text)
     raise RuntimeError(text)
+
 
 def log(text):
     """

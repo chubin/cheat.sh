@@ -11,15 +11,18 @@ import os
 from six import with_metaclass
 from config import CONFIG
 
+
 class AdapterMC(type):
     """
     Adapter Metaclass.
     Defines string representation of adapters
     """
+
     def __repr__(cls):
-        if hasattr(cls, '_class_repr'):
-            return getattr(cls, '_class_repr')()
+        if hasattr(cls, "_class_repr"):
+            return getattr(cls, "_class_repr")()
         return super(AdapterMC, cls).__repr__()
+
 
 class Adapter(with_metaclass(AdapterMC, object)):
     """
@@ -39,7 +42,7 @@ class Adapter(with_metaclass(AdapterMC, object)):
     """
 
     _adapter_name = None
-    _output_format = 'code'
+    _output_format = "code"
     _cache_needed = False
     _repository_url = None
     _local_repository_location = None
@@ -49,7 +52,7 @@ class Adapter(with_metaclass(AdapterMC, object)):
 
     @classmethod
     def _class_repr(cls):
-        return '[Adapter: %s (%s)]' % (cls._adapter_name, cls.__name__)
+        return "[Adapter: %s (%s)]" % (cls._adapter_name, cls.__name__)
 
     def __init__(self):
         self._list = {None: self._get_list()}
@@ -108,13 +111,13 @@ class Adapter(with_metaclass(AdapterMC, object)):
         pass
 
     def _get_output_format(self, topic):
-        if '/' in topic:
-            subquery = topic.split('/')[-1]
+        if "/" in topic:
+            subquery = topic.split("/")[-1]
         else:
             subquery = topic
 
-        if subquery in [':list']:
-            return 'text'
+        if subquery in [":list"]:
+            return "text"
         return self._output_format
 
     # pylint: disable=unused-argument
@@ -142,11 +145,11 @@ class Adapter(with_metaclass(AdapterMC, object)):
             answer = {"answer": answer}
 
         answer_dict = {
-            'topic': topic,
-            'topic_type': self._adapter_name,
-            'format': self._get_output_format(topic),
-            'cache': self._cache_needed,
-            }
+            "topic": topic,
+            "topic_type": self._adapter_name,
+            "format": self._get_output_format(topic),
+            "cache": self._cache_needed,
+        }
         answer_dict.update(answer)
 
         # pylint: disable=assignment-from-none
@@ -176,9 +179,9 @@ class Adapter(with_metaclass(AdapterMC, object)):
 
         if not dirname and cls._repository_url:
             dirname = cls._repository_url
-            if dirname.startswith('https://'):
+            if dirname.startswith("https://"):
                 dirname = dirname[8:]
-            elif dirname.startswith('http://'):
+            elif dirname.startswith("http://"):
                 dirname = dirname[7:]
 
         # if we did not manage to find out dirname up to this point,
@@ -187,7 +190,7 @@ class Adapter(with_metaclass(AdapterMC, object)):
         if not dirname:
             return None
 
-        if dirname.startswith('/'):
+        if dirname.startswith("/"):
             return dirname
 
         # it is possible that several repositories will
@@ -195,10 +198,10 @@ class Adapter(with_metaclass(AdapterMC, object)):
         # (because only the last part of the path is used)
         # in this case provide the name in _local_repository_location
         # (detected by fetch.py)
-        if '/' in dirname:
-            dirname = dirname.split('/')[-1]
+        if "/" in dirname:
+            dirname = dirname.split("/")[-1]
 
-        path = os.path.join(CONFIG['path.repositories'], dirname)
+        path = os.path.join(CONFIG["path.repositories"], dirname)
 
         if cheat_sheets_location:
             path = os.path.join(path, cls._cheatsheet_files_prefix)
@@ -225,7 +228,8 @@ class Adapter(with_metaclass(AdapterMC, object)):
         # in this case `fetch` has to be implemented
         # in the distinct adapter subclass
         raise RuntimeError(
-            "Do not known how to handle this repository: %s" % cls._repository_url)
+            "Do not known how to handle this repository: %s" % cls._repository_url
+        )
 
     @classmethod
     def update_command(cls):
@@ -245,7 +249,8 @@ class Adapter(with_metaclass(AdapterMC, object)):
         # in this case `update` has to be implemented
         # in the distinct adapter subclass
         raise RuntimeError(
-            "Do not known how to handle this repository: %s" % cls._repository_url)
+            "Do not known how to handle this repository: %s" % cls._repository_url
+        )
 
     @classmethod
     def current_state_command(cls):
@@ -264,7 +269,8 @@ class Adapter(with_metaclass(AdapterMC, object)):
         # in this case `update` has to be implemented
         # in the distinct adapter subclass
         raise RuntimeError(
-            "Do not known how to handle this repository: %s" % cls._repository_url)
+            "Do not known how to handle this repository: %s" % cls._repository_url
+        )
 
     @classmethod
     def save_state(cls, state):
@@ -273,8 +279,8 @@ class Adapter(with_metaclass(AdapterMC, object)):
         Must be called after the cache clean up.
         """
         local_repository_dir = cls.local_repository_location()
-        state_filename = os.path.join(local_repository_dir, '.cached_revision')
-        open(state_filename, 'w').write(state)
+        state_filename = os.path.join(local_repository_dir, ".cached_revision")
+        open(state_filename, "w").write(state)
 
     @classmethod
     def get_state(cls):
@@ -284,10 +290,10 @@ class Adapter(with_metaclass(AdapterMC, object)):
         """
 
         local_repository_dir = cls.local_repository_location()
-        state_filename = os.path.join(local_repository_dir, '.cached_revision')
+        state_filename = os.path.join(local_repository_dir, ".cached_revision")
         state = None
         if os.path.exists(state_filename):
-            state = open(state_filename, 'r').read()
+            state = open(state_filename, "r").read()
         return state
 
     @classmethod
@@ -317,19 +323,22 @@ class Adapter(with_metaclass(AdapterMC, object)):
                 answer.append(entry)
         return answer
 
+
 def all_adapters(as_dict=False):
     """
     Return list of all known adapters
     If `as_dict` is True, return dict {'name': adapter} instead of a list.
     """
+
     def _all_subclasses(cls):
-        return set(cls.__subclasses__()).union(set(
-            [s for c in cls.__subclasses__() for s in _all_subclasses(c)]
-        ))
+        return set(cls.__subclasses__()).union(
+            set([s for c in cls.__subclasses__() for s in _all_subclasses(c)])
+        )
 
     if as_dict:
-        return {x.name():x for x in _all_subclasses(Adapter)}
+        return {x.name(): x for x in _all_subclasses(Adapter)}
     return list(_all_subclasses(Adapter))
+
 
 def adapter_by_name(name):
     """
