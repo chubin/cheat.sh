@@ -25,27 +25,29 @@ import pyte
 # http://stackoverflow.com/questions/19782975/convert-rgb-color-to-the-nearest-color-in-palette-web-safe-color
 
 try:
-    basestring        # Python 2
+    basestring  # Python 2
 except NameError:
     basestring = str  # Python 3
 
 
 def color_mapping(clr):
-    if clr == 'default':
+    if clr == "default":
         return None
     return clr
+
 
 class Point(object):
     """
     One point (character) on a terminal
     """
+
     def __init__(self, char=None, foreground=None, background=None):
         self.foreground = foreground
         self.background = background
         self.char = char
 
-class Panela:
 
+class Panela:
     """
     To implement:
 
@@ -110,9 +112,9 @@ class Panela:
             return False
         return True
 
-#
-# Blocks manipulation
-#
+    #
+    # Blocks manipulation
+    #
 
     def copy(self, x1, y1, x2, y2):
 
@@ -130,14 +132,13 @@ class Panela:
         if y1 > y2:
             y1, y2 = y2, y1
 
-        field = [self.field[i] for i in range(y1, y2+1)]
-        field = [line[x1:x2+1] for line in field]
+        field = [self.field[i] for i in range(y1, y2 + 1)]
+        field = [line[x1 : x2 + 1] for line in field]
 
         return Panela(field=field)
 
     def cut(self, x1, y1, x2, y2):
-        """
-        """
+        """ """
         if x1 < 0:
             x1 += self.size_x
         if x2 < 0:
@@ -154,8 +155,8 @@ class Panela:
 
         copied = self.copy(x1, y1, x2, y2)
 
-        for y in range(y1, y2+1):
-            for x in range(x1, x2+1):
+        for y in range(y1, y2 + 1):
+            for x in range(x1, x2 + 1):
                 self.field[y][x] = Point()
 
         return copied
@@ -170,7 +171,9 @@ class Panela:
             self.size_x += cols
 
         if rows and rows > 0:
-            self.field = self.field + [[Point() for _ in range(self.size_x)] for _ in range(rows)]
+            self.field = self.field + [
+                [Point() for _ in range(self.size_x)] for _ in range(rows)
+            ]
             self.size_y += rows
 
     def crop(self, left=None, right=None, top=None, bottom=None):
@@ -224,17 +227,24 @@ class Panela:
                 y_extend = y1 + panela.size_y - self.size_y
             self.extend(cols=x_extend, rows=y_extend)
 
-        for i in range(y1, min(self.size_y, y1+panela.size_y)):
-            for j in range(x1, min(self.size_x, x1+panela.size_x)):
+        for i in range(y1, min(self.size_y, y1 + panela.size_y)):
+            for j in range(x1, min(self.size_x, x1 + panela.size_x)):
                 if transparence:
-                    if panela.field[i-y1][j-x1].char and panela.field[i-y1][j-x1].char != " ":
-                        if panela.field[i-y1][j-x1].foreground:
-                            self.field[i][j].foreground = panela.field[i-y1][j-x1].foreground
-                        if panela.field[i-y1][j-x1].background:
-                            self.field[i][j].background = panela.field[i-y1][j-x1].background
-                        self.field[i][j].char = panela.field[i-y1][j-x1].char
+                    if (
+                        panela.field[i - y1][j - x1].char
+                        and panela.field[i - y1][j - x1].char != " "
+                    ):
+                        if panela.field[i - y1][j - x1].foreground:
+                            self.field[i][j].foreground = panela.field[i - y1][
+                                j - x1
+                            ].foreground
+                        if panela.field[i - y1][j - x1].background:
+                            self.field[i][j].background = panela.field[i - y1][
+                                j - x1
+                            ].background
+                        self.field[i][j].char = panela.field[i - y1][j - x1].char
                 else:
-                    self.field[i][j] = panela.field[i-y1][j-x1]
+                    self.field[i][j] = panela.field[i - y1][j - x1]
 
     def strip(self):
         """
@@ -269,14 +279,14 @@ class Panela:
             top += 1
 
         bottom = 0
-        while bottom < self.size_y and empty_line(self.field[-(bottom+1)]):
+        while bottom < self.size_y and empty_line(self.field[-(bottom + 1)]):
             bottom += 1
 
         self.crop(left=left, right=right, top=top, bottom=bottom)
 
-#
-# Drawing and painting
-#
+    #
+    # Drawing and painting
+    #
 
     def put_point(self, col, row, char=None, color=None, background=None):
         """
@@ -294,7 +304,9 @@ class Panela:
             if color:
                 self.field[row][col].foreground = color
         else:
-            self.field[row][col] = Point(char=char, foreground=color, background=background)
+            self.field[row][col] = Point(
+                char=char, foreground=color, background=background
+            )
 
     def put_string(self, col, row, s=None, color=None, background=None):
         """
@@ -302,7 +314,7 @@ class Panela:
         ad <col>, <row>
         """
         for i, c in enumerate(s):
-            self.put_point(col+i, row, c, color=color, background=background)
+            self.put_point(col + i, row, c, color=color, background=background)
 
     def put_line(self, x1, y1, x2, y2, char=None, color=None, background=None):
         """
@@ -384,14 +396,16 @@ class Panela:
         else:
             char_iter = itertools.repeat(char)
 
-        for x, y in get_line((x1,y1), (x2, y2)):
+        for x, y in get_line((x1, y1), (x2, y2)):
             char = next(char_iter)
             color = next(color_iter)
             background = next(background_iter)
 
             self.put_point(x, y, char=char, color=color, background=background)
 
-    def paint(self, x1, y1, x2, y2, c1, c2=None, bg1=None, bg2=None, angle=None, angle_bg=None):
+    def paint(
+        self, x1, y1, x2, y2, c1, c2=None, bg1=None, bg2=None, angle=None, angle_bg=None
+    ):
         """
         Paint rectangle (x1,y1) (x2,y2) with foreground color c1 and background bg1 if specified.
         If spefied colors c2/bg2, rectangle is painted with linear gradient (inclined under angle).
@@ -405,9 +419,13 @@ class Panela:
 
             r1, g1, b1 = rgb_from_str(c1)
             r2, g2, b2 = rgb_from_str(c2)
-            k = 1.0*(j-x1)/(x2-x1)*(1-a)
-            l = 1.0*(i-y1)/(y2-y1)*a
-            r3, g3, b3 = int(r1 + 1.0*(r2-r1)*(k+l)), int(g1 + 1.0*(g2-g1)*(k+l)), int(b1 + 1.0*(b2-b1)*(k+l))
+            k = 1.0 * (j - x1) / (x2 - x1) * (1 - a)
+            l = 1.0 * (i - y1) / (y2 - y1) * a
+            r3, g3, b3 = (
+                int(r1 + 1.0 * (r2 - r1) * (k + l)),
+                int(g1 + 1.0 * (g2 - g1) * (k + l)),
+                int(b1 + 1.0 * (b2 - b1) * (k + l)),
+            )
 
             return "#%02x%02x%02x" % (r3, g3, b3)
 
@@ -419,14 +437,18 @@ class Panela:
 
             r1, g1, b1 = rgb_from_str(bg1)
             r2, g2, b2 = rgb_from_str(bg2)
-            k = 1.0*(j-x1)/(x2-x1)*(1-a)
-            l = 1.0*(i-y1)/(y2-y1)*a
-            r3, g3, b3 = int(r1 + 1.0*(r2-r1)*(k+l)), int(g1 + 1.0*(g2-g1)*(k+l)), int(b1 + 1.0*(b2-b1)*(k+l))
+            k = 1.0 * (j - x1) / (x2 - x1) * (1 - a)
+            l = 1.0 * (i - y1) / (y2 - y1) * a
+            r3, g3, b3 = (
+                int(r1 + 1.0 * (r2 - r1) * (k + l)),
+                int(g1 + 1.0 * (g2 - g1) * (k + l)),
+                int(b1 + 1.0 * (b2 - b1) * (k + l)),
+            )
 
             return "#%02x%02x%02x" % (r3, g3, b3)
 
         if c2 == None:
-            for i in range(y1,y2):
+            for i in range(y1, y2):
                 for j in range(x1, x2):
                     self.field[i][j].foreground = c1
                     if bg1:
@@ -435,7 +457,7 @@ class Panela:
                         else:
                             self.field[i][j].background = bg1
         else:
-            for i in range(y1,y2):
+            for i in range(y1, y2):
                 for j in range(x1, x2):
                     self.field[i][j].foreground = calculate_color(i, j)
                     if bg1:
@@ -446,20 +468,22 @@ class Panela:
 
         return self
 
-    def put_rectangle(self, x1, y1, x2, y2, char=None, frame=None, color=None, background=None):
+    def put_rectangle(
+        self, x1, y1, x2, y2, char=None, frame=None, color=None, background=None
+    ):
         """
         Draw rectangle (x1,y1), (x2,y2) using <char> character, <color> and <background> color
         """
 
         frame_chars = {
-            'ascii':    u'++++-|',
-            'single':   u'┌┐└┘─│',
-            'double':   u'┌┐└┘─│',
+            "ascii": "++++-|",
+            "single": "┌┐└┘─│",
+            "double": "┌┐└┘─│",
         }
         if frame in frame_chars:
             chars = frame_chars[frame]
         else:
-            chars = char*6
+            chars = char * 6
 
         for x in range(x1, x2):
             self.put_point(x, y1, char=chars[4], color=color, background=background)
@@ -474,7 +498,6 @@ class Panela:
         self.put_point(x1, y2, char=chars[2], color=color, background=background)
         self.put_point(x2, y2, char=chars[3], color=color, background=background)
 
-
     def put_circle(self, x0, y0, radius, char=None, color=None, background=None):
         """
         Draw cricle with center in (x, y) and radius r (x1,y1), (x2,y2)
@@ -482,7 +505,7 @@ class Panela:
         """
 
         def k(x):
-            return int(x*1.9)
+            return int(x * 1.9)
 
         f = 1 - radius
         ddf_x = 1
@@ -491,44 +514,66 @@ class Panela:
         y = radius
         self.put_point(x0, y0 + radius, char=char, color=color, background=background)
         self.put_point(x0, y0 - radius, char=char, color=color, background=background)
-        self.put_point(x0 + k(radius), y0, char=char, color=color, background=background)
-        self.put_point(x0 - k(radius), y0, char=char, color=color, background=background)
-     
+        self.put_point(
+            x0 + k(radius), y0, char=char, color=color, background=background
+        )
+        self.put_point(
+            x0 - k(radius), y0, char=char, color=color, background=background
+        )
+
         char = "x"
         while x < y:
-            if f >= 0: 
+            if f >= 0:
                 y -= 1
                 ddf_y += 2
                 f += ddf_y
             x += 1
             ddf_x += 2
-            f += ddf_x    
-            self.put_point(x0 + k(x), y0 + y, char=char, color=color, background=background)
-            self.put_point(x0 - k(x), y0 + y, char=char, color=color, background=background)
-            self.put_point(x0 + k(x), y0 - y, char=char, color=color, background=background)
-            self.put_point(x0 - k(x), y0 - y, char=char, color=color, background=background)
-            self.put_point(x0 + k(y), y0 + x, char=char, color=color, background=background)
-            self.put_point(x0 - k(y), y0 + x, char=char, color=color, background=background)
-            self.put_point(x0 + k(y), y0 - x, char=char, color=color, background=background)
-            self.put_point(x0 - k(y), y0 - x, char=char, color=color, background=background)
+            f += ddf_x
+            self.put_point(
+                x0 + k(x), y0 + y, char=char, color=color, background=background
+            )
+            self.put_point(
+                x0 - k(x), y0 + y, char=char, color=color, background=background
+            )
+            self.put_point(
+                x0 + k(x), y0 - y, char=char, color=color, background=background
+            )
+            self.put_point(
+                x0 - k(x), y0 - y, char=char, color=color, background=background
+            )
+            self.put_point(
+                x0 + k(y), y0 + x, char=char, color=color, background=background
+            )
+            self.put_point(
+                x0 - k(y), y0 + x, char=char, color=color, background=background
+            )
+            self.put_point(
+                x0 + k(y), y0 - x, char=char, color=color, background=background
+            )
+            self.put_point(
+                x0 - k(y), y0 - x, char=char, color=color, background=background
+            )
 
     def read_ansi(self, seq, x=0, y=0, transparence=True):
         """
         Read ANSI sequence and render it to the panela starting from x and y.
         If transparence is True, replace spaces with ""
         """
-        screen = pyte.screens.Screen(self.size_x, self.size_y+1)
+        screen = pyte.screens.Screen(self.size_x, self.size_y + 1)
 
         stream = pyte.streams.ByteStream()
         stream.attach(screen)
 
-        stream.feed(seq.replace('\n', '\r\n'))
+        stream.feed(seq.replace("\n", "\r\n"))
 
         for i, line in sorted(screen.buffer.items(), key=lambda x: x[0]):
             for j, char in sorted(line.items(), key=lambda x: x[0]):
                 if j >= self.size_x:
                     break
-                self.field[i][j] = Point(char.data, color_mapping(char.fg), color_mapping(char.bg))
+                self.field[i][j] = Point(
+                    char.data, color_mapping(char.fg), color_mapping(char.bg)
+                )
 
     def __str__(self):
         answer = ""
@@ -540,72 +585,78 @@ class Panela:
                 stop = ""
 
                 if self.field[i][j].foreground:
-                    fg_ansi = '\033[38;2;%s;%s;%sm' % rgb_from_str(self.field[i][j].foreground)
+                    fg_ansi = "\033[38;2;%s;%s;%sm" % rgb_from_str(
+                        self.field[i][j].foreground
+                    )
                     stop = colored.attr("reset")
 
                 if self.field[i][j].background:
-                    bg_ansi = '\033[48;2;%s;%s;%sm' % rgb_from_str(self.field[i][j].background)
+                    bg_ansi = "\033[48;2;%s;%s;%sm" % rgb_from_str(
+                        self.field[i][j].background
+                    )
                     stop = colored.attr("reset")
 
                 char = c.char or " "
                 if not skip_next:
-                    answer += fg_ansi + bg_ansi + char.encode('utf-8') + stop
+                    answer += fg_ansi + bg_ansi + char.encode("utf-8") + stop
                 skip_next = wcswidth(char) == 2
 
             # answer += "...\n"
             answer += "\n"
         return answer
 
+
 ########################################################################################################
+
 
 class Template(object):
     def __init__(self):
-        self._mode = 'page'
+        self._mode = "page"
         self.page = []
         self.mask = []
         self.code = []
         self.panela = None
 
         self._colors = {
-            'A': '#00cc00',
-            'B': '#00cc00',
-            'C': '#00aacc',
-            'D': '#888888',
-            'E': '#cccc00',
-            'F': '#ff0000',
-            'H': '#22aa22',
-            'I': '#cc0000',
-            'J': '#000000',
+            "A": "#00cc00",
+            "B": "#00cc00",
+            "C": "#00aacc",
+            "D": "#888888",
+            "E": "#cccc00",
+            "F": "#ff0000",
+            "H": "#22aa22",
+            "I": "#cc0000",
+            "J": "#000000",
         }
 
         self._bg_colors = {
-            'G': '#555555',
-            'J': '#555555',
+            "G": "#555555",
+            "J": "#555555",
         }
 
     def _process_line(self, line):
-        if line == 'mask':
-            self._mode = 'mask'
-        if line == '':
-            self._mode = 'code'
+        if line == "mask":
+            self._mode = "mask"
+        if line == "":
+            self._mode = "code"
 
     def read(self, filename):
         """
         Read template from `filename`
         """
         with open(filename) as f:
-            self._mode = 'page'
+            self._mode = "page"
             for line in f.readlines():
-                line = line.rstrip('\n')
-                if line.startswith('==[') and line.endswith(']=='):
+                line = line.rstrip("\n")
+                if line.startswith("==[") and line.endswith("]=="):
                     self._process_line(line[3:-3].strip())
                     continue
 
-                if self._mode == 'page':
+                if self._mode == "page":
                     self.page.append(line)
-                elif self._mode == 'mask':
+                elif self._mode == "mask":
                     self.mask.append(line)
-                elif self._mode == 'code':
+                elif self._mode == "code":
                     self.mask.append(line)
 
     def apply_mask(self):
@@ -631,6 +682,7 @@ class Template(object):
 
         return self.page
 
+
 def main():
     "Only for experiments"
 
@@ -641,5 +693,5 @@ def main():
     sys.stdout.write(template.show())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

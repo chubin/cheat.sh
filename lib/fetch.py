@@ -24,6 +24,7 @@ import cache
 
 from config import CONFIG
 
+
 def _log(*message):
     logging.info(*message)
     if len(message) > 1:
@@ -31,14 +32,17 @@ def _log(*message):
     else:
         message = message[0].rstrip("\n")
 
-    sys.stdout.write(message+"\n")
+    sys.stdout.write(message + "\n")
+
 
 def _run_cmd(cmd):
     shell = isinstance(cmd, str)
     process = subprocess.Popen(
-        cmd, shell=shell, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        cmd, shell=shell, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+    )
     output = process.communicate()[0]
     return process.returncode, output
+
 
 def fetch_all(skip_existing=True):
     """
@@ -58,8 +62,11 @@ def fetch_all(skip_existing=True):
             sys.stdout.flush()
             try:
                 process = subprocess.Popen(
-                    cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                    universal_newlines=True)
+                    cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    universal_newlines=True,
+                )
             except OSError:
                 print("\nERROR: %s" % cmd)
                 raise
@@ -76,10 +83,14 @@ def fetch_all(skip_existing=True):
         location = adptr.local_repository_location()
         if not location:
             continue
-        if location in known_location \
-            and adptr.repository_url() != known_location[location].repository_url():
-            fatal("Duplicate location: %s for %s and %s"
-                  % (location, adptr, known_location[location]))
+        if (
+            location in known_location
+            and adptr.repository_url() != known_location[location].repository_url()
+        ):
+            fatal(
+                "Duplicate location: %s for %s and %s"
+                % (location, adptr, known_location[location])
+            )
         known_location[location] = adptr
 
     # Parent directories creation
@@ -101,8 +112,11 @@ def fetch_all(skip_existing=True):
 
         os.makedirs(parent)
 
-    known_location = {k:v for k, v in known_location.items() if k not in existing_locations}
+    known_location = {
+        k: v for k, v in known_location.items() if k not in existing_locations
+    }
     _fetch_locations(known_location)
+
 
 def _update_adapter(adptr):
     """
@@ -118,7 +132,10 @@ def _update_adapter(adptr):
 
     errorcode, output = _run_cmd(cmd)
     if errorcode:
-        _log("\nERROR:\n---%s\n" % output.decode("utf-8") + "\n---\nCould not update %s" % adptr)
+        _log(
+            "\nERROR:\n---%s\n" % output.decode("utf-8")
+            + "\n---\nCould not update %s" % adptr
+        )
         return False
 
     # Getting current repository state
@@ -129,7 +146,11 @@ def _update_adapter(adptr):
     if cmd:
         errorcode, state = _run_cmd(cmd)
         if errorcode:
-            _log("\nERROR:\n---\n" + state + "\n---\nCould not get repository state: %s" % adptr)
+            _log(
+                "\nERROR:\n---\n"
+                + state
+                + "\n---\nCould not get repository state: %s" % adptr
+            )
             return False
         state = state.strip()
 
@@ -141,7 +162,11 @@ def _update_adapter(adptr):
         errorcode, output = _run_cmd(cmd)
         output = output.decode("utf-8")
         if errorcode:
-            _log("\nERROR:\n---\n" + output + "\n---\nCould not get list of pages to be updated: %s" % adptr)
+            _log(
+                "\nERROR:\n---\n"
+                + output
+                + "\n---\nCould not get list of pages to be updated: %s" % adptr
+            )
             return False
         updates = output.splitlines()
 
@@ -161,6 +186,7 @@ def _update_adapter(adptr):
     adptr.save_state(state)
     return True
 
+
 def update_all():
     """
     Update all known repositories, mentioned in the adapters
@@ -177,14 +203,18 @@ def update_all():
 
         _update_adapter(adptr)
 
+
 def update_by_name(name):
     """
     Find adapter by its `name` and update only it.
     """
     pass
 
+
 def _show_usage():
-    sys.stdout.write(textwrap.dedent("""
+    sys.stdout.write(
+        textwrap.dedent(
+            """
         Usage:
 
             python lib/fetch.py [command]
@@ -195,7 +225,10 @@ def _show_usage():
             update [name]   -- update repository of the adapter `name`
             fetch-all       -- fetch all configured repositories
 
-    """))
+    """
+        )
+    )
+
 
 def main(args):
     """
@@ -213,17 +246,19 @@ def main(args):
     logging.basicConfig(
         filename=CONFIG["path.log.fetch"],
         level=logging.DEBUG,
-        format='%(asctime)s %(message)s')
+        format="%(asctime)s %(message)s",
+    )
 
-    if args[0] == 'fetch-all':
+    if args[0] == "fetch-all":
         fetch_all()
-    elif args[0] == 'update':
+    elif args[0] == "update":
         update_by_name(sys.argv[1])
-    elif args[0] == 'update-all':
+    elif args[0] == "update-all":
         update_all()
     else:
         _show_usage()
         sys.exit(0)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main(sys.argv[1:])

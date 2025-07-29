@@ -14,8 +14,8 @@ import os
 
 from .git_adapter import GitRepositoryAdapter
 
-class Tldr(GitRepositoryAdapter):
 
+class Tldr(GitRepositoryAdapter):
     """
     tldr-pages/tldr adapter
     """
@@ -41,7 +41,7 @@ class Tldr(GitRepositoryAdapter):
         skip_empty = False
         header = 2
         for line in text.splitlines():
-            if line.strip() == '':
+            if line.strip() == "":
                 if skip_empty and not header:
                     continue
                 if header == 1:
@@ -51,17 +51,17 @@ class Tldr(GitRepositoryAdapter):
             else:
                 skip_empty = False
 
-            if line.startswith('-'):
-                line = '# '+line[2:]
+            if line.startswith("-"):
+                line = "# " + line[2:]
                 skip_empty = True
-            elif line.startswith('> '):
+            elif line.startswith("> "):
                 if header == 2:
                     header = 1
-                line = '# '+line[2:]
+                line = "# " + line[2:]
                 skip_empty = True
-            elif line.startswith('`') and line.endswith('`'):
+            elif line.startswith("`") and line.endswith("`"):
                 line = line[1:-1]
-                line = re.sub(r'{{(.*?)}}', r'\1', line)
+                line = re.sub(r"{{(.*?)}}", r"\1", line)
 
             answer.append(line)
 
@@ -73,23 +73,22 @@ class Tldr(GitRepositoryAdapter):
         and as soon as anything is found, format and return it.
         """
 
-        search_order = ['common', 'linux', 'osx', 'sunos', 'windows', "android"]
+        search_order = ["common", "linux", "osx", "sunos", "windows", "android"]
         local_rep = self.local_repository_location()
         ext = self._cheatsheet_files_extension
 
         filename = None
         for subdir in search_order:
-            _filename = os.path.join(
-                local_rep, 'pages', subdir, "%s%s" % (topic, ext))
+            _filename = os.path.join(local_rep, "pages", subdir, "%s%s" % (topic, ext))
             if os.path.exists(_filename):
                 filename = _filename
                 break
 
         if filename:
-            answer = self._format_page(open(filename, 'r').read())
+            answer = self._format_page(open(filename, "r").read())
         else:
             # though it should not happen
-            answer = ''
+            answer = ""
 
         return answer
 
@@ -104,5 +103,5 @@ class Tldr(GitRepositoryAdapter):
 
         for entry in updated_files_list:
             if entry.endswith(ext):
-                answer.append(entry.split('/')[-1][:-len(ext)])
+                answer.append(entry.split("/")[-1][: -len(ext)])
         return answer

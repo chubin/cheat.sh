@@ -16,3 +16,4 @@ colorama
 pyyaml
 python-Levenshtein
 pytest
+black
