@@ -38,8 +38,8 @@ If the problem persists, file a GitHub issue at
 github.com/chubin/cheat.sh or ping @igor_chubin
 """
 
-class Question(UpstreamAdapter):
 
+class Question(UpstreamAdapter):
     """
     Answer to a programming language question, using Stackoverflow
     as the main data source. Heavy lifting is done by an external
@@ -62,55 +62,65 @@ class Question(UpstreamAdapter):
         if not os.path.exists(CONFIG["path.internal.bin.upstream"]):
             # if the upstream program is not found, use normal upstream adapter
             self._output_format = "ansi"
-            return UpstreamAdapter._get_page(self, topic, request_options=request_options)
+            return UpstreamAdapter._get_page(
+                self, topic, request_options=request_options
+            )
 
-        topic = topic.replace('+', ' ')
+        topic = topic.replace("+", " ")
 
         # if there is a language name in the section name,
         # cut it off (de:python => python)
-        if '/' in topic:
-            section_name, topic = topic.split('/', 1)
-            if ':' in section_name:
-                _, section_name = section_name.split(':', 1)
+        if "/" in topic:
+            section_name, topic = topic.split("/", 1)
+            if ":" in section_name:
+                _, section_name = section_name.split(":", 1)
             section_name = SO_NAME.get(section_name, section_name)
             topic = "%s/%s" % (section_name, topic)
 
         # some clients send queries with - instead of + so we have to rewrite them to
-        topic = re.sub(r"(?<!-)-", ' ', topic)
+        topic = re.sub(r"(?<!-)-", " ", topic)
 
         topic_words = topic.split()
 
         topic = " ".join(topic_words)
 
-        lang = 'en'
+        lang = "en"
         try:
-            query_text = topic # " ".join(topic)
-            query_text = re.sub('^[^/]*/+', '', query_text.rstrip('/'))
-            query_text = re.sub('/[0-9]+$', '', query_text)
-            query_text = re.sub('/[0-9]+$', '', query_text)
+            query_text = topic  # " ".join(topic)
+            query_text = re.sub("^[^/]*/+", "", query_text.rstrip("/"))
+            query_text = re.sub("/[0-9]+$", "", query_text)
+            query_text = re.sub("/[0-9]+$", "", query_text)
             detector = Detector(query_text)
             supposed_lang = detector.languages[0].code
-            if len(topic_words) > 2 \
-                or supposed_lang in ['az', 'ru', 'uk', 'de', 'fr', 'es', 'it', 'nl']:
+            if len(topic_words) > 2 or supposed_lang in [
+                "az",
+                "ru",
+                "uk",
+                "de",
+                "fr",
+                "es",
+                "it",
+                "nl",
+            ]:
                 lang = supposed_lang
-            if supposed_lang.startswith('zh_') or supposed_lang == 'zh':
-                lang = 'zh'
-            elif supposed_lang.startswith('pt_'):
-                lang = 'pt'
-            if supposed_lang in ['ja', 'ko']:
+            if supposed_lang.startswith("zh_") or supposed_lang == "zh":
+                lang = "zh"
+            elif supposed_lang.startswith("pt_"):
+                lang = "pt"
+            if supposed_lang in ["ja", "ko"]:
                 lang = supposed_lang
 
         except UnknownLanguage:
             print("Unknown language (%s)" % query_text)
 
-        if lang != 'en':
-            topic = ['--human-language', lang, topic]
+        if lang != "en":
+            topic = ["--human-language", lang, topic]
         else:
             topic = [topic]
 
         cmd = [CONFIG["path.internal.bin.upstream"]] + topic
         proc = Popen(cmd, stdin=open(os.devnull, "r"), stdout=PIPE, stderr=PIPE)
-        answer = proc.communicate()[0].decode('utf-8')
+        answer = proc.communicate()[0].decode("utf-8")
 
         if not answer:
             return NOT_FOUND_MESSAGE

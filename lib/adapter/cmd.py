@@ -1,5 +1,4 @@
-"""
-"""
+""" """
 
 # pylint: disable=unused-argument,abstract-method
 
@@ -19,13 +18,12 @@ def _get_abspath(path):
         return path
 
     import __main__
-    return os.path.join(
-        os.path.dirname(os.path.dirname(__main__.__file__)),
-        path)
+
+    return os.path.join(os.path.dirname(os.path.dirname(__main__.__file__)), path)
+
 
 class CommandAdapter(Adapter):
-    """
-    """
+    """ """
 
     _command = []
 
@@ -37,14 +35,17 @@ class CommandAdapter(Adapter):
         if cmd:
             try:
                 proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
-                answer = proc.communicate()[0].decode('utf-8', 'ignore')
+                answer = proc.communicate()[0].decode("utf-8", "ignore")
             except OSError:
-                return "ERROR of the \"%s\" adapter: please create an issue" % self._adapter_name
+                return (
+                    'ERROR of the "%s" adapter: please create an issue'
+                    % self._adapter_name
+                )
             return answer
         return ""
 
-class Fosdem(CommandAdapter):
 
+class Fosdem(CommandAdapter):
     """
     Show the output of the `current-fosdem-slide` command,
     which shows the current slide open in some terminal.
@@ -66,22 +67,26 @@ class Fosdem(CommandAdapter):
     _pages_list = [":fosdem"]
     _command = ["sudo", "/usr/local/bin/current-fosdem-slide"]
 
+
 class Translation(CommandAdapter):
-    """
-    """
+    """ """
 
     _adapter_name = "translation"
     _output_format = "text"
     _cache_needed = True
 
     def _get_page(self, topic, request_options=None):
-        from_, topic = topic.split('/', 1)
-        to_ = request_options.get('lang', 'en')
-        if '-' in from_:
-            from_, to_ = from_.split('-', 1)
+        from_, topic = topic.split("/", 1)
+        to_ = request_options.get("lang", "en")
+        if "-" in from_:
+            from_, to_ = from_.split("-", 1)
 
-        return ["/home/igor/cheat.sh/bin/get_translation",
-                from_, to_, topic.replace('+', ' ')]
+        return [
+            "/home/igor/cheat.sh/bin/get_translation",
+            from_,
+            to_,
+            topic.replace("+", " "),
+        ]
 
 
 class AdapterRfc(CommandAdapter):
@@ -111,6 +116,7 @@ class AdapterRfc(CommandAdapter):
 
     def is_found(self, topic):
         return True
+
 
 class AdapterOeis(CommandAdapter):
     """
@@ -145,12 +151,13 @@ class AdapterOeis(CommandAdapter):
                 suffix = " :list"
                 topic = topic[:-6]
 
-            topic = re.sub('[^a-zA-Z0-9-:]+', ' ', topic) + suffix
+            topic = re.sub("[^a-zA-Z0-9-:]+", " ", topic) + suffix
 
         return cmd + [topic]
 
     def is_found(self, topic):
         return True
+
 
 class AdapterChmod(CommandAdapter):
     """
@@ -170,8 +177,7 @@ class AdapterChmod(CommandAdapter):
         # remove all non (alphanumeric, '-') chars
         if topic.startswith("chmod/"):
             topic = topic[6:]
-            topic = re.sub('[^a-zA-Z0-9-]', '', topic)
-
+            topic = re.sub("[^a-zA-Z0-9-]", "", topic)
 
         return cmd + [topic]
 

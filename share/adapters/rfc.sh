@@ -12,8 +12,15 @@ RFC_get()
       | sed 's/##/\n/g' \
       | sed 's/#    //g' \
       | grep -o '.*\. ' \
-      | sed -r 's/^(.*)(January|February|March|April|May|June|July|August|September|October|November|December) [[:digit:]]{4}(.*)$/\1/'
+      | sed -E 's/^(.*)(January|February|March|April|May|June|July|August|September|October|November|December) [[:digit:]]{4}(.*)$/\1/'
   }
+
+  UNAME=$(uname -s)
+  if [ "$UNAME" = "Darwin" ]; then
+    SED_I="sed -i ''"
+  else
+    SED_I="sed -i"
+  fi
 
   mkdir -p /tmp/RFC_get
   local WEB_RESP="/tmp/RFC_get/rfc_get_web_resp_${RANDOM}.html"
@@ -23,9 +30,11 @@ RFC_get()
   [ -f ${RFC_INDEX} ] || curl 'https://www.ietf.org/download/rfc-index.txt' 2>/dev/null > ${RFC_INDEX}
   local MIN_RFC=1
   local MAX_RFC=$(sed '/^ / d' ${RFC_INDEX} | tail -n 1 | sed 's/ .*//')
-
+  
+  local arg_lower=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+  
   # Syntax check Usage statement
-  if [ $# -lt 1 ] || [[ ${1,,} == "-h" ]] || [[ ${1,,} == "--help" ]] || [[ ${1,,} == ":help" ]] || [[ ${1,,} == ":usage" ]]
+  if [ $# -lt 1 ] || [ "$arg_lower" = "-h" ] || [ "$arg_lower" = "--help" ] || [ "$arg_lower" = ":help" ] || [ "$arg_lower" = ":usage" ]
   then
     printf "
     USAGE:
@@ -80,7 +89,7 @@ RFC_get()
       fi
     fi
   # Print list of available RFCs
-  elif [[ "${1,,}" == ":list" ]]
+  elif [ "$arg_lower" = ":list" ]
   then
     # Format RFC_INDEX to show short description of each RFC
     rfc_describe \
@@ -88,7 +97,7 @@ RFC_get()
       | sed 's/ .*//; s/^0*//'
     return 0
   # Print list of available RFCs
-  elif [[ "${1,,}" == ":describe" ]]
+  elif [ "$arg_lower" = ":describe" ]
   then
     # Format RFC_INDEX to show short description of each RFC
     rfc_describe
@@ -101,7 +110,7 @@ RFC_get()
       > $WEB_RESP
   fi
   # Format nicely and print
-  sed -i '/Page [0-9]/,+2d; /page [0-9]/,+2d' ${WEB_RESP}
+  $SED_I -e '/Page [0-9]/,+2d; /page [0-9]/,+2d' ${WEB_RESP}
   if grep -q '<!DOCTYPE html>' ${WEB_RESP}
   then
     echo "Error retrieving RFC $1"
@@ -112,5 +121,4 @@ RFC_get()
     return 0
   fi
 )
-
 RFC_get "$1"

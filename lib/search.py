@@ -24,27 +24,29 @@ import re
 from config import CONFIG
 from routing import get_answers, get_topics_list
 
+
 def _limited_entry():
     return {
-        'topic_type': 'LIMITED',
+        "topic_type": "LIMITED",
         "topic": "LIMITED",
-        'answer': "LIMITED TO %s ANSWERS" % CONFIG['search.limit'],
-        'format': "code",
+        "answer": "LIMITED TO %s ANSWERS" % CONFIG["search.limit"],
+        "format": "code",
     }
 
+
 def _parse_options(options):
-    """Parse search options string into optiond_dict
-    """
+    """Parse search options string into optiond_dict"""
 
     if options is None:
         return {}
 
     search_options = {
-        'insensitive': 'i' in options,
-        'word_boundaries': 'b' in options,
-        'recursive': 'r' in options,
+        "insensitive": "i" in options,
+        "word_boundaries": "b" in options,
+        "recursive": "r" in options,
     }
     return search_options
+
 
 def match(paragraph, keyword, options=None, options_dict=None):
     """Search for each keyword from `keywords` in `page`
@@ -58,8 +60,8 @@ def match(paragraph, keyword, options=None, options_dict=None):
     if keyword is None:
         return True
 
-    if '~' in keyword:
-        keywords = keyword.split('~')
+    if "~" in keyword:
+        keywords = keyword.split("~")
     else:
         keywords = [keyword]
 
@@ -82,6 +84,7 @@ def match(paragraph, keyword, options=None, options_dict=None):
                 return False
     return True
 
+
 def find_answers_by_keyword(directory, keyword, options="", request_options=None):
     """
     Search in the whole tree of all cheatsheets or in its subtree `directory`
@@ -96,13 +99,13 @@ def find_answers_by_keyword(directory, keyword, options="", request_options=None
         if not topic.startswith(directory):
             continue
 
-        subtopic = topic[len(directory):]
-        if not options_dict["recursive"] and '/' in subtopic:
+        subtopic = topic[len(directory) :]
+        if not options_dict["recursive"] and "/" in subtopic:
             continue
 
         answer_dicts = get_answers(topic, request_options=request_options)
         for answer_dict in answer_dicts:
-            answer_text = answer_dict.get('answer', '')
+            answer_text = answer_dict.get("answer", "")
             # Temporary hotfix:
             # In some cases answer_text may be 'bytes' and not 'str'
             if type(b"") == type(answer_text):
@@ -111,10 +114,8 @@ def find_answers_by_keyword(directory, keyword, options="", request_options=None
             if match(answer_text, keyword, options_dict=options_dict):
                 answers_found.append(answer_dict)
 
-        if len(answers_found) > CONFIG['search.limit']:
-            answers_found.append(
-                _limited_entry()
-            )
+        if len(answers_found) > CONFIG["search.limit"]:
+            answers_found.append(_limited_entry())
             break
 
     return answers_found

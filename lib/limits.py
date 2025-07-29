@@ -19,14 +19,16 @@ Usage:
 import time
 from globals import log
 
-_WHITELIST = ['5.9.243.177']
+_WHITELIST = ["5.9.243.177"]
+
 
 def _time_caps(minutes, hours, days):
     return {
-        'min':   minutes,
-        'hour':  hours,
-        'day':   days,
-        }
+        "min": minutes,
+        "hour": hours,
+        "day": days,
+    }
+
 
 class Limits(object):
     """
@@ -38,17 +40,17 @@ class Limits(object):
     """
 
     def __init__(self):
-        self.intervals = ['min', 'hour', 'day']
+        self.intervals = ["min", "hour", "day"]
 
         self.divisor = _time_caps(60, 3600, 86400)
         self.limit = _time_caps(30, 600, 1000)
         self.last_update = _time_caps(0, 0, 0)
 
         self.counter = {
-            'min':      {},
-            'hour':     {},
-            'day':      {},
-            }
+            "min": {},
+            "hour": {},
+            "day": {},
+        }
 
         self._clear_counters_if_needed()
 
@@ -60,13 +62,15 @@ class Limits(object):
     def _limit_exceeded(self, interval, ip_address):
         visits = self.counter[interval][ip_address]
         limit = self._get_limit(interval)
-        return  visits > limit
+        return visits > limit
 
     def _get_limit(self, interval):
         return self.limit[interval]
 
     def _report_excessive_visits(self, interval, ip_address):
-        log("%s LIMITED [%s for %s]" % (ip_address, self._get_limit(interval), interval))
+        log(
+            "%s LIMITED [%s for %s]" % (ip_address, self._get_limit(interval), interval)
+        )
 
     def check_ip(self, ip_address):
         """
@@ -80,8 +84,10 @@ class Limits(object):
             self._log_visit(interval, ip_address)
             if self._limit_exceeded(interval, ip_address):
                 self._report_excessive_visits(interval, ip_address)
-                return ("Not so fast! Number of queries per %s is limited to %s"
-                        % (interval, self._get_limit(interval)))
+                return "Not so fast! Number of queries per %s is limited to %s" % (
+                    interval,
+                    self._get_limit(interval),
+                )
         return None
 
     def reset(self):

@@ -33,28 +33,32 @@ from config import CONFIG
 from languages_data import VIM_NAME
 import cache
 
-FNULL = open(os.devnull, 'w')
+FNULL = open(os.devnull, "w")
 TEXT = 0
 CODE = 1
 UNDEFINED = -1
 CODE_WHITESPACE = -2
+
+
 def _language_name(name):
     return VIM_NAME.get(name, name)
 
 
 def _remove_empty_lines_from_beginning(lines):
     start = 0
-    while start < len(lines) and lines[start].strip() == '':
+    while start < len(lines) and lines[start].strip() == "":
         start += 1
     lines = lines[start:]
     return lines
 
+
 def _remove_empty_lines_from_end(lines):
     end = len(lines) - 1
-    while end >= 0 and lines[end].strip() == '':
+    while end >= 0 and lines[end].strip() == "":
         end -= 1
-    lines = lines[:end+1]
+    lines = lines[: end + 1]
     return lines
+
 
 def _cleanup_lines(lines):
     """
@@ -66,9 +70,14 @@ def _cleanup_lines(lines):
     if lines == []:
         return lines
     # remove repeating empty lines
-    lines = list(chain.from_iterable(
-        [(list(x[1]) if x[0] else [''])
-         for x in groupby(lines, key=lambda x: x.strip() != '')]))
+    lines = list(
+        chain.from_iterable(
+            [
+                (list(x[1]) if x[0] else [""])
+                for x in groupby(lines, key=lambda x: x.strip() != "")
+            ]
+        )
+    )
 
     return lines
 
@@ -89,18 +98,19 @@ def _line_type(line):
     or if it is the first/last line and it has
     code on the other side.
     """
-    if line.strip() == '':
+    if line.strip() == "":
         return UNDEFINED
 
     # some line may start with spaces but still be not code.
     # we need some heuristics here, but for the moment just
     # whitelist such cases:
-    if line.strip().startswith('* ') or re.match(r'[0-9]+\.', line.strip()):
+    if line.strip().startswith("* ") or re.match(r"[0-9]+\.", line.strip()):
         return TEXT
 
-    if line.startswith('   '):
+    if line.startswith("   "):
         return CODE
     return TEXT
+
 
 def _classify_lines(lines):
     line_types = [_line_type(line) for line in lines]
@@ -108,12 +118,12 @@ def _classify_lines(lines):
     # pass 2:
     # adding empty code lines to the code
     for i in range(len(line_types) - 1):
-        if line_types[i] == CODE and line_types[i+1] == UNDEFINED:
-            line_types[i+1] = CODE_WHITESPACE
+        if line_types[i] == CODE and line_types[i + 1] == UNDEFINED:
+            line_types[i + 1] = CODE_WHITESPACE
             changed = True
 
     for i in range(len(line_types) - 1)[::-1]:
-        if line_types[i] == UNDEFINED and line_types[i+1] == CODE:
+        if line_types[i] == UNDEFINED and line_types[i + 1] == CODE:
             line_types[i] = CODE_WHITESPACE
             changed = True
     line_types = [CODE if x == CODE_WHITESPACE else x for x in line_types]
@@ -127,12 +137,12 @@ def _classify_lines(lines):
         # changing all lines types that are near the text
 
         for i in range(len(line_types) - 1):
-            if line_types[i] == TEXT and line_types[i+1] == UNDEFINED:
-                line_types[i+1] = TEXT
+            if line_types[i] == TEXT and line_types[i + 1] == UNDEFINED:
+                line_types[i + 1] = TEXT
                 changed = True
 
         for i in range(len(line_types) - 1)[::-1]:
-            if line_types[i] == UNDEFINED and line_types[i+1] == TEXT:
+            if line_types[i] == UNDEFINED and line_types[i + 1] == TEXT:
                 line_types[i] = TEXT
                 changed = True
 
@@ -140,14 +150,16 @@ def _classify_lines(lines):
     line_types = [CODE if x == UNDEFINED else x for x in line_types]
     return line_types
 
-def _unindent_code(line, shift=0):
-    if shift == -1 and line != '':
-        return ' ' + line
 
-    if shift > 0 and line.startswith(' '*shift):
+def _unindent_code(line, shift=0):
+    if shift == -1 and line != "":
+        return " " + line
+
+    if shift > 0 and line.startswith(" " * shift):
         return line[shift:]
 
     return line
+
 
 def _wrap_lines(lines_classes, unindent_code=False):
     """
@@ -169,6 +181,7 @@ def _wrap_lines(lines_classes, unindent_code=False):
 
     return result
 
+
 def _run_vim_script(script_lines, text_lines):
     """
     Apply `script_lines` to `lines_classes`
@@ -185,16 +198,21 @@ def _run_vim_script(script_lines, text_lines):
     textfile.file.close()
 
     my_env = os.environ.copy()
-    my_env['HOME'] = CONFIG["path.internal.vim"]
+    my_env["HOME"] = CONFIG["path.internal.vim"]
 
-    cmd = ["script", "-q", "-c",
-           "vim -S %s %s" % (script_vim.name, textfile.name)]
+    cmd = ["script", "-q", "-c", "vim -S %s %s" % (script_vim.name, textfile.name)]
 
-    Popen(cmd, shell=False,
-          stdin=open(os.devnull, 'r'),
-          stdout=FNULL, stderr=FNULL, env=my_env).communicate()
+    Popen(
+        cmd,
+        shell=False,
+        stdin=open(os.devnull, "r"),
+        stdout=FNULL,
+        stderr=FNULL,
+        env=my_env,
+    ).communicate()
 
     return open(textfile.name, "r").read()
+
 
 def _commenting_script(lines_blocks, filetype):
     script_lines = []
@@ -202,17 +220,21 @@ def _commenting_script(lines_blocks, filetype):
     for block in lines_blocks:
         lines = list(block[1])
 
-        block_end = block_start + len(lines)-1
+        block_end = block_start + len(lines) - 1
 
         if block[0] == 0:
-            comment_type = 'sexy'
-            if block_end - block_start < 1 or filetype == 'ruby':
-                comment_type = 'comment'
+            comment_type = "sexy"
+            if block_end - block_start < 1 or filetype == "ruby":
+                comment_type = "comment"
 
-            script_lines.insert(0, "%s,%s call NERDComment(1, '%s')"
-                                % (block_start, block_end, comment_type))
-            script_lines.insert(0, "%s,%s call NERDComment(1, 'uncomment')"
-                                % (block_start, block_end))
+            script_lines.insert(
+                0,
+                "%s,%s call NERDComment(1, '%s')"
+                % (block_start, block_end, comment_type),
+            )
+            script_lines.insert(
+                0, "%s,%s call NERDComment(1, 'uncomment')" % (block_start, block_end)
+            )
 
         block_start = block_end + 1
 
@@ -220,6 +242,7 @@ def _commenting_script(lines_blocks, filetype):
     script_lines.append("wq")
 
     return script_lines
+
 
 def _beautify(text, filetype, add_comments=False, remove_text=False):
     """
@@ -230,7 +253,7 @@ def _beautify(text, filetype, add_comments=False, remove_text=False):
     # or remove the text completely. Otherwise the code has to remain aligned
     unindent_code = add_comments or remove_text
 
-    lines = [x.decode("utf-8").rstrip('\n') for x in text.splitlines()]
+    lines = [x.decode("utf-8").rstrip("\n") for x in text.splitlines()]
     lines = _cleanup_lines(lines)
     lines_classes = zip(_classify_lines(lines), lines)
     lines_classes = _wrap_lines(lines_classes, unindent_code=unindent_code)
@@ -239,34 +262,33 @@ def _beautify(text, filetype, add_comments=False, remove_text=False):
         lines = [line[1] for line in lines_classes if line[0] == 1]
         lines = _cleanup_lines(lines)
         output = "\n".join(lines)
-        if not output.endswith('\n'):
+        if not output.endswith("\n"):
             output += "\n"
     elif not add_comments:
         output = "\n".join(line[1] for line in lines_classes)
     else:
         lines_blocks = groupby(lines_classes, key=lambda x: x[0])
         script_lines = _commenting_script(lines_blocks, filetype)
-        output = _run_vim_script(
-            script_lines,
-            [line for (_, line) in lines_classes])
+        output = _run_vim_script(script_lines, [line for (_, line) in lines_classes])
 
     return output
+
 
 def code_blocks(text, wrap_lines=False, unindent_code=False):
     """
     Split `text` into blocks of text and code.
     Return list of tuples TYPE, TEXT
     """
-    text = text.encode('utf-8')
+    text = text.encode("utf-8")
 
-    lines = [x.rstrip('\n') for x in text.splitlines()]
+    lines = [x.rstrip("\n") for x in text.splitlines()]
     lines_classes = zip(_classify_lines(lines), lines)
 
     if wrap_lines:
         lines_classes = _wrap_lines(lines_classes, unindent_code=unindent_code)
 
     lines_blocks = groupby(lines_classes, key=lambda x: x[0])
-    answer = [(x[0], "\n".join([y[1] for y in x[1]])+"\n") for x in lines_blocks]
+    answer = [(x[0], "\n".join([y[1] for y in x[1]]) + "\n") for x in lines_blocks]
     return answer
 
 
@@ -279,21 +301,22 @@ def beautify(text, lang, options):
     """
 
     options = options or {}
-    beauty_options = dict((k, v) for k, v in options.items() if k in
-                          ['add_comments', 'remove_text'])
+    beauty_options = dict(
+        (k, v) for k, v in options.items() if k in ["add_comments", "remove_text"]
+    )
 
-    mode = ''
-    if beauty_options.get('add_comments'):
-        mode += 'c'
-    if beauty_options.get('remove_text'):
-        mode += 'q'
+    mode = ""
+    if beauty_options.get("add_comments"):
+        mode += "c"
+    if beauty_options.get("remove_text"):
+        mode += "q"
 
     if beauty_options == {}:
         # if mode is unknown, just don't transform the text at all
         return text
 
     if isinstance(text, str):
-        text = text.encode('utf-8')
+        text = text.encode("utf-8")
     digest = "t:%s:%s:%s" % (hashlib.md5(text).hexdigest(), lang, mode)
 
     # temporary added line that removes invalid cache entries
@@ -309,6 +332,7 @@ def beautify(text, lang, options):
 
     return answer
 
+
 def __main__():
     text = sys.stdin.read()
     filetype = sys.argv[1]
@@ -321,5 +345,6 @@ def __main__():
     result = beautify(text, filetype, options)
     sys.stdout.write(result)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     __main__()

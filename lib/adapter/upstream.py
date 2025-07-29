@@ -15,6 +15,7 @@ import requests
 from config import CONFIG
 from .adapter import Adapter
 
+
 def _are_you_offline():
     return textwrap.dedent(
         """
@@ -32,10 +33,11 @@ def _are_you_offline():
            |____|_______|____|   the authors to develop it as soon as possible
 
          .
-            """)
+            """
+    )
+
 
 class UpstreamAdapter(Adapter):
-
     """
     Connect to the upstream server `CONFIG["upstream.url"]` and fetch
     response from it. The response is supposed to have the "ansi" format.
@@ -52,15 +54,21 @@ class UpstreamAdapter(Adapter):
 
     def _get_page(self, topic, request_options=None):
 
-        options_string = "&".join(["%s=%s" % (x, y) for (x, y) in request_options.items()])
-        url = CONFIG["upstream.url"].rstrip('/') \
-                + '/' + topic.lstrip('/') \
-                + "?" + options_string
+        options_string = "&".join(
+            ["%s=%s" % (x, y) for (x, y) in request_options.items()]
+        )
+        url = (
+            CONFIG["upstream.url"].rstrip("/")
+            + "/"
+            + topic.lstrip("/")
+            + "?"
+            + options_string
+        )
         try:
             response = requests.get(url, timeout=CONFIG["upstream.timeout"])
             answer = {"cache": False, "answer": response.text}
         except requests.exceptions.ConnectionError:
-            answer = {"cache": False, "answer":_are_you_offline()}
+            answer = {"cache": False, "answer": _are_you_offline()}
         return answer
 
     def _get_list(self, prefix=None):

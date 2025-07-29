@@ -21,8 +21,8 @@ import adapter.question
 import adapter.rosetta
 from config import CONFIG
 
-class Router(object):
 
+class Router(object):
     """
     Implementation of query routing. Routing is based on `routing_table`
     and the data exported by the adapters (functions `get_list()` and `is_found()`).
@@ -38,28 +38,27 @@ class Router(object):
 
         adapter_class = adapter.all_adapters(as_dict=True)
 
-        active_adapters = set(CONFIG['adapters.active'] + CONFIG['adapters.mandatory'])
+        active_adapters = set(CONFIG["adapters.active"] + CONFIG["adapters.mandatory"])
 
         self._adapter = {
             "internal": adapter.internal.InternalPages(
-                get_topic_type=self.get_topic_type,
-                get_topics_list=self.get_topics_list),
+                get_topic_type=self.get_topic_type, get_topics_list=self.get_topics_list
+            ),
             "unknown": adapter.internal.UnknownPages(
-                get_topic_type=self.get_topic_type,
-                get_topics_list=self.get_topics_list),
+                get_topic_type=self.get_topic_type, get_topics_list=self.get_topics_list
+            ),
         }
 
         for by_name in active_adapters:
             if by_name not in self._adapter:
                 self._adapter[by_name] = adapter_class[by_name]()
 
-        self._topic_list = {
-            key: obj.get_list()
-            for key, obj in self._adapter.items()
-        }
+        self._topic_list = {key: obj.get_list() for key, obj in self._adapter.items()}
 
         self.routing_table = CONFIG["routing.main"]
-        self.routing_table = CONFIG["routing.pre"] + self.routing_table + CONFIG["routing.post"]
+        self.routing_table = (
+            CONFIG["routing.pre"] + self.routing_table + CONFIG["routing.post"]
+        )
 
     def get_topics_list(self, skip_dirs=False, skip_internal=False):
         """
@@ -69,7 +68,7 @@ class Router(object):
         if self._cached_topics_list:
             return self._cached_topics_list
 
-        skip = ['fosdem']
+        skip = ["fosdem"]
         if skip_dirs:
             skip.append("cheat.sheets dir")
         if skip_internal:
@@ -78,7 +77,7 @@ class Router(object):
 
         answer = {}
         for key in sources_to_merge:
-            answer.update({name:key for name in self._topic_list[key]})
+            answer.update({name: key for name in self._topic_list[key]})
         answer = sorted(set(answer.keys()))
 
         self._cached_topics_list = answer
@@ -115,8 +114,9 @@ class Router(object):
         """
         Return answer_dict for the `query`.
         """
-        return self._adapter[topic_type]\
-               .get_page_dict(query, request_options=request_options)
+        return self._adapter[topic_type].get_page_dict(
+            query, request_options=request_options
+        )
 
     def handle_if_random_request(self, topic):
         """
@@ -127,30 +127,32 @@ class Router(object):
         """
 
         def __select_random_topic(prefix, topic_list):
-            #Here we remove the special cases
-            cleaned_topic_list = [ x for x in topic_list if '/' not in x and ':' not in x]
+            # Here we remove the special cases
+            cleaned_topic_list = [
+                x for x in topic_list if "/" not in x and ":" not in x
+            ]
 
-            #Here we still check that cleaned_topic_list in not empty
+            # Here we still check that cleaned_topic_list in not empty
             if not cleaned_topic_list:
                 return prefix
-                
+
             random_topic = random.choice(cleaned_topic_list)
             return prefix + random_topic
-        
-        if topic.endswith('/:random') or topic.lstrip('/') == ':random':
-            #We strip the :random part and see if the query is valid by running a get_topics_list()
-            if topic.lstrip('/') == ':random' :
-                 topic = topic.lstrip('/')
+
+        if topic.endswith("/:random") or topic.lstrip("/") == ":random":
+            # We strip the :random part and see if the query is valid by running a get_topics_list()
+            if topic.lstrip("/") == ":random":
+                topic = topic.lstrip("/")
             prefix = topic[:-7]
-            
-            topic_list = [x[len(prefix):]
-                         for x in self.get_topics_list()
-                         if x.startswith(prefix)]
 
-            if '' in topic_list: 
-                topic_list.remove('')
+            topic_list = [
+                x[len(prefix) :] for x in self.get_topics_list() if x.startswith(prefix)
+            ]
 
-            if topic_list:                
+            if "" in topic_list:
+                topic_list.remove("")
+
+            if topic_list:
                 # This is a correct formatted random query like /cpp/:random as the topic_list is not empty.
                 random_topic = __select_random_topic(prefix, topic_list)
                 return random_topic
@@ -160,10 +162,12 @@ class Router(object):
                 wrongly_formatted_random = topic[:-8]
                 return wrongly_formatted_random
 
-        #Here if not a random request, we just forward the topic
+        # Here if not a random request, we just forward the topic
         return topic
-    
-    def get_answers(self, topic: str, request_options:Dict[str, str] = None) -> List[Dict[str, Any]]:
+
+    def get_answers(
+        self, topic: str, request_options: Dict[str, str] = None
+    ) -> List[Dict[str, Any]]:
         """
         Find cheat sheets for the topic.
 
@@ -173,7 +177,7 @@ class Router(object):
         Returns:
             [answer_dict]:    list of answers (dictionaries)
         """
-        
+
         # if topic specified as <topic_type>:<topic>,
         # cut <topic_type> off
         topic_type = ""
@@ -191,21 +195,25 @@ class Router(object):
         # 'question' queries are pretty expensive, that's why they should be handled
         # in a special way:
         # we do not drop the old style cache entries and try to reuse them if possible
-        if topic_types == ['question']:
-            answer = cache.get('q:' + topic)
+        if topic_types == ["question"]:
+            answer = cache.get("q:" + topic)
             if answer:
                 if isinstance(answer, dict):
                     return [answer]
-                return [{
-                    'topic': topic,
-                    'topic_type': 'question',
-                    'answer': answer,
-                    'format': 'text+code',
-                    }]
+                return [
+                    {
+                        "topic": topic,
+                        "topic_type": "question",
+                        "answer": answer,
+                        "format": "text+code",
+                    }
+                ]
 
-            answer = self._get_page_dict(topic, topic_types[0], request_options=request_options)
+            answer = self._get_page_dict(
+                topic, topic_types[0], request_options=request_options
+            )
             if answer.get("cache", True):
-                cache.put('q:' + topic, answer)
+                cache.put("q:" + topic, answer)
             return [answer]
 
         # Try to find cacheable queries in the cache.
@@ -224,7 +232,9 @@ class Router(object):
                     answers.append(answer)
                     continue
 
-            answer = self._get_page_dict(topic, topic_type, request_options=request_options)
+            answer = self._get_page_dict(
+                topic, topic_type, request_options=request_options
+            )
             if isinstance(answer, dict):
                 if "cache" in answer:
                     cache_needed = answer["cache"]
@@ -235,6 +245,7 @@ class Router(object):
             answers.append(answer)
 
         return answers
+
 
 # pylint: disable=invalid-name
 _ROUTER = Router()

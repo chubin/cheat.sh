@@ -12,8 +12,8 @@ import sys
 import os
 from .git_adapter import GitRepositoryAdapter
 
-class Latenz(GitRepositoryAdapter):
 
+class Latenz(GitRepositoryAdapter):
     """
     chubin/late.nz Adapter
     """
@@ -23,12 +23,13 @@ class Latenz(GitRepositoryAdapter):
     _repository_url = "https://github.com/chubin/late.nz"
 
     def _get_page(self, topic, request_options=None):
-        sys.path.append(os.path.join(self.local_repository_location(), 'bin'))
+        sys.path.append(os.path.join(self.local_repository_location(), "bin"))
         import latencies
+
         return latencies.render()
 
     def _get_list(self, prefix=None):
-        return ['latencies']
+        return ["latencies"]
 
     def is_found(self, topic):
-        return topic.lower() in ['latencies', 'late.nz', 'latency']
+        return topic.lower() in ["latencies", "late.nz", "latency"]
