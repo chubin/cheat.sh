@@ -59,7 +59,7 @@ text.")
          (buffer (url-retrieve-synchronously (format cheat-sh-url (url-hexify-string thing)) t t)))
     (when buffer
       (with-current-buffer buffer
-        (setf (point) (point-min))
+        (goto-char (point-min))
         (when (search-forward-regexp "^$" nil t)
           (buffer-substring (point) (point-max)))))))
 
@@ -95,7 +95,7 @@ based of the sheets that are available on cheat.sh."
   "Decorate BUFFER, finding REGEXP and setting face to FACE."
   (with-current-buffer buffer
     (save-excursion
-      (setf (point) (point-min))
+      (goto-char (point-min))
       (while (search-forward-regexp regexp nil t)
         (replace-match (propertize (match-string 1) 'font-lock-face face) nil t)))))
 
