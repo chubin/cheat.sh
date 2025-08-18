@@ -209,16 +209,18 @@ has several useful features compared to querying the service directly with `curl
 To install the client:
 
 ```bash
+SHA256_CHECKSUM="d3135e42b800ff2e7aac44d4dfe500f0f4e2c7eb00a1c2191b0dc8b28431f155"
 PATH_DIR="$HOME/bin"  # or another directory on your $PATH
 mkdir -p "$PATH_DIR"
 curl https://cht.sh/:cht.sh > "$PATH_DIR/cht.sh"
+echo "$SHA256_CHECKSUM  $PATH_DIR/cht.sh" | sha256sum --check -
 chmod +x "$PATH_DIR/cht.sh"
 ```
 
 or to install it globally (for all users):
 
 ```bash
-curl -s https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh && sudo chmod +x /usr/local/bin/cht.sh
+curl -s https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh 1>/dev/null && echo "d3135e42b800ff2e7aac44d4dfe500f0f4e2c7eb00a1c2191b0dc8b28431f155  /usr/local/bin/cht.sh" | sha256sum --check - && sudo chmod +x /usr/local/bin/cht.sh
 ```
 
 Note: The package "rlwrap" is a required dependency to run in shell mode. Install this using `sudo apt install rlwrap`
