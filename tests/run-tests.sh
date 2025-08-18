@@ -29,6 +29,7 @@ test_standalone="${CHEATSH_TEST_STANDALONE:-YES}"
 show_details="${CHEATSH_TEST_SHOW_DETAILS:-YES}"
 update_tests_results="${CHEATSH_UPDATE_TESTS_RESULTS:-NO}"
 CHTSH_URL="${CHTSH_URL:-http://localhost:8002}"
+CHTSH_QUERY_OPTIONS="${CHTSH_QUERY_OPTIONS:-T}"
 
 TMP=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
 TMP2=$(mktemp /tmp/cht.sh.tests-XXXXXXXXXXXXXX)
@@ -74,15 +75,15 @@ while read -r number test_line; do
 
   if [ "$test_standalone" = YES ]; then
     test_line="${test_line//cht.sh /}"
-    [[ $show_details == YES ]] && echo "${PYTHON} ../lib/standalone.py $test_line"
-    "${PYTHON}" ../lib/standalone.py "$test_line" > "$TMP"
+    [[ $show_details == YES ]] && echo "${PYTHON} ../lib/standalone.py $test_line?$CHTSH_QUERY_OPTIONS"
+    "${PYTHON}" ../lib/standalone.py "$test_line?$CHTSH_QUERY_OPTIONS" > "$TMP"
   elif [[ $test_line = "cht.sh "* ]]; then
     test_line="${test_line//cht.sh /}"
-    [[ $show_details == YES ]] && echo "bash $CHTSH_SCRIPT $test_line"
-    eval "bash $CHTSH_SCRIPT $test_line" > "$TMP"
+    [[ $show_details == YES ]] && echo "bash $CHTSH_SCRIPT $test_line \?$CHTSH_QUERY_OPTIONS"
+    eval "bash $CHTSH_SCRIPT $test_line \?$CHTSH_QUERY_OPTIONS" > "$TMP"
   else
-    [[ $show_details == YES ]] && echo "curl -s $CHTSH_URL/$test_line"
-    eval "curl -s $CHTSH_URL/$test_line" > "$TMP"
+    [[ $show_details == YES ]] && echo "curl -s $CHTSH_URL/$test_line?$CHTSH_QUERY_OPTIONS"
+    eval "curl -s $CHTSH_URL/$test_line?$CHTSH_QUERY_OPTIONS" > "$TMP"
   fi
 
   if ! diff -u3 results/"$number" "$TMP" > "$TMP2"; then
