@@ -33,21 +33,30 @@ GITHUB_REPOSITORY = {
     "unknown": "",
 }
 
+STACKOVERFLOW_POST_ID_RE = re.compile(r"\[so/q/([0-9]+)\]")
+
 
 def visualize(answer_data, request_options):
     query = answer_data["query"]
     answers = answer_data["answers"]
     topics_list = answer_data["topics_list"]
-    editable = len(answers) == 1 and answers[0]["topic_type"] == "cheat.sheets"
 
+    edit_page_link = ""
     repository_button = ""
     if len(answers) == 1:
-        repository_button = _github_button(answers[0]["topic_type"])
+        answer = answers[0]
+        repository_button = _github_button(answer["topic_type"])
+        edit_page_link = _edit_page_link(query, answer)
 
     result, found = frontend.ansi.visualize(answer_data, request_options)
     return (
         _render_html(
-            query, result, editable, repository_button, topics_list, request_options
+            query,
+            result,
+            edit_page_link,
+            repository_button,
+            topics_list,
+            request_options,
         ),
         found,
     )
@@ -74,8 +83,36 @@ def _github_button(topic_type):
     return button
 
 
+def _extract_stackoverflow_post_id(answer):
+    match = STACKOVERFLOW_POST_ID_RE.search(answer)
+    if match:
+        return match.group(1)
+
+    match = re.search(r"stackoverflow\.com/questions/([0-9]+)", answer)
+    if match:
+        return match.group(1)
+
+    return None
+
+
+def _edit_page_link(query, answer):
+    if answer["topic_type"] == "cheat.sheets":
+        edit_query = "_" + query if "/" in query else query
+        return (
+            "https://github.com/chubin/cheat.sheets/edit/master/sheets/"
+            + edit_query
+        )
+
+    if answer["topic_type"] == "question":
+        post_id = _extract_stackoverflow_post_id(answer["answer"])
+        if post_id:
+            return "https://stackoverflow.com/posts/%s/edit" % post_id
+
+    return ""
+
+
 def _render_html(
-    query, result, editable, repository_button, topics_list, request_options
+    query, result, edit_page_link, repository_button, topics_list, request_options
 ):
 
     def _html_wrapper(data):
@@ -124,13 +161,7 @@ def _render_html(
     ) % (submit_button, curl_line, query, topic_list)
 
     edit_button = ""
-    if editable:
-        # It's possible that topic directory starts with omitted underscore
-        if "/" in query:
-            query = "_" + query
-        edit_page_link = (
-            "https://github.com/chubin/cheat.sheets/edit/master/sheets/" + query
-        )
+    if edit_page_link:
         edit_button = (
             '<pre style="position:absolute;padding-left:40em;overflow:visible;height:0;">'
             '[<a href="%s" style="color:cyan">edit</a>]'
