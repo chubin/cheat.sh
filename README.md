@@ -855,6 +855,24 @@ committed in the forked repository, a pull request to the upstream repository ow
 
 ![cheat.sh cheat sheets repositories](http://cheat.sh/files/edit-cheat-sheet.png)
 
+### When there is no edit or GitHub button
+
+The in-browser **[edit]** link and the per-sheet GitHub button at the bottom of the page
+appear only when cheat.sh shows a **single** answer from the
+[cheat.sheets](https://github.com/chubin/cheat.sheets) repository
+(for example `curl cheat.sh/python` or `curl cheat.sh/go`).
+
+If you opened a page using a **question query** (`/LANGUAGE/QUESTION`,
+for example `/python/read+json`), cheat.sh aggregates answers from Stack Overflow
+and other sources. These pages are **not editable on cheat.sh** and do not show
+the upstream-repository button.
+
+To improve question-style answers:
+
+* edit or answer the underlying thread on [Stack Overflow](https://stackoverflow.com), or
+* add or update a cheat sheet in [chubin/cheat.sheets](https://github.com/chubin/cheat.sheets)
+  so it can be served as a direct topic query.
+
 ### How to add a cheat sheet
 
 If you want to add a cheat sheet, you have one of the following
