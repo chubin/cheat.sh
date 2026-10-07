@@ -51,7 +51,7 @@ class Question(UpstreamAdapter):
     """
 
     _adapter_name = "question"
-    _output_format = "text+code"
+    _output_format = CONFIG["adapter.question.output_format"]
     _cache_needed = True
 
     def _get_page(self, topic, request_options=None):

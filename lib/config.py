@@ -100,6 +100,7 @@ _CONFIG = {
     "adapters.mandatory": [
         "search",
     ],
+    "adapter.question.output_format": "text+code",
     "cache.redis.db": 0,
     "cache.redis.host": "localhost",
     "cache.redis.port": 6379,
