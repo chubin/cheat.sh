@@ -1,120 +1,120 @@
-[48;5;8m[24m cheat.sheets:az [24m[0m
-[38;5;246;03m# Microsoft Azure CLI 2.0[39;00m
-[38;5;246;03m# Command-line tools for Azure[39;00m
+#[cheat.sheets:az]
+# Microsoft Azure CLI 2.0
+# Command-line tools for Azure
 
-[38;5;246;03m# Install Azure CLI 2.0 with one curl command.[39;00m
-[38;5;252mcurl[39m[38;5;252m [39m[38;5;252m-L[39m[38;5;252m [39m[38;5;252mhttps://aka.ms/InstallAzureCli[39m[38;5;252m [39m[38;5;252m|[39m[38;5;252m [39m[38;5;252mbash[39m
+# Install Azure CLI 2.0 with one curl command.
+curl -L https://aka.ms/InstallAzureCli | bash
 
-[38;5;246;03m# create a resource group named "MyRG" in the 'westus2' region[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mgroup[39m[38;5;252m [39m[38;5;252mcreate[39m[38;5;252m [39m[38;5;252m-n[39m[38;5;252m [39m[38;5;252mMyRG[39m[38;5;252m [39m[38;5;252m-l[39m[38;5;252m [39m[38;5;252mwestus2[39m
+# create a resource group named "MyRG" in the 'westus2' region
+az group create -n MyRG -l westus2
 
-[38;5;246;03m# create a Linux VM using the UbuntuTLS image,[39;00m
-[38;5;246;03m# with two attached storage disks of 10 GB and 20 GB[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mcreate[39m[38;5;252m [39m[38;5;252m-n[39m[38;5;252m [39m[38;5;252mMyLinuxVM[39m[38;5;252m [39m[38;5;252m-g[39m[38;5;252m [39m[38;5;252mMyRG[39m[38;5;252m [39m[38;5;214m\[39m
-[38;5;252m    [39m[38;5;252m--ssh-key-value[39m[38;5;252m [39m[38;5;87m$HOME[39m[38;5;252m/.ssh/id_rsa.pub[39m[38;5;252m [39m[38;5;252m--image[39m[38;5;252m [39m[38;5;252mUbuntuLTS[39m[38;5;252m [39m[38;5;214m\[39m
-[38;5;252m    [39m[38;5;252m--data-disk-sizes-gb[39m[38;5;252m [39m[38;5;67m10[39m[38;5;252m [39m[38;5;67m20[39m
+# create a Linux VM using the UbuntuTLS image,
+# with two attached storage disks of 10 GB and 20 GB
+az vm create -n MyLinuxVM -g MyRG \
+    --ssh-key-value $HOME/.ssh/id_rsa.pub --image UbuntuLTS \
+    --data-disk-sizes-gb 10 20
 
-[38;5;246;03m# list VMs[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mlist[39m[38;5;252m [39m[38;5;252m--output[39m[38;5;252m [39m[38;5;252mtable[39m
+# list VMs
+az vm list --output table
 
-[38;5;246;03m# list only VMs having distinct state[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mlist[39m[38;5;252m [39m[38;5;252m-d[39m[38;5;252m [39m[38;5;252m--query[39m[38;5;252m [39m[38;5;214m"[?powerState=='VM running']"[39m[38;5;252m [39m[38;5;252m--output[39m[38;5;252m [39m[38;5;252mtable[39m
+# list only VMs having distinct state
+az vm list -d --query "[?powerState=='VM running']" --output table
 
-[38;5;246;03m# delete VM (with the name MyLinuxVM in the group MyRG)[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mdelete[39m[38;5;252m [39m[38;5;252m-g[39m[38;5;252m [39m[38;5;252mMyRG[39m[38;5;252m [39m[38;5;252m-n[39m[38;5;252m [39m[38;5;252mMyLinuxVM[39m[38;5;252m [39m[38;5;252m--yes[39m
+# delete VM (with the name MyLinuxVM in the group MyRG)
+az vm delete -g MyRG -n MyLinuxVM --yes
 
-[38;5;246;03m# Delete all VMs in a resource group[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mdelete[39m[38;5;252m [39m[38;5;252m--ids[39m[38;5;252m [39m[38;5;70;01m$([39;00m[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mlist[39m[38;5;252m [39m[38;5;252m-g[39m[38;5;252m [39m[38;5;252mMyRG[39m[38;5;252m [39m[38;5;252m--query[39m[38;5;252m [39m[38;5;214m"[].id"[39m[38;5;252m [39m[38;5;252m-o[39m[38;5;252m [39m[38;5;252mtsv[39m[38;5;70;01m)[39;00m
+# Delete all VMs in a resource group
+az vm delete --ids $(az vm list -g MyRG --query "[].id" -o tsv)
 
-[38;5;246;03m# Create an Image based on a running VM[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mdeallocate[39m[38;5;252m [39m[38;5;252m-g[39m[38;5;252m [39m[38;5;252mMyRG[39m[38;5;252m [39m[38;5;252m-n[39m[38;5;252m [39m[38;5;252mMyLinuxVM[39m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mgeneralize[39m[38;5;252m [39m[38;5;252m-g[39m[38;5;252m [39m[38;5;252mMyRG[39m[38;5;252m [39m[38;5;252m-n[39m[38;5;252m [39m[38;5;252mMyLinuxVM[39m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mimage[39m[38;5;252m [39m[38;5;252mcreate[39m[38;5;252m [39m[38;5;252m--resource-group[39m[38;5;252m [39m[38;5;252mMyRG[39m[38;5;252m [39m[38;5;252m--name[39m[38;5;252m [39m[38;5;252mMyTestImage[39m[38;5;252m [39m[38;5;252m--source[39m[38;5;252m [39m[38;5;252mMyLinuxVM[39m
+# Create an Image based on a running VM
+az vm deallocate -g MyRG -n MyLinuxVM
+az vm generalize -g MyRG -n MyLinuxVM
+az image create --resource-group MyRG --name MyTestImage --source MyLinuxVM
 
-[38;5;246;03m# Running VM based on a VHD[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mstorage[39m[38;5;252m [39m[38;5;252mblob[39m[38;5;252m [39m[38;5;252mupload[39m[38;5;252m [39m[38;5;252m--account-name[39m[38;5;252m [39m[38;5;214m"[39m[38;5;214m${[39m[38;5;87maccount_name[39m[38;5;214m}[39m[38;5;214m"[39m[38;5;252m  [39m[38;5;214m\[39m
-[38;5;252m   [39m[38;5;252m--account-key[39m[38;5;252m [39m[38;5;214m"[39m[38;5;214m${[39m[38;5;87maccount_key[39m[38;5;214m}[39m[38;5;214m"[39m[38;5;252m [39m[38;5;252m--container-name[39m[38;5;252m [39m[38;5;214m"[39m[38;5;214m${[39m[38;5;87mcontainer[39m[38;5;214m}[39m[38;5;214m"[39m[38;5;252m [39m[38;5;252m--type[39m[38;5;252m [39m[38;5;252mpage[39m[38;5;252m [39m[38;5;214m\[39m
-[38;5;252m   [39m[38;5;252m--file[39m[38;5;252m [39m[38;5;214m"[39m[38;5;214m${[39m[38;5;87mfile[39m[38;5;214m}[39m[38;5;214m"[39m[38;5;252m [39m[38;5;252m--name[39m[38;5;252m [39m[38;5;214m"[39m[38;5;214m${[39m[38;5;87mvhd[39m[38;5;214m}[39m[38;5;214m"[39m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mdisk[39m[38;5;252m [39m[38;5;252mcreate[39m[38;5;252m [39m[38;5;214m\[39m
-[38;5;252m   [39m[38;5;252m--resource-group[39m[38;5;252m [39m[38;5;214m"[39m[38;5;214m${[39m[38;5;87mresource_group[39m[38;5;214m}[39m[38;5;214m"[39m[38;5;252m [39m[38;5;214m\[39m
-[38;5;252m   [39m[38;5;252m--name[39m[38;5;252m [39m[38;5;252mmyManagedDisk[39m[38;5;252m [39m[38;5;214m\[39m
-[38;5;252m   [39m[38;5;252m--source[39m[38;5;252m [39m[38;5;214m"[39m[38;5;214mhttps://[39m[38;5;214m${[39m[38;5;87maccount_name[39m[38;5;214m}[39m[38;5;214m.blob.core.windows.net/[39m[38;5;214m${[39m[38;5;87mcontainer[39m[38;5;214m}[39m[38;5;214m/[39m[38;5;214m${[39m[38;5;87mvhd[39m[38;5;214m}[39m[38;5;214m"[39m
+# Running VM based on a VHD
+az storage blob upload --account-name "${account_name}"  \
+   --account-key "${account_key}" --container-name "${container}" --type page \
+   --file "${file}" --name "${vhd}"
+az disk create \
+   --resource-group "${resource_group}" \
+   --name myManagedDisk \
+   --source "https://${account_name}.blob.core.windows.net/${container}/${vhd}"
 
-[38;5;246;03m# open port[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mopen-port[39m[38;5;252m [39m[38;5;252m--resource-group[39m[38;5;252m [39m[38;5;252mMyRG[39m[38;5;252m [39m[38;5;252m--name[39m[38;5;252m [39m[38;5;252mMyLinuxVM[39m[38;5;252m [39m[38;5;252m--port[39m[38;5;252m [39m[38;5;67m443[39m[38;5;252m [39m[38;5;252m--priority[39m[38;5;252m [39m[38;5;67m899[39m
+# open port
+az vm open-port --resource-group MyRG --name MyLinuxVM --port 443 --priority 899
 
-[38;5;246;03m# Show storage accounts[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mstorage[39m[38;5;252m [39m[38;5;252maccount[39m[38;5;252m [39m[38;5;252mlist[39m[38;5;252m [39m[38;5;252m--output[39m[38;5;252m [39m[38;5;252mtable[39m
+# Show storage accounts
+az storage account list --output table
 
-[38;5;246;03m# Show containers for an account[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mstorage[39m[38;5;252m [39m[38;5;252mcontainer[39m[38;5;252m [39m[38;5;252mlist[39m[38;5;252m [39m[38;5;252m--account-name[39m[38;5;252m [39m[38;5;252mmystorageaccount[39m[38;5;252m [39m[38;5;252m--output[39m[38;5;252m [39m[38;5;252mtable[39m
+# Show containers for an account
+az storage container list --account-name mystorageaccount --output table
 
-[38;5;246;03m# Show blobs in a container[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mstorage[39m[38;5;252m [39m[38;5;252mblob[39m[38;5;252m [39m[38;5;252mlist[39m[38;5;252m [39m[38;5;252m--account-name[39m[38;5;252m [39m[38;5;252mmystorageaccount[39m[38;5;252m [39m[38;5;214m\[39m
-[38;5;252m    [39m[38;5;252m--container-name[39m[38;5;252m [39m[38;5;252mmycontainer[39m[38;5;252m  [39m[38;5;252m--output[39m[38;5;252m [39m[38;5;252mtable[39m
+# Show blobs in a container
+az storage blob list --account-name mystorageaccount \
+    --container-name mycontainer  --output table
 
-[38;5;246;03m# list account keys[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mstorage[39m[38;5;252m [39m[38;5;252maccount[39m[38;5;252m [39m[38;5;252mkeys[39m[38;5;252m [39m[38;5;252mlist[39m[38;5;252m  [39m[38;5;252m--account-name[39m[38;5;252m [39m[38;5;252mSTORAGE_NAME[39m[38;5;252m [39m[38;5;252m--resource-group[39m[38;5;252m [39m[38;5;252mRESOURCE_GROUP[39m
+# list account keys
+az storage account keys list  --account-name STORAGE_NAME --resource-group RESOURCE_GROUP
 
-[38;5;246;03m# Show own images[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mimage[39m[38;5;252m [39m[38;5;252mlist[39m[38;5;252m [39m[38;5;252m--output[39m[38;5;252m [39m[38;5;252mtable[39m
+# Show own images
+az image list --output table
 
-[38;5;246;03m# Configure default storage location[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mconfigure[39m[38;5;252m [39m[38;5;252m--defaults[39m[38;5;252m [39m[38;5;87mlocation[39m[38;5;252m=[39m[38;5;252meastus2[39m
+# Configure default storage location
+az configure --defaults location=eastus2
 
-[38;5;246;03m# Show disks[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mdisk[39m[38;5;252m [39m[38;5;252mlist[39m[38;5;252m [39m[38;5;252m--output[39m[38;5;252m [39m[38;5;252mtable[39m
+# Show disks
+az disk list --output table
 
-[38;5;246;03m# Copy blob[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mstorage[39m[38;5;252m [39m[38;5;252mblob[39m[38;5;252m [39m[38;5;252mcopy[39m[38;5;252m [39m[38;5;252mstart[39m[38;5;252m [39m[38;5;214m\[39m
-[38;5;252m    [39m[38;5;252m--source-uri[39m[38;5;252m [39m[38;5;214m'https://xxx.blob.core.windows.net/jzwuuuzzapn0/abcd?...'[39m[38;5;252m [39m[38;5;214m\[39m
-[38;5;252m    [39m[38;5;252m--account-key[39m[38;5;252m [39m[38;5;87mXXXXXXXXXX[39m[38;5;252m=[39m[38;5;252m=[39m[38;5;252m [39m[38;5;214m\[39m
-[38;5;252m    [39m[38;5;252m--account-name[39m[38;5;252m [39m[38;5;252mdestaccount[39m[38;5;252m [39m[38;5;214m\[39m
-[38;5;252m    [39m[38;5;252m--destination-container[39m[38;5;252m [39m[38;5;252mvms[39m[38;5;252m [39m[38;5;214m\[39m
-[38;5;252m    [39m[38;5;252m--destination-blob[39m[38;5;252m [39m[38;5;252mDESTINATION-blob.vhd[39m
+# Copy blob
+az storage blob copy start \
+    --source-uri 'https://xxx.blob.core.windows.net/jzwuuuzzapn0/abcd?...' \
+    --account-key XXXXXXXXXX== \
+    --account-name destaccount \
+    --destination-container vms \
+    --destination-blob DESTINATION-blob.vhd
 
-[38;5;246;03m# List virtual networks[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mnetwork[39m[38;5;252m [39m[38;5;252mvnet[39m[38;5;252m [39m[38;5;252mlist[39m[38;5;252m [39m[38;5;252m--output[39m[38;5;252m [39m[38;5;252mtable[39m
+# List virtual networks
+az network vnet list --output table
 
-[38;5;246;03m# List virtual networks adapters[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mnetwork[39m[38;5;252m [39m[38;5;252mnic[39m[38;5;252m [39m[38;5;252mlist[39m[38;5;252m [39m[38;5;252m--output[39m[38;5;252m [39m[38;5;252mtable[39m
+# List virtual networks adapters
+az network nic list --output table
 
-[38;5;246;03m# List public IP addresses used by the VMs[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mlist-ip-addresses[39m[38;5;252m [39m[38;5;252m--output[39m[38;5;252m [39m[38;5;252mtable[39m
+# List public IP addresses used by the VMs
+az vm list-ip-addresses --output table
 
-[38;5;246;03m# create snapshot[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252msnapshot[39m[38;5;252m [39m[38;5;252mcreate[39m[38;5;252m [39m[38;5;252m--resource-group[39m[38;5;252m [39m[38;5;252mIC-EXASOL-001[39m[38;5;252m [39m[38;5;252m--source[39m[38;5;252m [39m[38;5;252mvm1-disk1[39m[38;5;252m [39m[38;5;252m-n[39m[38;5;252m [39m[38;5;252mvm1-snap1[39m
+# create snapshot
+az snapshot create --resource-group IC-EXASOL-001 --source vm1-disk1 -n vm1-snap1
 
-[38;5;246;03m# create SAS url for a snapshot[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252msnapshot[39m[38;5;252m [39m[38;5;252mgrant-access[39m[38;5;252m [39m[38;5;252m--resource-group[39m[38;5;252m [39m[38;5;252mIC-EXASOL-001[39m[38;5;252m [39m[38;5;252m--name[39m[38;5;252m [39m[38;5;252mvm1-snap1[39m[38;5;214m\[39m
-[38;5;252m    [39m[38;5;252m--duration-in-seconds[39m[38;5;252m [39m[38;5;67m36000[39m[38;5;252m [39m[38;5;252m--query[39m[38;5;252m [39m[38;5;214m'[accessSas]'[39m[38;5;252m [39m[38;5;252m-o[39m[38;5;252m [39m[38;5;252mtsv[39m
+# create SAS url for a snapshot
+az snapshot grant-access --resource-group IC-EXASOL-001 --name vm1-snap1\
+    --duration-in-seconds 36000 --query '[accessSas]' -o tsv
 
-[38;5;246;03m# attach disk[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mdisk[39m[38;5;252m [39m[38;5;252mattach[39m[38;5;252m [39m[38;5;252m--vm-name[39m[38;5;252m [39m[38;5;252mvm1[39m[38;5;252m [39m[38;5;252m-g[39m[38;5;252m [39m[38;5;252mRESOURCE_GROUP[39m[38;5;252m [39m[38;5;252m--disk[39m[38;5;252m [39m[38;5;252mDISK1_ID[39m
+# attach disk
+az vm disk attach --vm-name vm1 -g RESOURCE_GROUP --disk DISK1_ID
 
-[38;5;246;03m# detach disk[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mdisk[39m[38;5;252m [39m[38;5;252mdetach[39m[38;5;252m [39m[38;5;252m--vm-name[39m[38;5;252m [39m[38;5;252mvm1[39m[38;5;252m [39m[38;5;252m-g[39m[38;5;252m [39m[38;5;252mRESOURCE_GROUP[39m[38;5;252m [39m[38;5;252m--name[39m[38;5;252m [39m[38;5;252mDISK1_ID[39m
+# detach disk
+az vm disk detach --vm-name vm1 -g RESOURCE_GROUP --name DISK1_ID
 
-[48;5;8m[24m tldr:az [24m[0m
-[38;5;246;03m# az[39;00m
-[38;5;246;03m# The official CLI tool for Microsoft Azure.[39;00m
-[38;5;246;03m# Some subcommands such as `az login` have their own usage documentation.[39;00m
-[38;5;246;03m# More information: <https://docs.microsoft.com/cli/azure>.[39;00m
+#[tldr:az]
+# az
+# The official CLI tool for Microsoft Azure.
+# Some subcommands such as `az login` have their own usage documentation.
+# More information: <https://docs.microsoft.com/cli/azure>.
 
-[38;5;246;03m# Log in to Azure:[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mlogin[39m
+# Log in to Azure:
+az login
 
-[38;5;246;03m# Manage azure subscription information:[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252maccount[39m
+# Manage azure subscription information:
+az account
 
-[38;5;246;03m# List all Azure Managed Disks:[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mdisk[39m[38;5;252m [39m[38;5;252mlist[39m
+# List all Azure Managed Disks:
+az disk list
 
-[38;5;246;03m# List all Azure virtual machines:[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mvm[39m[38;5;252m [39m[38;5;252mlist[39m
+# List all Azure virtual machines:
+az vm list
 
-[38;5;246;03m# Manage Azure Kubernetes Services:[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252maks[39m
+# Manage Azure Kubernetes Services:
+az aks
 
-[38;5;246;03m# Manage Azure Network resources:[39;00m
-[38;5;252maz[39m[38;5;252m [39m[38;5;252mnetwork[39m
+# Manage Azure Network resources:
+az network
