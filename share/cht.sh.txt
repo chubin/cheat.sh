@@ -478,6 +478,21 @@ elif [ x"$1" = x--mode ]; then
   exit "$?"
 fi
 
+mkdir -p "$CHTSH_HOME/"
+lines=''; [ -t 1 ] && lines=$(tput lines)
+
+if command -v less >/dev/null; then
+  defpager="less -R"
+elif command -v more >/dev/null; then
+  defpager="more"
+else
+  defpager="cat"
+fi
+
+TMP1=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
+trap 'rm -f $TMP1 $TMP2' EXIT
+trap 'true' INT
+
 prompt="cht.sh"
 opts=""
 input=""
@@ -491,7 +506,7 @@ done
 query=$(echo "$input" | sed 's@ *$@@; s@^ *@@; s@ @/@; s@ @+@g')
 
 if [ "$shell_mode" != yes ]; then
-  curl -s "${CHTSH_URL}"/"$(get_query_options "$query")"
+  do_query "$query"
   exit 0
 else
   new_section="$1"
@@ -509,7 +524,7 @@ else
   fi
   if [ -n "$this_query" ] && [ -z "$CHEATSH_RESTART" ]; then
     printf "$this_prompt$this_query\n"
-    curl -s "${CHTSH_URL}"/"$(get_query_options "$query")"
+    do_query "$query"
   fi
 fi
 
@@ -521,17 +536,6 @@ if [ "$is_macos" != yes ]; then
   fi
 fi
 command -v rlwrap >/dev/null || { echo 'DEPENDENCY: install "rlwrap" to use cht.sh in the shell mode' >&2; exit 1; }
-
-mkdir -p "$CHTSH_HOME/"
-lines=$(tput lines)
-
-if command -v less >/dev/null; then
-  defpager="less -R"
-elif command -v more >/dev/null; then
-  defpager="more"
-else
-  defpager="cat"
-fi
 
 cmd_cd() {
   if [ $# -eq 0 ]; then
@@ -756,10 +760,6 @@ cmd_version() {
   fi
   rm -f "$TMP2" > /dev/null 2>&1
 }
-
-TMP1=$(mktemp /tmp/cht.sh.XXXXXXXXXXXXX)
-trap 'rm -f $TMP1 $TMP2' EXIT
-trap 'true' INT
 
 if ! [ -e "$CHTSH_HOME/.hushlogin" ] && [ -z "$this_query" ]; then
   echo "type 'help' for the cht.sh shell help"
